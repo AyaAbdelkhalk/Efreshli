@@ -1,0 +1,6 @@
+@Efreshli.API_HostAddress = http://localhost:5104
+
+GET {{Efreshli.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
