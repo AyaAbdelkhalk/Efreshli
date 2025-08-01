@@ -15,10 +15,10 @@ namespace Efreshli.Infrastructure.Repositories
         protected readonly EfreshliDbContext _context;
         protected readonly DbSet<TEntity> _dbSet;
 
-        public GenericRepository(EfreshliDbContext context, DbSet<TEntity> dbSet)
+        public GenericRepository(EfreshliDbContext context)
         {
             _context = context;
-            _dbSet = dbSet;
+            _dbSet = _context.Set<TEntity>();
         }
 
         public IQueryable<TEntity> GetAll()
@@ -57,6 +57,27 @@ namespace Efreshli.Infrastructure.Repositories
         public async Task<TEntity> RemoveAsync(int id, CancellationToken cancellationToken)
         {
             var entity = await GetByIdAsync(id, cancellationToken);
+
+            // Check if entity supports soft delete (IsDeleted property)
+            var isDeletedProp = typeof(TEntity).GetProperty("IsDeleted");
+            if (isDeletedProp != null)
+            {
+                isDeletedProp.SetValue(entity, true);
+
+                // Optionally set DeletedDate and DeletedBy if available
+                var deletedDateProp = typeof(TEntity).GetProperty("DeletedDate");
+                if (deletedDateProp != null)
+                    deletedDateProp.SetValue(entity, DateTime.UtcNow);
+
+                var deletedByProp = typeof(TEntity).GetProperty("DeletedBy");
+                if (deletedByProp != null)
+                    deletedByProp.SetValue(entity, "system"); // Replace with current user if available
+
+                _dbSet.Update(entity);
+                return entity;
+            }
+
+            // Fallback to hard delete if soft delete not supported
             return _dbSet.Remove(entity).Entity;
         }
 
