@@ -10,16 +10,6 @@ namespace Efreshli.Domain.Models
     public class ApplicationUser : IdentityUser , IAuditable
     {
         public string? FirstName { get; set; }
-
-
-
-
-
-
-
-
-
-        //Auditable properties
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }
