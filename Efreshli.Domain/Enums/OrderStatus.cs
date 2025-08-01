@@ -8,7 +8,7 @@ namespace Efreshli.Domain.Enums
 {
     public enum OrderStatus
     {
-        Pending,
+        Pending=0,
         Processing,
         Shipped,
         Delivered

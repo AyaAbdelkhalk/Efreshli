@@ -15,7 +15,7 @@ namespace Efreshli.Domain.Models
         public string DelegatedPersonPosition { get; set; }
         public string WebsiteLink { get; set; }
         public string InstagramLink { get; set; }
-        public string Portfolio { get; set; }
+        public string Portfolio { get; set; } // file
         public string CommercialRegistrationAndTaxCard { get; set; }
         public bool HasTax14 { get; set; }
         public bool HasElectronicInvoices { get; set; }

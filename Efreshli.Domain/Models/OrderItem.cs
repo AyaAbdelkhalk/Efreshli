@@ -9,13 +9,12 @@ namespace Efreshli.Domain.Models
         [Key]
         public int OrderItemId { get; set; }
         public int OrderId { get; set; }
-        public Order Order { get; set; }
+        public virtual Order? Order { get; set; }
 
         public int ProductItemId { get; set; }
-        public ProductItem ProductItem { get; set; }
+        public virtual ProductItem? ProductItem { get; set; }
 
-        public int Qty { get; set; }
+        public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public OrderStatus Status { get; set; }
     }
 }
