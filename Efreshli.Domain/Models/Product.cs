@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Efreshli.Domain.Common.Classes;
+using System.ComponentModel.DataAnnotations;
 
 namespace Efreshli.Domain.Models
 {
-    public class Product
+    public class Product : Auditable
     {
         [Key]
         public int ProductId { get; set; }

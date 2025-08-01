@@ -1,9 +1,10 @@
-﻿using Efreshli.Domain.Enums;
+﻿using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Efreshli.Domain.Models
 {
-    public class Payment
+    public class Payment : Auditable
     {
         [Key]
         public int PaymentId { get; set; }
