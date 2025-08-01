@@ -1,9 +1,10 @@
-﻿using Efreshli.Domain.Enums;
+﻿using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Efreshli.Domain.Models
 {
-    public class Order
+    public class Order : Auditable
     {
         [Key]
         public int OrderId { get; set; }
