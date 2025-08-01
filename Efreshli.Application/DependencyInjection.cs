@@ -1,4 +1,9 @@
-﻿using Efreshli.Application.Helper;
+﻿using Efreshli.Application.DTOs.CategoryDTOs;
+using Efreshli.Application.Helper;
+using Efreshli.Application.Interfaces;
+using Efreshli.Application.Services.CategoryServices;
+using Efreshli.Application.Validators.CategoryValidators;
+using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -14,6 +19,8 @@ namespace Efreshli.Application
         public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
             MapsterConfig.RegisterMappings();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IValidator<AddCategoryDto>, AddCategoryValidator>();
             return services;
         }
     }
