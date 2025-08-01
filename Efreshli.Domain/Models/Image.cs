@@ -1,4 +1,5 @@
-﻿using Efreshli.Domain.Enums;
+﻿using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Efreshli.Domain.Models
 {
-    public class Image
+    public class Image : Auditable
     {
         [Key]
         public int Id { get; set; }

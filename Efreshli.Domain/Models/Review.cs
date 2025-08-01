@@ -2,7 +2,7 @@
 
 namespace Efreshli.Domain.Models
 {
-    public class Review
+    public class Review : Auditable
     {
         [Key]
         public int Id { get; set; }
