@@ -8,7 +8,7 @@ namespace Efreshli.Domain.Enums
 {
     public enum PaymentStatus
     {
-        Pending,
+        Pending =0,
         Paid,
         Failed
     }

@@ -1,4 +1,5 @@
 ﻿using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Efreshli.Domain.Models

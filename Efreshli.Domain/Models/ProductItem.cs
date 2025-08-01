@@ -15,9 +15,10 @@ namespace Efreshli.Domain.Models
         public int? WoodColorId { get; set; }
         public Color? WoodColor { get; set; }
 
-        public decimal Discount { get; set; }
-        public bool IsPercentage { get; set; }
-        public int Qty { get; set; }
+        public decimal? Discount { get; set; }
+        public bool? IsPercentage { get; set; }
+        public int Quantity { get; set; }
+        
         public string SKU { get; set; }
 
         public int ProductId { get; set; }

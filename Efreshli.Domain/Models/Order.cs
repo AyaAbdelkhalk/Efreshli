@@ -1,6 +1,7 @@
 ﻿using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Efreshli.Domain.Models
 {
@@ -8,14 +9,17 @@ namespace Efreshli.Domain.Models
     {
         [Key]
         public int OrderId { get; set; }
-        public ICollection<OrderItem> OrderItems { get; set; }
+        public virtual ICollection<OrderItem>? OrderItems { get; set; }
         public decimal TotalPrice { get; set; }
-
+        [ForeignKey("ApplicationUser")]
+        public string ApplicationUserId { get; set; }
+        public virtual ApplicationUser? ApplicationUser { get; set; }
         public int? CouponId { get; set; }
+        public virtual Coupon? Coupon { get; set; }
 
-        public OrderStatus Status { get; set; }
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
-        public int AddressId { get; set; }
-        public Address DeliveryAddress { get; set; }
+        public int? AddressId { get; set; }
+        public virtual Address? DeliveryAddress { get; set; }
     }
 }

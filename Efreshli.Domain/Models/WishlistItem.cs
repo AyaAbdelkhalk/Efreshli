@@ -6,11 +6,11 @@ namespace Efreshli.Domain.Models
     public class WishlistItem : Auditable
     {
         [Key]
-        public int Id { get; set; }
+        public int WishlistItemId { get; set; }
         public int WishlistId { get; set; }
-        public Wishlist Wishlist { get; set; }
+        public  virtual Wishlist? Wishlist { get; set; }
 
         public int ProductItemId { get; set; }
-        public ProductItem ProductItem { get; set; }
+        public virtual ProductItem? ProductItem { get; set; }
     }
 }

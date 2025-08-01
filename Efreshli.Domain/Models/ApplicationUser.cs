@@ -10,6 +10,34 @@ namespace Efreshli.Domain.Models
     public class ApplicationUser : IdentityUser , IAuditable
     {
         public string? FirstName { get; set; }
+
+        public string? LastName { get; set; }
+
+        public string? FullName => $"{FirstName} {LastName}";
+
+        public int? ImageId { get; set; }
+
+        public virtual Image? Image { get; set; }
+
+        public virtual ICollection<Address>? Addresses { get; set; }
+
+        public virtual ICollection<Order>? Orders { get; set; }
+
+        public virtual ICollection<Wishlist>? Wishlists { get; set; }
+
+        public virtual ICollection<Cart>? Carts { get; set; }
+
+
+
+
+
+
+
+
+
+
+
+        //Auditable properties
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }

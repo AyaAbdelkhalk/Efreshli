@@ -8,8 +8,9 @@ namespace Efreshli.Domain.Enums
 {
     public enum ColorType
     {
-        Generic = 1,
-        Fabric = 2,
+        GenericColor = 0,
+        FabricColor = 1,
+        WoodColor = 2
 
     }
 }
