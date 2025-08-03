@@ -26,6 +26,7 @@ namespace Efreshli.MVC
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseRouting();
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 

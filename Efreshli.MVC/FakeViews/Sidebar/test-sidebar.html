@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sidebar Test - Dashboard Default Active</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#dc2626',secondary:'#6366f1',accent:'#f1f5f9',dark:'#1e293b'},borderRadius:{'none':'0px','sm':'6px',DEFAULT:'12px','md':'16px','lg':'20px','xl':'24px','2xl':'28px','3xl':'36px','full':'9999px','button':'12px'},animation:{float:'float 3s ease-in-out infinite',glow:'glow 2s ease-in-out infinite alternate',slideIn:'slideIn 0.5s ease-out'},fontFamily:{sans:['Inter','system-ui','sans-serif'],display:['Inter','system-ui','sans-serif']}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<link rel="stylesheet" href="SidebarStyle.css">
+</head>
+<body class="bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 font-sans">
+<div class="flex h-screen relative overflow-hidden">
+<!-- Sidebar Overlay -->
+<div id="sidebarOverlay" class="fixed inset-0 bg-gradient-to-r from-black/50 to-gray-900/30 z-20 lg:hidden hidden transition-all duration-500 backdrop-blur-sm"></div>
+
+<!-- Sidebar -->
+<div id="sidebar" class="fixed lg:relative z-30 w-72 lg:w-72 h-auto lg:h-[calc(100vh-2rem)] lg:mt-4 lg:mb-4 sidebar-transition sidebar-collapsed lg:sidebar-collapsed sidebar-modern">
+<div class="flex flex-col h-full">
+<!-- Logo Section -->
+<div class="p-6 border-b border-gray-200/60 rounded-t-3xl">
+<div class="sidebar-logo transition-all duration-300">
+<h1 class="text-2xl font-['Pacifico'] text-gray-800 drop-shadow-sm">Efreshli Admin</h1>
+</div>
+</div>
+
+<!-- Navigation Menu -->
+<nav class="flex-1 p-6 space-y-2 overflow-y-auto">
+<a href="#" class="nav-item active flex items-center px-5 py-4 rounded-2xl text-white shadow-lg group">
+<div class="icon-wrapper w-6 h-6 flex items-center justify-center">
+<i class="ri-dashboard-3-line text-lg"></i>
+</div>
+<span class="ml-4 sidebar-text transition-all duration-300 font-medium">Dashboard</span>
+<div class="ml-auto">
+<i class="ri-arrow-right-s-line text-sm"></i>
+</div>
+</a>
+
+<a href="#" class="nav-item flex items-center px-5 py-4 text-gray-600 hover:text-gray-900 rounded-2xl group">
+<div class="icon-wrapper w-6 h-6 flex items-center justify-center">
+<i class="ri-team-line text-lg"></i>
+</div>
+<span class="ml-4 sidebar-text transition-all duration-300 font-medium">Users</span>
+<div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+<i class="ri-arrow-right-s-line text-sm"></i>
+</div>
+</a>
+
+<a href="#" class="nav-item flex items-center px-5 py-4 text-gray-600 hover:text-gray-900 rounded-2xl group">
+<div class="icon-wrapper w-6 h-6 flex items-center justify-center">
+<i class="ri-shopping-bag-3-line text-lg"></i>
+</div>
+<span class="ml-4 sidebar-text transition-all duration-300 font-medium">Orders</span>
+<div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+<i class="ri-arrow-right-s-line text-sm"></i>
+</div>
+</a>
+
+<a href="#" class="nav-item flex items-center px-5 py-4 text-gray-600 hover:text-gray-900 rounded-2xl group">
+<div class="icon-wrapper w-6 h-6 flex items-center justify-center">
+<i class="ri-product-hunt-line text-lg"></i>
+</div>
+<span class="ml-4 sidebar-text transition-all duration-300 font-medium">Products</span>
+<div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+<i class="ri-arrow-right-s-line text-sm"></i>
+</div>
+</a>
+
+<a href="#" class="nav-item flex items-center px-5 py-4 text-gray-600 hover:text-gray-900 rounded-2xl group">
+<div class="icon-wrapper w-6 h-6 flex items-center justify-center">
+<i class="ri-bookmark-line text-lg"></i>
+</div>
+<span class="ml-4 sidebar-text transition-all duration-300 font-medium">Categories</span>
+<div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+<i class="ri-arrow-right-s-line text-sm"></i>
+</div>
+</a>
+
+<a href="#" class="nav-item flex items-center px-5 py-4 text-gray-600 hover:text-gray-900 rounded-2xl group">
+<div class="icon-wrapper w-6 h-6 flex items-center justify-center">
+<i class="ri-line-chart-line text-lg"></i>
+</div>
+<span class="ml-4 sidebar-text transition-all duration-300 font-medium">Analytics</span>
+<div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+<i class="ri-arrow-right-s-line text-sm"></i>
+</div>
+</a>
+
+<div class="border-t border-white/10 my-4"></div>
+
+<a href="#" class="nav-item flex items-center px-5 py-4 text-gray-600 hover:text-gray-900 rounded-2xl group">
+<div class="icon-wrapper w-6 h-6 flex items-center justify-center">
+<i class="ri-settings-3-line text-lg"></i>
+</div>
+<span class="ml-4 sidebar-text transition-all duration-300 font-medium">Settings</span>
+<div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+<i class="ri-arrow-right-s-line text-sm"></i>
+</div>
+</a>
+
+<a href="#" class="nav-item flex items-center px-5 py-4 text-gray-600 hover:text-gray-900 rounded-2xl group">
+<div class="icon-wrapper w-6 h-6 flex items-center justify-center">
+<i class="ri-question-line text-lg"></i>
+</div>
+<span class="ml-4 sidebar-text transition-all duration-300 font-medium">Help & Support</span>
+<div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+<i class="ri-external-link-line text-sm"></i>
+</div>
+</a>
+</nav>
+
+</div>
+</div>
+
+<!-- Main Content -->
+<div class="flex-1 flex flex-col lg:ml-0 transition-all duration-300 lg:p-4" id="mainContent">
+<!-- Header -->
+<header class="bg-white shadow-sm border-b border-gray-200 rounded-t-3xl lg:rounded-3xl">
+<div class="flex items-center justify-between px-6 py-4">
+<div class="flex items-center">
+<button id="sidebarToggle" class="lg:hidden p-2 rounded-2xl hover:bg-gray-100">
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-menu-line"></i>
+</div>
+</button>
+<div class="ml-4 lg:ml-0">
+<h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
+<nav class="text-sm text-gray-500 mt-1">
+<a href="#" class="hover:text-primary">Home</a>
+<span class="mx-2">/</span>
+<span>Dashboard</span>
+</nav>
+</div>
+</div>
+</div>
+</header>
+
+<main class="flex-1 p-8 lg:p-0 lg:pt-6">
+<div class="bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/30 h-full p-8 relative overflow-hidden">
+<div class="text-center">
+<h2 class="text-3xl font-bold text-gray-900 mb-4">Sidebar Test</h2>
+<p class="text-gray-600 mb-8">Click on any sidebar item to see the red background effect. Dashboard is set as the default active item.</p>
+<div class="bg-green-100 border border-green-300 rounded-lg p-4 max-w-md mx-auto">
+<h3 class="text-green-800 font-semibold mb-2">✅ Features Implemented:</h3>
+<ul class="text-green-700 text-left space-y-1">
+<li>• Dashboard is default active (red background)</li>
+<li>• Clicking any item changes background to red</li>
+<li>• Smooth transitions and animations</li>
+<li>• Responsive design</li>
+<li>• Glow effect on active items</li>
+</ul>
+</div>
+</div>
+</div>
+</main>
+
+<script src="SidebarScript.js"></script>
+</body>
+</html> 
