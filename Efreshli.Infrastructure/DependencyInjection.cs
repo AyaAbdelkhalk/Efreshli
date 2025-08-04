@@ -17,6 +17,7 @@ namespace Efreshli.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IBrandsRepository, BrandsRepository>();
             services.AddScoped<IGenericRepository<Image>, GenericRepository<Image>>();
             return services;
         }
