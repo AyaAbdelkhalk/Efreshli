@@ -1,4 +1,3 @@
-
 using CloudinaryDotNet;
 using Efreshli.Application;
 using Efreshli.Domain.Settings;
@@ -6,6 +5,13 @@ using Efreshli.Infrastructure;
 using Efreshli.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Efreshli.Application.Services.AuthServices;
+using Efreshli.Application.Services;
+using Efreshli.Domain.Models;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace Efreshli.API
 {
@@ -15,20 +21,15 @@ namespace Efreshli.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            // Register services
-            builder.Services.AddInfrastructure(builder.Configuration);
-            builder.Services.AddApplication(builder.Configuration);
-            // Register the DbContext
+
+      
             builder.Services.AddDbContext<EfreshliDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
-            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
 
             #region Cloudinary
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
@@ -47,18 +48,54 @@ namespace Efreshli.API
             }); 
             #endregion
 
+        
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 3;
+            })
+            .AddEntityFrameworkStores<EfreshliDbContext>()
+            .AddDefaultTokenProviders();
+
+          
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
+            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddApplication(builder.Configuration);
+
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWT"));
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "JwtBearer";
+                options.DefaultChallengeScheme = "JwtBearer";
+            }).AddJwtBearer("JwtBearer", options =>
+            {
+                var jwtSettings = builder.Configuration.GetSection("JWT").Get<JwtSettings>();
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
-            //{
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            //}
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-            app.UseAuthorization();
-
 
             app.MapControllers();
 
