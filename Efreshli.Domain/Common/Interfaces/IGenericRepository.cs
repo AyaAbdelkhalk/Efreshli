@@ -18,5 +18,6 @@ namespace Efreshli.Domain.Common.Interfaces
         Task<TEntity> RemoveAsync(int id, CancellationToken cancellationToken = default);
         IQueryable<TEntity> GetByIdQueryable(int id);
         IQueryable<TEntity> GetByIdQueryable(TEntity entity);
+        Task SaveChangesAsync();
     }
 }

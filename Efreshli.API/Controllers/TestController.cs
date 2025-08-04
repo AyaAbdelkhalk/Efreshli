@@ -1,4 +1,5 @@
 ﻿using Efreshli.Application.Services.File;
+using Efreshli.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,8 +18,8 @@ namespace Efreshli.API.Controllers
         [HttpPost("uploadImage")]
         public async Task<IActionResult> UploadImage(IFormFile file)
         {
-           var s=await _imageService.UploadImageAsync(file);
-           
+            var s = await _imageService.UploadImageAsync(file,ImageReferenceType.Category,4);
+
             return Ok(s);
         }
     }

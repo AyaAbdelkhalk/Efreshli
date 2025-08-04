@@ -1,4 +1,6 @@
 ﻿using CloudinaryDotNet.Actions;
+using Efreshli.Domain.Enums;
+using Efreshli.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -10,10 +12,8 @@ namespace Efreshli.Application.Services.File
 {
     public interface IImageService
     {
-        Task<ImageUploadResult> AddPhotoAsync(IFormFile file);
-        Task<string> UploadImageAsync(IFormFile file);
-        Task<DeletionResult> DeletePhotoAsync(string publicId);
 
-        
+        Task<Image> UploadImageAsync(IFormFile file, ImageReferenceType referenceType, int referenceId);
+        Task<bool> DeleteImageAsync(int imageId); 
     }
 }
