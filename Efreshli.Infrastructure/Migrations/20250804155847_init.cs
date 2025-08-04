@@ -26,27 +26,6 @@ namespace Efreshli.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Brands",
-                columns: table => new
-                {
-                    BrandId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Brands", x => x.BrandId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ContactUs",
                 columns: table => new
                 {
@@ -56,7 +35,7 @@ namespace Efreshli.Infrastructure.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -81,7 +60,7 @@ namespace Efreshli.Infrastructure.Migrations
                     IsPercentage = table.Column<bool>(type: "bit", nullable: false),
                     UsageLimit = table.Column<int>(type: "int", nullable: false),
                     UsedCount = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -112,7 +91,7 @@ namespace Efreshli.Infrastructure.Migrations
                     CommercialRegistrationAndTaxCard = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HasTax14 = table.Column<bool>(type: "bit", nullable: false),
                     HasElectronicInvoices = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -131,17 +110,18 @@ namespace Efreshli.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LogoURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DescriptionAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DescriptionEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Office = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FacebookLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InstaLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InstagramLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     YoutubeLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LinkedinLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -187,7 +167,7 @@ namespace Efreshli.Infrastructure.Migrations
                     Governorate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDefault = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -309,7 +289,7 @@ namespace Efreshli.Infrastructure.Migrations
                     CartId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -339,7 +319,7 @@ namespace Efreshli.Infrastructure.Migrations
                     CouponId = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -378,7 +358,7 @@ namespace Efreshli.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -410,7 +390,7 @@ namespace Efreshli.Infrastructure.Migrations
                     PaymentStatus = table.Column<int>(type: "int", nullable: false),
                     DeliveryNotes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -436,6 +416,28 @@ namespace Efreshli.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Brands",
+                columns: table => new
+                {
+                    BrandId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageId = table.Column<int>(type: "int", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Brands", x => x.BrandId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CartItems",
                 columns: table => new
                 {
@@ -444,7 +446,7 @@ namespace Efreshli.Infrastructure.Migrations
                     CartId = table.Column<int>(type: "int", nullable: false),
                     ProductItemId = table.Column<int>(type: "int", nullable: false),
                     RequiredQuantity = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -473,7 +475,7 @@ namespace Efreshli.Infrastructure.Migrations
                     NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ParentId = table.Column<int>(type: "int", nullable: true),
                     ImageId = table.Column<int>(type: "int", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -501,7 +503,7 @@ namespace Efreshli.Infrastructure.Migrations
                     NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -533,7 +535,7 @@ namespace Efreshli.Infrastructure.Migrations
                     DimensionsOrSize = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -565,9 +567,17 @@ namespace Efreshli.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     URL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublicId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReferenceType = table.Column<int>(type: "int", nullable: true),
                     ReferenceId = table.Column<int>(type: "int", nullable: true),
-                    ProductId = table.Column<int>(type: "int", nullable: true)
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -589,7 +599,7 @@ namespace Efreshli.Infrastructure.Migrations
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     ProductAttributeId = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -624,7 +634,7 @@ namespace Efreshli.Infrastructure.Migrations
                     ReviewText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -659,7 +669,7 @@ namespace Efreshli.Infrastructure.Migrations
                     NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageId = table.Column<int>(type: "int", nullable: true),
                     ColorType = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -692,7 +702,7 @@ namespace Efreshli.Infrastructure.Migrations
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     SKU = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -733,7 +743,7 @@ namespace Efreshli.Infrastructure.Migrations
                     ProductItemId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -766,7 +776,7 @@ namespace Efreshli.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     WishlistId = table.Column<int>(type: "int", nullable: false),
                     ProductItemId = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -839,6 +849,11 @@ namespace Efreshli.Infrastructure.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Brands_ImageId",
+                table: "Brands",
+                column: "ImageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartItems_CartId",
@@ -1016,6 +1031,14 @@ namespace Efreshli.Infrastructure.Migrations
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_Brands_Images_ImageId",
+                table: "Brands",
+                column: "ImageId",
+                principalTable: "Images",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_CartItems_ProductItems_ProductItemId",
                 table: "CartItems",
                 column: "ProductItemId",
@@ -1035,6 +1058,10 @@ namespace Efreshli.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Brands_Images_ImageId",
+                table: "Brands");
+
             migrationBuilder.DropForeignKey(
                 name: "FK_Categories_Images_ImageId",
                 table: "Categories");
