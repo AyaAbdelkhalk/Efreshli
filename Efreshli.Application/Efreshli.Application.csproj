@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Efreshli.Domain\Efreshli.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\BrandValidators\" />
+  </ItemGroup>
+
 </Project>
