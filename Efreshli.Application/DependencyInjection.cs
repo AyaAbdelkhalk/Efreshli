@@ -1,5 +1,6 @@
 ﻿using Efreshli.Application.DTOs.CategoryDTOs;
 using Efreshli.Application.Helper;
+using Efreshli.Application.Helper.Cloudinary;
 using Efreshli.Application.Interfaces;
 using Efreshli.Application.Services.CategoryServices;
 using Efreshli.Application.Services.File;
@@ -22,6 +23,7 @@ namespace Efreshli.Application
             MapsterConfig.RegisterMappings();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IValidator<AddCategoryDto>, AddCategoryValidator>();
+            services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
             services.AddScoped<IImageService, ImageService>();
             return services;
         }

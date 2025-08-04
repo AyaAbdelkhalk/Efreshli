@@ -105,5 +105,9 @@ namespace Efreshli.Infrastructure.Repositories
             var id = (int)typeof(TEntity).GetProperty(keyName).GetValue(entity);
             return GetByIdQueryable(id);
         }
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }
