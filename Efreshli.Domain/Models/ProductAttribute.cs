@@ -10,7 +10,7 @@ namespace Efreshli.Domain.Models
         public string NameAr { get; set; }
         public string NameEn { get; set; }
         public int? CategoryId { get; set; }
-        public virtual Category? Category { get; set; }
+        public virtual Brands? Category { get; set; }
 
         public virtual ICollection<ProductAttributeValue>? AttributeValues { get; set; }
     }
