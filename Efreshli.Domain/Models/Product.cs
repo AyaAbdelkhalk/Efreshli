@@ -14,11 +14,9 @@ namespace Efreshli.Domain.Models
         public string? DimensionsOrSize { get; set; }
 
         public int CategoryId { get; set; }
-        public Brands Category { get; set; }
-
+        public Category Category { get; set; }
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
-
         public virtual ICollection<Image>? ProductImages { get; set; }
         public virtual ICollection<ProductAttributeValue>? AttributeValues { get; set; }
     }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Efreshli.Infrastructure.Repositories
 {
-    public class BrandsRepository : GenericRepository<Brands>, IBrandsRepository
+    public class BrandsRepository : GenericRepository<Brand>, IBrandsRepository
     {
         public BrandsRepository(EfreshliDbContext context) : base(context)
         {

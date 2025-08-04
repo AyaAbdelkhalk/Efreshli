@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Efreshli.Domain.Models
 {
-    public class Brands : Auditable
+    public class Category : Auditable
     {
         [Key]
         public int CategoryId { get; set; }
@@ -13,7 +13,8 @@ namespace Efreshli.Domain.Models
 
         public int? ParentId { get; set; }
         [ForeignKey("ParentId")]
-        public Brands? Parent { get; set; }
+        public Category? Parent { get; set; }
+        public ICollection<Category>? SubCategories { get; set; } = new List<Category>();
 
         public int? ImageId { get; set; }
         public virtual Image? Image { get; set; }

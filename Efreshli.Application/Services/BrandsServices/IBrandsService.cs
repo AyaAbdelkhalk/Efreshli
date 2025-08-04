@@ -14,6 +14,5 @@ namespace Efreshli.Application.Services.BrandsServices
         Task<BrandResponseDto> CreateBrandAsync(CreateBrandDto brandDto);
         Task<BrandResponseDto?> UpdateBrandAsync(int id, UpdateBrandDto brandDto);
         Task<bool> DeleteBrandAsync(int id);
-        Task<int> GetTotalCountAsync(string? search = null);
     }
 }

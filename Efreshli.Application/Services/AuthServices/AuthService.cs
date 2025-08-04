@@ -1,5 +1,4 @@
-﻿using Efreshli.Application.DTOs;
-using Efreshli.Application.DTOs.IdentityDTOs;
+﻿using Efreshli.Application.DTOs.IdentityDTOs;
 using Efreshli.Domain.Models;
 using Efreshli.Domain.Settings;
 using Microsoft.AspNetCore.Identity;

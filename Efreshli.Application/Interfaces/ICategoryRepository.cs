@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Efreshli.Application.Interfaces
 {
-    public interface ICategoryRepository : IGenericRepository<Brands>
+    public interface ICategoryRepository : IGenericRepository<Category>
     {
     }
 }

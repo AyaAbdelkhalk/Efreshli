@@ -1,5 +1,4 @@
-﻿using Efreshli.Application.DTOs;
-using Efreshli.Application.DTOs.IdentityDTOs;
+﻿using Efreshli.Application.DTOs.IdentityDTOs;
 using Efreshli.Application.Services.AuthServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
