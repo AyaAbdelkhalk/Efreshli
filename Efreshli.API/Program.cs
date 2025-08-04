@@ -1,14 +1,17 @@
+using CloudinaryDotNet;
 using Efreshli.Application;
 using Efreshli.Domain.Settings;
 using Efreshli.Infrastructure;
 using Efreshli.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Efreshli.Application.Services.AuthServices;
 using Efreshli.Application.Services;
 using Efreshli.Domain.Models;
 using Microsoft.AspNetCore.Identity;
+
 
 namespace Efreshli.API
 {
@@ -26,6 +29,24 @@ namespace Efreshli.API
       
             builder.Services.AddDbContext<EfreshliDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
+
+
+            #region Cloudinary
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+
+            builder.Services.AddSingleton(sp =>
+            {
+                var settings = sp.GetRequiredService<IOptions<CloudinarySettings>>().Value;
+
+                var account = new Account(
+                    settings.CloudName,
+                    settings.ApiKey,
+                    settings.ApiSecret
+                );
+
+                return new Cloudinary(account);
+            }); 
+            #endregion
 
         
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -66,6 +87,7 @@ namespace Efreshli.API
                     ClockSkew = TimeSpan.Zero
                 };
             });
+
 
             var app = builder.Build();
 
