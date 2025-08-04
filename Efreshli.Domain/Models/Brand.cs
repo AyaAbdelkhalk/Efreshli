@@ -9,5 +9,7 @@ namespace Efreshli.Domain.Models
         public int BrandId { get; set; }
         public string NameAr { get; set; }
         public string NameEn { get; set; }
+        public string? ImageId { get; set; }
+        public virtual Image? Image { get; set; }
     }
 }

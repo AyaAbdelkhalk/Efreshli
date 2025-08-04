@@ -11,6 +11,9 @@ namespace Efreshli.Domain.Enums
         Product = 1,
         Color = 2,
         User = 3,
-        Category = 4
+        Category = 4,
+        Brand = 5,
+        Other
+
     }
 }
