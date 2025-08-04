@@ -14,7 +14,7 @@ namespace Efreshli.Domain.Models
         public string? DimensionsOrSize { get; set; }
 
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public Brands Category { get; set; }
 
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
