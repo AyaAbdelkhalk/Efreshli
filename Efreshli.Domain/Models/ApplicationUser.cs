@@ -43,7 +43,7 @@ namespace Efreshli.Domain.Models
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
-        public string? DeletedBy { get; set; }
+        public string? DeletedBy { get; set; } 
         public DateTime? DeletedDate { get; set; }
     }
 }

@@ -98,12 +98,16 @@ namespace Efreshli.Infrastructure.Repositories
 
         public IQueryable<TEntity> GetByIdQueryable(TEntity entity)
         {
-            var keyName = _context.Model.FindEntityType(typeof(TEntity))
+            var keyName =  _context.Model.FindEntityType(typeof(TEntity))
                 .FindPrimaryKey().Properties
                 .Single().Name;
 
             var id = (int)typeof(TEntity).GetProperty(keyName).GetValue(entity);
             return GetByIdQueryable(id);
+        }
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }
