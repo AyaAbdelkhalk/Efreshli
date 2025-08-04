@@ -1,5 +1,4 @@
-﻿using Efreshli.Application.DTOs;
-using Efreshli.Application.DTOs.IdentityDTOs;
+﻿using Efreshli.Application.DTOs.IdentityDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

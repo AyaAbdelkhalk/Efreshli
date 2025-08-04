@@ -1,6 +1,6 @@
 ﻿using Efreshli.Application.DTOs.CategoryDTOs;
-using Efreshli.Application.Helper;
 using Efreshli.Application.Helper.Cloudinary;
+using Efreshli.Application.Helper.Mapping;
 using Efreshli.Application.Interfaces;
 using Efreshli.Application.Services.BrandsServices;
 using Efreshli.Application.Services.CategoryServices;
