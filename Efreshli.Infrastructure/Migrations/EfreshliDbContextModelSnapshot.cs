@@ -199,10 +199,7 @@ namespace Efreshli.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ImageId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ImageId1")
+                    b.Property<int?>("ImageId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
@@ -224,7 +221,7 @@ namespace Efreshli.Infrastructure.Migrations
 
                     b.HasKey("BrandId");
 
-                    b.HasIndex("ImageId1");
+                    b.HasIndex("ImageId");
 
                     b.ToTable("Brands");
                 });
@@ -1147,10 +1144,10 @@ namespace Efreshli.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LogoURL")
-
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Office")
-
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -1419,7 +1416,7 @@ namespace Efreshli.Infrastructure.Migrations
                 {
                     b.HasOne("Efreshli.Domain.Models.Image", "Image")
                         .WithMany()
-                        .HasForeignKey("ImageId1")
+                        .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Image");
