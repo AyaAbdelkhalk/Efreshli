@@ -98,7 +98,7 @@ namespace Efreshli.Infrastructure.Repositories
 
         public IQueryable<TEntity> GetByIdQueryable(TEntity entity)
         {
-            var keyName = _context.Model.FindEntityType(typeof(TEntity))
+            var keyName =  _context.Model.FindEntityType(typeof(TEntity))
                 .FindPrimaryKey().Properties
                 .Single().Name;
 

@@ -1,9 +1,11 @@
 
+using CloudinaryDotNet;
 using Efreshli.Application;
 using Efreshli.Domain.Settings;
 using Efreshli.Infrastructure;
 using Efreshli.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Efreshli.API
 {
@@ -28,7 +30,22 @@ namespace Efreshli.API
                 options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
+            #region Cloudinary
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
+            builder.Services.AddSingleton(sp =>
+            {
+                var settings = sp.GetRequiredService<IOptions<CloudinarySettings>>().Value;
+
+                var account = new Account(
+                    settings.CloudName,
+                    settings.ApiKey,
+                    settings.ApiSecret
+                );
+
+                return new Cloudinary(account);
+            }); 
+            #endregion
 
             var app = builder.Build();
 

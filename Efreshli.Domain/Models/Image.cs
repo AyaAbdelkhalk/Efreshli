@@ -14,6 +14,7 @@ namespace Efreshli.Domain.Models
         [Key]
         public int Id { get; set; }
         public string URL { get; set; }
+        public string PublicId { get; set; }
         public ImageReferenceType? ReferenceType { get; set; }
         public int? ReferenceId { get; set; }
     }

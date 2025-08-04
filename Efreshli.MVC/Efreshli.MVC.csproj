@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="C:\Users\Elnour Tech\Desktop\_AdminLayout.cshtml" Link="_AdminLayout.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\css\SidebarStyle.css" />
     <None Include="wwwroot\js\SidebarScript.js" />
   </ItemGroup>
