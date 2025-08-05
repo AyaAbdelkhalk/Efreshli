@@ -13,7 +13,10 @@ namespace Efreshli.Application.DTOs.CategoryDTOs
         public string NameAr { get; set; }
         public string NameEn { get; set; }
         public int? ParentId { get; set; }
-        public IFormFile? Image { get; set; }
+        public int? ImageId { get; set; }
+        public string? ImageUrl { get; set; }
+
+        public GetCategoryDto? Parent { get; set; }
 
     }
 }
