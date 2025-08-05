@@ -20,7 +20,12 @@ namespace Efreshli.Application.Helper.Mapping
             //     .Map(dest => dest.CategoryName, src => src.Category.Name);
 
             #region Category
-            TypeAdapterConfig<Category, GetCategoryDto>.NewConfig();
+            TypeAdapterConfig<Category, GetCategoryDto>.NewConfig()
+                .Map(dest => dest.ImageUrl, src => src.Image.URL)
+                .Map(destinationMember => destinationMember.ImageUrl, src => src.Image.URL)
+                .Map(destinationMember => destinationMember.ParentId, src => src.ParentId);
+            TypeAdapterConfig<AddCategoryDto,Category>.NewConfig();
+            TypeAdapterConfig<UpdateCategoryDto, Category>.NewConfig();
             #endregion
 
             #region Brand

@@ -1,3 +1,4 @@
+using Efreshli.Domain.Common.Classes;
 using Efreshli.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,8 @@ namespace Efreshli.MVC
 
             #endregion
             var app = builder.Build();
+            // Initialize static UserContext
+            UserContext.Initialize(app.Services);
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

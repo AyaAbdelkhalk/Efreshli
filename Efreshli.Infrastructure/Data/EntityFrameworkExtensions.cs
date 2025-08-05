@@ -1,4 +1,5 @@
-﻿using Efreshli.Domain.Common.Interfaces;
+﻿using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -14,7 +15,35 @@ namespace Efreshli.Infrastructure.Data
     {
         public static void UpdateAuditFields(this DbContext context)
         {
+            var entries = context.ChangeTracker.Entries()
+                .Where(e => e.Entity is IAuditable && (e.State == EntityState.Added || e.State == EntityState.Modified));
+            
+            foreach (var entry in entries)
+            {
+                var auditableEntity = (IAuditable)entry.Entity;
+                if (entry.State == EntityState.Added)
+                {
+                    auditableEntity.CreatedBy = UserContext.CurrentUserId ?? "system";
+                    auditableEntity.CreatedDate = DateTime.UtcNow;
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    auditableEntity.UpdatedBy = UserContext.CurrentUserId ?? "system";
+                    auditableEntity.UpdatedDate = DateTime.UtcNow;
+                }
+                if (entry.State == EntityState.Deleted)
+                {
+                    entry.State = EntityState.Modified;
+                    auditableEntity.IsDeleted = true;
+                    auditableEntity.DeletedBy = UserContext.CurrentUserId ?? "system"; 
+                    auditableEntity.DeletedDate = DateTime.UtcNow;
+                }
+            }
+        }
 
+        // Keep the old overload for backward compatibility if needed
+        public static void UpdateAuditFields(this DbContext context, IUserContext userContext)
+        {
             var entries = context.ChangeTracker.Entries()
                 .Where(e => e.Entity is IAuditable && (e.State == EntityState.Added || e.State == EntityState.Modified));
             foreach (var entry in entries)
@@ -22,23 +51,22 @@ namespace Efreshli.Infrastructure.Data
                 var auditableEntity = (IAuditable)entry.Entity;
                 if (entry.State == EntityState.Added)
                 {
-                    auditableEntity.CreatedBy = "System"; // Replace with actual user context
+                    auditableEntity.CreatedBy = userContext.CurrentUserId;
                     auditableEntity.CreatedDate = DateTime.UtcNow;
                 }
                 else if (entry.State == EntityState.Modified)
                 {
-                    auditableEntity.UpdatedBy = "System"; // Replace with actual user context
+                    auditableEntity.UpdatedBy = userContext.CurrentUserId;
                     auditableEntity.UpdatedDate = DateTime.UtcNow;
                 }
                 if (entry.State == EntityState.Deleted)
                 {
                     entry.State = EntityState.Modified;
                     auditableEntity.IsDeleted = true;
-                    auditableEntity.DeletedBy = "System"; // Replace with actual user context
+                    auditableEntity.DeletedBy = userContext.CurrentUserId; 
                     auditableEntity.DeletedDate = DateTime.UtcNow;
                 }
             }
-
         }
 
         public static LambdaExpression GetIsDeletedFilter(Type type)
