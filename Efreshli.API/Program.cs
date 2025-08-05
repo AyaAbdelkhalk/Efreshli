@@ -1,16 +1,23 @@
 using CloudinaryDotNet;
 using Efreshli.Application;
+using Efreshli.Application.DTOs.CategoryDTOs;
+using Efreshli.Application.Services;
+using Efreshli.Application.Services.AuthServices;
+using Efreshli.Application.Validators.CategoryValidators;
+using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Common.Interfaces;
+using Efreshli.Domain.Models;
 using Efreshli.Domain.Settings;
 using Efreshli.Infrastructure;
 using Efreshli.Infrastructure.Data;
+using Efreshli.Infrastructure.Repositories;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Efreshli.Application.Services.AuthServices;
-using Efreshli.Application.Services;
-using Efreshli.Domain.Models;
-using Microsoft.AspNetCore.Identity;
 
 
 namespace Efreshli.API
@@ -26,7 +33,15 @@ namespace Efreshli.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-      
+            //builder.Services.AddControllers()
+            //    .AddFluentValidation(fv =>
+            //    {
+            //        fv.RegisterValidatorsFromAssemblyContaining<AddCategoryValidator>();
+            //        fv.DisableDataAnnotationsValidation = true; 
+            //    });
+
+            builder.Services.AddScoped<IValidator<AddCategoryDto>, AddCategoryDtoValidator>();
+
             builder.Services.AddDbContext<EfreshliDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
 
@@ -68,6 +83,8 @@ namespace Efreshli.API
 
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWT"));
 
+            builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = "JwtBearer";
@@ -90,6 +107,8 @@ namespace Efreshli.API
 
 
             var app = builder.Build();
+            // Initialize static UserContext
+            UserContext.Initialize(app.Services);
 
             app.UseSwagger();
             app.UseSwaggerUI();

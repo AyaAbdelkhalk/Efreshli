@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Efreshli.Domain.Models;
 
 namespace Efreshli.Domain.Common.Interfaces
 {
@@ -11,6 +12,6 @@ namespace Efreshli.Domain.Common.Interfaces
         string? CurrentUserId { get; }
         string CurrentUserName { get; }
         bool IsAuthenticated { get; }
-        bool IsInRole(string role);
+        ApplicationUser? ApplicationUser { get; }
     }
 }
