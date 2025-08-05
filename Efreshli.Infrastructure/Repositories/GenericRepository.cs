@@ -1,6 +1,9 @@
 ﻿using Efreshli.Domain.Common.Interfaces;
+using Efreshli.Domain.Models;
 using Efreshli.Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +17,13 @@ namespace Efreshli.Infrastructure.Repositories
     {
         protected readonly EfreshliDbContext _context;
         protected readonly DbSet<TEntity> _dbSet;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GenericRepository(EfreshliDbContext context)
+        public GenericRepository(EfreshliDbContext context, UserManager<ApplicationUser> userManager = null)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();
+            _userManager = userManager;
         }
 
         public IQueryable<TEntity> GetAll()
@@ -38,7 +43,7 @@ namespace Efreshli.Infrastructure.Repositories
 
         public async Task<TEntity> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            return await _dbSet.FindAsync([id], cancellationToken: cancellationToken);
+            return await _dbSet.FindAsync(new object[] { id }, cancellationToken: cancellationToken);
         }
 
         public async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken)
@@ -98,16 +103,91 @@ namespace Efreshli.Infrastructure.Repositories
 
         public IQueryable<TEntity> GetByIdQueryable(TEntity entity)
         {
-            var keyName =  _context.Model.FindEntityType(typeof(TEntity))
+            var keyName = _context.Model.FindEntityType(typeof(TEntity))
                 .FindPrimaryKey().Properties
                 .Single().Name;
 
             var id = (int)typeof(TEntity).GetProperty(keyName).GetValue(entity);
             return GetByIdQueryable(id);
         }
+
+        public async Task<IEnumerable<TEntity>> GetWhereAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            return await _dbSet.Where(expression).ToListAsync();
+        }
+        public async Task<TEntity> GetWhereSingleAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            return await _dbSet.SingleOrDefaultAsync(expression);
+        }
+        public async Task<IEnumerable<TResult>> GetWhereSelectAsync<TResult>(Expression<Func<TEntity, bool>> condition, Expression<Func<TEntity, TResult>> expression)
+        {
+            return await _dbSet.Where(condition).Select(expression).ToListAsync();
+        }
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            return await _dbSet.CountAsync(expression);
+        }
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
         }
+
+
+        public async Task<IEnumerable<TEntity>> GetAllWithIncludeAsync(
+            Expression<Func<TEntity, bool>>? predicate,
+            CancellationToken cancellationToken = default,
+            params Expression<Func<TEntity, object>>[] includes)
+        {
+            var query = BuildQueryWithIncludes(_dbSet, includes);
+
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            return await query.ToListAsync(cancellationToken);
+        }
+
+        public async Task<TEntity?> GetByIdWithIncludeAsync(
+            int id,
+            CancellationToken cancellationToken = default,
+            params Expression<Func<TEntity, object>>[] includes)
+        {
+            var query = BuildQueryWithIncludes(_dbSet, includes);
+            var keyName = _context.Model.FindEntityType(typeof(TEntity))
+                .FindPrimaryKey().Properties
+                .Single().Name;
+            return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, keyName).Equals(id), cancellationToken);
+        }
+
+        #region HelperMethods
+        private IQueryable<TEntity> BuildQueryWithIncludes(
+           IQueryable<TEntity> query,
+           params Expression<Func<TEntity, object>>[] includes)
+        {
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+            return query;
+        }
+        private IQueryable<TEntity> BuildQuery(
+            Expression<Func<TEntity, bool>>? predicate = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        {
+            IQueryable<TEntity> query = _dbSet;
+
+            if (include != null)
+                query = include(query);
+
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            return query;
+        }
+
+        #endregion
+
     }
 }

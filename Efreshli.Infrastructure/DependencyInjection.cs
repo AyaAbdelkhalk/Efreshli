@@ -1,4 +1,6 @@
-﻿using Efreshli.Application.Interfaces;
+﻿using CloudinaryDotNet;
+using Efreshli.Application.Interfaces;
+using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
 using Efreshli.Infrastructure.Repositories;
@@ -16,9 +18,14 @@ namespace Efreshli.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IGenericRepository<Image>, GenericRepository<Image>>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            // Initialize static UserContext
+            UserContext.Initialize(services.BuildServiceProvider());
+            //register repositories
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IBrandsRepository, BrandsRepository>();
-            services.AddScoped<IGenericRepository<Image>, GenericRepository<Image>>();
+            
             return services;
         }
     }

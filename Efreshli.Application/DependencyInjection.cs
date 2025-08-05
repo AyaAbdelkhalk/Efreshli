@@ -22,12 +22,16 @@ namespace Efreshli.Application
         public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
             MapsterConfig.RegisterMappings();
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IBrandsService, BrandsService>();
-
-            services.AddScoped<IValidator<AddCategoryDto>, AddCategoryValidator>();
             services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
             services.AddScoped<IImageService, ImageService>();
+
+            // Register validators
+            services.AddScoped<IValidator<AddCategoryDto>, AddCategoryDtoValidator>();
+            services.AddScoped<IValidator<UpdateCategoryDto>, UpdateCategoryDtoValidator>();
+
+            // Register services
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IBrandsService, BrandsService>();
             return services;
         }
     }
