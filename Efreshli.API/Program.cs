@@ -1,11 +1,16 @@
-
+﻿
 using CloudinaryDotNet;
 using Efreshli.Application;
 using Efreshli.Domain.Settings;
 using Efreshli.Infrastructure;
 using Efreshli.Infrastructure.Data;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore;
+using Swashbuckle.AspNetCore.SwaggerUI;
+using Swashbuckle.AspNetCore.Swagger;
+using Efreshli.Common;
 
 namespace Efreshli.API
 {
@@ -15,7 +20,20 @@ namespace Efreshli.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<ValidateModelAsyncFilter>();
+            });
+
+
+            //builder.Services.AddFluentValidationAutoValidation(config =>
+            //{
+            //    config.DisableDataAnnotationsValidation = true;
+            //});
             // Add services to the container.
+
+
+
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -29,7 +47,6 @@ namespace Efreshli.API
             builder.Services.AddDbContext<EfreshliDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-
             #region Cloudinary
             builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
@@ -56,7 +73,6 @@ namespace Efreshli.API
                 app.UseSwaggerUI();
             //}
 
-            app.UseAuthorization();
             app.UseAuthorization();
 
 

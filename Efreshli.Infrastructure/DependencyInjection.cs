@@ -18,6 +18,7 @@ namespace Efreshli.Infrastructure
         {
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IGenericRepository<Image>, GenericRepository<Image>>();
+            services.AddScoped<ICouponRepository, CouponRepository>();
             return services;
         }
     }
