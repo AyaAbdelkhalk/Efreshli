@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Efreshli.Application\Efreshli.Application.csproj" />
+    <ProjectReference Include="..\Efreshli.Common\Efreshli.Common.csproj" />
     <ProjectReference Include="..\Efreshli.Domain\Efreshli.Domain.csproj" />
     <ProjectReference Include="..\Efreshli.Infrastructure\Efreshli.Infrastructure.csproj" />
   </ItemGroup>

@@ -29,6 +29,7 @@ namespace Efreshli.Application.Validators.CategoryValidators
                 .MustAsync(async (parentId, cancellation) => await IsValidParentId(parentId))
                 .WithMessage("Invalid Parent Id");
         }
+        #region Methods
         private async Task<bool> IsUniqueNameAr(string name)
         {
             var existingCategory = await _unitOfWork.CategoryRepository.CountAsync(c => c.NameAr == name);
@@ -45,6 +46,7 @@ namespace Efreshli.Application.Validators.CategoryValidators
             if (!parentId.HasValue) return true;
             var parentCategory = await _unitOfWork.CategoryRepository.GetByIdAsync(parentId.Value);
             return parentCategory != null;
-        }
+        } 
+        #endregion
     }
 }
