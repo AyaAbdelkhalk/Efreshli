@@ -1,5 +1,6 @@
 ﻿using Efreshli.Application.DTOs.BrandDTOs;
 using Efreshli.Application.DTOs.CategoryDTOs;
+using Efreshli.Application.DTOs.WebsiteInfoDTOs;
 using Efreshli.Domain.Models;
 using Mapster;
 using System;
@@ -39,6 +40,19 @@ namespace Efreshli.Application.Helper.Mapping
                 .Map(dest => dest.OldImageId, src => src.ImageId);
 
             #endregion
+
+            #region WebsiteInfo
+            TypeAdapterConfig<WebsiteInfo, UpdateWebsiteInfoDto>.NewConfig();
+            TypeAdapterConfig<UpdateWebsiteInfoDto, WebsiteInfo>.NewConfig();
+
+            TypeAdapterConfig<CreateWebsiteInfoDto, WebsiteInfo>.NewConfig();
+            TypeAdapterConfig<WebsiteInfo, CreateWebsiteInfoDto>.NewConfig();
+
+            TypeAdapterConfig<WebsiteInfo, GetWebsiteInfoDto>.NewConfig();
+
+            #endregion
+
+
         }
     }
 }
