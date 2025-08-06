@@ -22,24 +22,15 @@ namespace Efreshli.Application.Services.CategoryServices
         #region Props&Ctor
         private readonly IUnitOfWork _unitOfWork;
         private readonly IImageService _imageService;
-        private readonly IValidator<AddCategoryDto> _addCategoryValidator;
-        private readonly IValidator<UpdateCategoryDto> _updateCategoryValidator;
-        public CategoryService(IUnitOfWork unitOfWork, IImageService imageService, IValidator<AddCategoryDto> addCategoryValidator, IValidator<UpdateCategoryDto> updateCategoryValidator)
+        public CategoryService(IUnitOfWork unitOfWork, IImageService imageService)
         {
             _unitOfWork = unitOfWork;
             _imageService = imageService;
-            _addCategoryValidator = addCategoryValidator;
-            _updateCategoryValidator = updateCategoryValidator;
         } 
         #endregion
 
         public async Task<Response<GetCategoryDto>> AddCategoryAsync(AddCategoryDto category)
         {
-            var validationResult = await _addCategoryValidator.ValidateAsync(category);
-            if (!validationResult.IsValid)
-            {
-                return ResponseHandler.ValidationError<GetCategoryDto>(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
-            }
 
             var newCategory = new Category
             {
@@ -71,7 +62,8 @@ namespace Efreshli.Application.Services.CategoryServices
         public async Task<Response<GetCategoryDto>> GetCategoryByIdAsync(int id)
         {
             var res= await _unitOfWork.CategoryRepository.GetByIdWithIncludeAsync(id,
-                includes: new Expression<Func<Category, object>>[] { c => c.Parent, c => c.Image }
+                includes: new Expression<Func<Category, object>>[] 
+                { c => c.Parent, c => c.Image }
                 );
 
             if (res == null)
@@ -96,12 +88,7 @@ namespace Efreshli.Application.Services.CategoryServices
         }
         public async Task<Response<GetCategoryDto>> UpdateCategoryAsync(int id, UpdateCategoryDto category)
         {
-            category.CategoryId = id;
-            var validationResult = await _updateCategoryValidator.ValidateAsync(category);
-            if (!validationResult.IsValid)
-            {
-                return ResponseHandler.ValidationError<GetCategoryDto>(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
-            }
+            
             var existingCategory = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
             if (existingCategory == null)
             {
