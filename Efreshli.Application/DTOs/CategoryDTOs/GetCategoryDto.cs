@@ -18,5 +18,7 @@ namespace Efreshli.Application.DTOs.CategoryDTOs
 
         public GetCategoryDto? Parent { get; set; }
 
+        public string? CreatedBy { get; set; }
+
     }
 }

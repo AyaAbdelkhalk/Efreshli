@@ -9,9 +9,7 @@ namespace Efreshli.Domain.Common.Interfaces
 {
     public interface IUserContext
     {
-        string? CurrentUserId { get; }
-        string CurrentUserName { get; }
-        bool IsAuthenticated { get; }
-        ApplicationUser? ApplicationUser { get; }
+        public string? GetCurrentUserId();
+        public Task<ApplicationUser?> GetCurrentUserDetailsAsync();
     }
 }

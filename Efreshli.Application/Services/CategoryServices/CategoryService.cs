@@ -19,19 +19,20 @@ namespace Efreshli.Application.Services.CategoryServices
 {
     public class CategoryService : ICategoryService
     {
-        private readonly ICategoryRepository _categoryRepository;
+        #region Props&Ctor
         private readonly IUnitOfWork _unitOfWork;
         private readonly IImageService _imageService;
         private readonly IValidator<AddCategoryDto> _addCategoryValidator;
         private readonly IValidator<UpdateCategoryDto> _updateCategoryValidator;
-        public CategoryService(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork, IImageService imageService, IValidator<AddCategoryDto> addCategoryValidator, IValidator<UpdateCategoryDto> updateCategoryValidator)
+        public CategoryService(IUnitOfWork unitOfWork, IImageService imageService, IValidator<AddCategoryDto> addCategoryValidator, IValidator<UpdateCategoryDto> updateCategoryValidator)
         {
-            _categoryRepository = categoryRepository;
             _unitOfWork = unitOfWork;
             _imageService = imageService;
             _addCategoryValidator = addCategoryValidator;
             _updateCategoryValidator = updateCategoryValidator;
-        }
+        } 
+        #endregion
+
         public async Task<Response<GetCategoryDto>> AddCategoryAsync(AddCategoryDto category)
         {
             var validationResult = await _addCategoryValidator.ValidateAsync(category);
@@ -61,8 +62,9 @@ namespace Efreshli.Application.Services.CategoryServices
                 }
                 newCategory.ParentId = parentCategory.ParentId;
                 newCategory.Parent = parentCategory;
+                newCategory.CreatedBy = parentCategory.CreatedBy;
             }
-            await _categoryRepository.AddAsync(newCategory);
+            await _unitOfWork.CategoryRepository.AddAsync(newCategory);
             await _unitOfWork.SaveChangesAsync();
             return ResponseHandler.Created(newCategory.Adapt<GetCategoryDto>());
         }
@@ -127,6 +129,7 @@ namespace Efreshli.Application.Services.CategoryServices
                 existingCategory.ParentId = null;
                 existingCategory.Parent = null;
             }
+            await _unitOfWork.CategoryRepository.UpdateAsync(existingCategory);
             await _unitOfWork.SaveChangesAsync();
             return ResponseHandler.Success(existingCategory.Adapt<GetCategoryDto>());
         }
