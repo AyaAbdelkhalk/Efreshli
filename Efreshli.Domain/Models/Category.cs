@@ -14,6 +14,7 @@ namespace Efreshli.Domain.Models
         public int? ParentId { get; set; }
         [ForeignKey("ParentId")]
         public Category? Parent { get; set; }
+        public ICollection<Category>? SubCategories { get; set; } = new List<Category>();
 
         public int? ImageId { get; set; }
         public virtual Image? Image { get; set; }
