@@ -2,6 +2,7 @@
 using Efreshli.Application.Helper.Cloudinary;
 using Efreshli.Application.Helper.Mapping;
 using Efreshli.Application.Interfaces;
+using Efreshli.Application.Services.AuthServices;
 using Efreshli.Application.Services.BrandsServices;
 using Efreshli.Application.Services.CategoryServices;
 using Efreshli.Application.Services.File;
@@ -24,6 +25,8 @@ namespace Efreshli.Application
             MapsterConfig.RegisterMappings();
             services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IAuthService, AuthService>();
+
 
             // Register validators
             services.AddScoped<IValidator<AddCategoryDto>, AddCategoryDtoValidator>();

@@ -2,6 +2,7 @@
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Services.CategoryServices;
 using Efreshli.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
