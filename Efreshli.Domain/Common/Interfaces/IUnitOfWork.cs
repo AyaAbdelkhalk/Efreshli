@@ -1,11 +1,13 @@
 ﻿using Efreshli.Domain.Models;
 
+
 namespace Efreshli.Domain.Common.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
         IGenericRepository<Category> CategoryRepository { get; }
         IGenericRepository<Image> ImageRepository { get; }
+
         IGenericRepository<Brand> BrandRepository { get; }
         IGenericRepository<Coupon> CouponRepository { get; }
         IGenericRepository<ApplicationUser> UserRepository { get; }
@@ -26,6 +28,8 @@ namespace Efreshli.Domain.Common.Interfaces
         IGenericRepository<Review> ReviewRepository { get; }
         IGenericRepository<WebsiteInfo> WebsiteInfoRepository { get; }
         IGenericRepository<VendorRequest> VendorRequestRepository { get; }
+
+
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

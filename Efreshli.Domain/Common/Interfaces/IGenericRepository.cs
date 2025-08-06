@@ -35,5 +35,7 @@ namespace Efreshli.Domain.Common.Interfaces
         Task<IEnumerable<TResult>> GetWhereSelectAsync<TResult>(Expression<Func<TEntity, bool>> Condition, Expression<Func<TEntity, TResult>> expression);
         Task<int> CountAsync(Expression<Func<TEntity, bool>> expression);
         Task SaveChangesAsync();
+        Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>>? predicate = null);
+
     }
 }

@@ -162,6 +162,15 @@ namespace Efreshli.Infrastructure.Repositories
             return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, keyName).Equals(id), cancellationToken);
         }
 
+        public async Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>>? predicate = null)
+        {
+            if (predicate == null)
+                return await _dbSet.AsNoTracking().FirstOrDefaultAsync();
+
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
+        }
+
+
         #region HelperMethods
         private IQueryable<TEntity> BuildQueryWithIncludes(
            IQueryable<TEntity> query,
