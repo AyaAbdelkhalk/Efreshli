@@ -21,7 +21,7 @@ namespace Efreshli.Application.Validators.WebsiteInfoValidators
             RuleFor(x => x.PhoneNumber)
                 .NotEmpty()
                 .WithMessage("Phone number is required")
-                .Matches(@"^[\+]?[1-9][\d]{0,15}$")
+                .Matches(@"^[\+]?[0-9][\d]{0,15}$")
                 .WithMessage("Please enter a valid phone number");
 
             RuleFor(x => x.DescriptionAr)
