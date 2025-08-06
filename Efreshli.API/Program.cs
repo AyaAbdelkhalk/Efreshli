@@ -1,4 +1,4 @@
-using CloudinaryDotNet;
+﻿using CloudinaryDotNet;
 using Efreshli.Application;
 using Efreshli.Application.DTOs.CategoryDTOs;
 using Efreshli.Application.Services;
@@ -22,6 +22,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 
+
 namespace Efreshli.API
 {
     public class Program
@@ -30,12 +31,18 @@ namespace Efreshli.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Add services to the container.
+
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddDbContext<EfreshliDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
+
+            //builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
             builder.Services.AddHttpContextAccessor();
+
 
 
             #region Cloudinary

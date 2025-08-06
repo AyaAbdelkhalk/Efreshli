@@ -5,14 +5,17 @@ using Efreshli.Application.Interfaces;
 using Efreshli.Application.Services.AuthServices;
 using Efreshli.Application.Services.BrandsServices;
 using Efreshli.Application.Services.CategoryServices;
+using Efreshli.Application.Services.CouponServices;
 using Efreshli.Application.Services.File;
 using Efreshli.Application.Validators.CategoryValidators;
+using Efreshli.Application.Validators.CouponValidators;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,19 +25,32 @@ namespace Efreshli.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
+            // Register Mapster mappings
             MapsterConfig.RegisterMappings();
-            services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
-            services.AddScoped<IImageService, ImageService>();
+
+
+            // Register services
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICouponService, CouponService>();
+            services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IBrandsService, BrandsService>();
+
+            // Register external services
+            services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
+            // Register all validators from the Application assembly
+            //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssembly(typeof(AddCouponValidator).Assembly);
+
+
+
 
 
             // Register validators
             services.AddScoped<IValidator<AddCategoryDto>, AddCategoryDtoValidator>();
             services.AddScoped<IValidator<UpdateCategoryDto>, UpdateCategoryDtoValidator>();
 
-            // Register services
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IBrandsService, BrandsService>();
+
             return services;
         }
     }
