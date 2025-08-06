@@ -1147,6 +1147,7 @@ namespace Efreshli.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+
                     b.Property<string>("Office")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

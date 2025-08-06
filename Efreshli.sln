@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36221.1 d17.14
+VisualStudioVersion = 17.14.36221.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Efreshli.Domain", "Efreshli.Domain\Efreshli.Domain.csproj", "{A56E719C-CEFF-4050-81AD-6494C3ADBE45}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Efreshli.API", "Efreshli.API\Efreshli.API.csproj", "{FECFF310-8D59-4568-BE61-067714A10B5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Efreshli.MVC", "Efreshli.MVC\Efreshli.MVC.csproj", "{BA6A0136-ABA7-49CF-BE60-CC9E645FE41A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Efreshli.Common", "Efreshli.Common\Efreshli.Common.csproj", "{7B70326E-F72A-4817-9C93-F57051A40117}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{BA6A0136-ABA7-49CF-BE60-CC9E645FE41A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA6A0136-ABA7-49CF-BE60-CC9E645FE41A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA6A0136-ABA7-49CF-BE60-CC9E645FE41A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B70326E-F72A-4817-9C93-F57051A40117}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B70326E-F72A-4817-9C93-F57051A40117}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B70326E-F72A-4817-9C93-F57051A40117}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B70326E-F72A-4817-9C93-F57051A40117}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

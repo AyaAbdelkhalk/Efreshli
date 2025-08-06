@@ -20,6 +20,8 @@ namespace Efreshli.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IGenericRepository<Image>, GenericRepository<Image>>();
+            services.AddScoped<ICouponRepository, CouponRepository>();
+
             services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             // Initialize static UserContext
@@ -33,6 +35,7 @@ namespace Efreshli.Infrastructure
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IBrandsRepository, BrandsRepository>();
             
+
             return services;
         }
     }
