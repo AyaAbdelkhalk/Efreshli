@@ -4,6 +4,7 @@ using Efreshli.Application.DTOs.CategoryDTOs;
 using Efreshli.Application.Services;
 using Efreshli.Application.Services.AuthServices;
 using Efreshli.Application.Validators.CategoryValidators;
+using Efreshli.Common;
 using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
@@ -33,7 +34,12 @@ namespace Efreshli.API
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(
+                options=>
+                {
+                    options.Filters.Add<ValidateModelAsyncFilter>();
+                }
+                );
             builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddDbContext<EfreshliDbContext>(options =>
@@ -43,6 +49,7 @@ namespace Efreshli.API
 
             builder.Services.AddHttpContextAccessor();
 
+            
 
 
             #region Cloudinary

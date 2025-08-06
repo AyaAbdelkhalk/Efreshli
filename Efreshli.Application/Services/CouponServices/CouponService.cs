@@ -1,6 +1,9 @@
 ﻿using Efreshli.Application.DTOs.CouponDTOs;
+using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Interfaces;
+using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
+using FluentValidation;
 using Mapster;
 using MapsterMapper;
 using System;
@@ -13,31 +16,30 @@ namespace Efreshli.Application.Services.CouponServices
 {
     public class CouponService : ICouponService
     {
-        private readonly ICouponRepository _couponRepository;
-
-        public CouponService(ICouponRepository couponRepository)
+        #region Props&Ctor
+        private readonly IUnitOfWork _unitOfWork;
+        public CouponService(IUnitOfWork unitOfWork)
         {
-            _couponRepository = couponRepository;
+            _unitOfWork = unitOfWork;
 
-            //// Configure Mapster mappings if not configured globally
-            //ConfigureMappings();
-        }
+        } 
+        #endregion
 
         public async Task<CouponDTO> GetCouponByIdAsync(int id)
         {
-            var coupon = await _couponRepository.GetByIdAsync(id);
+            var coupon = await _unitOfWork.CouponRepository.GetByIdAsync(id);
             return coupon.Adapt<CouponDTO>();
         }
 
         public async Task<CouponDTO> GetCouponByCodeAsync(string code)
         {
-            var coupon = await _couponRepository.GetByCodeAsync(code);
+            var coupon = await _unitOfWork.CouponRepository.GetWhereAsync(c=>c.Code==code);
             return coupon.Adapt<CouponDTO>();
         }
 
         public async Task<IEnumerable<CouponDTO>> GetAllCouponsAsync()
         {
-            var coupons = await _couponRepository.GetAllAsync();
+            var coupons = await _unitOfWork.CouponRepository.GetAllAsync();
             return coupons.Adapt<IEnumerable<CouponDTO>>();
         }
 
@@ -47,35 +49,37 @@ namespace Efreshli.Application.Services.CouponServices
             coupon.IsActive = true;
             coupon.UsedCount = 0;
 
-            await _couponRepository.AddAsync(coupon);
-            await _couponRepository.SaveChangesAsync();
+            await _unitOfWork.CouponRepository.AddAsync(coupon);
+            await _unitOfWork.SaveChangesAsync();
             return coupon.Adapt<CouponDTO>();
         }
 
         public async Task UpdateCouponAsync(UpdateCouponDTO couponDto)
         {
-            var coupon = await _couponRepository.GetByIdAsync(couponDto.CouponId);
+            var coupon = await _unitOfWork.CouponRepository.GetByIdAsync(couponDto.CouponId);
             if (coupon == null)
                 throw new KeyNotFoundException("Coupon not found");
 
             couponDto.Adapt(coupon);
-            await _couponRepository.UpdateAsync(coupon);
-            await _couponRepository.SaveChangesAsync();
+            await _unitOfWork.CouponRepository.UpdateAsync(coupon);
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task DeleteCouponAsync(int id)
+        public async Task<Response<bool>> DeleteCouponAsync(int id)
         {
-            var coupon = await _couponRepository.GetByIdAsync(id);
+            var coupon = await _unitOfWork.CouponRepository.GetByIdAsync(id);
             if (coupon == null)
-                throw new KeyNotFoundException("Coupon not found");
+                return ResponseHandler.NotFound<bool>("Coupon not found");
 
-            await _couponRepository.RemoveAsync(id);
-            await _couponRepository.SaveChangesAsync();
+            await _unitOfWork.CouponRepository.RemoveAsync(id);
+            await _unitOfWork.SaveChangesAsync();
+            return ResponseHandler.Success(true);
         }
 
         public async Task<bool> ValidateCouponAsync(string code)
         {
-            var coupon = await _couponRepository.GetByCodeAsync(code);
+            var coupons = await _unitOfWork.CouponRepository.GetWhereAsync(c => c.Code == code);
+            var coupon = coupons.FirstOrDefault();
             if (coupon == null || !coupon.IsActive)
                 return false;
 
@@ -83,8 +87,9 @@ namespace Efreshli.Application.Services.CouponServices
         }
 
         public async Task<CouponDTO> ApplyCouponAsync(string code)
-        {
-            var coupon = await _couponRepository.GetByCodeAsync(code);
+        { 
+            var coupons = await _unitOfWork.CouponRepository.GetWhereAsync(c => c.Code == code);
+            var coupon = coupons.FirstOrDefault();
             if (coupon == null || !coupon.IsActive)
                 throw new InvalidOperationException("Invalid coupon");
 
@@ -92,15 +97,16 @@ namespace Efreshli.Application.Services.CouponServices
                 throw new InvalidOperationException("Coupon usage limit reached");
 
             coupon.UsedCount++;
-            await _couponRepository.UpdateAsync(coupon);
-            await _couponRepository.SaveChangesAsync();
+            await _unitOfWork.CouponRepository.UpdateAsync(coupon);
+            await _unitOfWork.SaveChangesAsync();
 
             return coupon.Adapt<CouponDTO>();
         }
 
         public async Task<bool> CouponCodeExistsAsync(string code)
         {
-            var coupon = await _couponRepository.GetByCodeAsync(code);
+            var coupons = await _unitOfWork.CouponRepository.GetWhereAsync(c => c.Code == code);
+            var coupon = coupons.FirstOrDefault();
             return coupon != null;
         }
     }

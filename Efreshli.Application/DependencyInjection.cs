@@ -1,4 +1,5 @@
 ﻿using Efreshli.Application.DTOs.CategoryDTOs;
+using Efreshli.Application.DTOs.CouponDTOs;
 using Efreshli.Application.Helper.Cloudinary;
 using Efreshli.Application.Helper.Mapping;
 using Efreshli.Application.Interfaces;
@@ -39,16 +40,10 @@ namespace Efreshli.Application
             // Register external services
             services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
             // Register all validators from the Application assembly
-            //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddValidatorsFromAssembly(typeof(AddCouponValidator).Assembly);
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            //services.AddValidatorsFromAssembly(typeof(AddCouponDTOValidator).Assembly);
 
 
-
-
-
-            // Register validators
-            services.AddScoped<IValidator<AddCategoryDto>, AddCategoryDtoValidator>();
-            services.AddScoped<IValidator<UpdateCategoryDto>, UpdateCategoryDtoValidator>();
 
 
             return services;

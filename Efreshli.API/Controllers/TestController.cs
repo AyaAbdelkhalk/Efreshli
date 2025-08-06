@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Efreshli.Application.DTOs.CouponDTOs;
+using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Services.CouponServices;
 using Efreshli.Application.Services.File;
 using Efreshli.Domain.Enums;
@@ -43,6 +44,14 @@ namespace Efreshli.API.Controllers
                 return BadRequest(ModelState);
             var added= await _couponService.CreateCouponAsync(couponDTO);
             return Ok(added);
+        }
+
+        //delete
+        [HttpDelete("deleteCoupon")]
+        public async Task<IActionResult> DeleteCoupon([Required] int id)
+        {
+            var result = await _couponService.DeleteCouponAsync(id);
+            return this.CreateResponse(result);  
         }
 
     }
