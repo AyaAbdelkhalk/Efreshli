@@ -10,11 +10,10 @@ using System.Threading.Tasks;
 
 namespace Efreshli.Infrastructure.Repositories
 {
-    public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
+    public class BrandsRepository : GenericRepository<Brand>, IBrandsRepository
     {
-
-        public CategoryRepository(EfreshliDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
-        {   
+        public BrandsRepository(EfreshliDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
+        {
         }
     }
 }

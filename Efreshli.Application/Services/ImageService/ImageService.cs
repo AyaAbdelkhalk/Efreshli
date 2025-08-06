@@ -71,5 +71,12 @@ namespace Efreshli.Application.Services.File
             await _imageRepo.SaveChangesAsync();
             return true;
         }
+
+        public string GetImageUrl(int imageId)
+        {
+            var image = _imageRepo.GetByIdQueryable(imageId).FirstOrDefault();
+            if (image == null) return null;
+            return image.URL;
+        }
     }
 }
