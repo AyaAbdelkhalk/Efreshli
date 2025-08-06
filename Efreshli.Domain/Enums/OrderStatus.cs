@@ -11,6 +11,7 @@ namespace Efreshli.Domain.Enums
         Pending=0,
         Processing,
         Shipped,
-        Delivered
+        Delivered,
+        Cancelled
     }
 }

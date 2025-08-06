@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Efreshli.Domain.Models
 {
-    public class Image
+    public class Image : Auditable
     {
         [Key]
         public int Id { get; set; }

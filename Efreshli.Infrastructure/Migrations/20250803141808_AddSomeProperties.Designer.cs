@@ -4,6 +4,7 @@ using Efreshli.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Efreshli.Infrastructure.Migrations
 {
     [DbContext(typeof(EfreshliDbContext))]
-    partial class EfreshliDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250803141808_AddSomeProperties")]
+    partial class AddSomeProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -546,10 +549,6 @@ namespace Efreshli.Infrastructure.Migrations
 
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
-
-                    b.Property<string>("PublicId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ReferenceId")
                         .HasColumnType("int");
@@ -1146,11 +1145,11 @@ namespace Efreshli.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LogoURL");
-
+                    b.Property<string>("LogoUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Office")
-
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
