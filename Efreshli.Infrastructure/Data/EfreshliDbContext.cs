@@ -1,5 +1,6 @@
 ﻿using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -10,6 +11,7 @@ namespace Efreshli.Infrastructure.Data
 {
     public class EfreshliDbContext : IdentityDbContext<ApplicationUser>
     {
+
         public EfreshliDbContext(DbContextOptions options) : base(options)
         {
         }
@@ -52,19 +54,11 @@ namespace Efreshli.Infrastructure.Data
 
         public override int SaveChanges()
         {
-            if (this.ChangeTracker.HasChanges())
-            {
-                this.UpdateAuditFields();
-            }
             return base.SaveChanges();
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            if (this.ChangeTracker.HasChanges())
-            {
-                this.UpdateAuditFields();
-            }
             return await base.SaveChangesAsync(cancellationToken);
         }
     }

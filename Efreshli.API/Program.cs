@@ -13,8 +13,10 @@ using Efreshli.Infrastructure.Data;
 using Efreshli.Infrastructure.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -31,19 +33,9 @@ namespace Efreshli.API
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            //builder.Services.AddControllers()
-            //    .AddFluentValidation(fv =>
-            //    {
-            //        fv.RegisterValidatorsFromAssemblyContaining<AddCategoryValidator>();
-            //        fv.DisableDataAnnotationsValidation = true; 
-            //    });
-
-            builder.Services.AddScoped<IValidator<AddCategoryDto>, AddCategoryDtoValidator>();
-
             builder.Services.AddDbContext<EfreshliDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
+            builder.Services.AddHttpContextAccessor();
 
 
             #region Cloudinary
@@ -60,10 +52,15 @@ namespace Efreshli.API
                 );
 
                 return new Cloudinary(account);
-            }); 
+            });
             #endregion
 
-        
+
+
+
+
+            #region Auth
+
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -72,23 +69,17 @@ namespace Efreshli.API
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 3;
             })
-            .AddEntityFrameworkStores<EfreshliDbContext>()
-            .AddDefaultTokenProviders();
-
-          
-            builder.Services.AddScoped<IAuthService, AuthService>();
-
-            builder.Services.AddInfrastructure(builder.Configuration);
-            builder.Services.AddApplication(builder.Configuration);
+                .AddEntityFrameworkStores<EfreshliDbContext>()
+                 .AddDefaultTokenProviders();
 
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWT"));
 
-            builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = "JwtBearer";
                 options.DefaultChallengeScheme = "JwtBearer";
+
             }).AddJwtBearer("JwtBearer", options =>
             {
                 var jwtSettings = builder.Configuration.GetSection("JWT").Get<JwtSettings>();
@@ -101,19 +92,83 @@ namespace Efreshli.API
                     ValidIssuer = jwtSettings.Issuer,
                     ValidAudience = jwtSettings.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
-                    ClockSkew = TimeSpan.Zero
+                    ClockSkew = TimeSpan.Zero,
+                    RequireExpirationTime = true,
+                    ValidateActor = false,
+                    ValidateTokenReplay = false
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = context =>
+                    {
+                        Console.WriteLine($"Token validated for: {context.Principal.Identity.Name}");
+                        return Task.CompletedTask;
+                    }
                 };
             });
 
+            #endregion
+
+            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddApplication(builder.Configuration);
+
+
+            #region Swagger
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Title = "Efreshli API",
+                    Version = "v1",
+                    Description = "API for Efreshli application"
+                });
+                // Add security definition for JWT Bearer
+                options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    BearerFormat = "JWT",
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                    Scheme = "Bearer"
+                });
+                options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                    {
+                    {
+                        new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                        {
+                            Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                            {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+
+                            }
+                        },
+                        new string[] {}
+                    }
+                    });
+
+            });
+
+
+            #endregion
 
             var app = builder.Build();
-            // Initialize static UserContext
-            UserContext.Initialize(app.Services);
+
+            var httpContextAccessor = app.Services.GetRequiredService<IHttpContextAccessor>();
 
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            app.UseStaticFiles();
+
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.MapControllers();
