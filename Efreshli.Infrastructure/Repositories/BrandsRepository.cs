@@ -1,6 +1,7 @@
 ﻿using Efreshli.Application.Interfaces;
 using Efreshli.Domain.Models;
 using Efreshli.Infrastructure.Data;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Efreshli.Infrastructure.Repositories
 {
     public class BrandsRepository : GenericRepository<Brand>, IBrandsRepository
     {
-        public BrandsRepository(EfreshliDbContext context) : base(context)
+        public BrandsRepository(EfreshliDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
         {
         }
     }
