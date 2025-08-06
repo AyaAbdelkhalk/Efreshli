@@ -1,4 +1,5 @@
 ﻿using Efreshli.Application.DTOs.CategoryDTOs;
+using Efreshli.Application.DTOs.WebsiteInfoDTOs;
 using Efreshli.Application.Helper.Cloudinary;
 using Efreshli.Application.Helper.Mapping;
 using Efreshli.Application.Interfaces;
@@ -7,8 +8,10 @@ using Efreshli.Application.Services.BrandsServices;
 using Efreshli.Application.Services.CategoryServices;
 using Efreshli.Application.Services.CouponServices;
 using Efreshli.Application.Services.File;
+using Efreshli.Application.Services.WebsiteInfoServices;
 using Efreshli.Application.Validators.CategoryValidators;
 using Efreshli.Application.Validators.CouponValidators;
+using Efreshli.Application.Validators.WebsiteInfoValidators;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,30 +31,26 @@ namespace Efreshli.Application
             // Register Mapster mappings
             MapsterConfig.RegisterMappings();
 
-
             // Register services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICouponService, CouponService>();
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IBrandsService, BrandsService>();
+            services.AddScoped<IWebsiteInfoService, WebsiteInfoService>(); 
 
             // Register external services
             services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
-            // Register all validators from the Application assembly
-            //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+            // Register all validators
             services.AddValidatorsFromAssembly(typeof(AddCouponValidator).Assembly);
-
-
-
-
-
-            // Register validators
             services.AddScoped<IValidator<AddCategoryDto>, AddCategoryDtoValidator>();
             services.AddScoped<IValidator<UpdateCategoryDto>, UpdateCategoryDtoValidator>();
-
+            services.AddScoped<IValidator<CreateWebsiteInfoDto>, CreateWebsiteInfoDtoValidator>(); 
+            services.AddScoped<IValidator<UpdateWebsiteInfoDto>, UpdateWebsiteInfoDtoValidator>(); 
 
             return services;
         }
+
     }
 }
