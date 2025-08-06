@@ -21,8 +21,6 @@ namespace Efreshli.Infrastructure.Repositories
         protected readonly DbSet<TEntity> _dbSet;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        //private readonly UserManager<ApplicationUser> _userManager;
-
         public GenericRepository(EfreshliDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
