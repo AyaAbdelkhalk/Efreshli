@@ -1,0 +1,1532 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="General.Welcome" xml:space="preserve">
+    <value>مرحباً بك</value>
+    <comment>Welcome message</comment>
+  </data>
+  <data name="General.Loading" xml:space="preserve">
+    <value>جارٍ التحميل...</value>
+    <comment>Loading indicator</comment>
+  </data>
+  <data name="General.Processing" xml:space="preserve">
+    <value>جارٍ المعالجة...</value>
+    <comment>Processing indicator</comment>
+  </data>
+  <data name="General.PleaseWait" xml:space="preserve">
+    <value>يرجى الانتظار</value>
+    <comment>Please wait message</comment>
+  </data>
+  <data name="General.Search" xml:space="preserve">
+    <value>بحث</value>
+    <comment>Search label</comment>
+  </data>
+  <data name="General.Filter" xml:space="preserve">
+    <value>تصفية</value>
+    <comment>Filter label</comment>
+  </data>
+  <data name="General.Sort" xml:space="preserve">
+    <value>ترتيب</value>
+    <comment>Sort label</comment>
+  </data>
+  <data name="General.Select" xml:space="preserve">
+    <value>اختر</value>
+    <comment>Select label</comment>
+  </data>
+  <data name="General.All" xml:space="preserve">
+    <value>الكل</value>
+    <comment>All/Everything</comment>
+  </data>
+  <data name="General.None" xml:space="preserve">
+    <value>لا شيء</value>
+    <comment>None/Nothing</comment>
+  </data>
+  <data name="General.Yes" xml:space="preserve">
+    <value>نعم</value>
+    <comment>Yes</comment>
+  </data>
+  <data name="General.No" xml:space="preserve">
+    <value>لا</value>
+    <comment>No</comment>
+  </data>
+  <data name="General.OK" xml:space="preserve">
+    <value>موافق</value>
+    <comment>OK button</comment>
+  </data>
+  <data name="General.Apply" xml:space="preserve">
+    <value>تطبيق</value>
+    <comment>Apply button</comment>
+  </data>
+  <data name="General.Reset" xml:space="preserve">
+    <value>إعادة تعيين</value>
+    <comment>Reset button</comment>
+  </data>
+  <data name="General.Clear" xml:space="preserve">
+    <value>مسح</value>
+    <comment>Clear button</comment>
+  </data>
+  <data name="Navigation.Home" xml:space="preserve">
+    <value>الرئيسية</value>
+    <comment>Home page</comment>
+  </data>
+  <data name="Navigation.About" xml:space="preserve">
+    <value>عن الشركة</value>
+    <comment>About page</comment>
+  </data>
+  <data name="Navigation.Services" xml:space="preserve">
+    <value>الخدمات</value>
+    <comment>Services page</comment>
+  </data>
+  <data name="Navigation.Contact" xml:space="preserve">
+    <value>تواصل معنا</value>
+    <comment>Contact page</comment>
+  </data>
+  <data name="Navigation.FAQ" xml:space="preserve">
+    <value>الأسئلة الشائعة</value>
+    <comment>FAQ page</comment>
+  </data>
+  <data name="Navigation.Blog" xml:space="preserve">
+    <value>المدونة</value>
+    <comment>Blog page</comment>
+  </data>
+  <data name="Navigation.Pricing" xml:space="preserve">
+    <value>الأسعار</value>
+    <comment>Pricing page</comment>
+  </data>
+  <data name="Navigation.Portfolio" xml:space="preserve">
+    <value>معرض الأعمال</value>
+    <comment>Portfolio page</comment>
+  </data>
+  <data name="Navigation.Testimonials" xml:space="preserve">
+    <value>آراء العملاء</value>
+    <comment>Testimonials page</comment>
+  </data>
+  <data name="Navigation.News" xml:space="preserve">
+    <value>الأخبار</value>
+    <comment>News page</comment>
+  </data>
+  <data name="Navigation.Dashboard" xml:space="preserve">
+    <value>لوحة التحكم</value>
+    <comment>Dashboard</comment>
+  </data>
+  <data name="Navigation.Reports" xml:space="preserve">
+    <value>التقارير</value>
+    <comment>Reports</comment>
+  </data>
+  <data name="Validation.Required" xml:space="preserve">
+    <value>هذا الحقل مطلوب</value>
+    <comment>Required field validation</comment>
+  </data>
+  <data name="Validation.Invalid" xml:space="preserve">
+    <value>قيمة غير صالحة</value>
+    <comment>Invalid value</comment>
+  </data>
+  <data name="Validation.MinLength" xml:space="preserve">
+    <value>يجب أن يحتوي على الأقل على {0} حرف/أحرف</value>
+    <comment>Minimum length validation</comment>
+  </data>
+  <data name="Validation.MaxLength" xml:space="preserve">
+    <value>لا يمكن أن يتجاوز {0} حرف/أحرف</value>
+    <comment>Maximum length validation</comment>
+  </data>
+  <data name="Validation.ExactLength" xml:space="preserve">
+    <value>يجب أن يحتوي بالضبط على {0} حرف/أحرف</value>
+    <comment>Exact length validation</comment>
+  </data>
+  <data name="Validation.NumericOnly" xml:space="preserve">
+    <value>يجب أن يحتوي على أرقام فقط</value>
+    <comment>Numeric only validation</comment>
+  </data>
+  <data name="Validation.IntegerOnly" xml:space="preserve">
+    <value>يجب أن يكون رقمًا صحيحًا</value>
+    <comment>Integer only validation</comment>
+  </data>
+  <data name="Validation.DecimalOnly" xml:space="preserve">
+    <value>يجب أن يكون رقمًا عشريًا</value>
+    <comment>Decimal number validation</comment>
+  </data>
+  <data name="Validation.EmailInvalid" xml:space="preserve">
+    <value>بريد إلكتروني غير صالح</value>
+    <comment>Email is invalid</comment>
+  </data>
+  <data name="Validation.UrlInvalid" xml:space="preserve">
+    <value>رابط URL غير صالح</value>
+    <comment>URL format is invalid</comment>
+  </data>
+  <data name="Validation.DateInvalid" xml:space="preserve">
+    <value>تاريخ غير صالح (الرجاء استخدام صيغة يوم/شهر/سنة)</value>
+    <comment>Date format is invalid</comment>
+  </data>
+  <data name="Validation.TimeInvalid" xml:space="preserve">
+    <value>وقت غير صالح</value>
+    <comment>Time format is invalid</comment>
+  </data>
+  <data name="Validation.DateTimeInvalid" xml:space="preserve">
+    <value>تاريخ ووقت غير صالحين</value>
+    <comment>Date and time format is invalid</comment>
+  </data>
+  <data name="Validation.PhoneNumberInvalid" xml:space="preserve">
+    <value>رقم هاتف غير صالح</value>
+    <comment>Phone number is invalid</comment>
+  </data>
+  <data name="Validation.PasswordTooShort" xml:space="preserve">
+    <value>كلمة المرور قصيرة جدًا (الحد الأدنى {0} حرف/أحرف)</value>
+    <comment>Password is too short</comment>
+  </data>
+  <data name="Validation.PasswordComplexity" xml:space="preserve">
+    <value>يجب أن تحتوي على حروف كبيرة وصغيرة وأرقام وحرف خاص</value>
+    <comment>Password complexity requirements</comment>
+  </data>
+  <data name="Validation.PasswordMissingUppercase" xml:space="preserve">
+    <value>يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل</value>
+    <comment>Password is missing uppercase letter</comment>
+  </data>
+  <data name="Validation.PasswordMissingLowercase" xml:space="preserve">
+    <value>يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل</value>
+    <comment>Password is missing lowercase letter</comment>
+  </data>
+  <data name="Validation.PasswordMissingDigit" xml:space="preserve">
+    <value>يجب أن تحتوي كلمة المرور على رقم واحد على الأقل</value>
+    <comment>Password is missing digit</comment>
+  </data>
+  <data name="Validation.PasswordMissingSpecialChar" xml:space="preserve">
+    <value>يجب أن تحتوي كلمة المرور على حرف خاص واحد على الأقل</value>
+    <comment>Password is missing special character</comment>
+  </data>
+  <data name="Validation.PasswordsDoNotMatch" xml:space="preserve">
+    <value>كلمتا المرور غير متطابقتين</value>
+    <comment>Password and confirmation do not match</comment>
+  </data>
+  <data name="Validation.UsernameAlreadyExists" xml:space="preserve">
+    <value>اسم المستخدم موجود مسبقًا</value>
+    <comment>Username already exists</comment>
+  </data>
+  <data name="Validation.EmailAlreadyRegistered" xml:space="preserve">
+    <value>البريد الإلكتروني مسجل مسبقًا</value>
+    <comment>Email already registered</comment>
+  </data>
+  <data name="Validation.MustBeGreaterThanZero" xml:space="preserve">
+    <value>يجب أن يكون أكبر من الصفر</value>
+    <comment>Value must be greater than zero</comment>
+  </data>
+  <data name="Validation.MustBeGreaterThanOrEqualToZero" xml:space="preserve">
+    <value>يجب أن يكون صفرًا أو أكبر</value>
+    <comment>Value must be greater than or equal to zero</comment>
+  </data>
+  <data name="Validation.MustBePositiveNumber" xml:space="preserve">
+    <value>يجب أن يكون رقمًا موجبًا</value>
+    <comment>Must be a positive number</comment>
+  </data>
+  <data name="Validation.MustBeNegativeNumber" xml:space="preserve">
+    <value>يجب أن يكون رقمًا سالبًا</value>
+    <comment>Must be a negative number</comment>
+  </data>
+  <data name="Validation.ValueMustBeGreaterThan" xml:space="preserve">
+    <value>يجب أن يكون أكبر من {0}</value>
+    <comment>Value must be greater than {0}</comment>
+  </data>
+  <data name="Validation.ValueMustBeLessThan" xml:space="preserve">
+    <value>يجب أن يكون أقل من {0}</value>
+    <comment>Value must be less than {0}</comment>
+  </data>
+  <data name="Validation.ValueMustBeBetween" xml:space="preserve">
+    <value>يجب أن يكون بين {0} و {1}</value>
+    <comment>Value must be between {0} and {1}</comment>
+  </data>
+  <data name="Validation.FileTooLarge" xml:space="preserve">
+    <value>الملف كبير جدًا (الحد الأقصى {0})</value>
+    <comment>File size exceeds limit</comment>
+  </data>
+  <data name="Validation.InvalidFileType" xml:space="preserve">
+    <value>نوع الملف غير مسموح به</value>
+    <comment>File type is not allowed</comment>
+  </data>
+  <data name="Validation.FileDimensionsTooLarge" xml:space="preserve">
+    <value>أبعاد الصورة تتجاوز {0}×{1} بكسل</value>
+    <comment>Image dimensions exceed limit</comment>
+  </data>
+  <data name="Validation.NoFileSelected" xml:space="preserve">
+    <value>لم يتم اختيار أي ملف</value>
+    <comment>No file selected</comment>
+  </data>
+  <data name="Validation.FutureDateRequired" xml:space="preserve">
+    <value>يجب أن يكون تاريخًا مستقبليًا</value>
+    <comment>Future date required</comment>
+  </data>
+  <data name="Validation.PastDateRequired" xml:space="preserve">
+    <value>يجب أن يكون تاريخًا ماضيًا</value>
+    <comment>Past date required</comment>
+  </data>
+  <data name="Validation.DateMustBeAfter" xml:space="preserve">
+    <value>يجب أن يكون بعد {0}</value>
+    <comment>Date must be after {0}</comment>
+  </data>
+  <data name="Validation.DateMustBeBefore" xml:space="preserve">
+    <value>يجب أن يكون قبل {0}</value>
+    <comment>Date must be before {0}</comment>
+  </data>
+  <data name="Validation.EndDateAfterStartDate" xml:space="preserve">
+    <value>يجب أن يكون تاريخ الانتهاء بعد تاريخ البدء</value>
+    <comment>End date must be after start date</comment>
+  </data>
+  <data name="Validation.CheckedRequired" xml:space="preserve">
+    <value>يجب اختيار هذا الخيار</value>
+    <comment>Checkbox must be checked</comment>
+  </data>
+  <data name="Validation.UncheckedRequired" xml:space="preserve">
+    <value>يجب إلغاء اختيار هذا الخيار</value>
+    <comment>Checkbox must be unchecked</comment>
+  </data>
+  <data name="Validation.SelectAtLeastOne" xml:space="preserve">
+    <value>الرجاء اختيار عنصر واحد على الأقل</value>
+    <comment>Select at least one item</comment>
+  </data>
+  <data name="Validation.SelectMaxItems" xml:space="preserve">
+    <value>الحد الأقصى {0} عنصر/عناصر مسموح بها</value>
+    <comment>Select up to {0} items only</comment>
+  </data>
+  <data name="Validation.MustAcceptTerms" xml:space="preserve">
+    <value>يجب الموافقة على الشروط والأحكام</value>
+    <comment>You must accept terms and conditions</comment>
+  </data>
+  <data name="Validation.MustSelectOption" xml:space="preserve">
+    <value>الرجاء اختيار خيار</value>
+    <comment>You must select an option from the list</comment>
+  </data>
+  <data name="Validation.ConfirmationRequired" xml:space="preserve">
+    <value>الرجاء تأكيد هذا الإجراء</value>
+    <comment>Action confirmation is required</comment>
+  </data>
+  <data name="Validation.TooManyAttempts" xml:space="preserve">
+    <value>عدد كبير جدًا من المحاولات، يرجى المحاولة لاحقًا</value>
+    <comment>Too many attempts</comment>
+  </data>
+  <data name="Validation.AccountLocked" xml:space="preserve">
+    <value>الحساب مؤقتًا لأسباب أمنية</value>
+    <comment>Account locked due to security reasons</comment>
+  </data>
+  <data name="Validation.CreditCardInvalid" xml:space="preserve">
+    <value>رقم بطاقة ائتمان غير صالح</value>
+    <comment>Credit card number is invalid</comment>
+  </data>
+  <data name="Validation.IBANInvalid" xml:space="preserve">
+    <value>رقم IBAN غير صالح</value>
+    <comment>IBAN is invalid</comment>
+  </data>
+  <data name="Validation.CaptchaInvalid" xml:space="preserve">
+    <value>رمز التحقق غير صالح</value>
+    <comment>CAPTCHA verification failed</comment>
+  </data>
+  <data name="Validation.UniqueValueRequired" xml:space="preserve">
+    <value>هذه القيمة مستخدمة بالفعل</value>
+    <comment>Value must be unique</comment>
+  </data>
+  <data name="Validation.FieldMismatch" xml:space="preserve">
+    <value>لا يتطابق مع حقل {0}</value>
+    <comment>Field mismatch validation</comment>
+  </data>
+  <data name="Validation.AllowedCharacters" xml:space="preserve">
+    <value>يحتوي على أحرف غير مسموح بها</value>
+    <comment>Contains disallowed characters</comment>
+  </data>
+  <data name="Actions.Save" xml:space="preserve">
+    <value>حفظ</value>
+    <comment>Save action</comment>
+  </data>
+  <data name="Actions.Submit" xml:space="preserve">
+    <value>إرسال</value>
+    <comment>Submit action</comment>
+  </data>
+  <data name="Actions.Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+    <comment>Cancel action</comment>
+  </data>
+  <data name="Actions.Edit" xml:space="preserve">
+    <value>تعديل</value>
+    <comment>Edit action</comment>
+  </data>
+  <data name="Actions.Delete" xml:space="preserve">
+    <value>حذف</value>
+    <comment>Delete action</comment>
+  </data>
+  <data name="Actions.Create" xml:space="preserve">
+    <value>إنشاء</value>
+    <comment>Create action</comment>
+  </data>
+  <data name="Actions.Add" xml:space="preserve">
+    <value>إضافة</value>
+    <comment>Add action</comment>
+  </data>
+  <data name="Actions.Update" xml:space="preserve">
+    <value>تحديث</value>
+    <comment>Update action</comment>
+  </data>
+  <data name="Actions.View" xml:space="preserve">
+    <value>عرض</value>
+    <comment>View action</comment>
+  </data>
+  <data name="Actions.Close" xml:space="preserve">
+    <value>إغلاق</value>
+    <comment>Close action</comment>
+  </data>
+  <data name="Actions.Back" xml:space="preserve">
+    <value>رجوع</value>
+    <comment>Back action</comment>
+  </data>
+  <data name="Actions.Next" xml:space="preserve">
+    <value>التالي</value>
+    <comment>Next action</comment>
+  </data>
+  <data name="Actions.Previous" xml:space="preserve">
+    <value>السابق</value>
+    <comment>Previous action</comment>
+  </data>
+  <data name="Actions.Refresh" xml:space="preserve">
+    <value>تحديث</value>
+    <comment>Refresh action</comment>
+  </data>
+  <data name="Actions.Continue" xml:space="preserve">
+    <value>متابعة</value>
+    <comment>Continue action</comment>
+  </data>
+  <data name="Actions.Finish" xml:space="preserve">
+    <value>إنهاء</value>
+    <comment>Finish action</comment>
+  </data>
+  <data name="Actions.Send" xml:space="preserve">
+    <value>إرسال</value>
+    <comment>Send action</comment>
+  </data>
+  <data name="Actions.Print" xml:space="preserve">
+    <value>طباعة</value>
+    <comment>Print action</comment>
+  </data>
+  <data name="Actions.Share" xml:space="preserve">
+    <value>مشاركة</value>
+    <comment>Share action</comment>
+  </data>
+  <data name="Actions.Copy" xml:space="preserve">
+    <value>نسخ</value>
+    <comment>Copy action</comment>
+  </data>
+  <data name="Actions.Paste" xml:space="preserve">
+    <value>لصق</value>
+    <comment>Paste action</comment>
+  </data>
+  <data name="User.Login" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+    <comment>Login action</comment>
+  </data>
+  <data name="User.Logout" xml:space="preserve">
+    <value>تسجيل الخروج</value>
+    <comment>Logout action</comment>
+  </data>
+  <data name="User.Register" xml:space="preserve">
+    <value>تسجيل حساب جديد</value>
+    <comment>Register action</comment>
+  </data>
+  <data name="User.Username" xml:space="preserve">
+    <value>اسم المستخدم</value>
+    <comment>Username field</comment>
+  </data>
+  <data name="User.Email" xml:space="preserve">
+    <value>البريد الإلكتروني</value>
+    <comment>Email field</comment>
+  </data>
+  <data name="User.Password" xml:space="preserve">
+    <value>كلمة المرور</value>
+    <comment>Password field</comment>
+  </data>
+  <data name="User.ConfirmPassword" xml:space="preserve">
+    <value>تأكيد كلمة المرور</value>
+    <comment>Confirm password field</comment>
+  </data>
+  <data name="User.ForgotPassword" xml:space="preserve">
+    <value>نسيت كلمة المرور؟</value>
+    <comment>Forgot password link</comment>
+  </data>
+  <data name="User.ResetPassword" xml:space="preserve">
+    <value>إعادة تعيين كلمة المرور</value>
+    <comment>Reset password action</comment>
+  </data>
+  <data name="User.ChangePassword" xml:space="preserve">
+    <value>تغيير كلمة المرور</value>
+    <comment>Change password action</comment>
+  </data>
+  <data name="User.CreateAccount" xml:space="preserve">
+    <value>إنشاء حساب</value>
+    <comment>Create account action</comment>
+  </data>
+  <data name="User.UpdateProfile" xml:space="preserve">
+    <value>تحديث الملف الشخصي</value>
+    <comment>Update profile action</comment>
+  </data>
+  <data name="User.DeleteAccount" xml:space="preserve">
+    <value>حذف الحساب</value>
+    <comment>Delete account action</comment>
+  </data>
+  <data name="User.MyProfile" xml:space="preserve">
+    <value>ملفي الشخصي</value>
+    <comment>My profile</comment>
+  </data>
+  <data name="User.MyOrders" xml:space="preserve">
+    <value>طلباتي</value>
+    <comment>My orders</comment>
+  </data>
+  <data name="User.FirstName" xml:space="preserve">
+    <value>الاسم الأول</value>
+    <comment>First name field</comment>
+  </data>
+  <data name="User.LastName" xml:space="preserve">
+    <value>الاسم الأخير</value>
+    <comment>Last name field</comment>
+  </data>
+  <data name="User.FullName" xml:space="preserve">
+    <value>الاسم الكامل</value>
+    <comment>Full name field</comment>
+  </data>
+  <data name="User.PhoneNumber" xml:space="preserve">
+    <value>رقم الهاتف</value>
+    <comment>Phone number field</comment>
+  </data>
+  <data name="User.DateOfBirth" xml:space="preserve">
+    <value>تاريخ الميلاد</value>
+    <comment>Date of birth field</comment>
+  </data>
+  <data name="User.Gender" xml:space="preserve">
+    <value>الجنس</value>
+    <comment>Gender field</comment>
+  </data>
+  <data name="User.Address" xml:space="preserve">
+    <value>العنوان</value>
+    <comment>Address field</comment>
+  </data>
+  <data name="User.City" xml:space="preserve">
+    <value>المدينة</value>
+    <comment>City field</comment>
+  </data>
+  <data name="User.Country" xml:space="preserve">
+    <value>الدولة</value>
+    <comment>Country field</comment>
+  </data>
+  <data name="User.RememberMe" xml:space="preserve">
+    <value>تذكرني</value>
+    <comment>Remember me checkbox</comment>
+  </data>
+  <data name="ECommerce.AddToCart" xml:space="preserve">
+    <value>إضافة إلى السلة</value>
+    <comment>Add to cart action</comment>
+  </data>
+  <data name="ECommerce.RemoveFromCart" xml:space="preserve">
+    <value>إزالة من السلة</value>
+    <comment>Remove from cart action</comment>
+  </data>
+  <data name="ECommerce.ViewCart" xml:space="preserve">
+    <value>عرض السلة</value>
+    <comment>View cart action</comment>
+  </data>
+  <data name="ECommerce.EmptyCart" xml:space="preserve">
+    <value>إفراغ السلة</value>
+    <comment>Empty cart action</comment>
+  </data>
+  <data name="ECommerce.Checkout" xml:space="preserve">
+    <value>الدفع</value>
+    <comment>Checkout action</comment>
+  </data>
+  <data name="ECommerce.PlaceOrder" xml:space="preserve">
+    <value>تأكيد الطلب</value>
+    <comment>Place order action</comment>
+  </data>
+  <data name="ECommerce.AddToWishlist" xml:space="preserve">
+    <value>إضافة إلى المفضلة</value>
+    <comment>Add to wishlist action</comment>
+  </data>
+  <data name="ECommerce.RemoveFromWishlist" xml:space="preserve">
+    <value>إزالة من المفضلة</value>
+    <comment>Remove from wishlist action</comment>
+  </data>
+  <data name="ECommerce.ViewWishlist" xml:space="preserve">
+    <value>عرض المفضلة</value>
+    <comment>View wishlist action</comment>
+  </data>
+  <data name="ECommerce.Compare" xml:space="preserve">
+    <value>مقارنة</value>
+    <comment>Compare action</comment>
+  </data>
+  <data name="ECommerce.QuickView" xml:space="preserve">
+    <value>عرض سريع</value>
+    <comment>Quick view action</comment>
+  </data>
+  <data name="ECommerce.Subtotal" xml:space="preserve">
+    <value>المجموع الفرعي</value>
+    <comment>Subtotal</comment>
+  </data>
+  <data name="ECommerce.Tax" xml:space="preserve">
+    <value>الضريبة</value>
+    <comment>Tax</comment>
+  </data>
+  <data name="ECommerce.Shipping" xml:space="preserve">
+    <value>الشحن</value>
+    <comment>Shipping</comment>
+  </data>
+  <data name="ECommerce.Discount" xml:space="preserve">
+    <value>الخصم</value>
+    <comment>Discount</comment>
+  </data>
+  <data name="ECommerce.Total" xml:space="preserve">
+    <value>المجموع الكلي</value>
+    <comment>Total</comment>
+  </data>
+  <data name="ECommerce.Price" xml:space="preserve">
+    <value>السعر</value>
+    <comment>Price</comment>
+  </data>
+  <data name="ECommerce.Quantity" xml:space="preserve">
+    <value>الكمية</value>
+    <comment>Quantity</comment>
+  </data>
+  <data name="ECommerce.ProductCode" xml:space="preserve">
+    <value>كود المنتج</value>
+    <comment>Product code</comment>
+  </data>
+  <data name="ECommerce.Category" xml:space="preserve">
+    <value>الفئة</value>
+    <comment>Category</comment>
+  </data>
+  <data name="ECommerce.Brand" xml:space="preserve">
+    <value>العلامة التجارية</value>
+    <comment>Brand</comment>
+  </data>
+  <data name="ECommerce.InStock" xml:space="preserve">
+    <value>متوفر</value>
+    <comment>In stock</comment>
+  </data>
+  <data name="ECommerce.OutOfStock" xml:space="preserve">
+    <value>غير متوفر</value>
+    <comment>Out of stock</comment>
+  </data>
+  <data name="ECommerce.ShippingAddress" xml:space="preserve">
+    <value>عنوان الشحن</value>
+    <comment>Shipping address</comment>
+  </data>
+  <data name="ECommerce.BillingAddress" xml:space="preserve">
+    <value>عنوان الفواتير</value>
+    <comment>Billing address</comment>
+  </data>
+  <data name="ECommerce.PaymentMethod" xml:space="preserve">
+    <value>طريقة الدفع</value>
+    <comment>Payment method</comment>
+  </data>
+  <data name="ECommerce.PaymentInfo" xml:space="preserve">
+    <value>معلومات الدفع</value>
+    <comment>Payment information</comment>
+  </data>
+  <data name="ECommerce.OrderNumber" xml:space="preserve">
+    <value>رقم الطلب</value>
+    <comment>Order number</comment>
+  </data>
+  <data name="ECommerce.OrderDate" xml:space="preserve">
+    <value>تاريخ الطلب</value>
+    <comment>Order date</comment>
+  </data>
+  <data name="ECommerce.OrderStatus" xml:space="preserve">
+    <value>حالة الطلب</value>
+    <comment>Order status</comment>
+  </data>
+  <data name="ECommerce.TrackOrder" xml:space="preserve">
+    <value>تتبع الطلب</value>
+    <comment>Track order</comment>
+  </data>
+  <data name="ECommerce.DeliveryDate" xml:space="preserve">
+    <value>تاريخ التسليم</value>
+    <comment>Delivery date</comment>
+  </data>
+  <data name="ECommerce.CouponCode" xml:space="preserve">
+    <value>كود الخصم</value>
+    <comment>Coupon code</comment>
+  </data>
+  <data name="ECommerce.ApplyCoupon" xml:space="preserve">
+    <value>تطبيق الكوبون</value>
+    <comment>Apply coupon</comment>
+  </data>
+  <data name="File.Upload" xml:space="preserve">
+    <value>رفع</value>
+    <comment>Upload action</comment>
+  </data>
+  <data name="File.Download" xml:space="preserve">
+    <value>تحميل</value>
+    <comment>Download action</comment>
+  </data>
+  <data name="File.Export" xml:space="preserve">
+    <value>تصدير</value>
+    <comment>Export action</comment>
+  </data>
+  <data name="File.Import" xml:space="preserve">
+    <value>استيراد</value>
+    <comment>Import action</comment>
+  </data>
+  <data name="File.Sync" xml:space="preserve">
+    <value>مزامنة</value>
+    <comment>Sync action</comment>
+  </data>
+  <data name="File.Syncing" xml:space="preserve">
+    <value>جارٍ المزامنة...</value>
+    <comment>Syncing indicator</comment>
+  </data>
+  <data name="File.Browse" xml:space="preserve">
+    <value>تصفح</value>
+    <comment>Browse files</comment>
+  </data>
+  <data name="File.SelectFile" xml:space="preserve">
+    <value>اختر ملف</value>
+    <comment>Select file</comment>
+  </data>
+  <data name="File.DropFiles" xml:space="preserve">
+    <value>اسحب الملفات هنا</value>
+    <comment>Drop files here</comment>
+  </data>
+  <data name="File.FileName" xml:space="preserve">
+    <value>اسم الملف</value>
+    <comment>File name</comment>
+  </data>
+  <data name="File.FileSize" xml:space="preserve">
+    <value>حجم الملف</value>
+    <comment>File size</comment>
+  </data>
+  <data name="File.FileType" xml:space="preserve">
+    <value>نوع الملف</value>
+    <comment>File type</comment>
+  </data>
+  <data name="File.LastModified" xml:space="preserve">
+    <value>آخر تعديل</value>
+    <comment>Last modified</comment>
+  </data>
+  <data name="Settings.Title" xml:space="preserve">
+    <value>الإعدادات</value>
+    <comment>Settings title</comment>
+  </data>
+  <data name="Settings.Preferences" xml:space="preserve">
+    <value>التفضيلات</value>
+    <comment>Preferences</comment>
+  </data>
+  <data name="Settings.GeneralSettings" xml:space="preserve">
+    <value>الإعدادات العامة</value>
+    <comment>General settings</comment>
+  </data>
+  <data name="Settings.AccountSettings" xml:space="preserve">
+    <value>إعدادات الحساب</value>
+    <comment>Account settings</comment>
+  </data>
+  <data name="Settings.PrivacySettings" xml:space="preserve">
+    <value>إعدادات الخصوصية</value>
+    <comment>Privacy settings</comment>
+  </data>
+  <data name="Settings.SecuritySettings" xml:space="preserve">
+    <value>إعدادات الأمان</value>
+    <comment>Security settings</comment>
+  </data>
+  <data name="Settings.Language" xml:space="preserve">
+    <value>اللغة</value>
+    <comment>Language setting</comment>
+  </data>
+  <data name="Settings.Theme" xml:space="preserve">
+    <value>المظهر</value>
+    <comment>Theme setting</comment>
+  </data>
+  <data name="Settings.LightTheme" xml:space="preserve">
+    <value>المظهر الفاتح</value>
+    <comment>Light theme</comment>
+  </data>
+  <data name="Settings.DarkTheme" xml:space="preserve">
+    <value>المظهر الداكن</value>
+    <comment>Dark theme</comment>
+  </data>
+  <data name="Settings.AutoTheme" xml:space="preserve">
+    <value>المظهر التلقائي</value>
+    <comment>Auto theme</comment>
+  </data>
+  <data name="Settings.Notifications" xml:space="preserve">
+    <value>الإشعارات</value>
+    <comment>Notifications</comment>
+  </data>
+  <data name="Settings.EmailNotifications" xml:space="preserve">
+    <value>إشعارات البريد الإلكتروني</value>
+    <comment>Email notifications</comment>
+  </data>
+  <data name="Settings.PushNotifications" xml:space="preserve">
+    <value>الإشعارات الفورية</value>
+    <comment>Push notifications</comment>
+  </data>
+  <data name="Settings.Enable" xml:space="preserve">
+    <value>تفعيل</value>
+    <comment>Enable</comment>
+  </data>
+  <data name="Settings.Disable" xml:space="preserve">
+    <value>إلغاء التفعيل</value>
+    <comment>Disable</comment>
+  </data>
+  <data name="Settings.ResetToDefault" xml:space="preserve">
+    <value>إعادة تعيين الافتراضي</value>
+    <comment>Reset to default</comment>
+  </data>
+  <data name="Settings.SaveChanges" xml:space="preserve">
+    <value>حفظ التغييرات</value>
+    <comment>Save changes</comment>
+  </data>
+  <data name="Settings.DiscardChanges" xml:space="preserve">
+    <value>تجاهل التغييرات</value>
+    <comment>Discard changes</comment>
+  </data>
+  <data name="Success.Created" xml:space="preserve">
+    <value>تم الإنشاء بنجاح</value>
+    <comment>Successfully created</comment>
+  </data>
+  <data name="Success.Updated" xml:space="preserve">
+    <value>تم التحديث بنجاح</value>
+    <comment>Successfully updated</comment>
+  </data>
+  <data name="Success.Deleted" xml:space="preserve">
+    <value>تم الحذف بنجاح</value>
+    <comment>Successfully deleted</comment>
+  </data>
+  <data name="Success.Saved" xml:space="preserve">
+    <value>تم الحفظ بنجاح</value>
+    <comment>Successfully saved</comment>
+  </data>
+  <data name="Success.Uploaded" xml:space="preserve">
+    <value>تم الرفع بنجاح</value>
+    <comment>Successfully uploaded</comment>
+  </data>
+  <data name="Success.Downloaded" xml:space="preserve">
+    <value>تم التحميل بنجاح</value>
+    <comment>Successfully downloaded</comment>
+  </data>
+  <data name="Success.Imported" xml:space="preserve">
+    <value>تم الاستيراد بنجاح</value>
+    <comment>Successfully imported</comment>
+  </data>
+  <data name="Success.Exported" xml:space="preserve">
+    <value>تم التصدير بنجاح</value>
+    <comment>Successfully exported</comment>
+  </data>
+  <data name="Success.OperationSuccessful" xml:space="preserve">
+    <value>تمت العملية بنجاح</value>
+    <comment>Operation successful</comment>
+  </data>
+  <data name="Success.Sent" xml:space="preserve">
+    <value>تم الإرسال بنجاح</value>
+    <comment>Successfully sent</comment>
+  </data>
+  <data name="Success.Copied" xml:space="preserve">
+    <value>تم النسخ بنجاح</value>
+    <comment>Successfully copied</comment>
+  </data>
+  <data name="Success.Activated" xml:space="preserve">
+    <value>تم التفعيل بنجاح</value>
+    <comment>Successfully activated</comment>
+  </data>
+  <data name="Success.Deactivated" xml:space="preserve">
+    <value>تم إلغاء التفعيل بنجاح</value>
+    <comment>Successfully deactivated</comment>
+  </data>
+  <data name="Error.GeneralError" xml:space="preserve">
+    <value>حدث خطأ غير متوقع</value>
+    <comment>General error message</comment>
+  </data>
+  <data name="Error.NetworkError" xml:space="preserve">
+    <value>خطأ في الشبكة</value>
+    <comment>Network error</comment>
+  </data>
+  <data name="Error.ServerError" xml:space="preserve">
+    <value>خطأ في الخادم</value>
+    <comment>Server error</comment>
+  </data>
+  <data name="Error.ValidationError" xml:space="preserve">
+    <value>خطأ في التحقق من البيانات</value>
+    <comment>Validation error</comment>
+  </data>
+  <data name="Error.RequiredField" xml:space="preserve">
+    <value>هذا الحقل مطلوب</value>
+    <comment>Required field error</comment>
+  </data>
+  <data name="Error.InvalidEmail" xml:space="preserve">
+    <value>البريد الإلكتروني غير صحيح</value>
+    <comment>Invalid email error</comment>
+  </data>
+  <data name="Error.InvalidPassword" xml:space="preserve">
+    <value>كلمة المرور غير صحيحة</value>
+    <comment>Invalid password error</comment>
+  </data>
+  <data name="Error.PasswordMismatch" xml:space="preserve">
+    <value>كلمة المرور غير متطابقة</value>
+    <comment>Password mismatch error</comment>
+  </data>
+  <data name="Error.LoginFailed" xml:space="preserve">
+    <value>فشل في تسجيل الدخول</value>
+    <comment>Login failed error</comment>
+  </data>
+  <data name="Error.AccessDenied" xml:space="preserve">
+    <value>الوصول مرفوض</value>
+    <comment>Access denied error</comment>
+  </data>
+  <data name="Error.FileNotFound" xml:space="preserve">
+    <value>الملف غير موجود</value>
+    <comment>File not found error</comment>
+  </data>
+  <data name="Error.FileTooLarge" xml:space="preserve">
+    <value>الملف كبير جداً</value>
+    <comment>File too large error</comment>
+  </data>
+  <data name="Error.InvalidFileType" xml:space="preserve">
+    <value>نوع الملف غير صحيح</value>
+    <comment>Invalid file type error</comment>
+  </data>
+  <data name="Error.UploadFailed" xml:space="preserve">
+    <value>فشل في رفع الملف</value>
+    <comment>Upload failed error</comment>
+  </data>
+  <data name="Error.DownloadFailed" xml:space="preserve">
+    <value>فشل في تحميل الملف</value>
+    <comment>Download failed error</comment>
+  </data>
+  <data name="Error.ConnectionTimeout" xml:space="preserve">
+    <value>انتهت مهلة الاتصال</value>
+    <comment>Connection timeout error</comment>
+  </data>
+  <data name="Error.SessionExpired" xml:space="preserve">
+    <value>انتهت صلاحية الجلسة</value>
+    <comment>Session expired error</comment>
+  </data>
+  <data name="Error.UnauthorizedAccess" xml:space="preserve">
+    <value>وصول غير مصرح به</value>
+    <comment>Unauthorized access error</comment>
+  </data>
+  <data name="Error.InvalidOperation" xml:space="preserve">
+    <value>عملية غير صحيحة</value>
+    <comment>Invalid operation error</comment>
+  </data>
+  <data name="Error.DataNotFound" xml:space="preserve">
+    <value>البيانات المطلوبة غير موجودة</value>
+    <comment>Data not found error</comment>
+  </data>
+  <data name="Error.UnprocessableEntity" xml:space="preserve">
+    <value>لم نتمكن من معالجة طلبك. يرجى مراجعة المدخلات والمحاولة مرة أخرى.</value>
+    <comment>Unprocessable Entity error</comment>
+  </data>
+  <data name="Error.BadRequest" xml:space="preserve">
+    <value>طلبك يحتوي على بيانات غير صالحة. يرجى المراجعة والمحاولة مرة أخرى.</value>
+    <comment>   400 Bad Request</comment>
+  </data>
+  <data name="Confirm.Delete" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد حذف هذا العنصر؟</value>
+    <comment>Delete confirmation</comment>
+  </data>
+  <data name="Confirm.Save" xml:space="preserve">
+    <value>هل تريد حفظ التغييرات؟</value>
+    <comment>Save confirmation</comment>
+  </data>
+  <data name="Confirm.Cancel" xml:space="preserve">
+    <value>هل تريد إلغاء العملية؟</value>
+    <comment>Cancel confirmation</comment>
+  </data>
+  <data name="Confirm.Exit" xml:space="preserve">
+    <value>هل تريد الخروج؟</value>
+    <comment>Exit confirmation</comment>
+  </data>
+  <data name="Confirm.Logout" xml:space="preserve">
+    <value>هل تريد تسجيل الخروج؟</value>
+    <comment>Logout confirmation</comment>
+  </data>
+  <data name="Confirm.Reset" xml:space="preserve">
+    <value>هل تريد إعادة تعيين الإعدادات؟</value>
+    <comment>Reset confirmation</comment>
+  </data>
+  <data name="Confirm.Overwrite" xml:space="preserve">
+    <value>هل تريد استبدال الملف الموجود؟</value>
+    <comment>Overwrite confirmation</comment>
+  </data>
+  <data name="Confirm.UnsavedChanges" xml:space="preserve">
+    <value>لديك تغييرات غير محفوظة. هل تريد المتابعة؟</value>
+    <comment>Unsaved changes confirmation</comment>
+  </data>
+  <data name="Time.Today" xml:space="preserve">
+    <value>اليوم</value>
+    <comment>Today</comment>
+  </data>
+  <data name="Time.Yesterday" xml:space="preserve">
+    <value>أمس</value>
+    <comment>Yesterday</comment>
+  </data>
+  <data name="Time.Tomorrow" xml:space="preserve">
+    <value>غداً</value>
+    <comment>Tomorrow</comment>
+  </data>
+  <data name="Time.Now" xml:space="preserve">
+    <value>الآن</value>
+    <comment>Now</comment>
+  </data>
+  <data name="Time.Recently" xml:space="preserve">
+    <value>مؤخراً</value>
+    <comment>Recently</comment>
+  </data>
+  <data name="Time.JustNow" xml:space="preserve">
+    <value>منذ قليل</value>
+    <comment>Just now</comment>
+  </data>
+  <data name="Time.MinutesAgo" xml:space="preserve">
+    <value>منذ {0} دقائق</value>
+    <comment>Minutes ago</comment>
+  </data>
+  <data name="Time.HoursAgo" xml:space="preserve">
+    <value>منذ {0} ساعات</value>
+    <comment>Hours ago</comment>
+  </data>
+  <data name="Time.DaysAgo" xml:space="preserve">
+    <value>منذ {0} أيام</value>
+    <comment>Days ago</comment>
+  </data>
+  <data name="Time.WeeksAgo" xml:space="preserve">
+    <value>منذ {0} أسابيع</value>
+    <comment>Weeks ago</comment>
+  </data>
+  <data name="Time.MonthsAgo" xml:space="preserve">
+    <value>منذ {0} أشهر</value>
+    <comment>Months ago</comment>
+  </data>
+  <data name="Time.YearsAgo" xml:space="preserve">
+    <value>منذ {0} سنوات</value>
+    <comment>Years ago</comment>
+  </data>
+  <data name="Time.StartDate" xml:space="preserve">
+    <value>تاريخ البداية</value>
+    <comment>Start date</comment>
+  </data>
+  <data name="Time.EndDate" xml:space="preserve">
+    <value>تاريخ النهاية</value>
+    <comment>End date</comment>
+  </data>
+  <data name="Time.CreatedDate" xml:space="preserve">
+    <value>تاريخ الإنشاء</value>
+    <comment>Created date</comment>
+  </data>
+  <data name="Time.ModifiedDate" xml:space="preserve">
+    <value>تاريخ التعديل</value>
+    <comment>Modified date</comment>
+  </data>
+  <data name="Time.ExpiryDate" xml:space="preserve">
+    <value>تاريخ الانتهاء</value>
+    <comment>Expiry date</comment>
+  </data>
+  <data name="Status.Active" xml:space="preserve">
+    <value>نشط</value>
+    <comment>Active status</comment>
+  </data>
+  <data name="Status.Inactive" xml:space="preserve">
+    <value>غير نشط</value>
+    <comment>Inactive status</comment>
+  </data>
+  <data name="Status.Pending" xml:space="preserve">
+    <value>قيد الانتظار</value>
+    <comment>Pending status</comment>
+  </data>
+  <data name="Status.Approved" xml:space="preserve">
+    <value>مُعتمد</value>
+    <comment>Approved status</comment>
+  </data>
+  <data name="Status.Rejected" xml:space="preserve">
+    <value>مرفوض</value>
+    <comment>Rejected status</comment>
+  </data>
+  <data name="Status.Completed" xml:space="preserve">
+    <value>مكتمل</value>
+    <comment>Completed status</comment>
+  </data>
+  <data name="Status.InProgress" xml:space="preserve">
+    <value>قيد التنفيذ</value>
+    <comment>In progress status</comment>
+  </data>
+  <data name="Status.Cancelled" xml:space="preserve">
+    <value>ملغى</value>
+    <comment>Cancelled status</comment>
+  </data>
+  <data name="Status.Draft" xml:space="preserve">
+    <value>مسودة</value>
+    <comment>Draft status</comment>
+  </data>
+  <data name="Status.Published" xml:space="preserve">
+    <value>منشور</value>
+    <comment>Published status</comment>
+  </data>
+  <data name="Status.Archived" xml:space="preserve">
+    <value>مؤرشف</value>
+    <comment>Archived status</comment>
+  </data>
+  <data name="Status.Expired" xml:space="preserve">
+    <value>منتهي الصلاحية</value>
+    <comment>Expired status</comment>
+  </data>
+  <data name="Status.Locked" xml:space="preserve">
+    <value>مقفل</value>
+    <comment>Locked status</comment>
+  </data>
+  <data name="Status.Unlocked" xml:space="preserve">
+    <value>غير مقفل</value>
+    <comment>Unlocked status</comment>
+  </data>
+  <data name="Status.Online" xml:space="preserve">
+    <value>متصل</value>
+    <comment>Online status</comment>
+  </data>
+  <data name="Status.Offline" xml:space="preserve">
+    <value>غير متصل</value>
+    <comment>Offline status</comment>
+  </data>
+  <data name="Status.Available" xml:space="preserve">
+    <value>متاح</value>
+    <comment>Available status</comment>
+  </data>
+  <data name="Status.Unavailable" xml:space="preserve">
+    <value>غير متاح</value>
+    <comment>Unavailable status</comment>
+  </data>
+  <data name="Status.Busy" xml:space="preserve">
+    <value>مشغول</value>
+    <comment>Busy status</comment>
+  </data>
+  <data name="Pagination.FirstPage" xml:space="preserve">
+    <value>الصفحة الأولى</value>
+    <comment>First page</comment>
+  </data>
+  <data name="Pagination.LastPage" xml:space="preserve">
+    <value>الصفحة الأخيرة</value>
+    <comment>Last page</comment>
+  </data>
+  <data name="Pagination.NextPage" xml:space="preserve">
+    <value>الصفحة التالية</value>
+    <comment>Next page</comment>
+  </data>
+  <data name="Pagination.PreviousPage" xml:space="preserve">
+    <value>الصفحة السابقة</value>
+    <comment>Previous page</comment>
+  </data>
+  <data name="Pagination.Page" xml:space="preserve">
+    <value>الصفحة</value>
+    <comment>Page</comment>
+  </data>
+  <data name="Pagination.Of" xml:space="preserve">
+    <value>من</value>
+    <comment>Of (e.g., page 1 of 10)</comment>
+  </data>
+  <data name="Pagination.ItemsPerPage" xml:space="preserve">
+    <value>عدد العناصر لكل صفحة</value>
+    <comment>Items per page</comment>
+  </data>
+  <data name="Pagination.ShowingItems" xml:space="preserve">
+    <value>عرض {0} إلى {1} من {2} عنصر</value>
+    <comment>Showing X to Y of Z items</comment>
+  </data>
+  <data name="Pagination.NoItems" xml:space="preserve">
+    <value>لا توجد عناصر للعرض</value>
+    <comment>No items to display</comment>
+  </data>
+  <data name="Pagination.Results" xml:space="preserve">
+    <value>النتائج</value>
+    <comment>Results</comment>
+  </data>
+  <data name="Search.SearchResults" xml:space="preserve">
+    <value>نتائج البحث</value>
+    <comment>Search results</comment>
+  </data>
+  <data name="Search.NoResults" xml:space="preserve">
+    <value>لا توجد نتائج</value>
+    <comment>No search results</comment>
+  </data>
+  <data name="Search.SearchFor" xml:space="preserve">
+    <value>البحث عن</value>
+    <comment>Search for</comment>
+  </data>
+  <data name="Search.SearchQuery" xml:space="preserve">
+    <value>استعلام البحث</value>
+    <comment>Search query</comment>
+  </data>
+  <data name="Search.AdvancedSearch" xml:space="preserve">
+    <value>البحث المتقدم</value>
+    <comment>Advanced search</comment>
+  </data>
+  <data name="Search.ClearSearch" xml:space="preserve">
+    <value>مسح البحث</value>
+    <comment>Clear search</comment>
+  </data>
+  <data name="Search.FilterBy" xml:space="preserve">
+    <value>تصفية حسب</value>
+    <comment>Filter by</comment>
+  </data>
+  <data name="Search.SortBy" xml:space="preserve">
+    <value>ترتيب حسب</value>
+    <comment>Sort by</comment>
+  </data>
+  <data name="Search.Ascending" xml:space="preserve">
+    <value>تصاعدي</value>
+    <comment>Ascending order</comment>
+  </data>
+  <data name="Search.Descending" xml:space="preserve">
+    <value>تنازلي</value>
+    <comment>Descending order</comment>
+  </data>
+  <data name="Search.Name" xml:space="preserve">
+    <value>الاسم</value>
+    <comment>Name</comment>
+  </data>
+  <data name="Search.Date" xml:space="preserve">
+    <value>التاريخ</value>
+    <comment>Date</comment>
+  </data>
+  <data name="Search.Size" xml:space="preserve">
+    <value>الحجم</value>
+    <comment>Size</comment>
+  </data>
+  <data name="Search.Type" xml:space="preserve">
+    <value>النوع</value>
+    <comment>Type</comment>
+  </data>
+  <data name="Form.Title" xml:space="preserve">
+    <value>العنوان</value>
+    <comment>Title field</comment>
+  </data>
+  <data name="Form.Description" xml:space="preserve">
+    <value>الوصف</value>
+    <comment>Description field</comment>
+  </data>
+  <data name="Form.Content" xml:space="preserve">
+    <value>المحتوى</value>
+    <comment>Content field</comment>
+  </data>
+  <data name="Form.Message" xml:space="preserve">
+    <value>الرسالة</value>
+    <comment>Message field</comment>
+  </data>
+  <data name="Form.Comments" xml:space="preserve">
+    <value>التعليقات</value>
+    <comment>Comments field</comment>
+  </data>
+  <data name="Form.Tags" xml:space="preserve">
+    <value>العلامات</value>
+    <comment>Tags field</comment>
+  </data>
+  <data name="Form.Keywords" xml:space="preserve">
+    <value>الكلمات المفتاحية</value>
+    <comment>Keywords field</comment>
+  </data>
+  <data name="Form.URL" xml:space="preserve">
+    <value>الرابط</value>
+    <comment>URL field</comment>
+  </data>
+  <data name="Form.Link" xml:space="preserve">
+    <value>الرابط</value>
+    <comment>Link field</comment>
+  </data>
+  <data name="Form.Image" xml:space="preserve">
+    <value>الصورة</value>
+    <comment>Image field</comment>
+  </data>
+  <data name="Form.Video" xml:space="preserve">
+    <value>الفيديو</value>
+    <comment>Video field</comment>
+  </data>
+  <data name="Form.Audio" xml:space="preserve">
+    <value>الصوت</value>
+    <comment>Audio field</comment>
+  </data>
+  <data name="Form.Document" xml:space="preserve">
+    <value>الوثيقة</value>
+    <comment>Document field</comment>
+  </data>
+  <data name="Form.Attachment" xml:space="preserve">
+    <value>المرفق</value>
+    <comment>Attachment field</comment>
+  </data>
+  <data name="Form.Priority" xml:space="preserve">
+    <value>الأولوية</value>
+    <comment>Priority field</comment>
+  </data>
+  <data name="Form.Status" xml:space="preserve">
+    <value>الحالة</value>
+    <comment>Status field</comment>
+  </data>
+  <data name="Form.Notes" xml:space="preserve">
+    <value>الملاحظات</value>
+    <comment>Notes field</comment>
+  </data>
+  <data name="Form.Remarks" xml:space="preserve">
+    <value>الملاحظات</value>
+    <comment>Remarks field</comment>
+  </data>
+  <data name="Help.Help" xml:space="preserve">
+    <value>مساعدة</value>
+    <comment>Help</comment>
+  </data>
+  <data name="Help.Support" xml:space="preserve">
+    <value>الدعم</value>
+    <comment>Support</comment>
+  </data>
+  <data name="Help.Documentation" xml:space="preserve">
+    <value>الوثائق</value>
+    <comment>Documentation</comment>
+  </data>
+  <data name="Help.Tutorial" xml:space="preserve">
+    <value>الدليل التعليمي</value>
+    <comment>Tutorial</comment>
+  </data>
+  <data name="Help.FAQ" xml:space="preserve">
+    <value>الأسئلة الشائعة</value>
+    <comment>FAQ</comment>
+  </data>
+  <data name="Help.ContactSupport" xml:space="preserve">
+    <value>اتصل بالدعم</value>
+    <comment>Contact support</comment>
+  </data>
+  <data name="Help.UserGuide" xml:space="preserve">
+    <value>دليل المستخدم</value>
+    <comment>User guide</comment>
+  </data>
+  <data name="Help.TechnicalSupport" xml:space="preserve">
+    <value>الدعم التقني</value>
+    <comment>Technical support</comment>
+  </data>
+  <data name="Help.CustomerService" xml:space="preserve">
+    <value>خدمة العملاء</value>
+    <comment>Customer service</comment>
+  </data>
+  <data name="Help.LiveChat" xml:space="preserve">
+    <value>الدردشة المباشرة</value>
+    <comment>Live chat</comment>
+  </data>
+  <data name="Help.TicketSystem" xml:space="preserve">
+    <value>نظام التذاكر</value>
+    <comment>Ticket system</comment>
+  </data>
+  <data name="Help.CreateTicket" xml:space="preserve">
+    <value>إنشاء تذكرة</value>
+    <comment>Create ticket</comment>
+  </data>
+  <data name="Help.ViewTickets" xml:space="preserve">
+    <value>عرض التذاكر</value>
+    <comment>View tickets</comment>
+  </data>
+  <data name="Misc.Required" xml:space="preserve">
+    <value>مطلوب</value>
+    <comment>Required indicator</comment>
+  </data>
+  <data name="Misc.Optional" xml:space="preserve">
+    <value>اختياري</value>
+    <comment>Optional indicator</comment>
+  </data>
+  <data name="Misc.More" xml:space="preserve">
+    <value>المزيد</value>
+    <comment>More</comment>
+  </data>
+  <data name="Misc.Less" xml:space="preserve">
+    <value>أقل</value>
+    <comment>Less</comment>
+  </data>
+  <data name="Misc.ShowMore" xml:space="preserve">
+    <value>إظهار المزيد</value>
+    <comment>Show more</comment>
+  </data>
+  <data name="Misc.ShowLess" xml:space="preserve">
+    <value>إظهار أقل</value>
+    <comment>Show less</comment>
+  </data>
+  <data name="Misc.Expand" xml:space="preserve">
+    <value>توسيع</value>
+    <comment>Expand</comment>
+  </data>
+  <data name="Misc.Collapse" xml:space="preserve">
+    <value>طي</value>
+    <comment>Collapse</comment>
+  </data>
+  <data name="Misc.Details" xml:space="preserve">
+    <value>التفاصيل</value>
+    <comment>Details</comment>
+  </data>
+  <data name="Misc.Summary" xml:space="preserve">
+    <value>الملخص</value>
+    <comment>Summary</comment>
+  </data>
+  <data name="Misc.Information" xml:space="preserve">
+    <value>معلومات</value>
+    <comment>Information</comment>
+  </data>
+  <data name="Misc.Warning" xml:space="preserve">
+    <value>تحذير</value>
+    <comment>Warning</comment>
+  </data>
+  <data name="Misc.Error" xml:space="preserve">
+    <value>خطأ</value>
+    <comment>Error</comment>
+  </data>
+  <data name="Misc.Success" xml:space="preserve">
+    <value>نجح</value>
+    <comment>Success</comment>
+  </data>
+  <data name="Misc.Notice" xml:space="preserve">
+    <value>إشعار</value>
+    <comment>Notice</comment>
+  </data>
+  <data name="Misc.Alert" xml:space="preserve">
+    <value>تنبيه</value>
+    <comment>Alert</comment>
+  </data>
+  <data name="Misc.Tip" xml:space="preserve">
+    <value>نصيحة</value>
+    <comment>Tip</comment>
+  </data>
+  <data name="Misc.Version" xml:space="preserve">
+    <value>الإصدار</value>
+    <comment>Version</comment>
+  </data>
+  <data name="Misc.Copyright" xml:space="preserve">
+    <value>حقوق النشر</value>
+    <comment>Copyright</comment>
+  </data>
+  <data name="Misc.AllRightsReserved" xml:space="preserve">
+    <value>جميع الحقوق محفوظة</value>
+    <comment>All rights reserved</comment>
+  </data>
+  <data name="Misc.PrivacyPolicy" xml:space="preserve">
+    <value>سياسة الخصوصية</value>
+    <comment>Privacy policy</comment>
+  </data>
+  <data name="Misc.TermsOfService" xml:space="preserve">
+    <value>شروط الخدمة</value>
+    <comment>Terms of service</comment>
+  </data>
+  <data name="Misc.TermsAndConditions" xml:space="preserve">
+    <value>الشروط والأحكام</value>
+    <comment>Terms and conditions</comment>
+  </data>
+  <data name="Error.DataNotFoundWithParameter" xml:space="preserve">
+    <value>{0} غير موجود</value>
+    <comment>Data Does not exist with a specific Name Or Value Passed</comment>
+  </data>
+  <data name="Entities.Department" xml:space="preserve">
+    <value>القسم</value>
+    <comment>Department</comment>
+  </data>
+</root>
