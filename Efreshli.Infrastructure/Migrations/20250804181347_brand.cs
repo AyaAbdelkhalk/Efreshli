@@ -5,7 +5,7 @@
 namespace Efreshli.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class vv : Migration
+    public partial class brand : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Efreshli.Infrastructure.Migrations
 {
     [DbContext(typeof(EfreshliDbContext))]
-    [Migration("20250803141808_AddSomeProperties")]
-    partial class AddSomeProperties
+    [Migration("20250804181347_brand")]
+    partial class brand
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -202,10 +202,7 @@ namespace Efreshli.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ImageId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ImageId1")
+                    b.Property<int?>("ImageId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
@@ -227,7 +224,7 @@ namespace Efreshli.Infrastructure.Migrations
 
                     b.HasKey("BrandId");
 
-                    b.HasIndex("ImageId1");
+                    b.HasIndex("ImageId");
 
                     b.ToTable("Brands");
                 });
@@ -549,6 +546,10 @@ namespace Efreshli.Infrastructure.Migrations
 
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
+
+                    b.Property<string>("PublicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ReferenceId")
                         .HasColumnType("int");
@@ -1145,7 +1146,7 @@ namespace Efreshli.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LogoUrl")
+                    b.Property<string>("LogoURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -1418,7 +1419,7 @@ namespace Efreshli.Infrastructure.Migrations
                 {
                     b.HasOne("Efreshli.Domain.Models.Image", "Image")
                         .WithMany()
-                        .HasForeignKey("ImageId1")
+                        .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Image");
@@ -1462,7 +1463,7 @@ namespace Efreshli.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Efreshli.Domain.Models.Category", "Parent")
-                        .WithMany()
+                        .WithMany("SubCategories")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -1739,6 +1740,11 @@ namespace Efreshli.Infrastructure.Migrations
             modelBuilder.Entity("Efreshli.Domain.Models.Cart", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Efreshli.Domain.Models.Category", b =>
+                {
+                    b.Navigation("SubCategories");
                 });
 
             modelBuilder.Entity("Efreshli.Domain.Models.Order", b =>

@@ -1,6 +1,7 @@
 ﻿using Efreshli.Application.Interfaces;
 using Efreshli.Domain.Models;
 using Efreshli.Infrastructure.Data;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,9 @@ namespace Efreshli.Infrastructure.Repositories
 {
     public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
     {
-        public CategoryRepository(EfreshliDbContext context) : base(context)
-        {
+
+        public CategoryRepository(EfreshliDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
+        {   
         }
     }
 }
