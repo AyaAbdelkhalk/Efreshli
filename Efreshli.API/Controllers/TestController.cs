@@ -37,7 +37,7 @@ namespace Efreshli.API.Controllers
         [HttpPost("addCoupon")]
         public async  Task<IActionResult> AddCoupon([FromBody]AddCouponDTO couponDTO)
         {
-             var validationResult = await _validator.ValidateAsync(couponDTO);
+             //var validationResult = await _validator.ValidateAsync(couponDTO);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

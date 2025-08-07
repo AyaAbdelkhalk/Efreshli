@@ -1,11 +1,20 @@
 ﻿using CloudinaryDotNet;
 using Efreshli.Application;
+using Efreshli.Application.Services.AuthServices;
+using Efreshli.Common;
+using Efreshli.Domain.Models;
 using Efreshli.Domain.Settings;
 using Efreshli.Infrastructure;
 using Efreshli.Infrastructure.Data;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
+using System.Text;
 
 
 namespace Efreshli.API
@@ -18,7 +27,10 @@ namespace Efreshli.API
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<ValidateModelAsyncFilter>();
+            });
             builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -42,10 +54,32 @@ namespace Efreshli.API
                 );
 
                 return new Cloudinary(account);
-            }); 
+            });
             #endregion
 
-        
+            #region Localization
+            builder.Services.AddControllersWithViews();
+            builder.Services.AddLocalization(opt =>
+            {
+                opt.ResourcesPath = "";
+            });
+
+            builder.Services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
+            builder.Services.AddScoped(typeof(IStringLocalizer<>), typeof(StringLocalizer<>));
+
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                List<CultureInfo> supportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en-US"),
+                    new CultureInfo("ar-EG")
+                };
+                options.DefaultRequestCulture = new RequestCulture("ar-EG");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
+            #endregion
+
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -87,7 +121,10 @@ namespace Efreshli.API
 
 
             var app = builder.Build();
-
+            #region localization middleware
+            var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(options.Value);
+            #endregion
             app.UseSwagger();
             app.UseSwaggerUI();
 
