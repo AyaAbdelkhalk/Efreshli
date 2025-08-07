@@ -1,5 +1,11 @@
 using Efreshli.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Efreshli.MVC.Data;
+using Efreshli.Application;
+using Efreshli.Infrastructure;
+using CloudinaryDotNet;
+using Efreshli.Domain.Settings;
+using Microsoft.Extensions.Options;
 
 namespace Efreshli.MVC
 {
@@ -11,14 +17,34 @@ namespace Efreshli.MVC
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Database Context
             builder.Services.AddDbContext<EfreshliDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
+
+            // Application and Infrastructure services
+            builder.Services.AddApplication(builder.Configuration);
+            builder.Services.AddInfrastructure(builder.Configuration);
+
+            // Cloudinary Configuration
+            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+            builder.Services.AddSingleton(sp =>
+            {
+                var settings = sp.GetRequiredService<IOptions<CloudinarySettings>>().Value;
+                var account = new Account(
+                    settings.CloudName,
+                    settings.ApiKey,
+                    settings.ApiSecret
+                );
+                return new Cloudinary(account);
+            });
 
             #region RegisterIdentity
 
 
             #endregion
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -35,6 +61,7 @@ namespace Efreshli.MVC
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
+
 
             app.Run();
         }
