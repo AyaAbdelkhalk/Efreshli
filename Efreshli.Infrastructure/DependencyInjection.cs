@@ -1,6 +1,9 @@
-﻿using Efreshli.Application.Interfaces;
+﻿using CloudinaryDotNet;
+using Efreshli.Application.Interfaces;
+using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
+using Efreshli.Infrastructure.Data;
 using Efreshli.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,9 +19,31 @@ namespace Efreshli.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IGenericRepository<Image>, GenericRepository<Image>>();
+
+            services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
+            services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();
+            services.AddScoped<IGenericRepository<Coupon>, GenericRepository<Coupon>>();
+
+
+
+
+
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            // Initialize static UserContext
+            //UserContext.Initialize(services.BuildServiceProvider());
+            DbInitializer.SeedAsync(services.BuildServiceProvider()).GetAwaiter().GetResult();
+            
+
+
+            services.AddHttpContextAccessor();
+            //register repositories
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IBrandsRepository, BrandsRepository>();
             services.AddScoped<ICouponRepository, CouponRepository>();
+
+
             return services;
         }
     }

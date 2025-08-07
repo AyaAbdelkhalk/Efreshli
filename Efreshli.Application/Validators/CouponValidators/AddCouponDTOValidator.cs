@@ -1,6 +1,7 @@
 ﻿using Efreshli.Application.DTOs.CouponDTOs;
 using Efreshli.Application.Resources;
 using Efreshli.Application.Services.CouponServices;
+using Efreshli.Domain.Common.Interfaces;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using System;
@@ -10,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Efreshli.Application.Validators.CouponValidators
 {
-    public class AddCouponValidator : AbstractValidator<AddCouponDTO>
+    public class AddCouponDTOValidator : AbstractValidator<AddCouponDTO>
     {
         private readonly ICouponService _couponService;
         private readonly IStringLocalizer<SharedResources> _localizer;
@@ -18,6 +19,7 @@ namespace Efreshli.Application.Validators.CouponValidators
         {
             _localizer = localizer;
             _couponService = couponService;
+
 
             RuleFor(x => x.Code)
                 .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.Validation.Required])
@@ -34,7 +36,8 @@ namespace Efreshli.Application.Validators.CouponValidators
                 .GreaterThan(0).WithMessage(_localizer[SharedResourcesKeys.Validation.MustBeGreaterThanZero]);
                 //.GreaterThan(0).WithMessage("Usage limit must be greater than 0");
 
-            When(x => x.IsPercentage, () => {
+            When(x => x.IsPercentage, () =>
+            {
                 RuleFor(x => x.DiscountValue)
                     .LessThanOrEqualTo(100).WithMessage(_localizer[SharedResourcesKeys.Validation.ValueMustBeLessThan,100]);
             });

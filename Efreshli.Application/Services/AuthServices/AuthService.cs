@@ -1,5 +1,5 @@
-﻿using Efreshli.Application.DTOs;
-using Efreshli.Application.DTOs.IdentityDTOs;
+﻿using Efreshli.Application.DTOs.IdentityDTOs;
+using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Models;
 using Efreshli.Domain.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -34,7 +34,9 @@ namespace Efreshli.Application.Services.AuthServices
             {
                 UserName = model.Email,
                 Email = model.Email,
-                FirstName = model.FirstName
+                FirstName = model.FirstName,
+                CreatedBy = model.Email,
+                CreatedDate = DateTime.UtcNow
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -54,7 +56,6 @@ namespace Efreshli.Application.Services.AuthServices
             var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
             if (!result.Succeeded)
                 return "Invalid email or password";
-
             return GenerateJwtToken(user);
         }
 
@@ -62,9 +63,16 @@ namespace Efreshli.Application.Services.AuthServices
         {
             var claims = new[]
             {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("uid", user.Id)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
+                new Claim(ClaimTypes.Name, user.UserName ?? ""),
+                new Claim(ClaimTypes.Email, user.Email ?? ""),
+                new Claim("uid", user.Id),
+                new Claim("firstName", user.FirstName ?? ""),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // ✅ Unique token ID
+                new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));

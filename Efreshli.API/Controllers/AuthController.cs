@@ -1,8 +1,9 @@
-﻿using Efreshli.Application.DTOs;
-using Efreshli.Application.DTOs.IdentityDTOs;
+﻿using Efreshli.Application.DTOs.IdentityDTOs;
 using Efreshli.Application.Services.AuthServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Efreshli.API.Controllers
 {
@@ -30,6 +31,21 @@ namespace Efreshli.API.Controllers
             var result = await _authService.LoginAsync(dto);
             return Ok(new { token = result });
         }
-            
+        [Authorize]
+        [HttpGet("me")]
+        public IActionResult GetCurrentUser()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAuthenticated = User.Identity.IsAuthenticated;
+            var allClaims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+
+            return Ok(new
+            {
+                UserId = userId,
+                IsAuthenticated = isAuthenticated,
+                Claims = allClaims
+            });
+        }
+
     }
 }
