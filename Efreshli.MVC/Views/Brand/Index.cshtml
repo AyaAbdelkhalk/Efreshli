@@ -1,0 +1,418 @@
+@model Efreshli.MVC.Models.BrandListViewModel
+
+@{
+    ViewData["Title"] = "Brands";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title">Brand Management</h3>
+                    <div>
+                        <button type="button" class="btn btn-success btn-sm" onclick="exportToCSV()">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                        <button type="button" class="btn btn-info btn-sm" onclick="showAdvancedFilters()">
+                            <i class="fas fa-filter"></i> Advanced Filters
+                        </button>
+                        <a asp-action="Create" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add New Brand
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @TempData["Success"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+                    
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @TempData["Error"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <!-- Statistics Section -->
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body text-center">
+                                    <h5>@Model.Brands.Count()</h5>
+                                    <small>Total Brands</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body text-center">
+                                    <h5>@Model.Brands.Count(b => b.ImageId.HasValue)</h5>
+                                    <small>With Images</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body text-center">
+                                    <h5>@Model.Brands.Count(b => !b.ImageId.HasValue)</h5>
+                                    <small>Without Images</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body text-center">
+                                    <h5>@Model.TotalPages</h5>
+                                    <small>Total Pages</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search and Filters Form -->
+                    <form method="get" class="mb-3" id="searchForm">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="search" 
+                                           value="@Model.SearchTerm" placeholder="Search brands..." id="searchInput">
+                                    <button class="btn btn-outline-secondary" type="submit">
+                                        <i class="fas fa-search"></i> Search
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="form-select" name="pageSize" onchange="this.form.submit()">
+                                    <option value="5" @(Model.PageSize == 5 ? "selected" : "")>5 per page</option>
+                                    <option value="10" @(Model.PageSize == 10 ? "selected" : "")>10 per page</option>
+                                    <option value="20" @(Model.PageSize == 20 ? "selected" : "")>20 per page</option>
+                                    <option value="50" @(Model.PageSize == 50 ? "selected" : "")>50 per page</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" name="sortBy" onchange="this.form.submit()">
+                                    <option value="nameAr">Sort by Arabic Name</option>
+                                    <option value="nameEn">Sort by English Name</option>
+                                    <option value="id">Sort by ID</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                @if (!string.IsNullOrEmpty(Model.SearchTerm))
+                                {
+                                    <a asp-action="Index" class="btn btn-outline-secondary">
+                                        <i class="fas fa-times"></i> Clear Search
+                                    </a>
+                                }
+                                <button type="button" class="btn btn-outline-info" onclick="toggleBulkActions()">
+                                    <i class="fas fa-tasks"></i> Bulk Actions
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Bulk Actions Section -->
+                    <div class="row mb-3" id="bulkActionsSection" style="display: none;">
+                        <div class="col-12">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                                                <label class="form-check-label" for="selectAll">
+                                                    Select All
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <span id="selectedCount">0 items selected</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="bulkDelete()">
+                                                <i class="fas fa-trash"></i> Delete Selected
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Brands Table -->
+                    @if (Model.Brands.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover" id="brandsTable">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th width="50">
+                                            <input type="checkbox" class="form-check-input" id="selectAllTable" onchange="toggleSelectAllTable()">
+                                        </th>
+                                        <th>ID</th>
+                                        <th>Arabic Name</th>
+                                        <th>English Name</th>
+                                        <th>Image</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var brand in Model.Brands)
+                                    {
+                                        <tr data-brand-id="@brand.BrandId">
+                                            <td>
+                                                <input type="checkbox" class="form-check-input brand-checkbox" 
+                                                       value="@brand.BrandId" onchange="updateSelectedCount()">
+                                            </td>
+                                            <td>@brand.BrandId</td>
+                                            <td>@brand.NameAr</td>
+                                            <td>@brand.NameEn</td>
+                                            <td>
+                                                @if (brand.ImageId.HasValue)
+                                                {
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-image"></i> Available
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">
+                                                        <i class="fas fa-image"></i> Not Available
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <a asp-action="Details" asp-route-id="@brand.BrandId" 
+                                                       class="btn btn-sm btn-info" title="View Details">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a asp-action="Edit" asp-route-id="@brand.BrandId" 
+                                                       class="btn btn-sm btn-warning" title="Edit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a asp-action="Delete" asp-route-id="@brand.BrandId" 
+                                                       class="btn btn-sm btn-danger" title="Delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        @if (Model.TotalPages > 1)
+                        {
+                            <nav aria-label="Brand pages">
+                                <ul class="pagination justify-content-center">
+                                    @if (Model.CurrentPage > 1)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" asp-action="Index" 
+                                               asp-route-page="@(Model.CurrentPage - 1)" 
+                                               asp-route-search="@Model.SearchTerm">Previous</a>
+                                        </li>
+                                    }
+
+                                    @for (int i = Math.Max(1, Model.CurrentPage - 2); 
+                                          i <= Math.Min(Model.TotalPages, Model.CurrentPage + 2); 
+                                          i++)
+                                    {
+                                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                            <a class="page-link" asp-action="Index" 
+                                               asp-route-page="@i" 
+                                               asp-route-search="@Model.SearchTerm">@i</a>
+                                        </li>
+                                    }
+
+                                    @if (Model.CurrentPage < Model.TotalPages)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" asp-action="Index" 
+                                               asp-route-page="@(Model.CurrentPage + 1)" 
+                                               asp-route-search="@Model.SearchTerm">Next</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </nav>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No brands found</h5>
+                            <p class="text-muted">
+                                @if (!string.IsNullOrEmpty(Model.SearchTerm))
+                                {
+                                    <span>No results found for search "@Model.SearchTerm"</span>
+                                }
+                                else
+                                {
+                                    <span>No brands have been added yet</span>
+                                }
+                            </p>
+                            <a asp-action="Create" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add First Brand
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Advanced Filters Modal -->
+<div class="modal fade" id="advancedFiltersModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Advanced Filters</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="advancedFiltersForm">
+                    <div class="mb-3">
+                        <label class="form-label">Image Status</label>
+                        <select class="form-select" name="imageStatus">
+                            <option value="">All</option>
+                            <option value="with">With Images</option>
+                            <option value="without">Without Images</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sort Order</label>
+                        <select class="form-select" name="sortOrder">
+                            <option value="asc">Ascending</option>
+                            <option value="desc">Descending</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="applyAdvancedFilters()">Apply Filters</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let selectedBrands = [];
+
+        function showAdvancedFilters() {
+            new bootstrap.Modal(document.getElementById('advancedFiltersModal')).show();
+        }
+
+        function applyAdvancedFilters() {
+            const form = document.getElementById('advancedFiltersForm');
+            const formData = new FormData(form);
+            const params = new URLSearchParams();
+            
+            for (let [key, value] of formData.entries()) {
+                if (value) params.append(key, value);
+            }
+            
+            window.location.href = window.location.pathname + '?' + params.toString();
+        }
+
+        function toggleBulkActions() {
+            const section = document.getElementById('bulkActionsSection');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleSelectAll() {
+            const checkboxes = document.querySelectorAll('.brand-checkbox');
+            const selectAllCheckbox = document.getElementById('selectAll');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+            
+            updateSelectedCount();
+        }
+
+        function toggleSelectAllTable() {
+            const checkboxes = document.querySelectorAll('.brand-checkbox');
+            const selectAllTableCheckbox = document.getElementById('selectAllTable');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllTableCheckbox.checked;
+            });
+            
+            updateSelectedCount();
+        }
+
+        function updateSelectedCount() {
+            const checkboxes = document.querySelectorAll('.brand-checkbox:checked');
+            const count = checkboxes.length;
+            document.getElementById('selectedCount').textContent = count + ' items selected';
+            
+            selectedBrands = Array.from(checkboxes).map(cb => cb.value);
+        }
+
+        function bulkDelete() {
+            if (selectedBrands.length === 0) {
+                alert('Please select brands to delete');
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to delete ${selectedBrands.length} brand(s)?`)) {
+                // Here you would typically make an AJAX call to delete multiple brands
+                alert('Bulk delete functionality would be implemented here');
+            }
+        }
+
+        function exportToCSV() {
+            const table = document.getElementById('brandsTable');
+            const rows = table.querySelectorAll('tbody tr');
+            let csv = 'ID,Arabic Name,English Name,Has Image\n';
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const id = cells[1].textContent;
+                const nameAr = cells[2].textContent;
+                const nameEn = cells[3].textContent;
+                const hasImage = cells[4].textContent.includes('Available') ? 'Yes' : 'No';
+                
+                csv += `"${id}","${nameAr}","${nameEn}","${hasImage}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'brands.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            $('.alert').fadeOut('slow');
+        }, 5000);
+
+        // Initialize search functionality
+        $(document).ready(function() {
+            // Auto-submit search after 500ms delay
+            let searchTimeout;
+            $('#searchInput').on('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    $('#searchForm').submit();
+                }, 500);
+            });
+        });
+    </script>
+}
