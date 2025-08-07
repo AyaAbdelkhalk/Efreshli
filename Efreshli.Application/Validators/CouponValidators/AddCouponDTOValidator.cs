@@ -15,7 +15,7 @@ namespace Efreshli.Application.Validators.CouponValidators
     {
         private readonly ICouponService _couponService;
         private readonly IStringLocalizer<SharedResources> _localizer;
-        public AddCouponValidator(ICouponService couponService, IStringLocalizer<SharedResources> localizer)
+        public AddCouponDTOValidator(ICouponService couponService, IStringLocalizer<SharedResources> localizer)
         {
             _localizer = localizer;
             _couponService = couponService;
