@@ -229,6 +229,38 @@
     <value>التقارير</value>
     <comment>Reports</comment>
   </data>
+  <data name="Navigation.Users" xml:space="preserve">
+    <value>المستخدمون</value>
+    <comment>Users page</comment>
+  </data>
+  <data name="Navigation.Orders" xml:space="preserve">
+    <value>الطلبات</value>
+    <comment>Orders page</comment>
+  </data>
+  <data name="Navigation.Products" xml:space="preserve">
+    <value>المنتجات</value>
+    <comment>Products page</comment>
+  </data>
+  <data name="Navigation.Categories" xml:space="preserve">
+    <value>الاصناف</value>
+    <comment>Categories page</comment>
+  </data>
+  <data name="Navigation.Coupon" xml:space="preserve">
+    <value>الكوبونات</value>
+    <comment>Coupon page</comment>
+  </data>
+  <data name="Navigation.Analytics" xml:space="preserve">
+    <value>التحليلات</value>
+    <comment>Analytics page</comment>
+  </data>
+  <data name="Navigation.Settings" xml:space="preserve">
+    <value>الإعدادات</value>
+    <comment>Settings page</comment>
+  </data>
+  <data name="Navigation.HelpSupport" xml:space="preserve">
+    <value>المساعدة والدعم</value>
+    <comment>Help and Support page</comment>
+  </data>
   <data name="Validation.Required" xml:space="preserve">
     <value>هذا الحقل مطلوب</value>
     <comment>Required field validation</comment>

@@ -1,0 +1,40 @@
+﻿@model LocalizedConfirmationViewModel
+@using Efreshli.Application.Resources
+@using Efreshli.MVC.Models.ViewModels
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> Localizer
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">@Localizer[Model.TitleKey]</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="@Localizer[SharedResourcesKeys.Actions.Close]">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @{
+                    var message = !string.IsNullOrEmpty(Model.EntityNameKey)
+                    ? string.Format(Localizer[Model.MessageKey].Value,
+                    Localizer[Model.EntityNameKey].Value,
+                    Model.EntityValue)
+                    : Localizer[Model.MessageKey].Value;
+                }
+                @Html.Raw(message)
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    @Localizer[Model.CancelButtonKey]
+                </button>
+                <form asp-action="@Model.Action" asp-controller="@Model.Controller" method="post">
+                    <input type="hidden" name="id" value="@Model.ItemId" />
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">
+                        @Localizer[Model.ConfirmButtonKey]
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
