@@ -1,0 +1,94 @@
+﻿@model Efreshli.Application.DTOs.CouponDTOs.AddCouponDTO
+
+@{
+    ViewBag.Title = "Create New Coupon";
+}
+
+<div class="container">
+    <div class="form-container bg-white">
+        <h2 class="mb-4">Create New Coupon</h2>
+        <form asp-action="Create" asp-controller="Coupon" method="post" id="couponForm">
+            @Html.AntiForgeryToken()
+
+            <!-- Code Field -->
+            <div class="mb-3">
+                <label asp-for="Code" class="form-label"></label>
+                <input asp-for="Code" class="form-control" placeholder="e.g., SUMMER20" maxlength="20" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+                <div class="form-text">Enter a unique coupon code (uppercase letters and numbers recommended).</div>
+            </div>
+
+            <!-- Discount Value Field -->
+            <div class="mb-3">
+                <label asp-for="DiscountValue" class="form-label"></label>
+                <div class="input-group">
+                    <input asp-for="DiscountValue" class="form-control" placeholder="e.g., 10" type="number" min="0" step="0.01" />
+                    <span class="input-group-text" id="discountSuffix">$</span>
+                </div>
+                <span asp-validation-for="DiscountValue" class="text-danger"></span>
+            </div>
+
+            <!-- Discount Type Toggle -->
+            <div class="mb-3">
+                <label class="form-label">Discount Type</label>
+                <div class="discount-type-toggle btn-group" role="group">
+                    <input type="radio" class="btn-check" asp-for="IsPercentage" id="fixedAmount" value="false" checked="@(!Model.IsPercentage)" />
+                    <label class="btn btn-outline-primary" for="fixedAmount">Fixed Amount</label>
+
+                    <input type="radio" class="btn-check" asp-for="IsPercentage" id="percentage" value="true" checked="@(Model.IsPercentage)" />
+                    <label class="btn btn-outline-primary" for="percentage">Percentage</label>
+                </div>
+            </div>
+
+            <!-- Usage Limit -->
+            <div class="mb-3">
+                <label asp-for="UsageLimit" class="form-label"></label>
+                <input asp-for="UsageLimit" class="form-control" type="number" min="0" placeholder="0 for unlimited" />
+                <div class="form-text">Set to 0 for unlimited usage.</div>
+                <span asp-validation-for="UsageLimit" class="text-danger"></span>
+            </div>
+
+       
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="reset" class="btn btn-secondary me-md-2">Reset</button>
+                <button type="submit" class="btn btn-primary">Create Coupon</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('couponForm');
+            const discountTypeRadios = document.querySelectorAll('input[name="IsPercentage"]');
+            const discountSuffix = document.getElementById('discountSuffix');
+
+            // Toggle discount value suffix between $ and %
+            discountTypeRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    discountSuffix.textContent = this.value === 'true' ? '%' : '$';
+
+                    // Adjust placeholder based on type
+                    const discountValueInput = document.getElementById('DiscountValue');
+                    if (this.value === 'true') {
+                        discountValueInput.placeholder = 'e.g., 20 (for 20%)';
+                        discountValueInput.setAttribute('max', '100');
+                    } else {
+                        discountValueInput.placeholder = 'e.g., 10';
+                        discountValueInput.removeAttribute('max');
+                    }
+                });
+            });
+
+            // Auto-format coupon code to uppercase
+            document.getElementById('Code').addEventListener('input', function() {
+                this.value = this.value.toUpperCase();
+            });
+
+            // Trigger change event to set initial state
+            document.querySelector('input[name="IsPercentage"]:checked')?.dispatchEvent(new Event('change'));
+        });
+    </script>
+}
