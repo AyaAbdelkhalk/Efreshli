@@ -1,4 +1,6 @@
-﻿namespace Efreshli.MVC.Models
+﻿using Efreshli.Domain.Models;
+
+namespace Efreshli.MVC.Models
 {
     public class Product
     {
