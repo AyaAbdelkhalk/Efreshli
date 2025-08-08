@@ -1,5 +1,18 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using System.Globalization
+@using Efreshli.Application.Resources
+@using Microsoft.Extensions.Localization
+@using Microsoft.Extensions.Options
+@inject IOptions<RequestLocalizationOptions> LocOptions
+@inject IStringLocalizer<SharedResources> _stringLocalizer
+
+@{
+    var isRTL = System.Threading.Thread.CurrentThread.CurrentUICulture.TextInfo.IsRightToLeft;
+    var dirAttribute = isRTL ? "rtl" : "ltr";
+}
+
+<!DOCTYPE html>
+<html  dir="@dirAttribute" lang="@CultureInfo.CurrentUICulture.Name">
+@* <html lang="en"> *@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +26,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
     <link rel="stylesheet" href="~/css/SidebarStyle.css">
 </head>
-<body class="bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 font-sans">
+<body class="bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 font-sans" dir="@dirAttribute">
     <div class="flex h-screen relative overflow-auto">
         <!-- Sidebar Overlay -->
         <div id="sidebarOverlay" class="fixed inset-0 bg-gradient-to-r from-black/50 to-gray-900/30 z-20 lg:hidden hidden transition-all duration-500 backdrop-blur-sm"></div>
@@ -110,7 +123,7 @@
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-dashboard-3-line text-sm"></i>
                         </div>
-                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">Dashboard</span>
+                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">@_stringLocalizer[SharedResourcesKeys.Navigation.Dashboard]</span>
                         <div class="ml-auto">
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
@@ -120,18 +133,18 @@
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-team-line text-sm"></i>
                         </div>
-                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">Users</span>
+                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">@_stringLocalizer[SharedResourcesKeys.Navigation.Users]</span>
                         <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
                     </a>
-
+                   
                     <a href="#"
                        class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-shopping-bag-3-line text-sm"></i>
                         </div>
-                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">Orders</span>
+                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">@_stringLocalizer[SharedResourcesKeys.Navigation.Orders]</span>
                         <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
@@ -142,7 +155,7 @@
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-product-hunt-line text-sm"></i>
                         </div>
-                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">Products</span>
+                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">@_stringLocalizer[SharedResourcesKeys.Navigation.Products]</span>
                         <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
@@ -153,18 +166,33 @@
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-bookmark-line text-sm"></i>
                         </div>
-                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">Categories</span>
+                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">@_stringLocalizer[SharedResourcesKeys.Navigation.Categories]</span>
+                        <div class="ml-auto  opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="ri-arrow-right-s-line text-xs"></i>
+                        </div>
+                    </a>
+                    <!-- #region name -->
+
+                    <a asp-area="" asp-controller="Coupon" asp-action="Index"
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
+                        <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
+                            <i class="ri-bookmark-line text-sm"></i>
+                        </div>
+                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">@_stringLocalizer[SharedResourcesKeys.Navigation.Coupon]</span>
                         <div class="ml-auto  opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
                     </a>
 
-                    <a href ="#"
+                    <!-- #endregion -->
+
+
+                    <a href="#"
                        class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-line-chart-line text-sm"></i>
                         </div>
-                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">Analytics</span>
+                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">@_stringLocalizer[SharedResourcesKeys.Navigation.Analytics]</span>
                         <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
@@ -177,7 +205,7 @@
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-settings-3-line text-sm"></i>
                         </div>
-                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">Settings</span>
+                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">@_stringLocalizer[SharedResourcesKeys.Navigation.Settings]</span>
                         <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
@@ -188,11 +216,44 @@
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-question-line text-sm"></i>
                         </div>
-                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">Help & Support</span>
+                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">@_stringLocalizer[SharedResourcesKeys.Navigation.HelpSupport]</span>
                         <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="ri-external-link-line text-xs"></i>
                         </div>
                     </a>
+
+
+
+
+
+                    <!-- #region Language -->
+
+
+                    <a asp-area="" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="ar-EG"
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
+                        <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
+                            <i class="ri-bookmark-line text-sm"></i>
+                        </div>
+                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">عربي</span>
+                        <div class="ml-auto  opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="ri-arrow-right-s-line text-xs"></i>
+                        </div>
+                    </a>
+
+                    <a asp-area="" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="en-US"
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
+                        <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
+                            <i class="ri-bookmark-line text-sm"></i>
+                        </div>
+                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">English</span>
+                        <div class="ml-auto  opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="ri-arrow-right-s-line text-xs"></i>
+                        </div>
+                    </a>
+
+<!-- #endregion -->
+
+
                 </nav>
 
 
@@ -217,9 +278,9 @@
                                     var controller = ViewContext.RouteData.Values["controller"]?.ToString();
                                     var action = ViewContext.RouteData.Values["action"]?.ToString();
                                     var pageTitle = ViewData["Title"]?.ToString();
-                                    
+
                                     string displayTitle = "Management";
-                                    
+
                                     if (!string.IsNullOrEmpty(pageTitle))
                                     {
                                         displayTitle = pageTitle;
@@ -253,7 +314,7 @@
                                 }
                                 @displayTitle
                             </h1>
-                           @*  <nav class="text-xs text-gray-500 mt-0.5">
+                            @*  <nav class="text-xs text-gray-500 mt-0.5">
                                 <a href="https://readdy.ai/home/2e5c1a7e-89dd-4916-a8f3-f20b805c3d3d/317ef589-d765-4b24-9bd5-f7713ab55d6b"
                                    data-readdy="true" class="hover:text-primary">Home</a>
                                 <span class="mx-1.5">/</span>
@@ -322,7 +383,7 @@
                 </div>
             </header>
 
-             <main class="flex-1 p-4 lg:p-0 lg:pt-3 min-h-0 overflow-auto">
+            <main class="flex-1 p-4 lg:p-0 lg:pt-3 min-h-0 overflow-auto">
 
                 <div class="bg-white/70 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 h-full p-4 relative overflow-auto">
 
@@ -344,5 +405,43 @@
             </main>
 
             <script src="~/js/SidebarScript.js"></script>
+
+            <script>
+
+                                function showConfirmationModal(options) {
+                    const modal = $('#confirmationModal');
+
+                    // Set dynamic content
+                    if (options.message) {
+                        modal.find('.modal-body').html(options.message);
+                    }
+
+                    // Set form action
+                    modal.find('form').attr('action', options.formAction);
+
+                    // Set item ID
+                    modal.find('input[name="id"]').val(options.itemId);
+
+                    // Change modal color based on action type
+                    if (options.actionType === 'delete') {
+                        modal.find('.modal-header').removeClass('bg-warning bg-primary').addClass('bg-danger');
+                    } else if (options.actionType === 'warning') {
+                        modal.find('.modal-header').removeClass('bg-danger bg-primary').addClass('bg-warning');
+                    }
+
+                    modal.modal('show');
+                }
+
+                // Data attributes initialization
+                $(document).on('click', '[data-toggle="confirm-modal"]', function() {
+                    const $el = $(this);
+                    showConfirmationModal({
+                        formAction: $el.data('form-action'),
+                        itemId: $el.data('item-id'),
+                        actionType: $el.data('action-type'),
+                        message: $el.data('message')
+                    });
+                });
+            </script>
 </body>
 </html>

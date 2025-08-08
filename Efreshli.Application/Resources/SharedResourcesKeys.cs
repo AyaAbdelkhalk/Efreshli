@@ -38,8 +38,26 @@ namespace Efreshli.Application.Resources
         /// <summary>
         /// Main application navigation links.
         /// </summary>
+        //public static class Navigation
+        //{
+        //    public const string Home = "Navigation.Home";
+        //    public const string About = "Navigation.About";
+        //    public const string Services = "Navigation.Services";
+        //    public const string Contact = "Navigation.Contact";
+        //    public const string FAQ = "Navigation.FAQ";
+        //    public const string Blog = "Navigation.Blog";
+        //    public const string Pricing = "Navigation.Pricing";
+        //    public const string Portfolio = "Navigation.Portfolio";
+        //    public const string Testimonials = "Navigation.Testimonials";
+        //    public const string News = "Navigation.News";
+        //    public const string Dashboard = "Navigation.Dashboard";
+        //    public const string Reports = "Navigation.Reports";
+        //}
+
+
         public static class Navigation
         {
+            // Public Website Navigation
             public const string Home = "Navigation.Home";
             public const string About = "Navigation.About";
             public const string Services = "Navigation.Services";
@@ -50,8 +68,18 @@ namespace Efreshli.Application.Resources
             public const string Portfolio = "Navigation.Portfolio";
             public const string Testimonials = "Navigation.Testimonials";
             public const string News = "Navigation.News";
+
+            // Admin Dashboard Navigation
             public const string Dashboard = "Navigation.Dashboard";
             public const string Reports = "Navigation.Reports";
+            public const string Users = "Navigation.Users";
+            public const string Orders = "Navigation.Orders";
+            public const string Products = "Navigation.Products";
+            public const string Categories = "Navigation.Categories";
+            public const string Coupon = "Navigation.Coupon";
+            public const string Analytics = "Navigation.Analytics";
+            public const string Settings = "Navigation.Settings";
+            public const string HelpSupport = "Navigation.HelpSupport";
         }
 
 
@@ -513,5 +541,7 @@ namespace Efreshli.Application.Resources
             public const string TermsOfService = "Misc.TermsOfService";
             public const string TermsAndConditions = "Misc.TermsAndConditions";
         }
+
+
     }
 }
