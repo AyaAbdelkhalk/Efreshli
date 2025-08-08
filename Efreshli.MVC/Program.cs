@@ -1,3 +1,4 @@
+
 //using Efreshli.Domain.Common.Classes;
 //using Efreshli.Infrastructure.Data;
 //using Microsoft.EntityFrameworkCore;
@@ -43,9 +44,10 @@
 //        }
 //    }
 //}
+
 using CloudinaryDotNet;
 using Efreshli.Application;
-
+using Efreshli.Common;
 using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Models;
 using Efreshli.Domain.Settings;
@@ -54,6 +56,7 @@ using Efreshli.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System.Globalization;
 
@@ -66,7 +69,11 @@ namespace Efreshli.MVC
             var builder = WebApplication.CreateBuilder(args);
 
             // 1. MVC and Razor support
-            builder.Services.AddControllersWithViews();
+            //builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<ValidateModelAsyncFilter>();
+            });
             builder.Services.AddRazorPages();
 
             // 2. Database
@@ -160,8 +167,9 @@ namespace Efreshli.MVC
             var app = builder.Build();
 
             // Initialize static UserContext
-            UserContext.Initialize(app.Services);
+            //UserContext.Initialize(app.Services);
 
+            var app = builder.Build();
             // Localization middleware
             var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(locOptions.Value);
@@ -184,6 +192,7 @@ namespace Efreshli.MVC
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
             app.Run();
         }

@@ -1,0 +1,51 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace Efreshli.MVC.Models
+{
+    public class BrandViewModel
+    {
+        public int BrandId { get; set; }
+
+        [Required(ErrorMessage = "Arabic name is required")]
+        [StringLength(100, ErrorMessage = "Arabic name cannot exceed 100 characters")]
+        [Display(Name = "Arabic Name")]
+        public string NameAr { get; set; }
+
+        [Required(ErrorMessage = "English name is required")]
+        [StringLength(100, ErrorMessage = "English name cannot exceed 100 characters")]
+        [Display(Name = "English Name")]
+        public string NameEn { get; set; }
+
+        [Display(Name = "Brand Image")]
+        public IFormFile? BrandImage { get; set; }
+
+        [Display(Name = "Current Image")]
+        public int? ImageId { get; set; }
+
+        [Display(Name = "Created Date")]
+        public DateTime? CreatedDate { get; set; }
+
+        [Display(Name = "Updated Date")]
+        public DateTime? UpdatedDate { get; set; }
+    }
+
+    public class BrandListViewModel
+    {
+        public IEnumerable<BrandDisplayViewModel> Brands { get; set; } = new List<BrandDisplayViewModel>();
+        public string? SearchTerm { get; set; }
+        public int CurrentPage { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+        public int TotalCount { get; set; }
+        public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+    }
+
+    public class BrandDisplayViewModel
+    {
+        public int BrandId { get; set; }
+        public string NameAr { get; set; }
+        public string NameEn { get; set; }
+        public int? ImageId { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+    }
+}

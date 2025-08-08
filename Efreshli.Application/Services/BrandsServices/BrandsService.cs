@@ -77,6 +77,10 @@ namespace Efreshli.Application.Services.BrandsServices
 
         }
 
+        public Task<int> GetTotalCountAsync(string? search = null)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<BrandResponseDto?> UpdateBrandAsync(int id, UpdateBrandDto brandDto)
         {
