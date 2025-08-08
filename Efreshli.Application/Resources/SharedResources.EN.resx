@@ -181,86 +181,86 @@
     <value>Clear</value>
     <comment>Clear button</comment>
   </data>
-	<data name="Navigation.Home" xml:space="preserve">
-  <value>Home</value>
-  <comment>Home page</comment>
-</data>
-	<data name="Navigation.About" xml:space="preserve">
-  <value>About</value>
-  <comment>About page</comment>
-</data>
-	<data name="Navigation.Services" xml:space="preserve">
-  <value>Services</value>
-  <comment>Services page</comment>
-</data>
-	<data name="Navigation.Contact" xml:space="preserve">
-  <value>Contact</value>
-  <comment>Contact page</comment>
-</data>
-	<data name="Navigation.FAQ" xml:space="preserve">
-  <value>FAQ</value>
-  <comment>FAQ page</comment>
-</data>
-	<data name="Navigation.Blog" xml:space="preserve">
-  <value>Blog</value>
-  <comment>Blog page</comment>
-</data>
-	<data name="Navigation.Pricing" xml:space="preserve">
-  <value>Pricing</value>
-  <comment>Pricing page</comment>
-</data>
-	<data name="Navigation.Portfolio" xml:space="preserve">
-  <value>Portfolio</value>
-  <comment>Portfolio page</comment>
-</data>
-	<data name="Navigation.Testimonials" xml:space="preserve">
-  <value>Testimonials</value>
-  <comment>Testimonials page</comment>
-</data>
-	<data name="Navigation.News" xml:space="preserve">
-  <value>News</value>
-  <comment>News page</comment>
-</data>
-	<data name="Navigation.Dashboard" xml:space="preserve">
-  <value>Dashboard</value>
-  <comment>Dashboard</comment>
-</data>
-	<data name="Navigation.Reports" xml:space="preserve">
-  <value>Reports</value>
-  <comment>Reports</comment>
-</data>
-	<data name="Navigation.Users" xml:space="preserve">
-  <value>Users</value>
-  <comment>Users page</comment>
-</data>
-	<data name="Navigation.Orders" xml:space="preserve">
-  <value>Orders</value>
-  <comment>Orders page</comment>
-</data>
-	<data name="Navigation.Products" xml:space="preserve">
-  <value>Products</value>
-  <comment>Products page</comment>
-</data>
-	<data name="Navigation.Categories" xml:space="preserve">
-  <value>Categories</value>
-  <comment>Categories page</comment>
-</data>
-	<data name="Navigation.Coupon" xml:space="preserve">
-  <value>Coupon</value>
-  <comment>Coupon page</comment>
-</data>
-	<data name="Navigation.Analytics" xml:space="preserve">
-  <value>Analytics</value>
-  <comment>Analytics page</comment>
-</data>
-	<data name="Navigation.Settings" xml:space="preserve">
-  <value>Settings</value>
-  <comment>Settings page</comment>
-</data>
-	<data name="Navigation.HelpSupport" xml:space="preserve">
-  <value>Help &amp; Support</value>
-  <comment>Help and Support page</comment>
-</data>
+  <data name="Navigation.Home" xml:space="preserve">
+    <value>Home</value>
+    <comment>Home page</comment>
+  </data>
+  <data name="Navigation.About" xml:space="preserve">
+    <value>About</value>
+    <comment>About page</comment>
+  </data>
+  <data name="Navigation.Services" xml:space="preserve">
+    <value>Services</value>
+    <comment>Services page</comment>
+  </data>
+  <data name="Navigation.Contact" xml:space="preserve">
+    <value>Contact</value>
+    <comment>Contact page</comment>
+  </data>
+  <data name="Navigation.FAQ" xml:space="preserve">
+    <value>FAQ</value>
+    <comment>FAQ page</comment>
+  </data>
+  <data name="Navigation.Blog" xml:space="preserve">
+    <value>Blog</value>
+    <comment>Blog page</comment>
+  </data>
+  <data name="Navigation.Pricing" xml:space="preserve">
+    <value>Pricing</value>
+    <comment>Pricing page</comment>
+  </data>
+  <data name="Navigation.Portfolio" xml:space="preserve">
+    <value>Portfolio</value>
+    <comment>Portfolio page</comment>
+  </data>
+  <data name="Navigation.Testimonials" xml:space="preserve">
+    <value>Testimonials</value>
+    <comment>Testimonials page</comment>
+  </data>
+  <data name="Navigation.News" xml:space="preserve">
+    <value>News</value>
+    <comment>News page</comment>
+  </data>
+  <data name="Navigation.Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+    <comment>Dashboard</comment>
+  </data>
+  <data name="Navigation.Reports" xml:space="preserve">
+    <value>Reports</value>
+    <comment>Reports</comment>
+  </data>
+  <data name="Navigation.Users" xml:space="preserve">
+    <value>Users</value>
+    <comment>Users page</comment>
+  </data>
+  <data name="Navigation.Orders" xml:space="preserve">
+    <value>Orders</value>
+    <comment>Orders page</comment>
+  </data>
+  <data name="Navigation.Products" xml:space="preserve">
+    <value>Products</value>
+    <comment>Products page</comment>
+  </data>
+  <data name="Navigation.Categories" xml:space="preserve">
+    <value>Categories</value>
+    <comment>Categories page</comment>
+  </data>
+  <data name="Navigation.Coupon" xml:space="preserve">
+    <value>Coupon</value>
+    <comment>Coupon page</comment>
+  </data>
+  <data name="Navigation.Analytics" xml:space="preserve">
+    <value>Analytics</value>
+    <comment>Analytics page</comment>
+  </data>
+  <data name="Navigation.Settings" xml:space="preserve">
+    <value>Settings</value>
+    <comment>Settings page</comment>
+  </data>
+  <data name="Navigation.HelpSupport" xml:space="preserve">
+    <value>Help &amp; Support</value>
+    <comment>Help and Support page</comment>
+  </data>
   <data name="Validation.Required" xml:space="preserve">
     <value>This field is required</value>
     <comment>Required field validation</comment>
@@ -1560,5 +1560,8 @@
   <data name="Entities.Department" xml:space="preserve">
     <value>Depatment</value>
     <comment>Department</comment>
+  </data>
+  <data name="Navigation.Brand" xml:space="preserve">
+    <value>Brand</value>
   </data>
 </root>

@@ -169,7 +169,6 @@ namespace Efreshli.MVC
             // Initialize static UserContext
             //UserContext.Initialize(app.Services);
 
-            var app = builder.Build();
             // Localization middleware
             var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(locOptions.Value);

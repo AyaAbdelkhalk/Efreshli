@@ -1561,4 +1561,7 @@
     <value>القسم</value>
     <comment>Department</comment>
   </data>
+  <data name="Navigation.Brand" xml:space="preserve">
+    <value>البراند</value>
+  </data>
 </root>
