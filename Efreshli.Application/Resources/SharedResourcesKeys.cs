@@ -71,6 +71,7 @@ namespace Efreshli.Application.Resources
 
             // Admin Dashboard Navigation
             public const string Dashboard = "Navigation.Dashboard";
+            public const string Brand = "Navigation.Brand";
             public const string Reports = "Navigation.Reports";
             public const string Users = "Navigation.Users";
             public const string Orders = "Navigation.Orders";
