@@ -7,7 +7,12 @@ namespace Efreshli.MVC.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = "Categories Management";
-            return View("test");
+            return View("Main");
         }
+        //public IActionResult Main()
+        //{
+        //    ViewData["Title"] = "Create Management";
+        //    return View();
+        //}
     }
 }

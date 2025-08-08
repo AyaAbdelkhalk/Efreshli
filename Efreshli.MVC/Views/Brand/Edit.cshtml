@@ -1,0 +1,429 @@
+@model Efreshli.MVC.Models.BrandViewModel
+
+@{
+    ViewData["Title"] = "Edit Brand";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Edit Brand</h3>
+                    <div class="card-tools">
+                        <a asp-action="Index" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+
+                <form asp-action="Edit" method="post" enctype="multipart/form-data" id="editBrandForm">
+                    <div class="card-body">
+                        @if (TempData["Error"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                @TempData["Error"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display: none;"></div>
+
+                        <input asp-for="BrandId" type="hidden" />
+                        <input asp-for="ImageId" type="hidden" />
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="NameAr" class="form-label">Arabic Name <span class="text-danger">*</span></label>
+                                    <input asp-for="NameAr" class="form-control" placeholder="Enter brand name in Arabic"
+                                           id="nameArInput" onkeyup="validateForm(); trackChanges()" />
+                                    <span asp-validation-for="NameAr" class="text-danger"></span>
+                                    <small class="form-text text-muted">Required field</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="NameEn" class="form-label">English Name <span class="text-danger">*</span></label>
+                                    <input asp-for="NameEn" class="form-control" placeholder="Enter brand name in English"
+                                           id="nameEnInput" onkeyup="validateForm(); trackChanges()" />
+                                    <span asp-validation-for="NameEn" class="text-danger"></span>
+                                    <small class="form-text text-muted">Required field</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="BrandImage" class="form-label">New Brand Image</label>
+                                    <input asp-for="BrandImage" type="file" class="form-control"
+                                           accept="image/*" onchange="previewImage(this); validateForm(); trackChanges()"
+                                           id="brandImageInput" />
+                                    <span asp-validation-for="BrandImage" class="text-danger"></span>
+                                    <small class="form-text text-muted">
+                                        Choose a new image only if you want to change the current image<br>
+                                        Supported formats: JPG, PNG, GIF (Max size: 5MB)
+                                    </small>
+                                    <div class="progress mt-2" id="uploadProgress" style="display: none;">
+                                        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Image Preview</label>
+                                    <div class="border rounded p-3 text-center" style="min-height: 150px;" id="imagePreviewContainer">
+                                        <img id="imagePreview" src="#" alt="New Image Preview"
+                                             style="max-width: 100%; max-height: 120px; display: none;" />
+                                        <div id="currentImageInfo" class="text-muted">
+                                            @if (Model.ImageId.HasValue)
+                                            {
+                                                <i class="fas fa-image fa-2x mb-2 text-success"></i>
+                                                <br>
+                                                <span class="text-success">Current image exists</span>
+                                                <br>
+                                                <small>Choose a new image to replace it</small>
+                                            }
+                                            else
+                                            {
+                                                <i class="fas fa-image fa-2x mb-2"></i>
+                                                <br>
+                                                <span>No current image</span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="mt-2">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="clearImage()">
+                                            <i class="fas fa-times"></i> Clear New Image
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Change Tracking Section -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card bg-light">
+                                    <div class="card-header">
+                                        <h6 class="card-title mb-0">
+                                            <i class="fas fa-history"></i> Change Tracking
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <strong>Form Status:</strong>
+                                                <span id="formStatus" class="badge bg-success">Valid</span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <strong>Changes Made:</strong>
+                                                <span id="changesStatus" class="badge bg-secondary">No Changes</span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <strong>Image Status:</strong>
+                                                <span id="imageStatus" class="badge bg-secondary">No New Image</span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <strong>Validation:</strong>
+                                                <span id="validationStatus" class="badge bg-success">Valid</span>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-12">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-info-circle"></i>
+                                                    <strong>Note:</strong> Changes will be tracked automatically. You can preview changes before saving.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Additional Information</label>
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <strong>ID:</strong> @Model.BrandId
+                                                </div>
+                                                <div class="col-md-6">
+                                                    @if (Model.CreatedDate.HasValue)
+                                                    {
+                                                        <strong>Created Date:</strong> @Model.CreatedDate.Value.ToString("yyyy-MM-dd HH:mm")
+                                                    }
+                                                </div>
+                                            </div>
+                                            @if (Model.UpdatedDate.HasValue)
+                                            {
+                                                <div class="row mt-2">
+                                                    <div class="col-md-6">
+                                                        <strong>Last Updated:</strong> @Model.UpdatedDate.Value.ToString("yyyy-MM-dd HH:mm")
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <div>
+                                <button type="button" class="btn btn-info" onclick="previewChanges()">
+                                    <i class="fas fa-eye"></i> Preview Changes
+                                </button>
+                                <button type="button" class="btn btn-warning" onclick="compareWithOriginal()">
+                                    <i class="fas fa-exchange-alt"></i> Compare
+                                </button>
+                                <a asp-action="Details" asp-route-id="@Model.BrandId" class="btn btn-info">
+                                    <i class="fas fa-eye"></i> View Details
+                                </a>
+                                <a asp-action="Index" class="btn btn-secondary">
+                                    <i class="fas fa-times"></i> Cancel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Changes Preview Modal -->
+<div class="modal fade" id="changesPreviewModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Changes Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Current Values</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <th>Arabic Name:</th>
+                                <td id="currentNameAr">@Model.NameAr</td>
+                            </tr>
+                            <tr>
+                                <th>English Name:</th>
+                                <td id="currentNameEn">@Model.NameEn</td>
+                            </tr>
+                            <tr>
+                                <th>Image:</th>
+                                <td id="currentImageStatus">
+                                    @if (Model.ImageId.HasValue)
+                                    {
+                                        <span class="badge bg-success">Has Image</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">No Image</span>
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>New Values</h6>
+                        <table class="table table-sm">
+                            <tr>
+                                <th>Arabic Name:</th>
+                                <td id="newNameAr"></td>
+                            </tr>
+                            <tr>
+                                <th>English Name:</th>
+                                <td id="newNameEn"></td>
+                            </tr>
+                            <tr>
+                                <th>Image:</th>
+                                <td id="newImageStatus"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        let originalValues = {
+            nameAr: '@Model.NameAr',
+            nameEn: '@Model.NameEn',
+            hasImage: @(Model.ImageId.HasValue ? "true" : "false")
+        };
+
+        let hasChanges = false;
+
+        function previewImage(input) {
+            const preview = document.getElementById('imagePreview');
+            const currentInfo = document.getElementById('currentImageInfo');
+            const imageStatus = document.getElementById('imageStatus');
+
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+
+                // Validate file size (5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    input.value = '';
+                    return;
+                }
+
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file');
+                    input.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    currentInfo.style.display = 'none';
+                    imageStatus.textContent = 'New Image Selected';
+                    imageStatus.className = 'badge bg-success';
+                }
+
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+                currentInfo.style.display = 'block';
+                imageStatus.textContent = 'No New Image';
+                imageStatus.className = 'badge bg-secondary';
+            }
+        }
+
+        function validateForm() {
+            const nameAr = document.getElementById('nameArInput').value.trim();
+            const nameEn = document.getElementById('nameEnInput').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            const formStatus = document.getElementById('formStatus');
+            const validationStatus = document.getElementById('validationStatus');
+
+            if (nameAr && nameEn) {
+                submitBtn.disabled = false;
+                formStatus.textContent = 'Valid';
+                formStatus.className = 'badge bg-success';
+                validationStatus.textContent = 'Valid';
+                validationStatus.className = 'badge bg-success';
+            } else {
+                submitBtn.disabled = true;
+                formStatus.textContent = 'Invalid';
+                formStatus.className = 'badge bg-danger';
+                validationStatus.textContent = 'Invalid';
+                validationStatus.className = 'badge bg-danger';
+            }
+        }
+
+        function trackChanges() {
+            const nameAr = document.getElementById('nameArInput').value.trim();
+            const nameEn = document.getElementById('nameEnInput').value.trim();
+            const imageInput = document.getElementById('brandImageInput');
+            const changesStatus = document.getElementById('changesStatus');
+
+            const hasNameChanges = nameAr !== originalValues.nameAr || nameEn !== originalValues.nameEn;
+            const hasImageChanges = imageInput.files && imageInput.files.length > 0;
+
+            hasChanges = hasNameChanges || hasImageChanges;
+
+            if (hasChanges) {
+                changesStatus.textContent = 'Changes Detected';
+                changesStatus.className = 'badge bg-warning';
+            } else {
+                changesStatus.textContent = 'No Changes';
+                changesStatus.className = 'badge bg-secondary';
+            }
+        }
+
+        function clearImage() {
+            document.getElementById('brandImageInput').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('currentImageInfo').style.display = 'block';
+            document.getElementById('imageStatus').textContent = 'No New Image';
+            document.getElementById('imageStatus').className = 'badge bg-secondary';
+            trackChanges();
+        }
+
+        function previewChanges() {
+            const nameAr = document.getElementById('nameArInput').value;
+            const nameEn = document.getElementById('nameEnInput').value;
+            const imageInput = document.getElementById('brandImageInput');
+
+            document.getElementById('newNameAr').textContent = nameAr || 'Not provided';
+            document.getElementById('newNameEn').textContent = nameEn || 'Not provided';
+
+            if (imageInput.files && imageInput.files[0]) {
+                document.getElementById('newImageStatus').innerHTML = '<span class="badge bg-success">New Image Selected</span>';
+            } else {
+                document.getElementById('newImageStatus').innerHTML = '<span class="badge bg-secondary">No New Image</span>';
+            }
+
+            new bootstrap.Modal(document.getElementById('changesPreviewModal')).show();
+        }
+
+        function compareWithOriginal() {
+            const nameAr = document.getElementById('nameArInput').value;
+            const nameEn = document.getElementById('nameEnInput').value;
+
+            let changes = [];
+
+            if (nameAr !== originalValues.nameAr) {
+                changes.push(`Arabic name changed from "${originalValues.nameAr}" to "${nameAr}"`);
+            }
+
+            if (nameEn !== originalValues.nameEn) {
+                changes.push(`English name changed from "${originalValues.nameEn}" to "${nameEn}"`);
+            }
+
+            if (changes.length > 0) {
+                alert('Changes detected:\n\n' + changes.join('\n'));
+            } else {
+                alert('No changes detected in the form fields.');
+            }
+        }
+
+        // Auto-hide alerts after 5 seconds
+        setTimeout(function() {
+            $('.alert').fadeOut('slow');
+        }, 5000);
+
+        // Show validation summary if there are errors
+        $(document).ready(function() {
+            if ($('.field-validation-error').length > 0) {
+                $('.alert-danger').show();
+            }
+
+            // Initialize form validation and change tracking
+            validateForm();
+            trackChanges();
+        });
+    </script>
+}
