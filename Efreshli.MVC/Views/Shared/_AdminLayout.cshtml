@@ -1,17 +1,23 @@
-﻿<!DOCTYPE html>
+﻿﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-    <script>tailwind.config = { theme: { extend: { colors: { primary: '#fc0000e5', secondary: '#6366f1', accent: '#f1f5f9', dark: '#1e293b' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '28px', 'full': '9999px', 'button': '8px' }, animation: { float: 'float 3s ease-in-out infinite', glow: 'glow 2s ease-in-out infinite alternate', slideIn: 'slideIn 0.5s ease-out' }, fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], display: ['Inter', 'system-ui', 'sans-serif'] } } } }</script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/SidebarStyle.css">
+    <link rel="stylesheet" href="~/css/Brand/Brand.css">
+    <link rel="stylesheet" href="~/css/Category.css">
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#fc0000e5', secondary: '#6366f1', accent: '#f1f5f9', dark: '#1e293b' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '28px', 'full': '9999px', 'button': '8px' }, animation: { float: 'float 3s ease-in-out infinite', glow: 'glow 2s ease-in-out infinite alternate', slideIn: 'slideIn 0.5s ease-out' }, fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], display: ['Inter', 'system-ui', 'sans-serif'] } } } }</script>
+
 </head>
 <body class="bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 font-sans">
     <div class="flex h-screen relative overflow-auto">
@@ -118,10 +124,10 @@
                     <a asp-area="" asp-controller="Brand" asp-action="Index"
                        class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
-                            <i class="ri-dashboard-3-line text-sm"></i>
+                            <i class="ri-team-line text-sm"></i>
                         </div>
                         <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">Brand</span>
-                        <div class="ml-auto">
+                        <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
                     </a>
@@ -169,7 +175,7 @@
                         </div>
                     </a>
 
-                    <a href ="#"
+                    <a href="#"
                        class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-line-chart-line text-sm"></i>
@@ -227,9 +233,9 @@
                                     var controller = ViewContext.RouteData.Values["controller"]?.ToString();
                                     var action = ViewContext.RouteData.Values["action"]?.ToString();
                                     var pageTitle = ViewData["Title"]?.ToString();
-                                    
+
                                     string displayTitle = "Management";
-                                    
+
                                     if (!string.IsNullOrEmpty(pageTitle))
                                     {
                                         displayTitle = pageTitle;
@@ -263,7 +269,7 @@
                                 }
                                 @displayTitle
                             </h1>
-                           @*  <nav class="text-xs text-gray-500 mt-0.5">
+                            @*  <nav class="text-xs text-gray-500 mt-0.5">
                                 <a href="https://readdy.ai/home/2e5c1a7e-89dd-4916-a8f3-f20b805c3d3d/317ef589-d765-4b24-9bd5-f7713ab55d6b"
                                    data-readdy="true" class="hover:text-primary">Home</a>
                                 <span class="mx-1.5">/</span>
@@ -332,7 +338,7 @@
                 </div>
             </header>
 
-             <main class="flex-1 p-4 lg:p-0 lg:pt-3 min-h-0 overflow-auto">
+            <main class="flex-1 p-4 lg:p-0 lg:pt-3 min-h-0 overflow-auto">
 
                 <div class="bg-white/70 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 h-full p-4 relative overflow-auto">
 
@@ -352,6 +358,7 @@
 
                 </div>
             </main>
+            @await RenderSectionAsync("Scripts", required: false)
 
             <script src="~/js/SidebarScript.js"></script>
 </body>
