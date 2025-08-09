@@ -1588,4 +1588,7 @@
   <data name="Categories.CategoryName" xml:space="preserve">
     <value>Category Name</value>
   </data>
+  <data name="User.Management" xml:space="preserve">
+    <value>Management</value>
+  </data>
 </root>
