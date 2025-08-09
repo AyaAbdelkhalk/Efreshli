@@ -12,9 +12,13 @@ namespace Efreshli.Application.Services.CategoryServices
     public interface ICategoryService
     {
         public Task<Response<GetCategoryDto>> AddCategoryAsync(AddCategoryDto category);
-        public Task<Response<IEnumerable<GetCategoryDto>>> GetAllCategoriesAsync();
         public Task<Response<GetCategoryDto>> GetCategoryByIdAsync(int id);
+        public Task<Response<IEnumerable<GetCategoryDto>>> GetAllCategoriesAsync();
+        public Task<Response<IEnumerable<GetCategoryDto>>> GetMainCategoriesAsync();
+        public Task<Response<IEnumerable<GetCategoryDto>>> GetSubCategoriesAsync(int pid);
         public Task<Response<GetCategoryDto>> UpdateCategoryAsync(int id, UpdateCategoryDto category);
         public Task<Response<bool>> DeleteCategoryAsync(int id);
+        public Task<Response<IEnumerable<GetCategoryDto>>> GetCategoryHierarchyAsync();
+
     }
 }

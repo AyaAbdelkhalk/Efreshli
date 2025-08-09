@@ -194,6 +194,7 @@ namespace Efreshli.Application.Resources
             public const string Share = "Actions.Share";
             public const string Copy = "Actions.Copy";
             public const string Paste = "Actions.Paste";
+            public const string ConfirmDelete = "Actions.ConfirmDelete";
         }
 
         /// <summary>
@@ -541,6 +542,22 @@ namespace Efreshli.Application.Resources
             public const string PrivacyPolicy = "Misc.PrivacyPolicy";
             public const string TermsOfService = "Misc.TermsOfService";
             public const string TermsAndConditions = "Misc.TermsAndConditions";
+        }
+        public static class Categories 
+        { 
+            public const string AddCategory = "Categories.AddCategory";
+            public const string EditCategory = "Categories.EditCategory";
+            public const string DeleteCategory = "Categories.DeleteCategory";
+            public const string CategoryName = "Categories.CategoryName";
+            public const string MainCategories = "Categories.MainCategories";
+            public const string SubCategories = "Categories.SubCategories";
+            public const string Search = "Categories.Search";
+            public const string NoCategoriesFound = "Categories.NoCategoriesFound";
+            public const string CategoryImage = "Categories.CategoryImage";
+            public const string Products = "Categories.Products";
+
+
+
         }
 
 
