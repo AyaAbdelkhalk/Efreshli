@@ -1,795 +1,437 @@
-﻿// Category Management System - JavaScript
-/*
- * MVC Integration Guide:
- * 
- * 1. Controller Actions Required:
- *    - GET  /Category/Index              -> عرض الصفحة الرئيسية
- *    - GET  /Category/GetCategories      -> جلب الفئات (Ajax)
- *    - POST /Category/Create             -> إنشاء فئة جديدة
- *    - POST /Category/Edit/{id}          -> تعديل فئة
- *    - POST /Category/Delete/{id}        -> حذف فئة
- *    - GET  /Category/GetSubcategories/{parentId} -> جلب الفئات الفرعية
- * 
- * 2. Required DTOs:
- *    - CategoryDto: {CategoryId, NameAr, NameEn, ParentId, ImageUrl, ProductCount, Children}
- *    - CreateCategoryDto: {NameAr, NameEn, ParentId?, ImageUrl?}
- *    - UpdateCategoryDto: {CategoryId, NameAr, NameEn, ParentId?, ImageUrl?}
- * 
- * 3. Model Structure:
- *    public class Category {
- *        public int CategoryId { get; set; }
- *        public string NameAr { get; set; }
- *        public string NameEn { get; set; }
- *        public int? ParentId { get; set; }
- *        public string ImageUrl { get; set; }
- *        public int ProductCount { get; set; }
- *        public Category Parent { get; set; }
- *        public ICollection<Category> Children { get; set; }
- *        public string CreatedBy { get; set; }
- *        public DateTime CreatedAt { get; set; }
- *    }
- * 
- * 4. Integration Points:
- *    - Replace initializeDummyData() with AJAX call to controller
- *    - Replace add/edit/delete functions with AJAX calls
- *    - Add CSRF token to all POST requests
- */
+﻿// Global variables
 
-class CategoryManager {
-    constructor() {
-        this.categories = this.initializeDummyData();
-        this.currentLevel = [];
-        this.currentParentId = null;
-        this.editingCategoryId = null;
-        this.categoryToDelete = null;
-        this.searchTerm = '';
+let categories = [];
+let currentLevel = 0;
+let navigationPath = [];
+let editingCategoryId = null;
 
-        this.init();
+// Initialize page
+document.addEventListener('DOMContentLoaded', function () {
+    loadCategories();
+});
+
+// Load all categories from API
+async function loadCategories() {
+    showLoading();
+
+    try {
+        const response = await fetch('/Category/GetAllCategories');
+        const result = await response.json();
+
+        if (result.success) {
+            categories = result.data || [];
+            displayCategories();
+            populateParentOptions();
+        } else {
+            showError(result.message || 'خطأ في تحميل البيانات');
+            showEmptyState();
+        }
+    } catch (error) {
+        console.error('Error loading categories:', error);
+        showError('حدث خطأ في الاتصال بالخادم');
+        showEmptyState();
     }
 
-    // Initialize the application
-    init() {
-        this.loadCategories();
-        this.updateBreadcrumb();
-        this.populateParentSelect();
+    hideLoading();
+}
 
-        // For MVC: Replace with AJAX call
-        // this.loadCategoriesFromServer();
+// Display categories in grid
+//function displayCategories() {
+//    const grid = document.getElementById('categoriesGrid');
+//    const currentCategories = getCurrentLevelCategories();
+
+//    if (currentCategories.length === 0) {
+//        showEmptyState();
+//        return;
+//    }
+
+//    hideEmptyState();
+
+//    console.log('Displaying categories:', currentCategories);
+//    grid.innerHTML = currentCategories.map(category => `
+//        <div class="category-card" data-id="${category.categoryId}" onclick="navigateToSubcategories(${category.categoryId})">
+//            <div class="category-image">
+//                ${category.imageUrl ?
+//        `<img src="${category.imageUrl}" class="category-image" alt="${category.nameAr}" onerror="this.src='/images/default-category.png'">` :
+//            `<div class="no-image"><i class="fas fa-image"></i></div>`
+//        }
+//            </div>
+//            <div class="category-content">
+//                <h3 class="category-title">
+//                    <span class="ar-title" dir="rtl">${category.nameAr}</span>
+//                    <span class="en-title">${category.nameEn}</span>
+//                </h3>
+//                <div class="category-actions">
+//                    ${hasSubcategories(category.categoryId) ?
+//            `<button class="btn btn-sm btn-outline" onclick="navigateToSubcategories(${category.categoryId})">
+//                            <i class="fas fa-folder-open"></i>
+//                        </button>` : ''
+//        }
+//                    <button class="btn btn-sm btn-outline" onclick="editCategory(${category.categoryId})">
+//                        <i class="fas fa-edit"></i>
+
+//                    </button>
+//                    <button class="btn btn-sm btn-danger" onclick="deleteCategory(${category.categoryId})">
+//                        <i class="fas fa-trash"></i>
+
+//                    </button>
+//                </div>
+//            </div>
+//        </div>
+//    `).join('');
+//}
+
+function displayCategories() {
+    const container = document.getElementById('categoriesGrid');
+    container.innerHTML = ''; // Clear previous content
+    const currentCategories = getCurrentLevelCategories();
+    if (currentCategories.length === 0) {
+        showEmptyState();
+        return;
     }
 
-    // MVC Integration: Load categories from server
-    // async loadCategoriesFromServer() {
-    //     try {
-    //         const response = await fetch('/Category/GetCategories', {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             }
-    //         });
-    //         
-    //         if (response.ok) {
-    //             this.categories = await response.json();
-    //             this.loadCategories();
-    //             this.updateBreadcrumb();
-    //             this.populateParentSelect();
-    //         } else {
-    //             console.error('Failed to load categories');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error loading categories:', error);
-    //     }
-    // }
+    hideEmptyState();
 
-    // Dummy data following GetCategoryDto structure (for MVC binding)
-    initializeDummyData() {
-        return [
-            {
-                CategoryId: 1,
-                NameAr: "خضروات",
-                NameEn: "Vegetables",
-                ParentId: null,
-                ImageUrl: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200",
-                Parent: null,
-                CreatedBy: "Admin",
-                ProductCount: 25, // عدد المنتجات في هذه الفئة
-                Children: [
-                    {
-                        CategoryId: 11,
-                        NameAr: "خضروات ورقية",
-                        NameEn: "Leafy Greens",
-                        ParentId: 1,
-                        ImageUrl: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=200",
-                        Parent: null,
-                        CreatedBy: "Admin",
-                        ProductCount: 12, // عدد المنتجات في هذه الفئة الفرعية
-                        Children: [
-                            {
-                                CategoryId: 111,
-                                NameAr: "سبانخ",
-                                NameEn: "Spinach",
-                                ParentId: 11,
-                                ImageUrl: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=200",
-                                Parent: null,
-                                CreatedBy: "Admin",
-                                ProductCount: 5,
-                                Children: []
-                            },
-                            {
-                                CategoryId: 112,
-                                NameAr: "جرجير",
-                                NameEn: "Arugula",
-                                ParentId: 11,
-                                ImageUrl: "https://images.unsplash.com/photo-1622205313162-be1d5712a43f?w=200",
-                                Parent: null,
-                                CreatedBy: "Admin",
-                                ProductCount: 7,
-                                Children: []
-                            }
-                        ]
-                    },
-                    {
-                        CategoryId: 12,
-                        NameAr: "خضروات جذرية",
-                        NameEn: "Root Vegetables",
-                        ParentId: 1,
-                        ImageUrl: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=200",
-                        Parent: null,
-                        CreatedBy: "Admin",
-                        ProductCount: 8,
-                        Children: []
-                    }
-                ]
-            },
-            {
-                CategoryId: 2,
-                NameAr: "فواكه",
-                NameEn: "Fruits",
-                ParentId: null,
-                ImageUrl: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=200",
-                Parent: null,
-                CreatedBy: "Admin",
-                ProductCount: 18,
-                Children: [
-                    {
-                        CategoryId: 21,
-                        NameAr: "فواكه استوائية",
-                        NameEn: "Tropical Fruits",
-                        ParentId: 2,
-                        ImageUrl: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=200",
-                        Parent: null,
-                        CreatedBy: "Admin",
-                        ProductCount: 10,
-                        Children: []
-                    },
-                    {
-                        CategoryId: 22,
-                        NameAr: "حمضيات",
-                        NameEn: "Citrus Fruits",
-                        ParentId: 2,
-                        ImageUrl: "https://images.unsplash.com/photo-1547514701-42782101795e?w=200",
-                        Parent: null,
-                        CreatedBy: "Admin",
-                        ProductCount: 8,
-                        Children: []
-                    }
-                ]
-            },
-            {
-                CategoryId: 3,
-                NameAr: "منتجات الألبان",
-                NameEn: "Dairy Products",
-                ParentId: null,
-                ImageUrl: "https://images.unsplash.com/photo-1563636619-e9143da7973b?w=200",
-                Parent: null,
-                CreatedBy: "Admin",
-                ProductCount: 15,
-                Children: [
-                    {
-                        CategoryId: 31,
-                        NameAr: "جبن",
-                        NameEn: "Cheese",
-                        ParentId: 3,
-                        ImageUrl: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=200",
-                        Parent: null,
-                        CreatedBy: "Admin",
-                        ProductCount: 12,
-                        Children: []
-                    }
-                ]
-            },
-            {
-                CategoryId: 4,
-                NameAr: "لحوم",
-                NameEn: "Meat",
-                ParentId: null,
-                ImageUrl: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=200",
-                Parent: null,
-                CreatedBy: "Admin",
-                ProductCount: 22,
-                Children: []
-            },
-            {
-                CategoryId: 5,
-                NameAr: "لحوم",
-                NameEn: "Meat",
-                ParentId: null,
-                ImageUrl: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=200",
-                Parent: null,
-                CreatedBy: "Admin",
-                ProductCount: 22,
-                Children: []
-            }, {
-                CategoryId: 6,
-                NameAr: "لحوم",
-                NameEn: "Meat",
-                ParentId: null,
-                ImageUrl: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=200",
-                Parent: null,
-                CreatedBy: "Admin",
-                ProductCount: 22,
-                Children: []
-            }
-        ];
-    }
-
-    // Get categories by parent ID
-    getCategoriesByParent(parentId = null) {
-        const allCategories = this.flattenCategories(this.categories);
-        return allCategories.filter(cat => cat.ParentId === parentId);
-    }
-
-    // Flatten nested categories structure
-    flattenCategories(categories) {
-        let flattened = [];
-        categories.forEach(category => {
-            flattened.push(category);
-            if (category.Children && category.Children.length > 0) {
-                flattened = flattened.concat(this.flattenCategories(category.Children));
-            }
-        });
-        return flattened;
-    }
-
-    // Load and display categories
-    loadCategories() {
-        const grid = document.getElementById('categoriesGrid');
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        const emptyState = document.getElementById('emptyState');
-
-        // Show loading
-        loadingSpinner.style.display = 'flex';
-        grid.innerHTML = '';
-        emptyState.style.display = 'none';
-
-        // Simulate loading delay
-        setTimeout(() => {
-            const categories = this.getCategoriesByParent(this.currentParentId);
-            const filteredCategories = this.filterCategories(categories);
-
-            loadingSpinner.style.display = 'none';
-
-            if (filteredCategories.length === 0) {
-                emptyState.style.display = 'flex';
-            } else {
-                this.renderCategories(filteredCategories);
-            }
-        }, 500);
-    }
-
-    // Filter categories based on search term
-    filterCategories(categories) {
-        if (!this.searchTerm) return categories;
-
-        return categories.filter(category =>
-            category.NameAr.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-            category.NameEn.toLowerCase().includes(this.searchTerm.toLowerCase())
-        );
-    }
-
-    // Render categories in the grid
-    renderCategories(categories) {
-        const grid = document.getElementById('categoriesGrid');
-        grid.innerHTML = '';
-
-        categories.forEach((category, index) => {
-            const categoryCard = this.createCategoryCard(category, index);
-            grid.appendChild(categoryCard);
-        });
-    }
-
-    // Create individual category card
-    createCategoryCard(category, index) {
-        const card = document.createElement('div');
-        card.className = 'category-card';
-        card.style.animationDelay = `${index * 0.1}s`;
-
-        const subcategoryCount = category.Children ? category.Children.length : 0;
-        const productCount = category.ProductCount || 0; // عدد المنتجات
-        const hasImage = category.ImageUrl && category.ImageUrl !== '';
-
-        card.innerHTML = `
-            <div class="category-image">
-                ${hasImage ?
-                `<img src="${category.ImageUrl}" alt="${category.NameEn}" style="width: 100%; height: 100%; border-radius: 12px; object-fit: cover;">` :
-                '<i class="fas fa-folder"></i>'
-            }
-            </div>
-            <div class="category-content">
-                <h3>${category.NameEn}</h3>
-                <p>${category.NameAr}</p>
-                <div class="category-meta">
+    currentCategories.forEach(category => {
+        const categoryElement = document.createElement('div');
+        categoryElement.classList.add('category-item');
+        //categoryElement.setAttribute('onclick', `navigateToSubcategories(${category.categoryId})`);
+        const numOfChildren = categories.filter(cat => cat.parentId === category.categoryId).length;
+        const productCount = category.products ? category.products.length : 0;
+        categoryElement.innerHTML = `
+                <div class="category-card" data-id="${category.categoryId}">
+                    <div class="category-image">
+                        ${category.imageUrl ?
+                `<img src="${category.imageUrl}" class="category-image" alt="${category.nameAr}" onerror="this.src='/images/default-category.png'">` :
+                    `<div class="no-image"><i class="fas fa-image"></i></div>`
+                }
+                    </div>
+                    <div class="category-content">
+                           <h3>${window.translations.categoryName} : ${category.nameEn}</h3>
+                            <h4>${window.translations.categoryName} : ${category.nameAr}</h4>
+                            <div class="category-meta">
                     <div class="badge-container">
                         <span class="subcategory-badge">
                             <i class="fas fa-layer-group"></i>
-                            ${subcategoryCount} subcategories
+                            ${numOfChildren} ${window.translations.subCategories}
                         </span>
                         <span class="product-badge">
                             <i class="fas fa-cube"></i>
-                            ${productCount} products
+                            ${productCount} ${window.translations.products}
                         </span>
                     </div>
                 </div>
-            </div>
-            <div class="category-actions">
-                <button class="action-btn add-sub" onclick="categoryManager.addSubcategory(${category.CategoryId})" title="Add Subcategory">
+
+                <div class="category-actions">
+                ${hasSubcategories(category.categoryId) ?
+                `<button class="action-btn open-sub"  onclick="navigateToSubcategories(${category.categoryId})">
+                                    <i class="fas fa-folder-open"></i>
+                    </button>` : ''
+                }
+                <button class="action-btn add-sub" onclick="navigateToSubcategories(${category.categoryId})" title="Add Subcategory">
                     <i class="fas fa-plus"></i>
                 </button>
-                <button class="action-btn edit" onclick="categoryManager.editCategory(${category.CategoryId})" title="Edit Category">
+                 
+                <button class="action-btn edit" onclick="editCategory(${category.categoryId})" title="Edit Category">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button class="action-btn delete" onclick="categoryManager.deleteCategory(${category.CategoryId})" title="Delete Category">
+                <button class="action-btn delete" onclick="deleteCategory(${category.categoryId})" title="Delete Category">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
-        `;
+                    </div>
+                </div>
+    `;
 
-        // Add click handler for navigation (except on action buttons)
-        card.addEventListener('click', (e) => {
-            if (!e.target.closest('.category-actions')) {
-                this.navigateToCategory(category);
-            }
-        });
+        container.appendChild(categoryElement);
+    });
+}
 
-        return card;
+// Get categories for current level
+function getCurrentLevelCategories() {
+    if (currentLevel === 0) {
+        return categories.filter(cat => !cat.parentId);
     }
 
-    // Navigate to category (show its subcategories)
-    navigateToCategory(category) {
-        if (category.Children && category.Children.length > 0) {
-            this.currentLevel.push({
-                id: category.CategoryId,
-                nameEn: category.NameEn,
-                nameAr: category.NameAr
-            });
-            this.currentParentId = category.CategoryId;
-            this.updateBreadcrumb();
-            this.loadCategories();
-        }
-    }
+    const currentParentId = navigationPath[currentLevel - 1];
+    return categories.filter(cat => cat.parentId === currentParentId);
+}
 
-    // Navigate to specific level
-    navigateToLevel(level) {
-        if (level === 0) {
-            this.currentLevel = [];
-            this.currentParentId = null;
-        } else if (level < this.currentLevel.length) {
-            this.currentLevel = this.currentLevel.slice(0, level);
-            this.currentParentId = this.currentLevel[this.currentLevel.length - 1].id;
-        }
-        this.updateBreadcrumb();
-        this.loadCategories();
-    }
+// Check if category has subcategories
+function hasSubcategories(categoryId) {
+    return categories.some(cat => cat.parentId === categoryId);
+}
 
-    // Update breadcrumb navigation
-    updateBreadcrumb() {
-        const breadcrumb = document.getElementById('breadcrumb');
-        breadcrumb.innerHTML = `
-            <li class="breadcrumb-item ${this.currentLevel.length === 0 ? 'active' : ''}" onclick="categoryManager.navigateToLevel(0)">
-                <i class="fas fa-home"></i>
-                Main Categories
-            </li>
-        `;
+// Navigate to subcategories
+function navigateToSubcategories(categoryId) {
+    const category = categories.find(cat => cat.categoryId === categoryId);
+    if (!category) return;
 
-        this.currentLevel.forEach((level, index) => {
-            const isActive = index === this.currentLevel.length - 1;
-            breadcrumb.innerHTML += `
-                <li class="breadcrumb-item ${isActive ? 'active' : ''}" onclick="categoryManager.navigateToLevel(${index + 1})">
-                    ${level.nameEn}
+    navigationPath[currentLevel] = categoryId;
+    currentLevel++;
+
+    updateBreadcrumb();
+    displayCategories();
+}
+
+// Navigate to specific level
+function navigateToLevel(level) {
+    currentLevel = level;
+    navigationPath = navigationPath.slice(0, level);
+
+    updateBreadcrumb();
+    displayCategories();
+}
+
+// Update breadcrumb navigation
+function updateBreadcrumb() {
+    const breadcrumb = document.getElementById('breadcrumb');
+    let html = `
+        <li class="breadcrumb-item ${currentLevel === 0 ? 'active' : ''}" onclick="navigateToLevel(0)">
+            <i class="fas fa-home"></i>
+            الفئات الرئيسية
+        </li>
+    `;
+
+    for (let i = 0; i < currentLevel; i++) {
+        const categoryId = navigationPath[i];
+        const category = categories.find(cat => cat.categoryId === categoryId);
+        if (category) {
+            const isActive = i === currentLevel - 1;
+            html += `
+                <li class="breadcrumb-item ${isActive ? 'active' : ''}" onclick="navigateToLevel(${i + 1})">
+                    ${category.nameAr}
                 </li>
             `;
-        });
-    }
-
-    // Populate parent select dropdown
-    populateParentSelect() {
-        const select = document.getElementById('parentId');
-        const allCategories = this.flattenCategories(this.categories);
-
-        // Clear existing options except the first one
-        select.innerHTML = '<option value="">None (Main Category)</option>';
-
-        allCategories.forEach(category => {
-            if (this.editingCategoryId !== category.CategoryId) { // Don't allow category to be its own parent
-                const option = document.createElement('option');
-                option.value = category.CategoryId;
-                option.textContent = `${category.NameEn} (${category.NameAr})`;
-                select.appendChild(option);
-            }
-        });
-    }
-
-    // Search categories
-    searchCategories() {
-        this.searchTerm = document.getElementById('searchInput').value.trim();
-        this.loadCategories();
-    }
-
-    // Find category by ID
-    findCategoryById(id, categories = this.categories) {
-        for (const category of categories) {
-            if (category.CategoryId === id) {
-                return category;
-            }
-            if (category.Children && category.Children.length > 0) {
-                const found = this.findCategoryById(id, category.Children);
-                if (found) return found;
-            }
-        }
-        return null;
-    }
-
-    // Generate new category ID
-    generateNewId() {
-        const allCategories = this.flattenCategories(this.categories);
-        const maxId = Math.max(...allCategories.map(cat => cat.CategoryId));
-        return maxId + 1;
-    }
-
-    // Add new category
-    addCategory(formData) {
-        // For MVC: Replace this with AJAX call
-        // this.addCategoryToServer(formData);
-
-        const newCategory = {
-            CategoryId: this.generateNewId(),
-            NameAr: formData.nameAr,
-            NameEn: formData.nameEn,
-            ParentId: formData.parentId ? parseInt(formData.parentId) : null,
-            ImageUrl: formData.imageUrl || '',
-            Parent: null,
-            CreatedBy: "Admin",
-            ProductCount: 0, // عدد المنتجات الأولي
-            Children: []
-        };
-
-        if (newCategory.ParentId) {
-            // Add to parent's children
-            const parent = this.findCategoryById(newCategory.ParentId);
-            if (parent) {
-                parent.Children.push(newCategory);
-            }
-        } else {
-            // Add as main category
-            this.categories.push(newCategory);
-        }
-
-        this.loadCategories();
-        this.populateParentSelect();
-    }
-
-    // MVC Integration: Add category to server
-    // async addCategoryToServer(formData) {
-    //     try {
-    //         const response = await fetch('/Category/Create', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-    //             },
-    //             body: JSON.stringify({
-    //                 NameAr: formData.nameAr,
-    //                 NameEn: formData.nameEn,
-    //                 ParentId: formData.parentId ? parseInt(formData.parentId) : null,
-    //                 ImageUrl: formData.imageUrl || ''
-    //             })
-    //         });
-    //         
-    //         if (response.ok) {
-    //             const result = await response.json();
-    //             if (result.success) {
-    //                 // Reload categories from server
-    //                 await this.loadCategoriesFromServer();
-    //                 // Show success message
-    //                 console.log('Category added successfully');
-    //             } else {
-    //                 console.error('Failed to add category:', result.message);
-    //             }
-    //         }
-    //     } catch (error) {
-    //         console.error('Error adding category:', error);
-    //     }
-    // }
-
-    // Update existing category
-    updateCategory(id, formData) {
-        // For MVC: Replace with AJAX call
-        // this.updateCategoryOnServer(id, formData);
-
-        const category = this.findCategoryById(id);
-        if (category) {
-            const oldParentId = category.ParentId;
-            const newParentId = formData.parentId ? parseInt(formData.parentId) : null;
-
-            // Update category data
-            category.NameAr = formData.nameAr;
-            category.NameEn = formData.nameEn;
-            category.ImageUrl = formData.imageUrl || '';
-
-            // Handle parent change
-            if (oldParentId !== newParentId) {
-                // Remove from old parent
-                if (oldParentId) {
-                    const oldParent = this.findCategoryById(oldParentId);
-                    if (oldParent) {
-                        oldParent.Children = oldParent.Children.filter(child => child.CategoryId !== id);
-                    }
-                } else {
-                    this.categories = this.categories.filter(cat => cat.CategoryId !== id);
-                }
-
-                // Add to new parent
-                category.ParentId = newParentId;
-                if (newParentId) {
-                    const newParent = this.findCategoryById(newParentId);
-                    if (newParent) {
-                        newParent.Children.push(category);
-                    }
-                } else {
-                    this.categories.push(category);
-                }
-            }
-
-            this.loadCategories();
-            this.populateParentSelect();
         }
     }
 
-    // MVC Integration: Update category on server
-    // async updateCategoryOnServer(id, formData) {
-    //     try {
-    //         const response = await fetch(`/Category/Edit/${id}`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-    //             },
-    //             body: JSON.stringify({
-    //                 CategoryId: id,
-    //                 NameAr: formData.nameAr,
-    //                 NameEn: formData.nameEn,
-    //                 ParentId: formData.parentId ? parseInt(formData.parentId) : null,
-    //                 ImageUrl: formData.imageUrl || ''
-    //             })
-    //         });
-    //         
-    //         if (response.ok) {
-    //             const result = await response.json();
-    //             if (result.success) {
-    //                 await this.loadCategoriesFromServer();
-    //                 console.log('Category updated successfully');
-    //             } else {
-    //                 console.error('Failed to update category:', result.message);
-    //             }
-    //         }
-    //     } catch (error) {
-    //         console.error('Error updating category:', error);
-    //     }
-    // }
-
-    // Remove category and its children
-    removeCategory(id) {
-        // For MVC: Replace with AJAX call
-        // this.deleteCategoryFromServer(id);
-
-        const removeFromArray = (categories) => {
-            for (let i = 0; i < categories.length; i++) {
-                if (categories[i].CategoryId === id) {
-                    categories.splice(i, 1);
-                    return true;
-                }
-                if (categories[i].Children && categories[i].Children.length > 0) {
-                    if (removeFromArray(categories[i].Children)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        };
-
-        removeFromArray(this.categories);
-        this.loadCategories();
-        this.populateParentSelect();
-    }
-
-    // MVC Integration: Delete category from server
-    // async deleteCategoryFromServer(id) {
-    //     try {
-    //         const response = await fetch(`/Category/Delete/${id}`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
-    //             }
-    //         });
-    //         
-    //         if (response.ok) {
-    //             const result = await response.json();
-    //             if (result.success) {
-    //                 await this.loadCategoriesFromServer();
-    //                 console.log('Category deleted successfully');
-    //             } else {
-    //                 console.error('Failed to delete category:', result.message);
-    //             }
-    //         }
-    //     } catch (error) {
-    //         console.error('Error deleting category:', error);
-    //     }
-    // }
-
-    // Edit category
-    editCategory(id) {
-        const category = this.findCategoryById(id);
-        if (category) {
-            this.editingCategoryId = id;
-            this.populateParentSelect();
-
-            // Populate form
-            document.getElementById('modalTitle').textContent = 'Edit Category';
-            document.getElementById('nameAr').value = category.NameAr;
-            document.getElementById('nameEn').value = category.NameEn;
-            document.getElementById('imageUrl').value = category.ImageUrl || '';
-            document.getElementById('parentId').value = category.ParentId || '';
-
-            this.openModal();
-        }
-    }
-
-    // Add subcategory directly to a parent category
-    addSubcategory(parentId) {
-        this.editingCategoryId = null;
-        this.populateParentSelect();
-
-        // Set parent automatically and disable the select
-        document.getElementById('modalTitle').textContent = 'Add Subcategory';
-        document.getElementById('parentId').value = parentId;
-        document.getElementById('parentId').disabled = true;
-
-        this.openModal();
-    }
-
-    // Delete category
-    deleteCategory(id) {
-        this.categoryToDelete = id;
-        document.getElementById('deleteModal').classList.add('active');
-    }
-
-    // Open add/edit modal
-    openModal() {
-        document.getElementById('categoryModal').classList.add('active');
-    }
-
-    // Close modal
-    closeModal() {
-        document.getElementById('categoryModal').classList.remove('active');
-        this.resetForm();
-    }
-
-    // Close delete modal
-    closeDeleteModal() {
-        document.getElementById('deleteModal').classList.remove('active');
-        this.categoryToDelete = null;
-    }
-
-    // Confirm delete
-    confirmDelete() {
-        if (this.categoryToDelete) {
-            this.removeCategory(this.categoryToDelete);
-            this.closeDeleteModal();
-        }
-    }
-
-    // Reset form
-    resetForm() {
-        document.getElementById('categoryForm').reset();
-        document.getElementById('modalTitle').textContent = 'Add Category';
-        document.getElementById('parentId').disabled = false; // إعادة تفعيل select
-        this.editingCategoryId = null;
-        this.populateParentSelect();
-    }
-
-    // Handle form submission
-    handleFormSubmit(event) {
-        event.preventDefault();
-
-        const formData = new FormData(event.target);
-        const data = Object.fromEntries(formData.entries());
-
-        if (this.editingCategoryId) {
-            this.updateCategory(this.editingCategoryId, data);
-        } else {
-            this.addCategory(data);
-        }
-
-        this.closeModal();
-    }
+    breadcrumb.innerHTML = html;
 }
 
-// Global functions for HTML event handlers
-let categoryManager;
+// Search categories
+function searchCategories() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    if (!searchTerm) {
+        displayCategories();
+        return;
+    }
 
+    const filteredCategories = categories.filter(cat =>
+        cat.nameAr.toLowerCase().includes(searchTerm) ||
+        cat.nameEn.toLowerCase().includes(searchTerm)
+    );
+
+    const grid = document.getElementById('categoriesGrid');
+
+    if (filteredCategories.length === 0) {
+        showEmptyState();
+        return;
+    }
+
+    hideEmptyState();
+
+    grid.innerHTML = filteredCategories.map(category => `
+        <div class="category-card" data-id="${category.categoryId}">
+            <div class="category-image">
+                ${category.imageUrl ?
+            `<img class="category-image" src="${category.imageUrl}" alt="${category.nameAr}" onerror="this.src='/images/default-category.png'">` :
+            `<div class="no-image"><i class="fas fa-image"></i></div>`
+        }
+            </div>
+            <div class="category-content">
+                <h3 class="category-title">
+                    <span class="ar-title" dir="rtl">${category.nameAr}</span>
+                    <span class="en-title">${category.nameEn}</span>
+                </h3>
+                <div class="category-actions">
+                    <button class="btn btn-sm btn-outline" onclick="editCategory(${category.categoryId})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteCategory(${category.categoryId})">
+                        <i class="fas fa-trash"></i>
+                        
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Open add/edit modal
 function openAddModal() {
-    categoryManager.resetForm();
-    categoryManager.openModal();
+    editingCategoryId = null;
+    document.getElementById('modalTitle').textContent = 'إضافة فئة جديدة';
+    document.getElementById('categoryForm').reset();
+    populateParentOptions();
+    const modal = document.getElementById('categoryModal');
+    modal.style.display = 'flex';
+
 }
 
+function editCategory(categoryId) {
+    const category = categories.find(cat => cat.categoryId === categoryId);
+    if (!category) return;
+
+    editingCategoryId = categoryId;
+    document.getElementById('modalTitle').textContent = 'تعديل الفئة';
+    document.getElementById('nameAr').value = category.nameAr;
+    document.getElementById('nameEn').value = category.nameEn;
+    document.getElementById('imageUrl').value = category.image?.url || '';
+    document.getElementById('parentId').value = category.parentId || '';
+
+    populateParentOptions();
+    document.getElementById('categoryModal').style.display = 'flex';
+}
+
+// Populate parent category options
+function populateParentOptions() {
+    const select = document.getElementById('parentId');
+    const currentParentId = navigationPath[currentLevel - 1] || null;
+
+    let html = '<option value="">لا يوجد (فئة رئيسية)</option>';
+
+    categories.filter(cat => cat.categoryId !== editingCategoryId).forEach(category => {
+        const selected = category.categoryId === currentParentId ? 'selected' : '';
+        html += `<option value="${category.categoryId}" ${selected}>${category.nameAr}</option>`;
+    });
+
+    select.innerHTML = html;
+}
+
+// Handle form submission
+async function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const imageFile = document.getElementById('imageFile')?.files[0];
+
+    if (imageFile) {
+        formData.append('Image', imageFile);
+    }
+
+    // Remove imageUrl if we have a file
+    if (imageFile) {
+        formData.delete('imageUrl');
+    }
+
+    try {
+        let response;
+
+        if (editingCategoryId) {
+            // Update existing category
+            response = await fetch(`/Category/UpdateCategory/${editingCategoryId}`, {
+                method: 'PUT',
+                body: formData
+            });
+        } else {
+            // Add new category
+            response = await fetch('/Category/AddCategory', {
+                method: 'POST',
+                body: formData
+            });
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            showSuccess(result.message);
+            closeModal();
+            await loadCategories(); // Reload data
+        } else {
+            showError(result.message);
+        }
+
+    } catch (error) {
+        console.error('Error saving category:', error);
+        showError('حدث خطأ في حفظ البيانات');
+    }
+}
+
+// Delete category
+function deleteCategory(categoryId) {
+    const category = categories.find(cat => cat.categoryId === categoryId);
+    if (!category) return;
+
+    // Set the category to delete
+    window.categoryToDelete = categoryId;
+    document.getElementById('deleteModal').style.display = 'flex';
+    modal.classList.add('active');
+}
+
+async function confirmDelete() {
+    if (!window.categoryToDelete) return;
+
+    try {
+        const response = await fetch(`/Category/DeleteCategory/${window.categoryToDelete}`, {
+            method: 'DELETE'
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            showSuccess(result.message);
+            closeDeleteModal();
+            await loadCategories(); // Reload data
+        } else {
+            showError(result.message);
+        }
+
+    } catch (error) {
+        console.error('Error deleting category:', error);
+        showError('حدث خطأ في حذف الفئة');
+    }
+}
+
+// Modal controls
 function closeModal() {
-    categoryManager.closeModal();
+    document.getElementById('categoryModal').style.display = 'none';
 }
 
 function closeDeleteModal() {
-    categoryManager.closeDeleteModal();
+    document.getElementById('deleteModal').style.display = 'none';
+    window.categoryToDelete = null;
 }
 
-function confirmDelete() {
-    categoryManager.confirmDelete();
+// UI state management
+function showLoading() {
+    document.getElementById('loadingSpinner').style.display = 'block';
+    document.getElementById('categoriesGrid').style.display = 'none';
 }
 
-function searchCategories() {
-    categoryManager.searchCategories();
+function hideLoading() {
+    document.getElementById('loadingSpinner').style.display = 'none';
+    document.getElementById('categoriesGrid').style.display = 'grid';
 }
 
-function navigateToLevel(level) {
-    categoryManager.navigateToLevel(level);
+function showEmptyState() {
+    document.getElementById('emptyState').style.display = 'block';
+    document.getElementById('categoriesGrid').style.display = 'none';
 }
 
-function handleFormSubmit(event) {
-    categoryManager.handleFormSubmit(event);
+function hideEmptyState() {
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('categoriesGrid').style.display = 'grid';
 }
 
-// Add subcategory function for HTML onclick
-function addSubcategory(parentId) {
-    categoryManager.addSubcategory(parentId);
+// Notification functions
+function showSuccess(message) {
+    // يمكنك استخدام أي مكتبة notifications مثل toastr
+    alert('نجح: ' + message);
 }
 
-// Initialize the application when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    categoryManager = new CategoryManager();
-});
+function showError(message) {
+    alert('خطأ: ' + message);
+}
 
-// Close modals when clicking outside
-document.addEventListener('click', (e) => {
-    const categoryModal = document.getElementById('categoryModal');
-    const deleteModal = document.getElementById('deleteModal');
 
-    if (e.target === categoryModal) {
-        closeModal();
+function scrollModalIntoView(modal) {
+    const modalContent = modal.querySelector('.modal');
+    if (modalContent) {
+        modalContent.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center', // Center the modal vertically in the viewport
+            inline: 'center' // Center the modal horizontally in the viewport
+        });
     }
-    if (e.target === deleteModal) {
-        closeDeleteModal();
-    }
-});
-
-// Close modals with Escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        const categoryModal = document.getElementById('categoryModal');
-        const deleteModal = document.getElementById('deleteModal');
-
-        if (categoryModal.classList.contains('active')) {
-            closeModal();
-        }
-        if (deleteModal.classList.contains('active')) {
-            closeDeleteModal();
-        }
-    }
-});
+}
