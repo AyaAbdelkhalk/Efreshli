@@ -13,11 +13,7 @@
 
 <!DOCTYPE html>
 <html  dir="@dirAttribute" lang="@CultureInfo.CurrentUICulture.Name">
-@* <html lang="en"> *@
 
-﻿﻿
-<!DOCTYPE html>
-<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -403,8 +399,9 @@
                     </div>
                 </div>
             </header>
+        
 
-            <main class="flex-1 p-4 lg:p-0 lg:pt-3 min-h-0 overflow-auto">
+            <main class="flex-1 p-4 lg:p-0 lg:pt-3 rounded-2xl min-h-0 overflow-auto">
 
                 <div class="bg-white/70 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 h-full p-4 relative overflow-auto">
 
@@ -424,8 +421,10 @@
 
                 </div>
             </main>
+        </div>
+    </div>
             @await RenderSectionAsync("Scripts", required: false)
-
+    <script src="~/js/Notification.js" asp-append-version="true"></script>
             <script src="~/js/SidebarScript.js"></script>
 
             <script>

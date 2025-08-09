@@ -1,121 +1,252 @@
-﻿<div class="container">
-    <!-- Search and Navigation Section -->
-    <section class="navigation-section">
-        <div class="navigation-header">
-            <div class="search-container">
-                <div class="search-box">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="searchInput" placeholder="Search categories..." onkeyup="searchCategories()">
+﻿@using Efreshli.Application.Resources
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> _stringLocalizer
+@{
+    Layout = "_AdminLayout";
+}
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الفئات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="~/css/Category.css">
+
+
+    <div class="container">
+        <!-- Search and Navigation Section -->
+        <section class="navigation-section">
+            <div class="navigation-header">
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" placeholder="@_stringLocalizer[SharedResourcesKeys.Categories.Search]" onkeyup="searchCategories()">
+                    </div>
+                </div>
+            <button class="btn btn-primary add-category-btn" id="addCategoryBtnHeader" onclick="openAddModal()">
+                    <i class="fas fa-plus"></i>
+                    @_stringLocalizer[SharedResourcesKeys.Categories.AddCategory]
+                </button>
+            </div>
+
+            <nav class="breadcrumb-nav">
+                <ol class="breadcrumb" id="breadcrumb">
+                    <li class="breadcrumb-item active" onclick="navigateToLevel(0)">
+                        <i class="fas fa-home"></i>
+                        @_stringLocalizer[SharedResourcesKeys.Categories.MainCategories]
+                    </li>
+                </ol>
+            </nav>
+        </section>
+  
+        <!-- Categories Section -->
+        <section class="categories-section">
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- Categories will be loaded here dynamically -->
+            </div>
+
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>جاري تحميل الفئات...</p>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" style="display: none;">
+                <i class="fas fa-folder-open"></i>
+                <h3>لا توجد فئات</h3>
+                <p>ابدأ بإضافة فئتك الأولى</p>
+            <button class="btn btn-primary add-category-btn" style="width : fit-content" id="addCategoryBtnEmpty" onclick="openAddModal()">
+                    <i class="fas fa-plus"></i>
+                    @_stringLocalizer[SharedResourcesKeys.Categories.AddCategory]
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Add/Edit Category Modal -->
+    <div class="modal-overlay" id="categoryModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">@_stringLocalizer[SharedResourcesKeys.Categories.AddCategory]</h2>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form class="modal-body" id="categoryForm" onsubmit="handleFormSubmit(event)">
+                <div class="form-group">
+                    <label for="nameAr">@_stringLocalizer[SharedResourcesKeys.Categories.CategoryName] *</label>
+                    <input type="text" id="nameAr" name="nameAr" required dir="rtl">
+                </div>
+
+                <div class="form-group">
+                    <label for="nameEn">@_stringLocalizer[SharedResourcesKeys.Categories.CategoryName] *</label>
+                    <input type="text" id="nameEn" name="nameEn" required dir="ltr">
+                </div>
+
+                <div class="form-group">
+                    <label>@_stringLocalizer[SharedResourcesKeys.Categories.CategoryImage]</label>
+                    <div class="file-upload-container" onclick="document.getElementById('imageFile').click()">
+                        <div class="file-upload-button">
+                            <i class="fas fa-upload"></i>
+                            اختر صورة
+                        </div>
+                        <p>أو اسحب الصورة هنا</p>
+                        <input type="file" id="imageFile" name="imageFile" accept="image/*" class="file-upload-input">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="imageUrl">أو رابط الصورة</label>
+                    <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="parentId">الفئة الأب</label>
+                    <select id="parentId" name="parentId">
+                        <option value=""> @_stringLocalizer[SharedResourcesKeys.Categories.NoCategoriesFound]</option>
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()"> @_stringLocalizer[SharedResourcesKeys.Actions.Cancel]</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        @_stringLocalizer[SharedResourcesKeys.Actions.Save]
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal modal-small">
+            <div class="modal-header">
+                <h2 class="modal-title">@_stringLocalizer[SharedResourcesKeys.Actions.ConfirmDelete]</h2>
+                <button class="modal-close" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="delete-confirmation">
+                    <i class="fas fa-exclamation-triangle warning-icon"></i>
+                    <p>هل أنت متأكد من حذف هذه الفئة؟</p>
+                    <p class="warning-text">لا يمكن التراجع عن هذا الإجراء وسيتم حذف جميع الفئات الفرعية أيضاً.</p>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()"> @_stringLocalizer[SharedResourcesKeys.Actions.Cancel]</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                        <i class="fas fa-trash"></i>
+                        @_stringLocalizer[SharedResourcesKeys.Actions.Delete]
+                    </button>
                 </div>
             </div>
-            <button class="btn btn-primary add-category-btn" onclick="openAddModal()">
-                <i class="fas fa-plus"></i>
-                Add Category
-            </button>
-        </div>
-
-        <nav class="breadcrumb-nav">
-            <ol class="breadcrumb" id="breadcrumb">
-                <li class="breadcrumb-item active" onclick="navigateToLevel(0)">
-                    <i class="fas fa-home"></i>
-                    Main Categories
-                </li>
-            </ol>
-        </nav>
-    </section>
-
-    <!-- Categories Section -->
-    <section class="categories-section">
-        <div class="categories-grid" id="categoriesGrid">
-            <!-- Categories will be loaded here dynamically -->
-        </div>
-
-        <!-- Loading Spinner -->
-        <div class="loading-spinner" id="loadingSpinner" style="display: none;">
-            <div class="spinner"></div>
-            <p>Loading categories...</p>
-        </div>
-
-        <!-- Empty State -->
-        <div class="empty-state" id="emptyState" style="display: none;">
-            <i class="fas fa-folder-open"></i>
-            <h3>No categories found</h3>
-            <p>Start by adding your first category</p>
-            <button class="btn btn-primary" onclick="openAddModal()">
-                <i class="fas fa-plus"></i>
-                Add Category
-            </button>
-        </div>
-    </section>
-</div>
-
-<!-- Add/Edit Category Modal -->
-<div class="modal-overlay" id="categoryModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h2 class="modal-title" id="modalTitle">Add Category</h2>
-            <button class="modal-close" onclick="closeModal()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <form class="modal-body" id="categoryForm" onsubmit="handleFormSubmit(event)">
-            <div class="form-group">
-                <label for="nameAr">Arabic Name *</label>
-                <input type="text" id="nameAr" name="nameAr" required dir="rtl">
-            </div>
-
-            <div class="form-group">
-                <label for="nameEn">English Name *</label>
-                <input type="text" id="nameEn" name="nameEn" required>
-            </div>
-
-            <div class="form-group">
-                <label for="imageUrl">Image URL</label>
-                <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg">
-            </div>
-
-            <div class="form-group">
-                <label for="parentId">Parent Category</label>
-                <select id="parentId" name="parentId">
-                    <option value="">None (Main Category)</option>
-                </select>
-            </div>
-
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i>
-                    Save Category
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Delete Confirmation Modal -->
-<div class="modal-overlay" id="deleteModal">
-    <div class="modal modal-small">
-        <div class="modal-header">
-            <h2 class="modal-title">Confirm Delete</h2>
-            <button class="modal-close" onclick="closeDeleteModal()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="delete-confirmation">
-                <i class="fas fa-exclamation-triangle warning-icon"></i>
-                <p>Are you sure you want to delete this category?</p>
-                <p class="warning-text">This action cannot be undone and will also delete all subcategories.</p>
-            </div>
-            <div class="modal-actions">
-                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
-                <button type="button" class="btn btn-danger" onclick="confirmDelete()">
-                    <i class="fas fa-trash"></i>
-                    Delete
-                </button>
-            </div>
         </div>
     </div>
-</div>
 
+<script>
+    window.translations = {
+        categoryName: '@_stringLocalizer[SharedResourcesKeys.Categories.CategoryName]',
+        noImage: '@_stringLocalizer["NoImageAvailable"]',
+        searchPlaceholder: '@_stringLocalizer["SearchCategories"]',
+        subCategories: '@_stringLocalizer[SharedResourcesKeys.Categories.SubCategories]',
+        products: '@_stringLocalizer[SharedResourcesKeys.Categories.Products]'
+    };
+
+    // Modal functions
+    function openAddModal() {
+        console.log('openAddModal called');
+        const modal = document.getElementById('categoryModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            modal.classList.add('active');
+            console.log('Modal should be visible now');
+        } else {
+            console.error('Modal not found');
+        }
+    }
+
+    function closeModal() {
+        console.log('closeModal called');
+        const modal = document.getElementById('categoryModal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.classList.remove('active');
+            resetForm();
+        }
+    }
+
+    function closeDeleteModal() {
+        const modal = document.getElementById('deleteModal');
+        if (modal) {
+            modal.style.display = 'none';
+            modal.classList.remove('active');
+        }
+    }
+
+    function resetForm() {
+        const form = document.getElementById('categoryForm');
+        if (form) {
+            form.reset();
+        }
+    }
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+        console.log('Form submitted');
+        // Add form handling logic here
+    }
+
+    function searchCategories() {
+        console.log('Search function called');
+        // Add search logic here
+    }
+
+    function navigateToLevel(level) {
+        console.log('Navigate to level:', level);
+        // Add navigation logic here
+    }
+
+    function confirmDelete() {
+        console.log('Confirm delete called');
+        closeDeleteModal();
+    }
+
+    // Make functions globally available
+    window.openAddModal = openAddModal;
+    window.closeModal = closeModal;
+    window.closeDeleteModal = closeDeleteModal;
+    window.handleFormSubmit = handleFormSubmit;
+    window.searchCategories = searchCategories;
+    window.navigateToLevel = navigateToLevel;
+    window.confirmDelete = confirmDelete;
+
+    // Close modals when clicking outside
+    document.addEventListener('click', function(e) {
+        const categoryModal = document.getElementById('categoryModal');
+        const deleteModal = document.getElementById('deleteModal');
+
+        if (e.target === categoryModal) {
+            closeModal();
+        }
+        if (e.target === deleteModal) {
+            closeDeleteModal();
+        }
+    });
+
+    // Close modals with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const categoryModal = document.getElementById('categoryModal');
+            const deleteModal = document.getElementById('deleteModal');
+
+            if (categoryModal.classList.contains('active')) {
+                closeModal();
+            }
+            if (deleteModal.classList.contains('active')) {
+                closeDeleteModal();
+            }
+        }
+    });
+</script>
 <script src="~/js/Category.js"></script>
