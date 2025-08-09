@@ -1,5 +1,4 @@
-
-﻿@using System.Globalization
+@using System.Globalization
 @using Efreshli.Application.Resources
 @using Microsoft.Extensions.Localization
 @using Microsoft.Extensions.Options
@@ -31,7 +30,36 @@
     <link rel="stylesheet" href="~/css/Brand/Brand.css">
     <link rel="stylesheet" href="~/css/Category.css">
     <script>tailwind.config = { theme: { extend: { colors: { primary: '#fc0000e5', secondary: '#6366f1', accent: '#f1f5f9', dark: '#1e293b' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '28px', 'full': '9999px', 'button': '8px' }, animation: { float: 'float 3s ease-in-out infinite', glow: 'glow 2s ease-in-out infinite alternate', slideIn: 'slideIn 0.5s ease-out' }, fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], display: ['Inter', 'system-ui', 'sans-serif'] } } } }</script>
+    <style>
+        .sidebar-language {
+            margin: 15px;
+            color: white;
+            font-size: 14px;
+        }
 
+            .sidebar-language label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
+
+            .sidebar-language select {
+                width: 100%;
+                padding: 5px 8px;
+                border-radius: 5px;
+                border: none;
+                background-color: #2c3e50;
+                color: white;
+                font-size: 14px;
+                outline: none;
+                cursor: pointer;
+            }
+
+                .sidebar-language select option {
+                    background-color: #2c3e50;
+                    color: white;
+                }
+    </style>
 </head>
 <body class="bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 font-sans" dir="@dirAttribute">
     <div class="flex h-screen relative overflow-auto">
@@ -242,11 +270,9 @@
 
 
 
-
+                    @* ده للوكال هوست بس *@
                     <!-- #region Language -->
-
-
-                    <a asp-area="" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="ar-EG"
+                    <a asp-area="" asp-controller="" asp-action="setLanguage" asp-route-culture="ar-EG" 
                        class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-bookmark-line text-sm"></i>
@@ -257,7 +283,7 @@
                         </div>
                     </a>
 
-                    <a asp-area="" asp-controller="Home" asp-action="SetLanguage" asp-route-culture="en-US"
+                    <a  asp-area="" asp-controller="" asp-action="setLanguage" asp-route-culture="en-US" 
                        class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-bookmark-line text-sm"></i>
@@ -267,6 +293,30 @@
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
                     </a>
+
+                    @* ده للهوست *@
+
+                    @* <a href="#" onclick="setLanguage('ar-EG')"
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
+                        <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
+                            <i class="ri-bookmark-line text-sm"></i>
+                        </div>
+                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">عربي</span>
+                        <div class="ml-auto  opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="ri-arrow-right-s-line text-xs"></i>
+                        </div>
+                    </a>
+
+                    <a href="#" onclick="setLanguage('en-US')"
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
+                        <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
+                            <i class="ri-bookmark-line text-sm"></i>
+                        </div>
+                        <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">English</span>
+                        <div class="ml-auto  opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i class="ri-arrow-right-s-line text-xs"></i>
+                        </div>
+                    </a> *@
 
 <!-- #endregion -->
 
@@ -296,7 +346,7 @@
                                     var action = ViewContext.RouteData.Values["action"]?.ToString();
                                     var pageTitle = ViewData["Title"]?.ToString();
 
-                                    string displayTitle = "Management";
+                                    string displayTitle = @_stringLocalizer[SharedResourcesKeys.User.Management];
 
                                     if (!string.IsNullOrEmpty(pageTitle))
                                     {
@@ -463,6 +513,17 @@
                         message: $el.data('message')
                     });
                 });
-            </script>
+                     document.addEventListener("DOMContentLoaded", function () {
+            const match = document.cookie.match(/LanguagePreference=([^;]+)/);
+                if (match) {
+                    const culture = match[1].split('|')[0].split('=')[1];
+                    document.getElementById("languageSelect").value = culture;
+                }
+             });
+                function setLanguage(culture) {
+                     document.cookie = `LanguagePreference=c=${culture}|uic=${culture}; path=/`;
+                     location.reload(); // إعادة تحميل الصفحة
+             }
+    </script>
 </body>
 </html>

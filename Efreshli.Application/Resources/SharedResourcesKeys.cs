@@ -227,6 +227,7 @@ namespace Efreshli.Application.Resources
             public const string City = "User.City";
             public const string Country = "User.Country";
             public const string RememberMe = "User.RememberMe";
+            public const string Management = "User.Management";
         }
 
         /// <summary>
