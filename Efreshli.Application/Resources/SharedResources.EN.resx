@@ -1564,4 +1564,28 @@
   <data name="Navigation.Brand" xml:space="preserve">
     <value>Brand</value>
   </data>
+  <data name="Categories.AddCategory" xml:space="preserve">
+    <value>Add New Category</value>
+  </data>
+  <data name="Categories.MainCategories" xml:space="preserve">
+    <value>Main Categories</value>
+  </data>
+  <data name="Categories.Search" xml:space="preserve">
+    <value>Search Categories ...............</value>
+  </data>
+  <data name="Categories.CategoryImage" xml:space="preserve">
+    <value>Category Image</value>
+  </data>
+  <data name="Actions.ConfirmDelete" xml:space="preserve">
+    <value>Confirm Delete</value>
+  </data>
+  <data name="Categories.Products" xml:space="preserve">
+    <value>Products</value>
+  </data>
+  <data name="Categories.SubCategories" xml:space="preserve">
+    <value>Sub Categories</value>
+  </data>
+  <data name="Categories.CategoryName" xml:space="preserve">
+    <value>Category Name</value>
+  </data>
 </root>
