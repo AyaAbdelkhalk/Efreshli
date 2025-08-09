@@ -122,18 +122,16 @@ namespace Efreshli.MVC
 
 
             // 7. Localization
-            builder.Services.AddLocalization(opt =>
-            {
-                opt.ResourcesPath = "";
-            });
+            builder.Services.AddLocalization();
+            builder.Services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
 
             builder.Services.Configure<RequestLocalizationOptions>(options =>
             {
                 var supportedCultures = new List<CultureInfo>
-    {
-        new CultureInfo("en-US"),
-        new CultureInfo("ar-EG")
-    };
+                    {
+                        new CultureInfo("en-US"),
+                        new CultureInfo("ar-EG")
+                    };
 
                 options.DefaultRequestCulture = new RequestCulture("ar-EG");
                 options.SupportedCultures = supportedCultures;
@@ -169,10 +167,7 @@ namespace Efreshli.MVC
             // Initialize static UserContext
             //UserContext.Initialize(app.Services);
 
-            // Localization middleware
-            var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
-            app.UseRequestLocalization(locOptions.Value);
-
+            
             // Error handling
             if (!app.Environment.IsDevelopment())
             {
@@ -180,7 +175,8 @@ namespace Efreshli.MVC
             }
 
             app.UseStaticFiles();
-
+            var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(locOptions.Value);
             app.UseRouting();
 
             // Auth middlewares if needed
