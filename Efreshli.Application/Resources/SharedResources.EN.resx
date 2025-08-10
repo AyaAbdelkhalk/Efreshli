@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
+	<!-- 
     Microsoft ResX Schema 
     
     Version 2.0
@@ -59,1536 +59,1799 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="General.Welcome" xml:space="preserve">
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" />
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string" />
+							<xsd:attribute name="type" type="xsd:string" />
+							<xsd:attribute name="mimetype" type="xsd:string" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string" />
+							<xsd:attribute name="name" type="xsd:string" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="General.Welcome" xml:space="preserve">
     <value>Welcome</value>
     <comment>Welcome message</comment>
   </data>
-  <data name="General.Loading" xml:space="preserve">
+	<data name="General.Loading" xml:space="preserve">
     <value>Loading...</value>
     <comment>Loading indicator</comment>
   </data>
-  <data name="General.Processing" xml:space="preserve">
+	<data name="General.Processing" xml:space="preserve">
     <value>Processing...</value>
     <comment>Processing indicator</comment>
   </data>
-  <data name="General.PleaseWait" xml:space="preserve">
+	<data name="General.PleaseWait" xml:space="preserve">
     <value>Please Wait...</value>
     <comment>Please wait message</comment>
   </data>
-  <data name="General.Search" xml:space="preserve">
+	<data name="General.Search" xml:space="preserve">
     <value>Search</value>
     <comment>Search label</comment>
   </data>
-  <data name="General.Filter" xml:space="preserve">
+	<data name="General.Filter" xml:space="preserve">
     <value>Filter</value>
     <comment>Filter label</comment>
   </data>
-  <data name="General.Sort" xml:space="preserve">
+	<data name="General.Sort" xml:space="preserve">
     <value>Sort</value>
     <comment>Sort label</comment>
   </data>
-  <data name="General.Select" xml:space="preserve">
+	<data name="General.Select" xml:space="preserve">
     <value>Select</value>
     <comment>Select label</comment>
   </data>
-  <data name="General.All" xml:space="preserve">
+	<data name="General.All" xml:space="preserve">
     <value>All</value>
     <comment>All/Everything</comment>
   </data>
-  <data name="General.None" xml:space="preserve">
+	<data name="General.None" xml:space="preserve">
     <value>None</value>
     <comment>None/Nothing</comment>
   </data>
-  <data name="General.Yes" xml:space="preserve">
+	<data name="General.Yes" xml:space="preserve">
     <value>Yes</value>
     <comment>Yes</comment>
   </data>
-  <data name="General.No" xml:space="preserve">
+	<data name="General.No" xml:space="preserve">
     <value>No</value>
     <comment>No</comment>
   </data>
-  <data name="General.OK" xml:space="preserve">
+	<data name="General.OK" xml:space="preserve">
     <value>OK</value>
     <comment>OK button</comment>
   </data>
-  <data name="General.Apply" xml:space="preserve">
+	<data name="General.Apply" xml:space="preserve">
     <value>Apply</value>
     <comment>Apply button</comment>
   </data>
-  <data name="General.Reset" xml:space="preserve">
+	<data name="General.Reset" xml:space="preserve">
     <value>Reset</value>
     <comment>Reset button</comment>
   </data>
-  <data name="General.Clear" xml:space="preserve">
+	<data name="General.Clear" xml:space="preserve">
     <value>Clear</value>
     <comment>Clear button</comment>
   </data>
-  <data name="Navigation.Home" xml:space="preserve">
+	<data name="Currency.USD" xml:space="preserve">
+    <value>USD</value>
+    <comment>US Dollar</comment>
+  </data>
+	<data name="Currency.EGP" xml:space="preserve">
+    <value>EGP</value>
+    <comment>Egyptian Pound</comment>
+  </data>
+	<data name="Navigation.Home" xml:space="preserve">
     <value>Home</value>
     <comment>Home page</comment>
   </data>
-  <data name="Navigation.About" xml:space="preserve">
+	<data name="Navigation.About" xml:space="preserve">
     <value>About</value>
     <comment>About page</comment>
   </data>
-  <data name="Navigation.Services" xml:space="preserve">
+	<data name="Navigation.Services" xml:space="preserve">
     <value>Services</value>
     <comment>Services page</comment>
   </data>
-  <data name="Navigation.Contact" xml:space="preserve">
+	<data name="Navigation.Contact" xml:space="preserve">
     <value>Contact</value>
     <comment>Contact page</comment>
   </data>
-  <data name="Navigation.FAQ" xml:space="preserve">
+	<data name="Navigation.FAQ" xml:space="preserve">
     <value>FAQ</value>
     <comment>FAQ page</comment>
   </data>
-  <data name="Navigation.Blog" xml:space="preserve">
+	<data name="Navigation.Blog" xml:space="preserve">
     <value>Blog</value>
     <comment>Blog page</comment>
   </data>
-  <data name="Navigation.Pricing" xml:space="preserve">
+	<data name="Navigation.Pricing" xml:space="preserve">
     <value>Pricing</value>
     <comment>Pricing page</comment>
   </data>
-  <data name="Navigation.Portfolio" xml:space="preserve">
+	<data name="Navigation.Portfolio" xml:space="preserve">
     <value>Portfolio</value>
     <comment>Portfolio page</comment>
   </data>
-  <data name="Navigation.Testimonials" xml:space="preserve">
+	<data name="Navigation.Testimonials" xml:space="preserve">
     <value>Testimonials</value>
     <comment>Testimonials page</comment>
   </data>
-  <data name="Navigation.News" xml:space="preserve">
+	<data name="Navigation.News" xml:space="preserve">
     <value>News</value>
     <comment>News page</comment>
   </data>
-  <data name="Navigation.Dashboard" xml:space="preserve">
+	<data name="Navigation.Dashboard" xml:space="preserve">
     <value>Dashboard</value>
     <comment>Dashboard</comment>
   </data>
-  <data name="Navigation.Reports" xml:space="preserve">
+	<data name="Navigation.Reports" xml:space="preserve">
     <value>Reports</value>
     <comment>Reports</comment>
   </data>
-  <data name="Navigation.Users" xml:space="preserve">
+	<data name="Navigation.Users" xml:space="preserve">
     <value>Users</value>
     <comment>Users page</comment>
   </data>
-  <data name="Navigation.Orders" xml:space="preserve">
+	<data name="Navigation.Orders" xml:space="preserve">
     <value>Orders</value>
     <comment>Orders page</comment>
   </data>
-  <data name="Navigation.Products" xml:space="preserve">
+	<data name="Navigation.Products" xml:space="preserve">
     <value>Products</value>
     <comment>Products page</comment>
   </data>
-  <data name="Navigation.Categories" xml:space="preserve">
+	<data name="Navigation.Categories" xml:space="preserve">
     <value>Categories</value>
     <comment>Categories page</comment>
   </data>
-  <data name="Navigation.Coupon" xml:space="preserve">
+	<data name="Navigation.Coupon" xml:space="preserve">
     <value>Coupon</value>
     <comment>Coupon page</comment>
   </data>
-  <data name="Navigation.Analytics" xml:space="preserve">
+	<data name="Navigation.Analytics" xml:space="preserve">
     <value>Analytics</value>
     <comment>Analytics page</comment>
   </data>
-  <data name="Navigation.Settings" xml:space="preserve">
+	<data name="Navigation.Settings" xml:space="preserve">
     <value>Settings</value>
     <comment>Settings page</comment>
   </data>
-  <data name="Navigation.HelpSupport" xml:space="preserve">
+	<data name="Navigation.HelpSupport" xml:space="preserve">
     <value>Help &amp; Support</value>
     <comment>Help and Support page</comment>
   </data>
-  <data name="Validation.Required" xml:space="preserve">
+	<data name="Validation.Required" xml:space="preserve">
     <value>This field is required</value>
     <comment>Required field validation</comment>
   </data>
-  <data name="Validation.Invalid" xml:space="preserve">
+	<data name="Validation.Invalid" xml:space="preserve">
     <value>Invalid value entered</value>
     <comment>Invalid value</comment>
   </data>
-  <data name="Validation.MinLength" xml:space="preserve">
+	<data name="Validation.MinLength" xml:space="preserve">
     <value>Must be at least {0} characters</value>
     <comment>Minimum length validation</comment>
   </data>
-  <data name="Validation.MaxLength" xml:space="preserve">
+	<data name="Validation.MaxLength" xml:space="preserve">
     <value>Cannot exceed {0} characters</value>
     <comment>Maximum length validation</comment>
   </data>
-  <data name="Validation.ExactLength" xml:space="preserve">
+	<data name="Validation.ExactLength" xml:space="preserve">
     <value>Must be exactly {0} characters</value>
     <comment>Exact length validation</comment>
   </data>
-  <data name="Validation.NumericOnly" xml:space="preserve">
+	<data name="Validation.NumericOnly" xml:space="preserve">
     <value>Must contain only numbers</value>
     <comment>Numeric only validation</comment>
   </data>
-  <data name="Validation.IntegerOnly" xml:space="preserve">
+	<data name="Validation.IntegerOnly" xml:space="preserve">
     <value>Must be a whole number</value>
     <comment>Integer only validation</comment>
   </data>
-  <data name="Validation.DecimalOnly" xml:space="preserve">
+	<data name="Validation.DecimalOnly" xml:space="preserve">
     <value>Must be a decimal number</value>
     <comment>Decimal number validation</comment>
   </data>
-  <data name="Validation.EmailInvalid" xml:space="preserve">
+	<data name="Validation.EmailInvalid" xml:space="preserve">
     <value>Invalid email address</value>
     <comment>Email is invalid</comment>
   </data>
-  <data name="Validation.UrlInvalid" xml:space="preserve">
+	<data name="Validation.UrlInvalid" xml:space="preserve">
     <value>Invalid URL</value>
     <comment>URL format is invalid</comment>
   </data>
-  <data name="Validation.DateInvalid" xml:space="preserve">
+	<data name="Validation.DateInvalid" xml:space="preserve">
     <value>Invalid date (please use DD/MM/YYYY format)</value>
     <comment>Date format is invalid</comment>
   </data>
-  <data name="Validation.TimeInvalid" xml:space="preserve">
+	<data name="Validation.TimeInvalid" xml:space="preserve">
     <value>Invalid time</value>
     <comment>Time format is invalid</comment>
   </data>
-  <data name="Validation.DateTimeInvalid" xml:space="preserve">
+	<data name="Validation.DateTimeInvalid" xml:space="preserve">
     <value>Invalid date and time</value>
     <comment>Date and time format is invalid</comment>
   </data>
-  <data name="Validation.PhoneNumberInvalid" xml:space="preserve">
+	<data name="Validation.PhoneNumberInvalid" xml:space="preserve">
     <value>Invalid phone number</value>
     <comment>Phone number is invalid</comment>
   </data>
-  <data name="Validation.PasswordTooShort" xml:space="preserve">
+	<data name="Validation.PasswordTooShort" xml:space="preserve">
     <value>Password too short (minimum {0} characters)</value>
     <comment>Password is too short</comment>
   </data>
-  <data name="Validation.PasswordComplexity" xml:space="preserve">
+	<data name="Validation.PasswordComplexity" xml:space="preserve">
     <value>Must contain uppercase, lowercase, number, and special character</value>
     <comment>Password complexity requirements</comment>
   </data>
-  <data name="Validation.PasswordMissingUppercase" xml:space="preserve">
+	<data name="Validation.PasswordMissingUppercase" xml:space="preserve">
     <value>Password must contain at least one uppercase letter</value>
     <comment>Password is missing uppercase letter</comment>
   </data>
-  <data name="Validation.PasswordMissingLowercase" xml:space="preserve">
+	<data name="Validation.PasswordMissingLowercase" xml:space="preserve">
     <value>Password must contain at least one lowercase letter</value>
     <comment>Password is missing lowercase letter</comment>
   </data>
-  <data name="Validation.PasswordMissingDigit" xml:space="preserve">
+	<data name="Validation.PasswordMissingDigit" xml:space="preserve">
     <value>Password must contain at least one number</value>
     <comment>Password is missing digit</comment>
   </data>
-  <data name="Validation.PasswordMissingSpecialChar" xml:space="preserve">
+	<data name="Validation.PasswordMissingSpecialChar" xml:space="preserve">
     <value>Password must contain at least one special character</value>
     <comment>Password is missing special character</comment>
   </data>
-  <data name="Validation.PasswordsDoNotMatch" xml:space="preserve">
+	<data name="Validation.PasswordsDoNotMatch" xml:space="preserve">
     <value>Passwords don't match</value>
     <comment>Password and confirmation do not match</comment>
   </data>
-  <data name="Validation.UsernameAlreadyExists" xml:space="preserve">
+	<data name="Validation.UsernameAlreadyExists" xml:space="preserve">
     <value>Username already taken</value>
     <comment>Username already exists</comment>
   </data>
-  <data name="Validation.EmailAlreadyRegistered" xml:space="preserve">
+	<data name="Validation.EmailAlreadyRegistered" xml:space="preserve">
     <value>Email already registered</value>
     <comment>Email already registered</comment>
   </data>
-  <data name="Validation.MustBeGreaterThanZero" xml:space="preserve">
+	<data name="Validation.MustBeGreaterThanZero" xml:space="preserve">
     <value>Must be greater than zero</value>
     <comment>Value must be greater than zero</comment>
   </data>
-  <data name="Validation.MustBeGreaterThanOrEqualToZero" xml:space="preserve">
+	<data name="Validation.MustBeGreaterThanOrEqualToZero" xml:space="preserve">
     <value>Must be zero or greater</value>
     <comment>Value must be greater than or equal to zero</comment>
   </data>
-  <data name="Validation.MustBePositiveNumber" xml:space="preserve">
+	<data name="Validation.MustBePositiveNumber" xml:space="preserve">
     <value>Must be a positive number</value>
     <comment>Must be a positive number</comment>
   </data>
-  <data name="Validation.MustBeNegativeNumber" xml:space="preserve">
+	<data name="Validation.MustBeNegativeNumber" xml:space="preserve">
     <value>Must be a negative number</value>
     <comment>Must be a negative number</comment>
   </data>
-  <data name="Validation.ValueMustBeGreaterThan" xml:space="preserve">
+	<data name="Validation.ValueMustBeGreaterThan" xml:space="preserve">
     <value>Must be greater than {0}</value>
     <comment>Value must be greater than {0}</comment>
   </data>
-  <data name="Validation.ValueMustBeLessThan" xml:space="preserve">
+	<data name="Validation.ValueMustBeLessThan" xml:space="preserve">
     <value>Must be less than {0}</value>
     <comment>Value must be less than {0}</comment>
   </data>
-  <data name="Validation.ValueMustBeBetween" xml:space="preserve">
+	<data name="Validation.ValueMustBeBetween" xml:space="preserve">
     <value>Must be between {0} and {1}</value>
     <comment>Value must be between {0} and {1}</comment>
   </data>
-  <data name="Validation.FileTooLarge" xml:space="preserve">
+	<data name="Validation.FileTooLarge" xml:space="preserve">
     <value>File too large (maximum {0})</value>
     <comment>File size exceeds limit</comment>
   </data>
-  <data name="Validation.InvalidFileType" xml:space="preserve">
+	<data name="Validation.InvalidFileType" xml:space="preserve">
     <value>File type not allowed</value>
     <comment>File type is not allowed</comment>
   </data>
-  <data name="Validation.FileDimensionsTooLarge" xml:space="preserve">
+	<data name="Validation.FileDimensionsTooLarge" xml:space="preserve">
     <value>Image dimensions exceed {0}×{1} pixels</value>
     <comment>Image dimensions exceed limit</comment>
   </data>
-  <data name="Validation.NoFileSelected" xml:space="preserve">
+	<data name="Validation.NoFileSelected" xml:space="preserve">
     <value>No file selected</value>
     <comment>No file selected</comment>
   </data>
-  <data name="Validation.FutureDateRequired" xml:space="preserve">
+	<data name="Validation.FutureDateRequired" xml:space="preserve">
     <value>Must be a future date</value>
     <comment>Future date required</comment>
   </data>
-  <data name="Validation.PastDateRequired" xml:space="preserve">
+	<data name="Validation.PastDateRequired" xml:space="preserve">
     <value>Must be a past date</value>
     <comment>Past date required</comment>
   </data>
-  <data name="Validation.DateMustBeAfter" xml:space="preserve">
+	<data name="Validation.DateMustBeAfter" xml:space="preserve">
     <value>Must be after {0}</value>
     <comment>Date must be after {0}</comment>
   </data>
-  <data name="Validation.DateMustBeBefore" xml:space="preserve">
+	<data name="Validation.DateMustBeBefore" xml:space="preserve">
     <value>Must be before {0}</value>
     <comment>Date must be before {0}</comment>
   </data>
-  <data name="Validation.EndDateAfterStartDate" xml:space="preserve">
+	<data name="Validation.EndDateAfterStartDate" xml:space="preserve">
     <value>End date must be after start date</value>
     <comment>End date must be after start date</comment>
   </data>
-  <data name="Validation.CheckedRequired" xml:space="preserve">
+	<data name="Validation.CheckedRequired" xml:space="preserve">
     <value>This option must be selected</value>
     <comment>Checkbox must be checked</comment>
   </data>
-  <data name="Validation.UncheckedRequired" xml:space="preserve">
+	<data name="Validation.UncheckedRequired" xml:space="preserve">
     <value>This option must be deselected</value>
     <comment>Checkbox must be unchecked</comment>
   </data>
-  <data name="Validation.SelectAtLeastOne" xml:space="preserve">
+	<data name="Validation.SelectAtLeastOne" xml:space="preserve">
     <value>Please select at least one item</value>
     <comment>Select at least one item</comment>
   </data>
-  <data name="Validation.SelectMaxItems" xml:space="preserve">
+	<data name="Validation.SelectMaxItems" xml:space="preserve">
     <value>Maximum {0} items allowed</value>
     <comment>Select up to {0} items only</comment>
   </data>
-  <data name="Validation.MustAcceptTerms" xml:space="preserve">
+	<data name="Validation.MustAcceptTerms" xml:space="preserve">
     <value>You must accept the terms and conditions</value>
     <comment>You must accept terms and conditions</comment>
   </data>
-  <data name="Validation.MustSelectOption" xml:space="preserve">
+	<data name="Validation.MustSelectOption" xml:space="preserve">
     <value>Please select an option</value>
     <comment>You must select an option from the list</comment>
   </data>
-  <data name="Validation.ConfirmationRequired" xml:space="preserve">
+	<data name="Validation.ConfirmationRequired" xml:space="preserve">
     <value>Please confirm this action</value>
     <comment>Action confirmation is required</comment>
   </data>
-  <data name="Validation.TooManyAttempts" xml:space="preserve">
+	<data name="Validation.TooManyAttempts" xml:space="preserve">
     <value>Too many attempts, please try again later</value>
     <comment>Too many attempts</comment>
   </data>
-  <data name="Validation.AccountLocked" xml:space="preserve">
+	<data name="Validation.AccountLocked" xml:space="preserve">
     <value>Account temporarily locked for security reasons</value>
     <comment>Account locked due to security reasons</comment>
   </data>
-  <data name="Validation.CreditCardInvalid" xml:space="preserve">
+	<data name="Validation.CreditCardInvalid" xml:space="preserve">
     <value>Invalid credit card number</value>
     <comment>Credit card number is invalid</comment>
   </data>
-  <data name="Validation.IBANInvalid" xml:space="preserve">
+	<data name="Validation.IBANInvalid" xml:space="preserve">
     <value>Invalid IBAN number</value>
     <comment>IBAN is invalid</comment>
   </data>
-  <data name="Validation.CaptchaInvalid" xml:space="preserve">
+	<data name="Validation.CaptchaInvalid" xml:space="preserve">
     <value>Invalid verification code</value>
     <comment>CAPTCHA verification failed</comment>
   </data>
-  <data name="Validation.UniqueValueRequired" xml:space="preserve">
+	<data name="Validation.UniqueValueRequired" xml:space="preserve">
     <value>This value is already in use</value>
     <comment>Value must be unique</comment>
   </data>
-  <data name="Validation.FieldMismatch" xml:space="preserve">
+	<data name="Validation.FieldMismatch" xml:space="preserve">
     <value>Doesn't match the {0} field</value>
     <comment>Field mismatch validation</comment>
   </data>
-  <data name="Validation.AllowedCharacters" xml:space="preserve">
+	<data name="Validation.AllowedCharacters" xml:space="preserve">
     <value>Contains invalid characters</value>
     <comment>Contains disallowed characters</comment>
   </data>
-  <data name="Actions.Save" xml:space="preserve">
+	<data name="Actions.Save" xml:space="preserve">
     <value>Save</value>
     <comment>Save action</comment>
   </data>
-  <data name="Actions.Submit" xml:space="preserve">
+	<data name="Actions.Submit" xml:space="preserve">
     <value>Submit</value>
     <comment>Submit action</comment>
   </data>
-  <data name="Actions.Cancel" xml:space="preserve">
+	<data name="Actions.Cancel" xml:space="preserve">
     <value>Cancel</value>
     <comment>Cancel action</comment>
   </data>
-  <data name="Actions.Edit" xml:space="preserve">
-    <value>Edit</value>
+	<data name="Actions.Reset" xml:space="preserve">
+    <value>Reset</value>
+    <comment>Reset action</comment>
+  </data>
+	<data name="Actions.Edit" xml:space="preserve">
+    <value>Edit {0}</value>
     <comment>Edit action</comment>
   </data>
-  <data name="Actions.Delete" xml:space="preserve">
-    <value>Delete</value>
+	<data name="Actions.Delete" xml:space="preserve">
+    <value>Delete {0}</value>
     <comment>Delete action</comment>
   </data>
-  <data name="Actions.Create" xml:space="preserve">
-    <value>Create</value>
+	<data name="Actions.Create" xml:space="preserve">
+    <value>Create {0}</value>
     <comment>Create action</comment>
   </data>
-  <data name="Actions.Add" xml:space="preserve">
+	<data name="Actions.Add" xml:space="preserve">
     <value>Add</value>
     <comment>Add action</comment>
   </data>
-  <data name="Actions.Update" xml:space="preserve">
+	<data name="Actions.Update" xml:space="preserve">
     <value>Update</value>
     <comment>Update action</comment>
   </data>
-  <data name="Actions.View" xml:space="preserve">
+	<data name="Actions.View" xml:space="preserve">
     <value>View</value>
     <comment>View action</comment>
   </data>
-  <data name="Actions.Close" xml:space="preserve">
+	<data name="Actions.Close" xml:space="preserve">
     <value>Close</value>
     <comment>Close action</comment>
   </data>
-  <data name="Actions.Back" xml:space="preserve">
+	<data name="Actions.Back" xml:space="preserve">
     <value>Back</value>
     <comment>Back action</comment>
   </data>
-  <data name="Actions.Next" xml:space="preserve">
+	<data name="Actions.Next" xml:space="preserve">
     <value>Next</value>
     <comment>Next action</comment>
   </data>
-  <data name="Actions.Previous" xml:space="preserve">
+	<data name="Actions.Previous" xml:space="preserve">
     <value>Previous</value>
     <comment>Previous action</comment>
   </data>
-  <data name="Actions.Refresh" xml:space="preserve">
+	<data name="Actions.Refresh" xml:space="preserve">
     <value>Refresh</value>
     <comment>Refresh action</comment>
   </data>
-  <data name="Actions.Continue" xml:space="preserve">
+	<data name="Actions.Continue" xml:space="preserve">
     <value>Continue</value>
     <comment>Continue action</comment>
   </data>
-  <data name="Actions.Finish" xml:space="preserve">
+	<data name="Actions.Finish" xml:space="preserve">
     <value>Finish</value>
     <comment>Finish action</comment>
   </data>
-  <data name="Actions.Send" xml:space="preserve">
+	<data name="Actions.Send" xml:space="preserve">
     <value>Send</value>
     <comment>Send action</comment>
   </data>
-  <data name="Actions.Print" xml:space="preserve">
+	<data name="Actions.Print" xml:space="preserve">
     <value>Print</value>
     <comment>Print action</comment>
   </data>
-  <data name="Actions.Share" xml:space="preserve">
+	<data name="Actions.Share" xml:space="preserve">
     <value>Share</value>
     <comment>Share action</comment>
   </data>
-  <data name="Actions.Copy" xml:space="preserve">
+	<data name="Actions.Copy" xml:space="preserve">
     <value>Copy</value>
     <comment>Copy action</comment>
   </data>
-  <data name="Actions.Paste" xml:space="preserve">
+	<data name="Actions.Paste" xml:space="preserve">
     <value>Paste</value>
     <comment>Paste action</comment>
   </data>
-  <data name="User.Login" xml:space="preserve">
+	<data name="Actions.Activate" xml:space="preserve">
+    <value>Activate</value>
+    <comment>Paste action</comment>
+  </data>
+	<data name="Actions.Deactivate" xml:space="preserve">
+    <value>Deactivate</value>
+    <comment>Paste action</comment>
+  </data>
+	<data name="User.Login" xml:space="preserve">
     <value>Login</value>
     <comment>Login action</comment>
   </data>
-  <data name="User.Logout" xml:space="preserve">
+	<data name="User.Logout" xml:space="preserve">
     <value>Logout</value>
     <comment>Logout action</comment>
   </data>
-  <data name="User.Register" xml:space="preserve">
+	<data name="User.Register" xml:space="preserve">
     <value>Register</value>
     <comment>Register action</comment>
   </data>
-  <data name="User.Username" xml:space="preserve">
+	<data name="User.Username" xml:space="preserve">
     <value>Username</value>
     <comment>Username field</comment>
   </data>
-  <data name="User.Email" xml:space="preserve">
+	<data name="User.Email" xml:space="preserve">
     <value>Email</value>
     <comment>Email field</comment>
   </data>
-  <data name="User.Password" xml:space="preserve">
+	<data name="User.Password" xml:space="preserve">
     <value>Password</value>
     <comment>Password field</comment>
   </data>
-  <data name="User.ConfirmPassword" xml:space="preserve">
+	<data name="User.ConfirmPassword" xml:space="preserve">
     <value>Confirm Password</value>
     <comment>Confirm password field</comment>
   </data>
-  <data name="User.ForgotPassword" xml:space="preserve">
+	<data name="User.ForgotPassword" xml:space="preserve">
     <value>Forgot Password?</value>
     <comment>Forgot password link</comment>
   </data>
-  <data name="User.ResetPassword" xml:space="preserve">
+	<data name="User.ResetPassword" xml:space="preserve">
     <value>Reset Password</value>
     <comment>Reset password action</comment>
   </data>
-  <data name="User.ChangePassword" xml:space="preserve">
+	<data name="User.ChangePassword" xml:space="preserve">
     <value>Change Password</value>
     <comment>Change password action</comment>
   </data>
-  <data name="User.CreateAccount" xml:space="preserve">
+	<data name="User.CreateAccount" xml:space="preserve">
     <value>Create Account</value>
     <comment>Create account action</comment>
   </data>
-  <data name="User.UpdateProfile" xml:space="preserve">
+	<data name="User.UpdateProfile" xml:space="preserve">
     <value>Update Profile</value>
     <comment>Update profile action</comment>
   </data>
-  <data name="User.DeleteAccount" xml:space="preserve">
+	<data name="User.DeleteAccount" xml:space="preserve">
     <value>Delete Account</value>
     <comment>Delete account action</comment>
   </data>
-  <data name="User.MyProfile" xml:space="preserve">
+	<data name="User.MyProfile" xml:space="preserve">
     <value>My Profile</value>
     <comment>My profile</comment>
   </data>
-  <data name="User.MyOrders" xml:space="preserve">
+	<data name="User.MyOrders" xml:space="preserve">
     <value>My Orders</value>
     <comment>My orders</comment>
   </data>
-  <data name="User.FirstName" xml:space="preserve">
+	<data name="User.FirstName" xml:space="preserve">
     <value>First Name</value>
     <comment>First name field</comment>
   </data>
-  <data name="User.LastName" xml:space="preserve">
+	<data name="User.LastName" xml:space="preserve">
     <value>Last Name</value>
     <comment>Last name field</comment>
   </data>
-  <data name="User.FullName" xml:space="preserve">
+	<data name="User.FullName" xml:space="preserve">
     <value>Full Name</value>
     <comment>Full name field</comment>
   </data>
-  <data name="User.PhoneNumber" xml:space="preserve">
+	<data name="User.PhoneNumber" xml:space="preserve">
     <value>Phone Number</value>
     <comment>Phone number field</comment>
   </data>
-  <data name="User.DateOfBirth" xml:space="preserve">
+	<data name="User.DateOfBirth" xml:space="preserve">
     <value>Date of Birth</value>
     <comment>Date of birth field</comment>
   </data>
-  <data name="User.Gender" xml:space="preserve">
+	<data name="User.Gender" xml:space="preserve">
     <value>Gender</value>
     <comment>Gender field</comment>
   </data>
-  <data name="User.Address" xml:space="preserve">
+	<data name="User.Address" xml:space="preserve">
     <value>Address</value>
     <comment>Address field</comment>
   </data>
-  <data name="User.City" xml:space="preserve">
+	<data name="User.City" xml:space="preserve">
     <value>City</value>
     <comment>City field</comment>
   </data>
-  <data name="User.Country" xml:space="preserve">
+	<data name="User.Country" xml:space="preserve">
     <value>Country</value>
     <comment>Country field</comment>
   </data>
-  <data name="User.RememberMe" xml:space="preserve">
+	<data name="User.RememberMe" xml:space="preserve">
     <value>Remember Me</value>
     <comment>Remember me checkbox</comment>
   </data>
-  <data name="ECommerce.AddToCart" xml:space="preserve">
+	<data name="ECommerce.AddToCart" xml:space="preserve">
     <value>Add to Cart</value>
     <comment>Add to cart action</comment>
   </data>
-  <data name="ECommerce.RemoveFromCart" xml:space="preserve">
+	<data name="ECommerce.RemoveFromCart" xml:space="preserve">
     <value>Remove from Cart</value>
     <comment>Remove from cart action</comment>
   </data>
-  <data name="ECommerce.ViewCart" xml:space="preserve">
+	<data name="ECommerce.ViewCart" xml:space="preserve">
     <value>View Cart</value>
     <comment>View cart action</comment>
   </data>
-  <data name="ECommerce.EmptyCart" xml:space="preserve">
+	<data name="ECommerce.EmptyCart" xml:space="preserve">
     <value>Empty Cart</value>
     <comment>Empty cart action</comment>
   </data>
-  <data name="ECommerce.Checkout" xml:space="preserve">
+	<data name="ECommerce.Checkout" xml:space="preserve">
     <value>Checkout</value>
     <comment>Checkout action</comment>
   </data>
-  <data name="ECommerce.PlaceOrder" xml:space="preserve">
+	<data name="ECommerce.PlaceOrder" xml:space="preserve">
     <value>Place Order</value>
     <comment>Place order action</comment>
   </data>
-  <data name="ECommerce.AddToWishlist" xml:space="preserve">
+	<data name="ECommerce.AddToWishlist" xml:space="preserve">
     <value>Add to Wishlist</value>
     <comment>Add to wishlist action</comment>
   </data>
-  <data name="ECommerce.RemoveFromWishlist" xml:space="preserve">
+	<data name="ECommerce.RemoveFromWishlist" xml:space="preserve">
     <value>Remove from Wishlist</value>
     <comment>Remove from wishlist action</comment>
   </data>
-  <data name="ECommerce.ViewWishlist" xml:space="preserve">
+	<data name="ECommerce.ViewWishlist" xml:space="preserve">
     <value>View Wishlist</value>
     <comment>View wishlist action</comment>
   </data>
-  <data name="ECommerce.Compare" xml:space="preserve">
+	<data name="ECommerce.Compare" xml:space="preserve">
     <value>Compare</value>
     <comment>Compare action</comment>
   </data>
-  <data name="ECommerce.QuickView" xml:space="preserve">
+	<data name="ECommerce.QuickView" xml:space="preserve">
     <value>Quick View</value>
     <comment>Quick view action</comment>
   </data>
-  <data name="ECommerce.Subtotal" xml:space="preserve">
+	<data name="ECommerce.Subtotal" xml:space="preserve">
     <value>Subtotal</value>
     <comment>Subtotal</comment>
   </data>
-  <data name="ECommerce.Tax" xml:space="preserve">
+	<data name="ECommerce.Tax" xml:space="preserve">
     <value>Tax</value>
     <comment>Tax</comment>
   </data>
-  <data name="ECommerce.Shipping" xml:space="preserve">
+	<data name="ECommerce.Shipping" xml:space="preserve">
     <value>Shipping</value>
     <comment>Shipping</comment>
   </data>
-  <data name="ECommerce.Discount" xml:space="preserve">
+	<data name="ECommerce.Discount" xml:space="preserve">
     <value>Discount</value>
     <comment>Discount</comment>
   </data>
-  <data name="ECommerce.Total" xml:space="preserve">
+	<data name="ECommerce.Total" xml:space="preserve">
     <value>Total</value>
     <comment>Total</comment>
   </data>
-  <data name="ECommerce.Price" xml:space="preserve">
+	<data name="ECommerce.Price" xml:space="preserve">
     <value>Price</value>
     <comment>Price</comment>
   </data>
-  <data name="ECommerce.Quantity" xml:space="preserve">
+	<data name="ECommerce.Quantity" xml:space="preserve">
     <value>Quantity</value>
     <comment>Quantity</comment>
   </data>
-  <data name="ECommerce.ProductCode" xml:space="preserve">
+	<data name="ECommerce.ProductCode" xml:space="preserve">
     <value>Product Code</value>
     <comment>Product code</comment>
   </data>
-  <data name="ECommerce.Category" xml:space="preserve">
+	<data name="ECommerce.Category" xml:space="preserve">
     <value>Category</value>
     <comment>Category</comment>
   </data>
-  <data name="ECommerce.Brand" xml:space="preserve">
+	<data name="ECommerce.Brand" xml:space="preserve">
     <value>Brand</value>
     <comment>Brand</comment>
   </data>
-  <data name="ECommerce.InStock" xml:space="preserve">
+	<data name="ECommerce.InStock" xml:space="preserve">
     <value>In Stock</value>
     <comment>In stock</comment>
   </data>
-  <data name="ECommerce.OutOfStock" xml:space="preserve">
+	<data name="ECommerce.OutOfStock" xml:space="preserve">
     <value>Out of Stock</value>
     <comment>Out of stock</comment>
   </data>
-  <data name="ECommerce.ShippingAddress" xml:space="preserve">
+	<data name="ECommerce.ShippingAddress" xml:space="preserve">
     <value>Shipping Address</value>
     <comment>Shipping address</comment>
   </data>
-  <data name="ECommerce.BillingAddress" xml:space="preserve">
+	<data name="ECommerce.BillingAddress" xml:space="preserve">
     <value>Billing Address</value>
     <comment>Billing address</comment>
   </data>
-  <data name="ECommerce.PaymentMethod" xml:space="preserve">
+	<data name="ECommerce.PaymentMethod" xml:space="preserve">
     <value>Payment Method</value>
     <comment>Payment method</comment>
   </data>
-  <data name="ECommerce.PaymentInfo" xml:space="preserve">
+	<data name="ECommerce.PaymentInfo" xml:space="preserve">
     <value>Payment Information</value>
     <comment>Payment information</comment>
   </data>
-  <data name="ECommerce.OrderNumber" xml:space="preserve">
+	<data name="ECommerce.OrderNumber" xml:space="preserve">
     <value>Order Number</value>
     <comment>Order number</comment>
   </data>
-  <data name="ECommerce.OrderDate" xml:space="preserve">
+	<data name="ECommerce.OrderDate" xml:space="preserve">
     <value>Order Date</value>
     <comment>Order date</comment>
   </data>
-  <data name="ECommerce.OrderStatus" xml:space="preserve">
+	<data name="ECommerce.OrderStatus" xml:space="preserve">
     <value>Order Status</value>
     <comment>Order status</comment>
   </data>
-  <data name="ECommerce.TrackOrder" xml:space="preserve">
+	<data name="ECommerce.TrackOrder" xml:space="preserve">
     <value>Track Order</value>
     <comment>Track order</comment>
   </data>
-  <data name="ECommerce.DeliveryDate" xml:space="preserve">
+	<data name="ECommerce.DeliveryDate" xml:space="preserve">
     <value>Delivery Date</value>
     <comment>Delivery date</comment>
   </data>
-  <data name="ECommerce.CouponCode" xml:space="preserve">
+	<data name="ECommerce.CouponCode" xml:space="preserve">
     <value>Coupon Code</value>
     <comment>Coupon code</comment>
   </data>
-  <data name="ECommerce.ApplyCoupon" xml:space="preserve">
+	<data name="ECommerce.ApplyCoupon" xml:space="preserve">
     <value>Apply Coupon</value>
     <comment>Apply coupon</comment>
   </data>
-  <data name="File.Upload" xml:space="preserve">
+	<data name="File.Upload" xml:space="preserve">
     <value>Upload</value>
     <comment>Upload action</comment>
   </data>
-  <data name="File.Download" xml:space="preserve">
+	<data name="File.Download" xml:space="preserve">
     <value>Download</value>
     <comment>Download action</comment>
   </data>
-  <data name="File.Export" xml:space="preserve">
+	<data name="File.Export" xml:space="preserve">
     <value>Export</value>
     <comment>Export action</comment>
   </data>
-  <data name="File.Import" xml:space="preserve">
+	<data name="File.Import" xml:space="preserve">
     <value>Import</value>
     <comment>Import action</comment>
   </data>
-  <data name="File.Sync" xml:space="preserve">
+	<data name="File.Sync" xml:space="preserve">
     <value>Sync</value>
     <comment>Sync action</comment>
   </data>
-  <data name="File.Syncing" xml:space="preserve">
+	<data name="File.Syncing" xml:space="preserve">
     <value>Syncing...</value>
     <comment>Syncing indicator</comment>
   </data>
-  <data name="File.Browse" xml:space="preserve">
+	<data name="File.Browse" xml:space="preserve">
     <value>Browse</value>
     <comment>Browse files</comment>
   </data>
-  <data name="File.SelectFile" xml:space="preserve">
+	<data name="File.SelectFile" xml:space="preserve">
     <value>Select File</value>
     <comment>Select file</comment>
   </data>
-  <data name="File.DropFiles" xml:space="preserve">
+	<data name="File.DropFiles" xml:space="preserve">
     <value>Drop Files Here</value>
     <comment>Drop files here</comment>
   </data>
-  <data name="File.FileName" xml:space="preserve">
+	<data name="File.FileName" xml:space="preserve">
     <value>File Name</value>
     <comment>File name</comment>
   </data>
-  <data name="File.FileSize" xml:space="preserve">
+	<data name="File.FileSize" xml:space="preserve">
     <value>File Size</value>
     <comment>File size</comment>
   </data>
-  <data name="File.FileType" xml:space="preserve">
+	<data name="File.FileType" xml:space="preserve">
     <value>File Type</value>
     <comment>File type</comment>
   </data>
-  <data name="File.LastModified" xml:space="preserve">
+	<data name="File.LastModified" xml:space="preserve">
     <value>Last Modified</value>
     <comment>Last modified</comment>
   </data>
-  <data name="Settings.Title" xml:space="preserve">
+	<data name="Settings.Title" xml:space="preserve">
     <value>Settings</value>
     <comment>Settings title</comment>
   </data>
-  <data name="Settings.Preferences" xml:space="preserve">
+	<data name="Settings.Preferences" xml:space="preserve">
     <value>Preferences</value>
     <comment>Preferences</comment>
   </data>
-  <data name="Settings.GeneralSettings" xml:space="preserve">
+	<data name="Settings.GeneralSettings" xml:space="preserve">
     <value>General Settings</value>
     <comment>General settings</comment>
   </data>
-  <data name="Settings.AccountSettings" xml:space="preserve">
+	<data name="Settings.AccountSettings" xml:space="preserve">
     <value>Account Settings</value>
     <comment>Account settings</comment>
   </data>
-  <data name="Settings.PrivacySettings" xml:space="preserve">
+	<data name="Settings.PrivacySettings" xml:space="preserve">
     <value>Privacy Settings</value>
     <comment>Privacy settings</comment>
   </data>
-  <data name="Settings.SecuritySettings" xml:space="preserve">
+	<data name="Settings.SecuritySettings" xml:space="preserve">
     <value>Security Settings</value>
     <comment>Security settings</comment>
   </data>
-  <data name="Settings.Language" xml:space="preserve">
+	<data name="Settings.Language" xml:space="preserve">
     <value>Language</value>
     <comment>Language setting</comment>
   </data>
-  <data name="Settings.Theme" xml:space="preserve">
+	<data name="Settings.Theme" xml:space="preserve">
     <value>Theme</value>
     <comment>Theme setting</comment>
   </data>
-  <data name="Settings.LightTheme" xml:space="preserve">
+	<data name="Settings.LightTheme" xml:space="preserve">
     <value>Light Theme</value>
     <comment>Light theme</comment>
   </data>
-  <data name="Settings.DarkTheme" xml:space="preserve">
+	<data name="Settings.DarkTheme" xml:space="preserve">
     <value>Dark Theme</value>
     <comment>Dark theme</comment>
   </data>
-  <data name="Settings.AutoTheme" xml:space="preserve">
+	<data name="Settings.AutoTheme" xml:space="preserve">
     <value>Auto</value>
     <comment>Auto theme</comment>
   </data>
-  <data name="Settings.Notifications" xml:space="preserve">
+	<data name="Settings.Notifications" xml:space="preserve">
     <value>Notifications</value>
     <comment>Notifications</comment>
   </data>
-  <data name="Settings.EmailNotifications" xml:space="preserve">
+	<data name="Settings.EmailNotifications" xml:space="preserve">
     <value>Email Notifications</value>
     <comment>Email notifications</comment>
   </data>
-  <data name="Settings.PushNotifications" xml:space="preserve">
+	<data name="Settings.PushNotifications" xml:space="preserve">
     <value>Push Notifications</value>
     <comment>Push notifications</comment>
   </data>
-  <data name="Settings.Enable" xml:space="preserve">
+	<data name="Settings.Enable" xml:space="preserve">
     <value>Enable</value>
     <comment>Enable</comment>
   </data>
-  <data name="Settings.Disable" xml:space="preserve">
+	<data name="Settings.Disable" xml:space="preserve">
     <value>Disable</value>
     <comment>Disable</comment>
   </data>
-  <data name="Settings.ResetToDefault" xml:space="preserve">
+	<data name="Settings.ResetToDefault" xml:space="preserve">
     <value>Reset to Default</value>
     <comment>Reset to default</comment>
   </data>
-  <data name="Settings.SaveChanges" xml:space="preserve">
+	<data name="Settings.SaveChanges" xml:space="preserve">
     <value>Save Changes</value>
     <comment>Save changes</comment>
   </data>
-  <data name="Settings.DiscardChanges" xml:space="preserve">
+	<data name="Settings.DiscardChanges" xml:space="preserve">
     <value>Discard Changes</value>
     <comment>Discard changes</comment>
   </data>
-  <data name="Success.Created" xml:space="preserve">
+	<data name="Success.Created" xml:space="preserve">
     <value>Successfully Created</value>
     <comment>Successfully created</comment>
   </data>
-  <data name="Success.Updated" xml:space="preserve">
+	<data name="Success.Updated" xml:space="preserve">
     <value>Successfully Updated</value>
     <comment>Successfully updated</comment>
   </data>
-  <data name="Success.Deleted" xml:space="preserve">
+	<data name="Success.Deleted" xml:space="preserve">
     <value>Successfully Deleted</value>
     <comment>Successfully deleted</comment>
   </data>
-  <data name="Success.Saved" xml:space="preserve">
+	<data name="Success.Saved" xml:space="preserve">
     <value>Successfully Saved</value>
     <comment>Successfully saved</comment>
   </data>
-  <data name="Success.Uploaded" xml:space="preserve">
+	<data name="Success.Uploaded" xml:space="preserve">
     <value>Successfully Uploaded</value>
     <comment>Successfully uploaded</comment>
   </data>
-  <data name="Success.Downloaded" xml:space="preserve">
+	<data name="Success.Downloaded" xml:space="preserve">
     <value>Successfully Downloaded</value>
     <comment>Successfully downloaded</comment>
   </data>
-  <data name="Success.Imported" xml:space="preserve">
+	<data name="Success.Imported" xml:space="preserve">
     <value>Successfully Imported</value>
     <comment>Successfully imported</comment>
   </data>
-  <data name="Success.Exported" xml:space="preserve">
+	<data name="Success.Exported" xml:space="preserve">
     <value>Successfully Exported</value>
     <comment>Successfully exported</comment>
   </data>
-  <data name="Success.OperationSuccessful" xml:space="preserve">
+	<data name="Success.OperationSuccessful" xml:space="preserve">
     <value>Operation Done Successfully</value>
     <comment>Operation successful</comment>
   </data>
-  <data name="Success.Sent" xml:space="preserve">
+	<data name="Success.Sent" xml:space="preserve">
     <value>Successfully Sent</value>
     <comment>Successfully sent</comment>
   </data>
-  <data name="Success.Copied" xml:space="preserve">
+	<data name="Success.Copied" xml:space="preserve">
     <value>Successfully Copied</value>
     <comment>Successfully copied</comment>
   </data>
-  <data name="Success.Activated" xml:space="preserve">
+	<data name="Success.Activated" xml:space="preserve">
     <value>Successfully Activated</value>
     <comment>Successfully activated</comment>
   </data>
-  <data name="Success.Deactivated" xml:space="preserve">
+	<data name="Success.Deactivated" xml:space="preserve">
     <value>Successfully Deactivated</value>
     <comment>Successfully deactivated</comment>
   </data>
-  <data name="Error.GeneralError" xml:space="preserve">
+	<data name="Error.GeneralError" xml:space="preserve">
     <value>An unexpected error has occurred.</value>
     <comment>General error message</comment>
   </data>
-  <data name="Error.NetworkError" xml:space="preserve">
+	<data name="Error.NetworkError" xml:space="preserve">
     <value>A network error has occurred.</value>
     <comment>Network error</comment>
   </data>
-  <data name="Error.ServerError" xml:space="preserve">
+	<data name="Error.ServerError" xml:space="preserve">
     <value>A server error has occurred.</value>
     <comment>Server error</comment>
   </data>
-  <data name="Error.ValidationError" xml:space="preserve">
+	<data name="Error.ValidationError" xml:space="preserve">
     <value>A validation error has occurred.</value>
     <comment>Validation error</comment>
   </data>
-  <data name="Error.RequiredField" xml:space="preserve">
+	<data name="Error.RequiredField" xml:space="preserve">
     <value>This field is required.</value>
     <comment>Required field error</comment>
   </data>
-  <data name="Error.InvalidEmail" xml:space="preserve">
+	<data name="Error.InvalidEmail" xml:space="preserve">
     <value>The email address is not valid.</value>
     <comment>Invalid email error</comment>
   </data>
-  <data name="Error.InvalidPassword" xml:space="preserve">
+	<data name="Error.InvalidPassword" xml:space="preserve">
     <value>The password is not valid.</value>
     <comment>Invalid password error</comment>
   </data>
-  <data name="Error.PasswordMismatch" xml:space="preserve">
+	<data name="Error.PasswordMismatch" xml:space="preserve">
     <value>The passwords do not match.</value>
     <comment>Password mismatch error</comment>
   </data>
-  <data name="Error.LoginFailed" xml:space="preserve">
+	<data name="Error.LoginFailed" xml:space="preserve">
     <value>Login failed. Please check your credentials.</value>
     <comment>Login failed error</comment>
   </data>
-  <data name="Error.AccessDenied" xml:space="preserve">
+	<data name="Error.AccessDenied" xml:space="preserve">
     <value>Access Denied.</value>
     <comment>Access denied error</comment>
   </data>
-  <data name="Error.FileNotFound" xml:space="preserve">
+	<data name="Error.FileNotFound" xml:space="preserve">
     <value>The file was not found.</value>
     <comment>File not found error</comment>
   </data>
-  <data name="Error.FileTooLarge" xml:space="preserve">
+	<data name="Error.FileTooLarge" xml:space="preserve">
     <value>The file is too large.</value>
     <comment>File too large error</comment>
   </data>
-  <data name="Error.InvalidFileType" xml:space="preserve">
+	<data name="Error.InvalidFileType" xml:space="preserve">
     <value>Invalid file type.</value>
     <comment>Invalid file type error</comment>
   </data>
-  <data name="Error.UploadFailed" xml:space="preserve">
+	<data name="Error.UploadFailed" xml:space="preserve">
     <value>The file upload failed.</value>
     <comment>Upload failed error</comment>
   </data>
-  <data name="Error.DownloadFailed" xml:space="preserve">
+	<data name="Error.DownloadFailed" xml:space="preserve">
     <value>The file download failed.</value>
     <comment>Download failed error</comment>
   </data>
-  <data name="Error.ConnectionTimeout" xml:space="preserve">
+	<data name="Error.ConnectionTimeout" xml:space="preserve">
     <value>The connection has timed out.</value>
     <comment>Connection timeout error</comment>
   </data>
-  <data name="Error.SessionExpired" xml:space="preserve">
+	<data name="Error.SessionExpired" xml:space="preserve">
     <value>Your session has expired. Please log in again.</value>
     <comment>Session expired error</comment>
   </data>
-  <data name="Error.UnauthorizedAccess" xml:space="preserve">
+	<data name="Error.UnauthorizedAccess" xml:space="preserve">
     <value>Unauthorized Access.</value>
     <comment>Unauthorized access error</comment>
   </data>
-  <data name="Error.InvalidOperation" xml:space="preserve">
+	<data name="Error.InvalidOperation" xml:space="preserve">
     <value>Invalid Operation.</value>
     <comment>Invalid operation error</comment>
   </data>
-  <data name="Error.DataNotFound" xml:space="preserve">
+	<data name="Error.DataNotFound" xml:space="preserve">
     <value>Data not found.</value>
     <comment>Data not found error</comment>
   </data>
-  <data name="Error.UnprocessableEntity" xml:space="preserve">
+	<data name="Error.UnprocessableEntity" xml:space="preserve">
     <value>We couldn't process your request. Please check your input and try again.</value>
     <comment>Unprocessable Entity error</comment>
   </data>
-  <data name="Error.BadRequest" xml:space="preserve">
+	<data name="Error.BadRequest" xml:space="preserve">
     <value>Your request contains invalid data. Please check and try again.</value>
     <comment>Bad Request error </comment>
   </data>
-  <data name="Confirm.Delete" xml:space="preserve">
+	<data name="Confirm.Delete" xml:space="preserve">
     <value>Are you sure you want to delete this item?</value>
     <comment>Delete confirmation</comment>
   </data>
-  <data name="Confirm.Save" xml:space="preserve">
+	<data name="Confirm.Save" xml:space="preserve">
     <value>Do you want to save the changes?</value>
     <comment>Save confirmation</comment>
   </data>
-  <data name="Confirm.Cancel" xml:space="preserve">
+	<data name="Confirm.Cancel" xml:space="preserve">
     <value>Are you sure you want to cancel this operation?</value>
     <comment>Cancel confirmation</comment>
   </data>
-  <data name="Confirm.Exit" xml:space="preserve">
+	<data name="Confirm.Exit" xml:space="preserve">
     <value>Are you sure you want to exit?</value>
     <comment>Exit confirmation</comment>
   </data>
-  <data name="Confirm.Logout" xml:space="preserve">
+	<data name="Confirm.Logout" xml:space="preserve">
     <value>Are you sure you want to logout?</value>
     <comment>Logout confirmation</comment>
   </data>
-  <data name="Confirm.Reset" xml:space="preserve">
+	<data name="Confirm.Reset" xml:space="preserve">
     <value>Are you sure you want to reset the settings?</value>
     <comment>Reset confirmation</comment>
   </data>
-  <data name="Confirm.Overwrite" xml:space="preserve">
+	<data name="Confirm.Overwrite" xml:space="preserve">
     <value>The file already exists. Do you want to overwrite it?</value>
     <comment>Overwrite confirmation</comment>
   </data>
-  <data name="Confirm.UnsavedChanges" xml:space="preserve">
+	<data name="Confirm.UnsavedChanges" xml:space="preserve">
     <value>You have unsaved changes. Are you sure you want to continue?</value>
     <comment>Unsaved changes confirmation</comment>
   </data>
-  <data name="Time.Today" xml:space="preserve">
+	<data name="Time.Today" xml:space="preserve">
     <value>Today</value>
     <comment>Today</comment>
   </data>
-  <data name="Time.Yesterday" xml:space="preserve">
+	<data name="Time.Yesterday" xml:space="preserve">
     <value>Yesterday</value>
     <comment>Yesterday</comment>
   </data>
-  <data name="Time.Tomorrow" xml:space="preserve">
+	<data name="Time.Tomorrow" xml:space="preserve">
     <value>Tomorrow</value>
     <comment>Tomorrow</comment>
   </data>
-  <data name="Time.Now" xml:space="preserve">
+	<data name="Time.Now" xml:space="preserve">
     <value>Now</value>
     <comment>Now</comment>
   </data>
-  <data name="Time.Recently" xml:space="preserve">
+	<data name="Time.Recently" xml:space="preserve">
     <value>Recently</value>
     <comment>Recently</comment>
   </data>
-  <data name="Time.JustNow" xml:space="preserve">
+	<data name="Time.JustNow" xml:space="preserve">
     <value>Just Now</value>
     <comment>Just now</comment>
   </data>
-  <data name="Time.MinutesAgo" xml:space="preserve">
+	<data name="Time.MinutesAgo" xml:space="preserve">
     <value>{0} minutes ago</value>
     <comment>Minutes ago</comment>
   </data>
-  <data name="Time.HoursAgo" xml:space="preserve">
+	<data name="Time.HoursAgo" xml:space="preserve">
     <value>{0} hours ago</value>
     <comment>Hours ago</comment>
   </data>
-  <data name="Time.DaysAgo" xml:space="preserve">
+	<data name="Time.DaysAgo" xml:space="preserve">
     <value>{0} days ago</value>
     <comment>Days ago</comment>
   </data>
-  <data name="Time.WeeksAgo" xml:space="preserve">
+	<data name="Time.WeeksAgo" xml:space="preserve">
     <value>{0} weeks ago</value>
     <comment>Weeks ago</comment>
   </data>
-  <data name="Time.MonthsAgo" xml:space="preserve">
+	<data name="Time.MonthsAgo" xml:space="preserve">
     <value>{0} months ago</value>
     <comment>Months ago</comment>
   </data>
-  <data name="Time.YearsAgo" xml:space="preserve">
+	<data name="Time.YearsAgo" xml:space="preserve">
     <value>{0} years ago</value>
     <comment>Years ago</comment>
   </data>
-  <data name="Time.StartDate" xml:space="preserve">
+	<data name="Time.StartDate" xml:space="preserve">
     <value>Start Date</value>
     <comment>Start date</comment>
   </data>
-  <data name="Time.EndDate" xml:space="preserve">
+	<data name="Time.EndDate" xml:space="preserve">
     <value>End Date</value>
     <comment>End date</comment>
   </data>
-  <data name="Time.CreatedDate" xml:space="preserve">
+	<data name="Time.CreatedDate" xml:space="preserve">
     <value>Created Date</value>
     <comment>Created date</comment>
   </data>
-  <data name="Time.ModifiedDate" xml:space="preserve">
+	<data name="Time.ModifiedDate" xml:space="preserve">
     <value>Modified Date</value>
     <comment>Modified date</comment>
   </data>
-  <data name="Time.ExpiryDate" xml:space="preserve">
+	<data name="Time.ExpiryDate" xml:space="preserve">
     <value>Expiry Date</value>
     <comment>Expiry date</comment>
   </data>
-  <data name="Status.Active" xml:space="preserve">
+	<data name="Status.Title" xml:space="preserve">
+    <value>Status</value>
+    <comment>Active status</comment>
+  </data>
+	<data name="Status.Active" xml:space="preserve">
     <value>Active</value>
     <comment>Active status</comment>
   </data>
-  <data name="Status.Inactive" xml:space="preserve">
+	<data name="Status.Inactive" xml:space="preserve">
     <value>Inactive</value>
     <comment>Inactive status</comment>
   </data>
-  <data name="Status.Pending" xml:space="preserve">
+	<data name="Status.Pending" xml:space="preserve">
     <value>Pending</value>
     <comment>Pending status</comment>
   </data>
-  <data name="Status.Approved" xml:space="preserve">
+	<data name="Status.Approved" xml:space="preserve">
     <value>Approved</value>
     <comment>Approved status</comment>
   </data>
-  <data name="Status.Rejected" xml:space="preserve">
+	<data name="Status.Rejected" xml:space="preserve">
     <value>Rejected</value>
     <comment>Rejected status</comment>
   </data>
-  <data name="Status.Completed" xml:space="preserve">
+	<data name="Status.Completed" xml:space="preserve">
     <value>Completed</value>
     <comment>Completed status</comment>
   </data>
-  <data name="Status.InProgress" xml:space="preserve">
+	<data name="Status.InProgress" xml:space="preserve">
     <value>In Progress</value>
     <comment>In progress status</comment>
   </data>
-  <data name="Status.Cancelled" xml:space="preserve">
+	<data name="Status.Cancelled" xml:space="preserve">
     <value>Cancelled</value>
     <comment>Cancelled status</comment>
   </data>
-  <data name="Status.Draft" xml:space="preserve">
+	<data name="Status.Draft" xml:space="preserve">
     <value>Draft</value>
     <comment>Draft status</comment>
   </data>
-  <data name="Status.Published" xml:space="preserve">
+	<data name="Status.Published" xml:space="preserve">
     <value>Published</value>
     <comment>Published status</comment>
   </data>
-  <data name="Status.Archived" xml:space="preserve">
+	<data name="Status.Archived" xml:space="preserve">
     <value>Archived</value>
     <comment>Archived status</comment>
   </data>
-  <data name="Status.Expired" xml:space="preserve">
+	<data name="Status.Expired" xml:space="preserve">
     <value>Expired</value>
     <comment>Expired status</comment>
   </data>
-  <data name="Status.Locked" xml:space="preserve">
+	<data name="Status.Locked" xml:space="preserve">
     <value>Locked</value>
     <comment>Locked status</comment>
   </data>
-  <data name="Status.Unlocked" xml:space="preserve">
+	<data name="Status.Unlocked" xml:space="preserve">
     <value>Unlocked</value>
     <comment>Unlocked status</comment>
   </data>
-  <data name="Status.Online" xml:space="preserve">
+	<data name="Status.Online" xml:space="preserve">
     <value>Online</value>
     <comment>Online status</comment>
   </data>
-  <data name="Status.Offline" xml:space="preserve">
+	<data name="Status.Offline" xml:space="preserve">
     <value>Offline</value>
     <comment>Offline status</comment>
   </data>
-  <data name="Status.Available" xml:space="preserve">
+	<data name="Status.Available" xml:space="preserve">
     <value>Available</value>
     <comment>Available status</comment>
   </data>
-  <data name="Status.Unavailable" xml:space="preserve">
+	<data name="Status.Unavailable" xml:space="preserve">
     <value>Unavailable</value>
     <comment>Unavailable status</comment>
   </data>
-  <data name="Status.Busy" xml:space="preserve">
+	<data name="Status.Busy" xml:space="preserve">
     <value>Busy</value>
     <comment>Busy status</comment>
   </data>
-  <data name="Pagination.FirstPage" xml:space="preserve">
+	<data name="Pagination.FirstPage" xml:space="preserve">
     <value>First Page</value>
     <comment>First page</comment>
   </data>
-  <data name="Pagination.LastPage" xml:space="preserve">
+	<data name="Pagination.LastPage" xml:space="preserve">
     <value>Last Page</value>
     <comment>Last page</comment>
   </data>
-  <data name="Pagination.NextPage" xml:space="preserve">
+	<data name="Pagination.NextPage" xml:space="preserve">
     <value>Next Page</value>
     <comment>Next page</comment>
   </data>
-  <data name="Pagination.PreviousPage" xml:space="preserve">
+	<data name="Pagination.PreviousPage" xml:space="preserve">
     <value>Previous Page</value>
     <comment>Previous page</comment>
   </data>
-  <data name="Pagination.Page" xml:space="preserve">
+	<data name="Pagination.Page" xml:space="preserve">
     <value>Page</value>
     <comment>Page</comment>
   </data>
-  <data name="Pagination.Of" xml:space="preserve">
+	<data name="Pagination.Of" xml:space="preserve">
     <value>of</value>
     <comment>Of (e.g., page 1 of 10)</comment>
   </data>
-  <data name="Pagination.ItemsPerPage" xml:space="preserve">
+	<data name="Pagination.ItemsPerPage" xml:space="preserve">
     <value>Items per page</value>
     <comment>Items per page</comment>
   </data>
-  <data name="Pagination.ShowingItems" xml:space="preserve">
+	<data name="Pagination.ShowingItems" xml:space="preserve">
     <value>Showing {0} to {1} of {2} items</value>
     <comment>Showing X to Y of Z items</comment>
   </data>
-  <data name="Pagination.NoItems" xml:space="preserve">
+	<data name="Pagination.NoItems" xml:space="preserve">
     <value>There are no items to display.</value>
     <comment>No items to display</comment>
   </data>
-  <data name="Pagination.Results" xml:space="preserve">
+	<data name="Pagination.Results" xml:space="preserve">
     <value>Results</value>
     <comment>Results</comment>
   </data>
-  <data name="Search.SearchResults" xml:space="preserve">
+	<data name="Search.SearchResults" xml:space="preserve">
     <value>Search Results</value>
     <comment>Search results</comment>
   </data>
-  <data name="Search.NoResults" xml:space="preserve">
+	<data name="Search.NoResults" xml:space="preserve">
     <value>No results found.</value>
     <comment>No search results</comment>
   </data>
-  <data name="Search.SearchFor" xml:space="preserve">
+	<data name="Search.SearchFor" xml:space="preserve">
     <value>Search for...</value>
     <comment>Search for</comment>
   </data>
-  <data name="Search.SearchQuery" xml:space="preserve">
+	<data name="Search.SearchQuery" xml:space="preserve">
     <value>Search Query</value>
     <comment>Search query</comment>
   </data>
-  <data name="Search.AdvancedSearch" xml:space="preserve">
+	<data name="Search.AdvancedSearch" xml:space="preserve">
     <value>Advanced Search</value>
     <comment>Advanced search</comment>
   </data>
-  <data name="Search.ClearSearch" xml:space="preserve">
+	<data name="Search.ClearSearch" xml:space="preserve">
     <value>Clear Search</value>
     <comment>Clear search</comment>
   </data>
-  <data name="Search.FilterBy" xml:space="preserve">
+	<data name="Search.FilterBy" xml:space="preserve">
     <value>Filter by</value>
     <comment>Filter by</comment>
   </data>
-  <data name="Search.SortBy" xml:space="preserve">
+	<data name="Search.SortBy" xml:space="preserve">
     <value>Sort by</value>
     <comment>Sort by</comment>
   </data>
-  <data name="Search.Ascending" xml:space="preserve">
+	<data name="Search.Ascending" xml:space="preserve">
     <value>Ascending</value>
     <comment>Ascending order</comment>
   </data>
-  <data name="Search.Descending" xml:space="preserve">
+	<data name="Search.Descending" xml:space="preserve">
     <value>Descending</value>
     <comment>Descending order</comment>
   </data>
-  <data name="Search.Name" xml:space="preserve">
+	<data name="Search.Name" xml:space="preserve">
     <value>Name</value>
     <comment>Name</comment>
   </data>
-  <data name="Search.Date" xml:space="preserve">
+	<data name="Search.Date" xml:space="preserve">
     <value>Date</value>
     <comment>Date</comment>
   </data>
-  <data name="Search.Size" xml:space="preserve">
+	<data name="Search.Size" xml:space="preserve">
     <value>Size</value>
     <comment>Size</comment>
   </data>
-  <data name="Search.Type" xml:space="preserve">
+	<data name="Search.Type" xml:space="preserve">
     <value>Type</value>
     <comment>Type</comment>
   </data>
-  <data name="Form.Title" xml:space="preserve">
+	<data name="Form.Title" xml:space="preserve">
     <value>Title</value>
     <comment>Title field</comment>
   </data>
-  <data name="Form.Description" xml:space="preserve">
+	<data name="Form.Description" xml:space="preserve">
     <value>Description</value>
     <comment>Description field</comment>
   </data>
-  <data name="Form.Content" xml:space="preserve">
+	<data name="Form.Content" xml:space="preserve">
     <value>Content</value>
     <comment>Content field</comment>
   </data>
-  <data name="Form.Message" xml:space="preserve">
+	<data name="Form.Message" xml:space="preserve">
     <value>Message</value>
     <comment>Message field</comment>
   </data>
-  <data name="Form.Comments" xml:space="preserve">
+	<data name="Form.Comments" xml:space="preserve">
     <value>Comments</value>
     <comment>Comments field</comment>
   </data>
-  <data name="Form.Tags" xml:space="preserve">
+	<data name="Form.Tags" xml:space="preserve">
     <value>Tags</value>
     <comment>Tags field</comment>
   </data>
-  <data name="Form.Keywords" xml:space="preserve">
+	<data name="Form.Keywords" xml:space="preserve">
     <value>Keywords</value>
     <comment>Keywords field</comment>
   </data>
-  <data name="Form.URL" xml:space="preserve">
+	<data name="Form.URL" xml:space="preserve">
     <value>URL</value>
     <comment>URL field</comment>
   </data>
-  <data name="Form.Link" xml:space="preserve">
+	<data name="Form.Link" xml:space="preserve">
     <value>Link</value>
     <comment>Link field</comment>
   </data>
-  <data name="Form.Image" xml:space="preserve">
+	<data name="Form.Image" xml:space="preserve">
     <value>Image</value>
     <comment>Image field</comment>
   </data>
-  <data name="Form.Video" xml:space="preserve">
+	<data name="Form.Video" xml:space="preserve">
     <value>Video</value>
     <comment>Video field</comment>
   </data>
-  <data name="Form.Audio" xml:space="preserve">
+	<data name="Form.Audio" xml:space="preserve">
     <value>Audio</value>
     <comment>Audio field</comment>
   </data>
-  <data name="Form.Document" xml:space="preserve">
+	<data name="Form.Document" xml:space="preserve">
     <value>Document</value>
     <comment>Document field</comment>
   </data>
-  <data name="Form.Attachment" xml:space="preserve">
+	<data name="Form.Attachment" xml:space="preserve">
     <value>Attachment</value>
     <comment>Attachment field</comment>
   </data>
-  <data name="Form.Priority" xml:space="preserve">
+	<data name="Form.Priority" xml:space="preserve">
     <value>Priority</value>
     <comment>Priority field</comment>
   </data>
-  <data name="Form.Status" xml:space="preserve">
+	<data name="Form.Status" xml:space="preserve">
     <value>Status</value>
     <comment>Status field</comment>
   </data>
-  <data name="Form.Notes" xml:space="preserve">
+	<data name="Form.Notes" xml:space="preserve">
     <value>Notes</value>
     <comment>Notes field</comment>
   </data>
-  <data name="Form.Remarks" xml:space="preserve">
+	<data name="Form.Remarks" xml:space="preserve">
     <value>Remarks</value>
     <comment>Remarks field</comment>
   </data>
-  <data name="Help.Help" xml:space="preserve">
+	<data name="Help.Help" xml:space="preserve">
     <value>Help</value>
     <comment>Help</comment>
   </data>
-  <data name="Help.Support" xml:space="preserve">
+	<data name="Help.Support" xml:space="preserve">
     <value>Support</value>
     <comment>Support</comment>
   </data>
-  <data name="Help.Documentation" xml:space="preserve">
+	<data name="Help.Documentation" xml:space="preserve">
     <value>Documentation</value>
     <comment>Documentation</comment>
   </data>
-  <data name="Help.Tutorial" xml:space="preserve">
+	<data name="Help.Tutorial" xml:space="preserve">
     <value>Tutorial</value>
     <comment>Tutorial</comment>
   </data>
-  <data name="Help.FAQ" xml:space="preserve">
+	<data name="Help.FAQ" xml:space="preserve">
     <value>FAQ</value>
     <comment>FAQ</comment>
   </data>
-  <data name="Help.ContactSupport" xml:space="preserve">
+	<data name="Help.ContactSupport" xml:space="preserve">
     <value>Contact Support</value>
     <comment>Contact support</comment>
   </data>
-  <data name="Help.UserGuide" xml:space="preserve">
+	<data name="Help.UserGuide" xml:space="preserve">
     <value>User Guide</value>
     <comment>User guide</comment>
   </data>
-  <data name="Help.TechnicalSupport" xml:space="preserve">
+	<data name="Help.TechnicalSupport" xml:space="preserve">
     <value>Technical Support</value>
     <comment>Technical support</comment>
   </data>
-  <data name="Help.CustomerService" xml:space="preserve">
+	<data name="Help.CustomerService" xml:space="preserve">
     <value>Customer Service</value>
     <comment>Customer service</comment>
   </data>
-  <data name="Help.LiveChat" xml:space="preserve">
+	<data name="Help.LiveChat" xml:space="preserve">
     <value>Live Chat</value>
     <comment>Live chat</comment>
   </data>
-  <data name="Help.TicketSystem" xml:space="preserve">
+	<data name="Help.TicketSystem" xml:space="preserve">
     <value>Ticket System</value>
     <comment>Ticket system</comment>
   </data>
-  <data name="Help.CreateTicket" xml:space="preserve">
+	<data name="Help.CreateTicket" xml:space="preserve">
     <value>Create Ticket</value>
     <comment>Create ticket</comment>
   </data>
-  <data name="Help.ViewTickets" xml:space="preserve">
+	<data name="Help.ViewTickets" xml:space="preserve">
     <value>View Tickets</value>
     <comment>View tickets</comment>
   </data>
-  <data name="Misc.Required" xml:space="preserve">
+	<data name="Misc.Required" xml:space="preserve">
     <value>Required</value>
     <comment>Required indicator</comment>
   </data>
-  <data name="Misc.Optional" xml:space="preserve">
+	<data name="Misc.Optional" xml:space="preserve">
     <value>Optional</value>
     <comment>Optional indicator</comment>
   </data>
-  <data name="Misc.More" xml:space="preserve">
+	<data name="Misc.More" xml:space="preserve">
     <value>More</value>
     <comment>More</comment>
   </data>
-  <data name="Misc.Less" xml:space="preserve">
+	<data name="Misc.Less" xml:space="preserve">
     <value>Less</value>
     <comment>Less</comment>
   </data>
-  <data name="Misc.ShowMore" xml:space="preserve">
+	<data name="Misc.ShowMore" xml:space="preserve">
     <value>Show More</value>
     <comment>Show more</comment>
   </data>
-  <data name="Misc.ShowLess" xml:space="preserve">
+	<data name="Misc.ShowLess" xml:space="preserve">
     <value>Show Less</value>
     <comment>Show less</comment>
   </data>
-  <data name="Misc.Expand" xml:space="preserve">
+	<data name="Misc.Expand" xml:space="preserve">
     <value>Expand</value>
     <comment>Expand</comment>
   </data>
-  <data name="Misc.Collapse" xml:space="preserve">
+	<data name="Misc.Collapse" xml:space="preserve">
     <value>Collapse</value>
     <comment>Collapse</comment>
   </data>
-  <data name="Misc.Details" xml:space="preserve">
+	<data name="Misc.Details" xml:space="preserve">
     <value>Details</value>
     <comment>Details</comment>
   </data>
-  <data name="Misc.Summary" xml:space="preserve">
+	<data name="Misc.Summary" xml:space="preserve">
     <value>Summary</value>
     <comment>Summary</comment>
   </data>
-  <data name="Misc.Information" xml:space="preserve">
+	<data name="Misc.Information" xml:space="preserve">
     <value>Information</value>
     <comment>Information</comment>
   </data>
-  <data name="Misc.Warning" xml:space="preserve">
+	<data name="Misc.Warning" xml:space="preserve">
     <value>Warning</value>
     <comment>Warning</comment>
   </data>
-  <data name="Misc.Error" xml:space="preserve">
+	<data name="Misc.Error" xml:space="preserve">
     <value>Error</value>
     <comment>Error</comment>
   </data>
-  <data name="Misc.Success" xml:space="preserve">
+	<data name="Misc.Success" xml:space="preserve">
     <value>Success</value>
     <comment>Success</comment>
   </data>
-  <data name="Misc.Notice" xml:space="preserve">
+	<data name="Misc.Notice" xml:space="preserve">
     <value>Notice</value>
     <comment>Notice</comment>
   </data>
-  <data name="Misc.Alert" xml:space="preserve">
+	<data name="Misc.Alert" xml:space="preserve">
     <value>Alert</value>
     <comment>Alert</comment>
   </data>
-  <data name="Misc.Tip" xml:space="preserve">
+	<data name="Misc.Tip" xml:space="preserve">
     <value>Tip</value>
     <comment>Tip</comment>
   </data>
-  <data name="Misc.Version" xml:space="preserve">
+	<data name="Misc.Version" xml:space="preserve">
     <value>Version</value>
     <comment>Version</comment>
   </data>
-  <data name="Misc.Copyright" xml:space="preserve">
+	<data name="Misc.Copyright" xml:space="preserve">
     <value>Copyright</value>
     <comment>Copyright</comment>
   </data>
-  <data name="Misc.AllRightsReserved" xml:space="preserve">
+	<data name="Misc.AllRightsReserved" xml:space="preserve">
     <value>All Rights Reserved</value>
     <comment>All rights reserved</comment>
   </data>
-  <data name="Misc.PrivacyPolicy" xml:space="preserve">
+	<data name="Misc.PrivacyPolicy" xml:space="preserve">
     <value>Privacy Policy</value>
     <comment>Privacy policy</comment>
   </data>
-  <data name="Misc.TermsOfService" xml:space="preserve">
+	<data name="Misc.TermsOfService" xml:space="preserve">
     <value>Terms of Service</value>
     <comment>Terms of service</comment>
   </data>
-  <data name="Misc.TermsAndConditions" xml:space="preserve">
+	<data name="Misc.TermsAndConditions" xml:space="preserve">
     <value>Terms and Conditions</value>
     <comment>Terms and conditions</comment>
   </data>
-  <data name="Error.DataNotFoundWithParameter" xml:space="preserve">
+	<data name="Error.DataNotFoundWithParameter" xml:space="preserve">
     <value>{0} not found</value>
     <comment>Data Does not exist with a specific Name Or Value Passed</comment>
   </data>
-  <data name="Entities.Department" xml:space="preserve">
+	<data name="Entities.Department" xml:space="preserve">
     <value>Depatment</value>
     <comment>Department</comment>
   </data>
-  <data name="Navigation.Brand" xml:space="preserve">
+	<data name="Navigation.Brand" xml:space="preserve">
     <value>Brand</value>
   </data>
-  <data name="Categories.AddCategory" xml:space="preserve">
-    <value>Add New Category</value>
+	<data name="Efreshli.Auditable.ID" xml:space="preserve">
+    <value>ID</value>
   </data>
-  <data name="Categories.MainCategories" xml:space="preserve">
-    <value>Main Categories</value>
+	<data name="Efreshli.Auditable.CreatedBy" xml:space="preserve">
+    <value>Created By</value>
   </data>
-  <data name="Categories.Search" xml:space="preserve">
-    <value>Search Categories ...............</value>
+	<data name="Efreshli.Auditable.CreatedDate" xml:space="preserve">
+    <value>Created Date</value>
   </data>
-  <data name="Categories.CategoryImage" xml:space="preserve">
-    <value>Category Image</value>
+	<data name="Efreshli.Auditable.UpdatedBy" xml:space="preserve">
+    <value>Updated By</value>
   </data>
-  <data name="Actions.ConfirmDelete" xml:space="preserve">
-    <value>Confirm Delete</value>
+	<data name="Efreshli.Auditable.UpdatedDate" xml:space="preserve">
+    <value>Updated Date</value>
   </data>
-  <data name="Categories.Products" xml:space="preserve">
-    <value>Products</value>
+	<data name="Efreshli.Auditable.IsDeleted" xml:space="preserve">
+    <value>Is Deleted</value>
   </data>
-  <data name="Categories.SubCategories" xml:space="preserve">
-    <value>Sub Categories</value>
+	<data name="Efreshli.Auditable.DeletedBy" xml:space="preserve">
+    <value>Deleted By</value>
   </data>
-  <data name="Categories.CategoryName" xml:space="preserve">
-    <value>Category Name</value>
+	<data name="Efreshli.Auditable.DeletedDate" xml:space="preserve">
+    <value>Deleted Date</value>
   </data>
-  <data name="User.Management" xml:space="preserve">
-    <value>Management</value>
+	<data name="Efreshli.Address.FullAddress" xml:space="preserve">
+    <value>Full address</value>
   </data>
+	<data name="Efreshli.Address.PhoneNumber" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+	<data name="Efreshli.Address.Governorate" xml:space="preserve">
+    <value>Governorate</value>
+  </data>
+	<data name="Efreshli.Address.City" xml:space="preserve">
+    <value>City</value>
+  </data>
+	<data name="Efreshli.Address.IsDefault" xml:space="preserve">
+    <value>Is default address</value>
+  </data>
+	<data name="Efreshli.ApplicationUser.FirstName" xml:space="preserve">
+    <value>First name</value>
+  </data>
+	<data name="Efreshli.ApplicationUser.LastName" xml:space="preserve">
+    <value>Last name</value>
+  </data>
+	<data name="Efreshli.ApplicationUser.FullName" xml:space="preserve">
+    <value>Full name</value>
+  </data>
+	<data name="Efreshli.Brand.NameAr" xml:space="preserve">
+    <value>Name in Arabic</value>
+  </data>
+	<data name="Efreshli.Brand.NameEn" xml:space="preserve">
+    <value>Name in English</value>
+  </data>
+	<data name="Efreshli.CartItem.RequiredQuantity" xml:space="preserve">
+    <value>Required quantity</value>
+  </data>
+	<data name="Efreshli.Category.NameAr" xml:space="preserve">
+    <value>Name in Arabic</value>
+  </data>
+	<data name="Efreshli.Category.NameEn" xml:space="preserve">
+    <value>Name in English</value>
+  </data>
+	<data name="Efreshli.Color.NameAr" xml:space="preserve">
+    <value>Name in Arabic</value>
+  </data>
+	<data name="Efreshli.Color.NameEn" xml:space="preserve">
+    <value>Name in English</value>
+  </data>
+	<data name="Efreshli.ContactUs.FullName" xml:space="preserve">
+    <value>Full name</value>
+  </data>
+	<data name="Efreshli.ContactUs.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+	<data name="Efreshli.ContactUs.PhoneNumber" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+	<data name="Efreshli.ContactUs.Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+	<data name="Efreshli.Coupon.Title" xml:space="preserve">
+    <value>Coupon</value>
+  </data>
+	<data name="Efreshli.Coupon.Code" xml:space="preserve">
+    <value>Coupon code</value>
+  </data>
+	<data name="Efreshli.Coupon.IsActive" xml:space="preserve">
+    <value>Is active</value>
+  </data>
+	<data name="Efreshli.Coupon.DiscountValue" xml:space="preserve">
+    <value>Discount value</value>
+  </data>
+	<data name="Efreshli.Coupon.IsPercentage" xml:space="preserve">
+    <value>Is percentage</value>
+  </data>
+	<data name="Efreshli.Coupon.FixedAmount" xml:space="preserve">
+    <value>Fixed Amount</value>
+  </data>
+	<data name="Efreshli.Coupon.UsageLimit" xml:space="preserve">
+    <value>Usage limit</value>
+  </data>
+	<data name="Efreshli.Coupon.UsedCount" xml:space="preserve">
+    <value>Used count</value>
+  </data>
+	<data name="Efreshli.Image.URL" xml:space="preserve">
+    <value>Image URL</value>
+  </data>
+	<data name="Efreshli.Order.TotalPrice" xml:space="preserve">
+    <value>Total price</value>
+  </data>
+	<data name="Efreshli.Order.Status" xml:space="preserve">
+    <value>Order status</value>
+  </data>
+	<data name="Efreshli.OrderItem.Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+	<data name="Efreshli.OrderItem.Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+	<data name="Efreshli.Payment.Amount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+	<data name="Efreshli.Payment.PaymentMethod" xml:space="preserve">
+    <value>Payment method</value>
+  </data>
+	<data name="Efreshli.Payment.PaymentStatus" xml:space="preserve">
+    <value>Payment status</value>
+  </data>
+	<data name="Efreshli.Payment.DeliveryNotes" xml:space="preserve">
+    <value>Delivery notes</value>
+  </data>
+	<data name="Efreshli.Product.NameAr" xml:space="preserve">
+    <value>Name in Arabic</value>
+  </data>
+	<data name="Efreshli.Product.NameEn" xml:space="preserve">
+    <value>Name in English</value>
+  </data>
+	<data name="Efreshli.Product.DescriptionAr" xml:space="preserve">
+    <value>Description in Arabic</value>
+  </data>
+	<data name="Efreshli.Product.DescriptionEn" xml:space="preserve">
+    <value>Description in English</value>
+  </data>
+	<data name="Efreshli.Product.DimensionsOrSize" xml:space="preserve">
+    <value>Dimensions or size</value>
+  </data>
+	<data name="Efreshli.ProductAttribute.NameAr" xml:space="preserve">
+    <value>Name in Arabic</value>
+  </data>
+	<data name="Efreshli.ProductAttribute.NameEn" xml:space="preserve">
+    <value>Name in English</value>
+  </data>
+	<data name="Efreshli.ProductAttributeValue.Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+	<data name="Efreshli.ProductItem.Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+	<data name="Efreshli.ProductItem.Discount" xml:space="preserve">
+    <value>Discount</value>
+  </data>
+	<data name="Efreshli.ProductItem.IsPercentage" xml:space="preserve">
+    <value>Is percentage</value>
+  </data>
+	<data name="Efreshli.ProductItem.Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+	<data name="Efreshli.ProductItem.SKU" xml:space="preserve">
+    <value>Stock keeping unit</value>
+  </data>
+	<data name="Efreshli.Review.Rate" xml:space="preserve">
+    <value>Rate</value>
+  </data>
+	<data name="Efreshli.Review.ReviewText" xml:space="preserve">
+    <value>Review text</value>
+  </data>
+	<data name="Efreshli.VendorRequest.FullName" xml:space="preserve">
+    <value>Full name</value>
+  </data>
+	<data name="Efreshli.VendorRequest.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+	<data name="Efreshli.VendorRequest.PhoneNumber" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+	<data name="Efreshli.VendorRequest.BrandName" xml:space="preserve">
+    <value>Brand name</value>
+  </data>
+	<data name="Efreshli.VendorRequest.BrandCategory" xml:space="preserve">
+    <value>Brand category</value>
+  </data>
+	<data name="Efreshli.VendorRequest.DelegatedPersonPosition" xml:space="preserve">
+    <value>Delegated person position</value>
+  </data>
+	<data name="Efreshli.VendorRequest.WebsiteLink" xml:space="preserve">
+    <value>Website link</value>
+  </data>
+	<data name="Efreshli.VendorRequest.InstagramLink" xml:space="preserve">
+    <value>Instagram link</value>
+  </data>
+	<data name="Efreshli.VendorRequest.Portfolio" xml:space="preserve">
+    <value>Portfolio</value>
+  </data>
+	<data name="Efreshli.VendorRequest.CommercialRegistrationAndTaxCard" xml:space="preserve">
+    <value>Commercial registration and tax card</value>
+  </data>
+	<data name="Efreshli.VendorRequest.HasTax14" xml:space="preserve">
+    <value>Has tax 14%</value>
+  </data>
+	<data name="Efreshli.VendorRequest.HasElectronicInvoices" xml:space="preserve">
+    <value>Has electronic invoices</value>
+  </data>
+	<data name="Efreshli.WebsiteInfo.LogoURL" xml:space="preserve">
+    <value>Logo URL</value>
+  </data>
+	<data name="Efreshli.WebsiteInfo.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+	<data name="Efreshli.WebsiteInfo.PhoneNumber" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+	<data name="Efreshli.WebsiteInfo.DescriptionAr" xml:space="preserve">
+    <value>Description in Arabic</value>
+  </data>
+	<data name="Efreshli.WebsiteInfo.DescriptionEn" xml:space="preserve">
+    <value>Description in English</value>
+  </data>
+	<data name="Efreshli.WebsiteInfo.Office" xml:space="preserve">
+    <value>Office</value>
+  </data>
+	<data name="Efreshli.WebsiteInfo.Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+	<data name="Efreshli.WebsiteInfo.FacebookLink" xml:space="preserve">
+    <value>Facebook link</value>
+  </data>
+	<data name="Efreshli.WebsiteInfo.InstagramLink" xml:space="preserve">
+    <value>Instagram link</value>
+  </data>
+	<data name="Efreshli.WebsiteInfo.YoutubeLink" xml:space="preserve">
+    <value>Youtube link</value>
+  </data>
+	<data name="Efreshli.WebsiteInfo.LinkedinLink" xml:space="preserve">
+    <value>LinkedIn link</value>
+  </data>
+	<data name="Efreshli.Wishlist.Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+	<data name="Title.CreateItem" xml:space="preserve">
+    <value>Create {0}</value>
+    <comment>Creating a new item; {0} will be replaced by item name</comment>
+  </data>
+	<data name="Title.EditItem" xml:space="preserve">
+    <value>Edit {0}</value>
+    <comment>Editing an existing item; {0} will be replaced by item name</comment>
+  </data>
+	<data name="Title.DeleteItem" xml:space="preserve">
+    <value>Delete {0}</value>
+    <comment>Deleting an item; {0} will be replaced by item name</comment>
+  </data>
+	<data name="Title.Management" xml:space="preserve">
+    <value>{0} Management</value>
+    <comment>Manage an item; {0} will be replaced by item name</comment>
+  </data>
+	
 </root>
