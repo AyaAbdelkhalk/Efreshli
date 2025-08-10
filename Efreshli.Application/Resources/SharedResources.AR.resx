@@ -1923,4 +1923,8 @@
     <value>حذف {0}</value>
     <comment>Deleting a new item; {0} will be replaced by item name</comment>
   </data>
+	<data name="Title.Management" xml:space="preserve">
+    <value>{0} ادارة</value>
+    <comment>Management an item; {0} will be replaced by item name</comment>
+  </data>
 </root>
