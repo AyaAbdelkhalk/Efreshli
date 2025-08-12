@@ -109,6 +109,32 @@ namespace Efreshli.Application.Services.CouponServices
             var coupon = coupons.FirstOrDefault();
             return coupon != null;
         }
+
+        public async Task<bool> ActivateCouponAsync(int id)
+        {
+          var coupon= await _unitOfWork.CouponRepository.GetByIdAsync(id);
+           if(coupon == null )
+            {
+                throw new KeyNotFoundException();
+            }
+           coupon.IsActive = true;
+           await _unitOfWork.CouponRepository.UpdateAsync(coupon);
+           await _unitOfWork.SaveChangesAsync();
+           return true;
+        }
+
+        public async Task<bool> DeactivateCouponAsync(int id)
+        {
+            var coupon = await _unitOfWork.CouponRepository.GetByIdAsync(id);
+            if (coupon == null)
+            {
+                throw new KeyNotFoundException();
+            }
+            coupon.IsActive = false;
+            await _unitOfWork.CouponRepository.UpdateAsync(coupon);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
     }
 }
     
