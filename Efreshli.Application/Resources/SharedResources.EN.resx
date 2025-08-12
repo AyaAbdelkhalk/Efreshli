@@ -1851,7 +1851,7 @@
   </data>
 	<data name="Title.Management" xml:space="preserve">
     <value>{0} Management</value>
-    <comment>Deleting an item; {0} will be replaced by item name</comment>
+    <comment>Manage an item; {0} will be replaced by item name</comment>
   </data>
 	
 </root>
