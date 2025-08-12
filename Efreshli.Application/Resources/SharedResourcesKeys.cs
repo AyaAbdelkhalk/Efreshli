@@ -31,6 +31,18 @@ namespace Efreshli.Application.Resources
             public const string Reset = "General.Reset";
             public const string Clear = "General.Clear";
         }
+        public static class Currency
+        {
+            public const string USD = "Currency.USD";
+            public const string EGP = "Currency.EGP";
+        }
+        public static class Title
+        {
+            public const string CreateItem = "Title.CreateItem";
+            public const string EditItem = "Title.EditItem";
+            public const string DeleteItem = "Title.DeleteItem";
+            public const string Management = "Title.Management";
+        }
         public static class Entities
         {
             public const string Department = "Entities.Department";
@@ -558,7 +570,138 @@ namespace Efreshli.Application.Resources
             public const string Products = "Categories.Products";
 
 
-
+        }
+        public static class Efreshli
+        {
+            public static class Auditable
+            {
+                public const string ID = "Efreshli.Auditable.ID";
+                public const string CreatedBy = "Efreshli.Auditable.CreatedBy";
+                public const string CreatedDate = "Efreshli.Auditable.CreatedDate";
+                public const string UpdatedBy = "Efreshli.Auditable.UpdatedBy";
+                public const string UpdatedDate = "Efreshli.Auditable.UpdatedDate";
+                public const string IsDeleted = "Efreshli.Auditable.IsDeleted";
+                public const string DeletedBy = "Efreshli.Auditable.DeletedBy";
+                public const string DeletedDate = "Efreshli.Auditable.DeletedDate";
+            }
+            public static class Address
+            {
+                public const string FullAddress = "Efreshli.Address.FullAddress";
+                public const string PhoneNumber = "Efreshli.Address.PhoneNumber";
+                public const string Governorate = "Efreshli.Address.Governorate";
+                public const string City = "Efreshli.Address.City";
+                public const string IsDefault = "Efreshli.Address.IsDefault";
+            }
+            public static class ApplicationUser
+            {
+                public const string FirstName = "Efreshli.ApplicationUser.FirstName";
+                public const string LastName = "Efreshli.ApplicationUser.LastName";
+                public const string FullName = "Efreshli.ApplicationUser.FullName";
+            }
+            public static class CartItem
+            {
+                public const string RequiredQuantity = "Efreshli.CartItem.RequiredQuantity";
+            }
+            public static class Category
+            {
+                public const string NameAr = "Efreshli.Category.NameAr";
+                public const string NameEn = "Efreshli.Category.NameEn";
+            }
+            public static class Color
+            {
+                public const string NameAr = "Efreshli.Color.NameAr";
+                public const string NameEn = "Efreshli.Color.NameEn";
+            }
+            public static class ContactUs
+            {
+                public const string FullName = "Efreshli.ContactUs.FullName";
+                public const string Email = "Efreshli.ContactUs.Email";
+                public const string PhoneNumber = "Efreshli.ContactUs.PhoneNumber";
+                public const string Message = "Efreshli.ContactUs.Message";
+            }
+            public static class Coupon
+            {
+                public const string Title = "Efreshli.Coupon.Title";
+                public const string Code = "Efreshli.Coupon.Code";
+                public const string IsActive = "Efreshli.Coupon.IsActive";
+                public const string DiscountValue = "Efreshli.Coupon.DiscountValue";
+                public const string IsPercentage = "Efreshli.Coupon.IsPercentage";
+                public const string FixedAmount = "Efreshli.Coupon.FixedAmount";
+                public const string UsageLimit = "Efreshli.Coupon.UsageLimit";
+                public const string UsedCount = "Efreshli.Coupon.UsedCount";
+            }
+            public static class Image
+            {
+                public const string URL = "Efreshli.Image.URL";
+            }
+            public static class Order
+            {
+                public const string TotalPrice = "Efreshli.Order.TotalPrice";
+                public const string Status = "Efreshli.Order.Status";
+            }
+            public static class OrderItem
+            {
+                public const string Quantity = "Efreshli.OrderItem.Quantity";
+                public const string Price = "Efreshli.OrderItem.Price";
+            }
+            public static class Product
+            {
+                public const string NameAr = "Efreshli.Product.NameAr";
+                public const string NameEn = "Efreshli.Product.NameEn";
+                public const string DescriptionAr = "Efreshli.Product.DescriptionAr";
+                public const string DescriptionEn = "Efreshli.Product.DescriptionEn";
+                public const string DimensionsOrSize = "Efreshli.Product.DimensionsOrSize";
+            }
+            public static class ProductAttribute
+            {
+                public const string NameAr = "Efreshli.ProductAttribute.NameAr";
+                public const string NameEn = "Efreshli.ProductAttribute.NameEn";
+            }
+            public static class ProductAttributeValue
+            {
+                public const string Value = "Efreshli.ProductAttributeValue.Value";
+            }
+            public static class ProductItem
+            {
+                public const string Price = "Efreshli.ProductItem.Price";
+                public const string Discount = "Efreshli.ProductItem.Discount";
+                public const string IsPercentage = "Efreshli.ProductItem.IsPercentage";
+                public const string Quantity = "Efreshli.ProductItem.Quantity";
+                public const string SKU = "Efreshli.ProductItem.SKU";
+            }
+            public static class VendorRequest
+            {
+                public const string FullName = "Efreshli.VendorRequest.FullName";
+                public const string Email = "Efreshli.VendorRequest.Email";
+                public const string PhoneNumber = "Efreshli.VendorRequest.PhoneNumber";
+                public const string BrandName = "Efreshli.VendorRequest.BrandName";
+                public const string BrandCategory = "Efreshli.VendorRequest.BrandCategory";
+                public const string DelegatedPersonPosition = "Efreshli.VendorRequest.DelegatedPersonPosition";
+                public const string WebsiteLink = "Efreshli.VendorRequest.WebsiteLink";
+                public const string InstagramLink = "Efreshli.VendorRequest.InstagramLink";
+                public const string Portfolio = "Efreshli.VendorRequest.Portfolio";
+                public const string CommercialRegistrationAndTaxCard = "Efreshli.VendorRequest.CommercialRegistrationAndTaxCard";
+                public const string HasTax14 = "Efreshli.VendorRequest.HasTax14";
+                public const string HasElectronicInvoices = "Efreshli.VendorRequest.HasElectronicInvoices";
+            }
+            public static class WebsiteInfo
+            {
+                public const string LogoURL = "Efreshli.WebsiteInfo.LogoURL";
+                public const string Email = "Efreshli.WebsiteInfo.Email";
+                public const string PhoneNumber = "Efreshli.WebsiteInfo.PhoneNumber";
+                public const string DescriptionAr = "Efreshli.WebsiteInfo.DescriptionAr";
+                public const string DescriptionEn = "Efreshli.WebsiteInfo.DescriptionEn";
+                public const string Office = "Efreshli.WebsiteInfo.Office";
+                public const string Location = "Efreshli.WebsiteInfo.Location";
+                public const string FacebookLink = "Efreshli.WebsiteInfo.FacebookLink";
+                public const string InstagramLink = "Efreshli.WebsiteInfo.InstagramLink";
+                public const string YoutubeLink = "Efreshli.WebsiteInfo.YoutubeLink";
+                public const string LinkedinLink = "Efreshli.WebsiteInfo.LinkedinLink";
+            }
+            public static class Wishlist
+            {
+                public const string Name = "Efreshli.Wishlist.Name";
+            }
         }
 
 
