@@ -1,14 +1,17 @@
-﻿@model Efreshli.Application.DTOs.CouponDTOs.AddCouponDTO
+﻿@model Efreshli.Application.DTOs.CouponDTOs.UpdateCouponDTO
 
 @{
-    var pageTitle = _stringLocalizer[SharedResourcesKeys.Title.CreateItem, _stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.Title]];
+    var pageTitle = _stringLocalizer[SharedResourcesKeys.Title.EditItem, _stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.Title]];
     ViewBag.Title = pageTitle;
 }
 
 <div class="container">
     <div class="form-container bg-white p-4 rounded shadow-sm">
-        <form asp-action="Create" asp-controller="Coupon" method="post" id="couponForm" novalidate>
+        <form asp-action="Edit" asp-controller="Coupon" method="post" id="couponForm" novalidate>
             @Html.AntiForgeryToken()
+
+            <!-- Hidden CouponId Field -->
+            <input type="hidden" asp-for="CouponId" />
 
             <!-- Validation Summary -->
             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
@@ -58,11 +61,11 @@
 
             <!-- Actions -->
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button type="reset" class="btn btn-secondary me-md-2">
-                    @_stringLocalizer[SharedResourcesKeys.Actions.Reset]
-                </button>
+                <a asp-action="Index" class="btn btn-secondary me-md-2">
+                    @_stringLocalizer[SharedResourcesKeys.Actions.Cancel]
+                </a>
                 <button type="submit" class="btn btn-primary">
-                    @_stringLocalizer[SharedResourcesKeys.Actions.Create]
+                    @_stringLocalizer[SharedResourcesKeys.Actions.Update]
                 </button>
             </div>
         </form>

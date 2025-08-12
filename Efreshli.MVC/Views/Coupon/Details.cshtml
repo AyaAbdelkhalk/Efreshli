@@ -3,52 +3,58 @@
 <div class="container mx-auto px-4 py-8">
     <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 max-w-2xl mx-auto">
         <div class="flex justify-between items-start mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Coupon Details</h2>
+            <h2 class="text-2xl font-bold text-gray-800">@_stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.Title] @Model.Code</h2>
             <span class="@(Model.IsActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800") px-3 py-1 rounded-full text-xs font-medium">
-                @(Model.IsActive ? "Active" : "Inactive")
+                @(Model.IsActive? _stringLocalizer[SharedResourcesKeys.Status.Active] : _stringLocalizer[SharedResourcesKeys.Status.Inactive])
             </span>
         </div>
 
         <div class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <dt class="text-sm font-medium text-gray-500">Coupon ID</dt>
+                    <dt class="text-sm font-medium text-gray-500">@_stringLocalizer[SharedResourcesKeys.Efreshli.Auditable.ID]</dt>
                     <dd class="mt-1 text-sm text-gray-900">@Model.CouponId</dd>
                 </div>
                 <div>
-                    <dt class="text-sm font-medium text-gray-500">Code</dt>
+                    <dt class="text-sm font-medium text-gray-500">@_stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.Code]</dt>
                     <dd class="mt-1 text-sm text-gray-900 font-mono">@Model.Code</dd>
                 </div>
                 <div>
-                    <dt class="text-sm font-medium text-gray-500">Usage</dt>
+                    <dt class="text-sm font-medium text-gray-500">@_stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.UsageLimit]</dt>
                     <dd class="mt-1 text-sm text-gray-900">
-                        @Model.UsedCount of @(Model.UsageLimit == int.MaxValue ? "∞" : Model.UsageLimit.ToString())
+                         @Model.UsageLimit
+                    </dd>
+                </div>
+                <div>
+                    <dt class="text-sm font-medium text-gray-500">@_stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.UsedCount]</dt>
+                    <dd class="mt-1 text-sm text-gray-900">
+                         @Model.UsedCount
                     </dd>
                 </div>
             </div>
 
             <div class="bg-blue-50 p-4 rounded-lg">
-                <dt class="text-sm font-medium text-blue-800">Discount Value</dt>
+                <dt class="text-sm font-medium text-blue-800">@_stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.DiscountValue]</dt>
                 <dd class="mt-1 text-3xl font-bold text-blue-600">
-                    @Model.DiscountValue.ToString("0.##") @(Model.IsPercentage ? "%" : "EGP")
+                    @Model.DiscountValue.ToString("0.##") @(Model.IsPercentage ? "%" : _stringLocalizer[SharedResourcesKeys.Currency.EGP])
                 </dd>
             </div>
 
             <div class="pt-4 border-t border-gray-200 flex flex-wrap gap-3">
                 <a asp-action="Edit" asp-route-id="@Model.CouponId"
                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                    Edit Coupon
+                    @_stringLocalizer[SharedResourcesKeys.Actions.Edit]
                 </a>
                 <a asp-action="Index"
                    class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                    Back to List
+                    @_stringLocalizer[SharedResourcesKeys.Actions.Back]
                 </a>
 
                 @if (Model.IsActive)
                 {
                     <form asp-action="Deactivate" asp-route-id="@Model.CouponId" method="post" class="ml-auto">
                         <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
-                            Deactivate
+                            @_stringLocalizer[SharedResourcesKeys.Actions.Deactivate]
                         </button>
                     </form>
                 }
@@ -56,7 +62,7 @@
                 {
                     <form asp-action="Activate" asp-route-id="@Model.CouponId" method="post" class="ml-auto">
                         <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                            Activate
+                            @_stringLocalizer[SharedResourcesKeys.Actions.Activate]
                         </button>
                     </form>
                 }

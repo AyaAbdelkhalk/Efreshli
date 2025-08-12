@@ -29,6 +29,26 @@
     <link rel="stylesheet" href="~/css/SidebarStyle.css">
     <link rel="stylesheet" href="~/css/Brand/Brand.css">
     <link rel="stylesheet" href="~/css/Category.css">
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+ <!-- #region client side validation using IQuery -->
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+  
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/localization/messages_ar.js"></script>
+        <script>
+            console.log("Arabic validation messages loaded");
+        </script>
+    
+    @* else
+    {
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/localization/messages_en.js"></script>
+    } *@
+    <script src="/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+<!-- #endregion -->
     <script>tailwind.config = { theme: { extend: { colors: { primary: '#fc0000e5', secondary: '#6366f1', accent: '#f1f5f9', dark: '#1e293b' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '28px', 'full': '9999px', 'button': '8px' }, animation: { float: 'float 3s ease-in-out infinite', glow: 'glow 2s ease-in-out infinite alternate', slideIn: 'slideIn 0.5s ease-out' }, fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], display: ['Inter', 'system-ui', 'sans-serif'] } } } }</script>
     <style>
         .sidebar-language {
