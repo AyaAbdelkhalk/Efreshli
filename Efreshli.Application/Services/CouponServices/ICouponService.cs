@@ -19,5 +19,7 @@ namespace Efreshli.Application.Services.CouponServices
         Task<bool> ValidateCouponAsync(string code);
         Task<CouponDTO> ApplyCouponAsync(string code);
         Task<bool> CouponCodeExistsAsync(string code);
+        Task<bool> ActivateCouponAsync(int id);
+        Task<bool> DeactivateCouponAsync(int id);
     }
 }

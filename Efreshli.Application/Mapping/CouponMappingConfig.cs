@@ -42,7 +42,6 @@ namespace Efreshli.Application.Mapping
             TypeAdapterConfig<UpdateCouponDTO, Coupon>.NewConfig()
                 .Map(dest => dest.CouponId, src => src.CouponId)
                 .Map(dest => dest.Code, src => src.Code)
-                .Map(dest => dest.IsActive, src => src.IsActive)
                 .Map(dest => dest.DiscountValue, src => src.DiscountValue)
                 .Map(dest => dest.IsPercentage, src => src.IsPercentage)
                 .Map(dest => dest.UsageLimit, src => src.UsageLimit)

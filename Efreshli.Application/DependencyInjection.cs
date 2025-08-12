@@ -44,7 +44,7 @@ namespace Efreshli.Application
             services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
 
             // Register all validators from the Application assembly
-            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             //services.AddValidatorsFromAssembly(typeof(AddCouponDTOValidator).Assembly);
 
 
@@ -54,8 +54,8 @@ namespace Efreshli.Application
 
             // Register all validators
 
-            services.AddScoped<IValidator<CreateWebsiteInfoDto>, CreateWebsiteInfoDtoValidator>(); 
-            services.AddScoped<IValidator<UpdateWebsiteInfoDto>, UpdateWebsiteInfoDtoValidator>(); 
+            //services.AddScoped<IValidator<CreateWebsiteInfoDto>, CreateWebsiteInfoDtoValidator>(); 
+            //services.AddScoped<IValidator<UpdateWebsiteInfoDto>, UpdateWebsiteInfoDtoValidator>(); 
 
 
             return services;
