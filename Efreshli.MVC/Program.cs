@@ -47,12 +47,16 @@
 
 using CloudinaryDotNet;
 using Efreshli.Application;
+using Efreshli.Application.DTOs.CouponDTOs;  // This is crucial
+using Efreshli.Application.Validators.CouponValidators;
 using Efreshli.Common;
 using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Models;
 using Efreshli.Domain.Settings;
 using Efreshli.Infrastructure;
 using Efreshli.Infrastructure.Data;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -67,6 +71,11 @@ namespace Efreshli.MVC
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+          
+            builder.Services.AddValidatorsFromAssemblyContaining<AddCouponDTO>(ServiceLifetime.Scoped);
+            //builder.Services.AddScoped<IValidator<AddCouponDTO>, AddCouponDTOValidator>();
+
+            //builder.Services.AddControllersWithViews();
 
             // 1. MVC and Razor support
             //builder.Services.AddControllersWithViews();
@@ -177,6 +186,12 @@ namespace Efreshli.MVC
             app.UseStaticFiles();
             var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(locOptions.Value);
+            app.Use(async (context, next) =>
+            {
+                var culture = CultureInfo.CurrentUICulture;
+                Console.WriteLine($"Current Culture: {culture}"); // Debug check
+                await next();
+            });
             app.UseRouting();
 
             // Auth middlewares if needed

@@ -110,6 +110,7 @@ namespace Efreshli.Application.Resources
             public const string MinLength = "Validation.MinLength";
             public const string MaxLength = "Validation.MaxLength";
             public const string ExactLength = "Validation.ExactLength";
+            public const string LengthRange = "Validation.LengthRange";
 
             // Number validations
             public const string NumericOnly = "Validation.NumericOnly";
@@ -185,6 +186,8 @@ namespace Efreshli.Application.Resources
         /// </summary>
         public static class Actions
         {
+
+            public const string Title = "Actions.Title";
             public const string Save = "Actions.Save";
             public const string Submit = "Actions.Submit";
             public const string Cancel = "Actions.Cancel";
@@ -207,6 +210,9 @@ namespace Efreshli.Application.Resources
             public const string Copy = "Actions.Copy";
             public const string Paste = "Actions.Paste";
             public const string ConfirmDelete = "Actions.ConfirmDelete";
+            public const string Reset = "Actions.Reset";
+            public const string Activate = "Actions.Activate";
+            public const string Deactivate = "Actions.Deactivate";
         }
 
         /// <summary>
@@ -423,6 +429,7 @@ namespace Efreshli.Application.Resources
         /// </summary>
         public static class Status
         {
+            public const string Title = "Status.Title";
             public const string Active = "Status.Active";
             public const string Inactive = "Status.Inactive";
             public const string Pending = "Status.Pending";
@@ -703,7 +710,5 @@ namespace Efreshli.Application.Resources
                 public const string Name = "Efreshli.Wishlist.Name";
             }
         }
-
-
     }
 }
