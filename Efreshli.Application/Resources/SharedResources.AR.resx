@@ -1660,6 +1660,14 @@
     <value>الاسم (عربي)</value>
     <comment>Name in Arabic</comment>
   </data>
+  <data name="Efreshli.Category.DeleteCategory" xml:space="preserve">
+    <value>حذف الفئة</value>
+    <comment>Name in Arabic</comment>
+  </data>
+  <data name="Efreshli.Category.EditCategory" xml:space="preserve">
+    <value>تعديل الفئة</value>
+    <comment>Name in Arabic</comment>
+  </data>
   <data name="Efreshli.Category.NameEn" xml:space="preserve">
     <value>الاسم (إنجليزي)</value>
     <comment>Name in English</comment>
@@ -1932,5 +1940,32 @@
   </data>
   <data name="Actions.Title" xml:space="preserve">
     <value>إجراءات</value>
+  </data>
+  <data name="Categories.AddCategory" xml:space="preserve">
+    <value>إضافة فئة</value>
+    <comment>Add Category</comment>
+  </data>
+  <data name="Categories.EditCategory" xml:space="preserve">
+    <value>تعديل الفئة</value>
+    <comment>Edit Category</comment>
+  </data>
+  <data name="Categories.DeleteCategory" xml:space="preserve">
+    <value>حذف الفئة</value>
+    <comment>Delete Category</comment>
+  </data>
+  <data name="Efreshli.Category.AddCategory" xml:space="preserve">
+    <value>اضافة فئة جديدة</value>
+  </data>
+  <data name="Efreshli.Category.MainCategories" xml:space="preserve">
+    <value>الفئات الرئيسية</value>
+  </data>
+  <data name="Efreshli.Category.SubCategories" xml:space="preserve">
+    <value>فئات فرعية</value>
+  </data>
+  <data name="Efreshli.Category.Products" xml:space="preserve">
+    <value>منتجات</value>
+  </data>
+  <data name="Efreshli.Category.CategoryImage" xml:space="preserve">
+    <value>صورة الفئة</value>
   </data>
 </root>

@@ -19,12 +19,12 @@
                 <div class="search-container">
                     <div class="search-box">
                         <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="searchInput" placeholder="@_stringLocalizer[SharedResourcesKeys.Categories.Search]" onkeyup="searchCategories()">
+                    <input type="text" id="searchInput" placeholder="@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.Search]" onkeyup="searchCategories()">
                     </div>
                 </div>
             <button class="btn btn-primary add-category-btn" id="addCategoryBtnHeader" onclick="openAddModal()">
                     <i class="fas fa-plus"></i>
-                    @_stringLocalizer[SharedResourcesKeys.Categories.AddCategory]
+                @_stringLocalizer[SharedResourcesKeys.Efreshli.Category.AddCategory]
                 </button>
             </div>
 
@@ -32,7 +32,7 @@
                 <ol class="breadcrumb" id="breadcrumb">
                     <li class="breadcrumb-item active" onclick="navigateToLevel(0)">
                         <i class="fas fa-home"></i>
-                        @_stringLocalizer[SharedResourcesKeys.Categories.MainCategories]
+                    @_stringLocalizer[SharedResourcesKeys.Efreshli.Category.MainCategories]
                     </li>
                 </ol>
             </nav>
@@ -57,7 +57,7 @@
                 <p>ابدأ بإضافة فئتك الأولى</p>
             <button class="btn btn-primary add-category-btn" style="width : fit-content" id="addCategoryBtnEmpty" onclick="openAddModal()">
                     <i class="fas fa-plus"></i>
-                    @_stringLocalizer[SharedResourcesKeys.Categories.AddCategory]
+                @_stringLocalizer[SharedResourcesKeys.Efreshli.Category.AddCategory]
                 </button>
             </div>
         </section>
@@ -67,24 +67,24 @@
     <div class="modal-overlay" id="categoryModal">
         <div class="modal">
             <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">@_stringLocalizer[SharedResourcesKeys.Categories.AddCategory]</h2>
+            <h2 class="modal-title" id="modalTitle">@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.AddCategory]</h2>
                 <button class="modal-close" onclick="closeModal()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <form class="modal-body" id="categoryForm" onsubmit="handleFormSubmit(event)">
                 <div class="form-group">
-                    <label for="nameAr">@_stringLocalizer[SharedResourcesKeys.Categories.CategoryName] *</label>
+                <label for="nameAr">@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.NameAr] *</label>
                     <input type="text" id="nameAr" name="nameAr" required dir="rtl">
                 </div>
 
                 <div class="form-group">
-                    <label for="nameEn">@_stringLocalizer[SharedResourcesKeys.Categories.CategoryName] *</label>
+                <label for="nameEn">@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.NameEn] *</label>
                     <input type="text" id="nameEn" name="nameEn" required dir="ltr">
                 </div>
 
                 <div class="form-group">
-                    <label>@_stringLocalizer[SharedResourcesKeys.Categories.CategoryImage]</label>
+                <label>@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.CategoryImage]</label>
                     <div class="file-upload-container" onclick="document.getElementById('imageFile').click()">
                         <div class="file-upload-button">
                             <i class="fas fa-upload"></i>
@@ -103,7 +103,7 @@
                 <div class="form-group">
                     <label for="parentId">الفئة الأب</label>
                     <select id="parentId" name="parentId">
-                        <option value=""> @_stringLocalizer[SharedResourcesKeys.Categories.NoCategoriesFound]</option>
+                    <option value=""> @_stringLocalizer[SharedResourcesKeys.Efreshli.Category.NoCategoriesFound]</option>
                     </select>
                 </div>
 
@@ -146,11 +146,11 @@
 
 <script>
     window.translations = {
-        categoryName: '@_stringLocalizer[SharedResourcesKeys.Categories.CategoryName]',
+        categoryName: '@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.NameAr]',
         noImage: '@_stringLocalizer["NoImageAvailable"]',
         searchPlaceholder: '@_stringLocalizer["SearchCategories"]',
-        subCategories: '@_stringLocalizer[SharedResourcesKeys.Categories.SubCategories]',
-        products: '@_stringLocalizer[SharedResourcesKeys.Categories.Products]'
+        subCategories: '@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.SubCategories]',
+        products: '@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.Products]'
     };
 
     // Modal functions

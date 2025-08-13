@@ -1648,6 +1648,12 @@
   <data name="Efreshli.Category.NameAr" xml:space="preserve">
     <value>Name in Arabic</value>
   </data>
+  <data name="Efreshli.Category.DeleteCategory" xml:space="preserve">
+    <value>Delete Category</value>
+  </data>
+  <data name="Efreshli.Category.EditCategory" xml:space="preserve">
+    <value>Update Category</value>
+  </data>
   <data name="Efreshli.Category.NameEn" xml:space="preserve">
     <value>Name in English</value>
   </data>
@@ -1858,5 +1864,29 @@
   </data>
   <data name="Actions.Title" xml:space="preserve">
     <value>Actions</value>
+  </data>
+  <data name="Categories.AddCategory" xml:space="preserve">
+    <value>Add Category</value>
+  </data>
+  <data name="Categories.EditCategory" xml:space="preserve">
+    <value>Update Category</value>
+  </data>
+  <data name="Categories.DeleteCategory" xml:space="preserve">
+    <value>Delete Category</value>
+  </data>
+  <data name="Efreshli.Category.AddCategory" xml:space="preserve">
+    <value>Add New Category</value>
+  </data>
+  <data name="Efreshli.Category.MainCategories" xml:space="preserve">
+    <value>Main Categories</value>
+  </data>
+  <data name="Efreshli.Category.SubCategories" xml:space="preserve">
+    <value>Sub Categories</value>
+  </data>
+  <data name="Efreshli.Category.Products" xml:space="preserve">
+    <value>Products</value>
+  </data>
+  <data name="Efreshli.Category.CategoryImage" xml:space="preserve">
+    <value>Category Image</value>
   </data>
 </root>
