@@ -613,6 +613,16 @@ namespace Efreshli.Application.Resources
             {
                 public const string NameAr = "Efreshli.Category.NameAr";
                 public const string NameEn = "Efreshli.Category.NameEn";
+                public const string AddCategory = "Efreshli.Category.AddCategory";
+                public const string EditCategory = "Efreshli.Category.EditCategory";
+                public const string DeleteCategory = "Efreshli.Category.DeleteCategory";
+                public const string CategoryName = "Efreshli.Category.CategoryName";
+                public const string MainCategories = "Efreshli.Category.MainCategories";
+                public const string SubCategories = "Efreshli.Category.SubCategories";
+                public const string Search = "Efreshli.Category.Search";
+                public const string NoCategoriesFound = "Efreshli.Category.NoCategoriesFound";
+                public const string CategoryImage = "Efreshli.Category.CategoryImage";
+                public const string Products = "Efreshli.Category.Products";
             }
             public static class Color
             {
