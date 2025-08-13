@@ -107,8 +107,8 @@ function displayCategories() {
                 }
                     </div>
                     <div class="category-content">
-                           <h3>${window.translations.categoryName} : ${category.nameEn}</h3>
-                            <h4>${window.translations.categoryName} : ${category.nameAr}</h4>
+                           <h3>${window.translations.categoryNameEn} : ${category.nameEn}</h3>
+                           <h4>${window.translations.categoryNameAr} : ${category.nameAr}</h4>
                             <div class="category-meta">
                     <div class="badge-container">
                         <span class="subcategory-badge">
