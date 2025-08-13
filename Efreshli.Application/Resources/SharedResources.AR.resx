@@ -1968,4 +1968,10 @@
   <data name="Efreshli.Category.CategoryImage" xml:space="preserve">
     <value>صورة الفئة</value>
   </data>
+  <data name="Efreshli.Category.NameEn2" xml:space="preserve">
+    <value>الاسم (إنجليزي)</value>
+  </data>
+  <data name="Efreshli.Category.NameAr2" xml:space="preserve">
+    <value>الاسم (عربي)</value>
+  </data>
 </root>

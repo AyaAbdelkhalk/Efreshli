@@ -74,12 +74,12 @@
             </div>
             <form class="modal-body" id="categoryForm" onsubmit="handleFormSubmit(event)">
                 <div class="form-group">
-                <label for="nameAr">@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.NameAr] *</label>
+                <label for="nameAr">@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.CatNameAr] *</label>
                     <input type="text" id="nameAr" name="nameAr" required dir="rtl">
                 </div>
 
                 <div class="form-group">
-                <label for="nameEn">@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.NameEn] *</label>
+                <label for="nameEn">@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.CatNameEn] *</label>
                     <input type="text" id="nameEn" name="nameEn" required dir="ltr">
                 </div>
 
@@ -146,7 +146,8 @@
 
 <script>
     window.translations = {
-        categoryName: '@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.NameAr]',
+        categoryNameAr: '@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.CatNameAr]',
+        categoryNameEn: '@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.CatNameEn]',
         noImage: '@_stringLocalizer["NoImageAvailable"]',
         searchPlaceholder: '@_stringLocalizer["SearchCategories"]',
         subCategories: '@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.SubCategories]',

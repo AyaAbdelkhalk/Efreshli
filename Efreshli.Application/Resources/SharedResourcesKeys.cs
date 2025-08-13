@@ -611,8 +611,8 @@ namespace Efreshli.Application.Resources
             }
             public static class Category
             {
-                public const string NameAr = "Efreshli.Category.NameAr";
-                public const string NameEn = "Efreshli.Category.NameEn";
+                public const string CatNameAr = "Efreshli.Category.NameAr2";
+                public const string CatNameEn = "Efreshli.Category.NameEn2";
                 public const string AddCategory = "Efreshli.Category.AddCategory";
                 public const string EditCategory = "Efreshli.Category.EditCategory";
                 public const string DeleteCategory = "Efreshli.Category.DeleteCategory";
