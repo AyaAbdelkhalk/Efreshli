@@ -3,6 +3,7 @@ using Efreshli.Application;
 using Efreshli.Application.DTOs.CategoryDTOs;
 using Efreshli.Application.Services;
 using Efreshli.Application.Services.AuthServices;
+using Efreshli.Application.Services.CartServices;
 using Efreshli.Application.Validators.CategoryValidators;
 using Efreshli.Common;
 using Efreshli.Domain.Common.Classes;
@@ -154,7 +155,7 @@ namespace Efreshli.API
 
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddApplication(builder.Configuration);
-
+            builder.Services.AddScoped<ICartService, CartService>();
 
             #region Swagger
             builder.Services.AddSwaggerGen(options =>
