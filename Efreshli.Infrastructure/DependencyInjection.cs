@@ -24,6 +24,7 @@ namespace Efreshli.Infrastructure
             services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
             services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();
             services.AddScoped<IGenericRepository<Coupon>, GenericRepository<Coupon>>();
+            services.AddScoped<IGenericRepository<Cart>, GenericRepository<Cart>>();
 
 
 
@@ -42,6 +43,7 @@ namespace Efreshli.Infrastructure
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IBrandsRepository, BrandsRepository>();
             services.AddScoped<ICouponRepository, CouponRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
 
 
             return services;
