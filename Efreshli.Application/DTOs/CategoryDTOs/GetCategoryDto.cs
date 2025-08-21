@@ -17,7 +17,7 @@ namespace Efreshli.Application.DTOs.CategoryDTOs
         public string? ImageUrl { get; set; }
         public GetCategoryDto? Parent { get; set; }
         public string? CreatedBy { get; set; }
-        public int ProductCount { get; set; } = 0;
+        public int ProductCount { get; set; } 
         public List<GetCategoryDto>? Children { get; set; } = new List<GetCategoryDto>();
 
     }

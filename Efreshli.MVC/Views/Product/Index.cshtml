@@ -1,0 +1,553 @@
+﻿@using Efreshli.Application.Resources
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> _stringLocalizer
+@{
+    Layout = "_AdminLayout";
+}
+@model IEnumerable<Efreshli.Application.DTOs.ProductDTOs.MainProductsDto>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+    /* Modern CSS Variables for Theme */
+    :root {
+        --primary-color: #e11d48;
+        --primary-dark: #e11d48;
+        --secondary-color: #64748b;
+        --accent-color: #0891b2;
+        --success-color: #059669;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --background-light: #f8fafc;
+        --background-white: #ffffff;
+        --border-light: #e2e8f0;
+        --border-radius: 12px;
+        --border-radius-sm: 6px;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+        --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.12);
+        --transition: all 0.2s ease;
+    }
+
+    /* Container */
+    .admin-products-page {
+        margin: 20px auto;
+        max-width: 1400px;
+        padding: 0 20px;
+        background: #f8fafc;
+        min-height: 100vh;
+    }
+
+    .admin-products-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        background: var(--background-white);
+        padding: 20px 24px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-light);
+    }
+
+    .admin-products-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .admin-add-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: var(--border-radius-sm);
+        padding: 10px 20px;
+        font-weight: 500;
+        font-size: 14px;
+        transition: var(--transition);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: var(--shadow-sm);
+    }
+
+        .admin-add-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+    /* Table Container */
+    .admin-products-table-container {
+        background: var(--background-white);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+        border: 1px solid var(--border-light);
+    }
+
+    /* Modern Table */
+    .admin-products-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: 14px;
+    }
+
+    .admin-table-header {
+        background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    }
+
+        .admin-table-header th {
+            padding: 16px 20px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border-light);
+            font-size: 13px;
+            letter-spacing: 0.025em;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            position: relative;
+        }
+
+            .admin-table-header th:first-child {
+                border-top-right-radius: var(--border-radius);
+            }
+
+            .admin-table-header th:last-child {
+                border-top-left-radius: var(--border-radius);
+            }
+
+    .admin-table-row {
+        transition: var(--transition);
+        background: var(--background-white);
+    }
+
+        .admin-table-row:nth-child(even) {
+            background: #fafbfc;
+        }
+
+        .admin-table-row:hover {
+            background: #f0f9ff;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+        }
+
+    .admin-table-cell {
+        padding: 16px 20px;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    /* Product Image Cell */
+    .admin-product-image-cell {
+        width: 80px;
+        text-align: center;
+    }
+
+    .admin-product-image {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: var(--border-radius-sm);
+        border: 1px solid var(--border-light);
+        transition: var(--transition);
+    }
+
+        .admin-product-image:hover {
+            transform: scale(1.1);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+    /* Product Name Cell */
+    .admin-product-name {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0 0 4px 0;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .admin-product-desc {
+        color: var(--text-secondary);
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.4;
+        max-width: 200px;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Price Cell */
+    .admin-product-price {
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0 0 4px 0;
+    }
+
+    .admin-final-price {
+        font-size: 12px;
+        color: var(--success-color);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    /* Badge */
+    .admin-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #f0f9ff;
+        color: var(--primary-color);
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+        border: 1px solid #e0f2fe;
+    }
+
+        .admin-badge.colors {
+            background: #f0f9ff;
+            color: var(--primary-color);
+            border-color: #e0f2fe;
+        }
+
+    /* Dimensions Cell */
+    .admin-dimensions {
+        color: var(--text-secondary);
+        font-size: 12px;
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0;
+    }
+
+    /* Actions Cell */
+    .admin-table-actions {
+        display: flex;
+        gap: 6px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .admin-icon-btn {
+        background: var(--background-light);
+        border: 1px solid var(--border-light);
+        width: 32px;
+        height: 32px;
+        border-radius: var(--border-radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+        color: var(--text-secondary);
+        font-size: 12px;
+        text-decoration: none;
+    }
+
+        .admin-icon-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+    .admin-btn-view {
+        color: var(--success-color);
+        border-color: #dcfce7;
+        background: #f0fdf4;
+    }
+
+        .admin-btn-view:hover {
+            background: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+    .admin-btn-delete {
+        color: #dc2626;
+        border-color: #fecaca;
+        background: #fef2f2;
+    }
+
+        .admin-btn-delete:hover {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+        }
+
+   
+
+    /* Table Animation */
+    .admin-table-row {
+        opacity: 0;
+        animation: fadeInUp 0.4s ease forwards;
+    }
+
+  
+
+    /* Custom Scrollbar */
+    .admin-products-table-container::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .admin-products-table-container::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 3px;
+    }
+
+    .admin-products-table-container::-webkit-scrollbar-thumb {
+        background: var(--border-light);
+        border-radius: 3px;
+    }
+
+        .admin-products-table-container::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+</style>
+
+<div class="admin-products-page">
+    <div class="admin-products-header">
+        @* <h2 class="admin-products-title">
+            <i class="fa-solid fa-box-open" style="margin-left: 10px;color:#e11d48"></i>
+            Product Management
+        </h2> *@
+        <a asp-action="CreateProduct" asp-controller="Product" class="admin-add-btn">
+            <i class="fa-solid fa-plus"></i>
+            Add New Product
+        </a>
+    </div>
+
+    <div class="admin-products-table-container">
+        <table class="admin-products-table">
+            <thead class="admin-table-header">
+                <tr>
+                    <th style="width: 80px;">Image</th>
+                    <th style="width: 250px;">Product Name</th>
+                    <th style="width: 120px;">Price</th>
+                    <th style="width: 100px;">Colors</th>
+                    <th style="width: 150px;">Dimensions</th>
+                    <th style="width: 120px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model)
+                {
+                    <tr class="admin-table-row" style="animation-delay: @(Model.ToList().IndexOf(product) * 0.1)s;">
+                        <!-- Product Image -->
+                        <td class="admin-table-cell admin-product-image-cell">
+                            @if (product.ImageUrl == null || product.ImageUrl == "")
+                            {
+                                <img src="/images/NoImage.png" alt="@product.NameAr" class="admin-product-image" />
+                            }
+                            else
+                            {
+                                <img src="@product.ImageUrl" alt="@product.NameAr" class="admin-product-image" />
+                            }
+                        </td>
+
+                        <!-- Product Name & Description -->
+                        <td class="admin-table-cell">
+                            <h3 class="admin-product-name">@product.NameAr</h3>
+                            @* <p class="admin-product-name">@product.DescriptionAr</p> *@
+                        </td>
+
+                        <!-- Price Information -->
+                        <td class="admin-table-cell">
+                            <div class="admin-product-price">
+                                <i class="fa-solid fa-tag"></i>
+                                @product.Price ج.م
+                            </div>
+                            <div class="admin-final-price">
+                                <i class="fa-solid fa-check-circle"></i>
+                                @product.FinalPrice ج.م
+                            </div>
+                        </td>
+
+                        <!-- Colors Count -->
+                        <td class="admin-table-cell">
+                            <span class="admin-badge colors">
+                                <i class="fa-solid fa-palette" style="font-size: 10px; margin-left: 4px;"></i>
+                                @(product.ProductItemColorsUrls?.Count() ?? 0) ألوان
+                            </span>
+                        </td>
+
+                        <!-- Dimensions -->
+                        <td class="admin-table-cell">
+                            <div class="">
+                                <i class="fa-solid fa-ruler-combined"></i>
+                                @(string.IsNullOrEmpty(product.DimensionsOrSize) ? "غير محدد" : product.DimensionsOrSize)
+                            </div>
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="admin-table-cell">
+                            <div class="admin-table-actions">
+                                <a asp-action="GetProductDetailsForAdmin" asp-controller="Product"
+                                   asp-route-id="@product.ProductId"
+                                   class="admin-icon-btn admin-btn-view" title="عرض التفاصيل">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                                <button class="admin-icon-btn admin-btn-delete" title="حذف المنتج"
+                                        onclick="confirmDelete(@product.ProductId)">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination Component -->
+    @*  <div class="pagination-container">
+        <nav aria-label="صفحات المنتجات">
+            <ul class="pagination">
+                <!-- Previous Button -->
+                <li class="page-item">
+                    <a class="page-nav" href="#" aria-label="الصفحة السابقة">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </li>
+
+                <!-- Page Numbers -->
+                <li class="page-item">
+                    <a href="#" class="page-link">1</a>
+                </li>
+                <li class="page-item active">
+                    <span class="page-link">2</span>
+                </li>
+                <li class="page-item">
+                    <a href="#" class="page-link">3</a>
+                </li>
+                <li class="page-item d-none-mobile">
+                    <a href="#" class="page-link">4</a>
+                </li>
+                <li class="page-item d-none-mobile">
+                    <a href="#" class="page-link">5</a>
+                </li>
+                <li class="page-item">
+                    <span class="page-link">...</span>
+                </li>
+                <li class="page-item">
+                    <a href="#" class="page-link">10</a>
+                </li>
+
+                <!-- Page Info -->
+                <li class="page-info">
+                    صفحة 2 من 10 (120 منتج)
+                </li>
+
+                <!-- Next Button -->
+                <li class="page-item">
+                    <a class="page-nav" href="#" aria-label="الصفحة التالية">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div> *@
+</div>
+
+<script>
+        async function confirmDelete(productId) {
+        const result = await Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: "لا يمكنك التراجع بعد الحذف!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'نعم، احذف',
+            cancelButtonText: 'إلغاء'
+        });
+
+        if (result.isConfirmed) {
+            const response = await fetch(`/Product/DeleteProduct/${productId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                Swal.fire({
+                    title: 'تم الحذف!',
+                    text: '✅ تم حذف المنتج بنجاح',
+                    icon: 'success',
+                    confirmButtonText: 'تمام'
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'خطأ',
+                    text: '❌ حصل خطأ أثناء الحذف',
+                    icon: 'error',
+                    confirmButtonText: 'حسناً'
+                });
+            }
+        }
+    }
+
+
+
+    // Add loading animation when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const tableRows = document.querySelectorAll('.admin-table-row');
+
+        // Animate table rows on load
+        tableRows.forEach((row, index) => {
+            row.style.animationDelay = `${index * 0.05}s`;
+        });
+
+        // Enhanced image hover effects
+        const productImages = document.querySelectorAll('.admin-product-image');
+        productImages.forEach(img => {
+            img.addEventListener('click', function() {
+                // Create modal for image preview
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.7);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                    cursor: pointer;
+                `;
+
+                const modalImg = document.createElement('img');
+                modalImg.src = this.src;
+                modalImg.style.cssText = `
+                    max-width: 90%;
+                    max-height: 90%;
+                    border-radius: 8px;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                `;
+
+                modal.appendChild(modalImg);
+                document.body.appendChild(modal);
+
+                modal.addEventListener('click', () => {
+                    document.body.removeChild(modal);
+                });
+            });
+        });
+    });
+</script>

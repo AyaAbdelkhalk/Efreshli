@@ -1,0 +1,463 @@
+﻿@using Efreshli.Application.Resources
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> _stringLocalizer
+@using Efreshli.Application.DTOs.ProductDTOs
+@model CreateProductDto
+@using Microsoft.AspNetCore.Mvc.Rendering;
+
+<link rel="stylesheet" href="~/css/CreateProduct.css" />
+
+<div class="ef-container">
+    <h2 class="ef-title">➕ إضافة منتج جديد</h2>
+
+    <form asp-action="CreateProduct" method="post" enctype="multipart/form-data" class="ef-form">
+        <!-- Basic Product Information -->
+        <div class="ef-section">
+            <h4>📝 المعلومات الأساسية</h4>
+            <div class="ef-form-grid">
+                <div>
+                    <label class="ef-label">الاسم (عربي)</label>
+                    <input asp-for="NameAr" class="ef-form-control" placeholder="أدخل اسم المنتج بالعربية" />
+                    <span asp-validation-for="NameAr" class="ef-validation"></span>
+                </div>
+
+                <div>
+                    <label class="ef-label">الاسم (إنجليزي)</label>
+                    <input asp-for="NameEn" class="ef-form-control" placeholder="Enter product name in English" />
+                    <span asp-validation-for="NameEn" class="ef-validation"></span>
+                </div>
+            </div>
+
+            <div class="ef-form-grid">
+                <div>
+                    <label class="ef-label">الوصف (عربي)</label>
+                    <textarea asp-for="DescriptionAr" class="ef-form-control" rows="4" placeholder="وصف تفصيلي للمنتج بالعربية"></textarea>
+                </div>
+
+                <div>
+                    <label class="ef-label">الوصف (إنجليزي)</label>
+                    <textarea asp-for="DescriptionEn" class="ef-form-control" rows="4" placeholder="Detailed product description in English"></textarea>
+                </div>
+            </div>
+
+            <div class="ef-form-grid">
+                <div>
+                    <label class="ef-label">الحجم / الأبعاد</label>
+                    <input asp-for="DimensionsOrSize" class="ef-form-control" placeholder="مثال: 120x80x45 سم" />
+                </div>
+
+                <div>
+                    <label class="ef-label">SKU (رمز المنتج)</label>
+                    <input asp-for="SKU" class="ef-form-control" placeholder="PRD-001" />
+                </div>
+            </div>
+
+            <div class="ef-form-grid">
+                <div>
+                    <label class="ef-label">الفئة</label>
+                    <select asp-for="CategoryId" class="ef-form-control" asp-items="ViewBag.Categories">
+                        <option value="">-- اختر الفئة --</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="ef-label">البراند</label>
+                    <select asp-for="BrandId" class="ef-form-control" asp-items="ViewBag.Brands">
+                        <option value="">-- اختر البراند --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="ef-label">صور المنتج</label>
+                <input type="file" name="Images" multiple class="ef-form-control" accept="image/*" />
+                <small style="color: #6b7280; margin-top: 5px; display: block;">يمكنك اختيار عدة صور للمنتج</small>
+            </div>
+        </div>
+
+        <!-- Attributes Section -->
+        <div class="ef-section">
+            <h4>⚙️ خصائص المنتج</h4>
+            <div style="overflow-x: auto;">
+                <table class="ef-table" id="attributesTable">
+                    <thead>
+                        <tr>
+                            <th>الخاصية</th>
+                            <th>القيمة</th>
+                            <th style="width: 100px;">إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+                <button type="button" class="ef-btn ef-btn-add" onclick="addAttributeRow()">➕ إضافة خاصية</button>
+            </div>
+        </div>
+
+        <!-- Product Items Section - المحسن -->
+        <div class="ef-section">
+            <h4>📦  عناصر المنتج</h4>
+
+            <div class="ef-product-items-container" id="productItemsContainer">
+                <!-- سيتم إضافة المنتجات الفرعية هنا -->
+            </div>
+
+            <div class="ef-empty-state" id="emptyState" style="text-align: center; padding: 3rem 2rem; color: #6b7280; font-size: 1rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;">📦</div>
+                <p>لم يتم إضافة أي منتجات فرعية بعد</p>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem; color: #9ca3af;">اضغط على الزر أدناه لإضافة منتج فرعي</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 1rem;">
+                <button type="button" class="ef-btn ef-btn-add" onclick="addProductItem()">
+                    ➕ إضافة منتج فرعي جديد
+                </button>
+            </div>
+        </div>
+
+        <div class="ef-section" style="text-align: center;">
+            <button type="submit" class="ef-btn ef-btn-submit">💾 حفظ المنتج</button>
+        </div>
+    </form>
+
+</div>
+
+@section Scripts {
+    <script>
+        let productItemIndex = 0;
+
+        // Enhanced row removal with animation
+        function removeRow(button) {
+            const row = button.closest('tr');
+            row.style.animation = 'slideOutUp 0.3s ease-in';
+            setTimeout(() => {
+                row.remove();
+                updateIndices();
+            }, 300);
+        }
+
+        // Update table indices after row removal
+        function updateIndices() {
+            // Update attributes table
+            const attributeRows = document.querySelectorAll('#attributesTable tbody tr');
+            attributeRows.forEach((row, index) => {
+                const select = row.querySelector('select');
+                const input = row.querySelector('input[type="text"]');
+                if (select) select.name = `ProductAttributeValues[${index}].ProductAttributeId`;
+                if (input) input.name = `ProductAttributeValues[${index}].Value`;
+            });
+        }
+
+        // Add Product Attribute Row
+        function addAttributeRow() {
+            let table = document.getElementById("attributesTable").querySelector("tbody");
+            let index = table.rows.length;
+
+            let row = `<tr style="animation: slideInUp 0.5s ease-out;">
+                <td>
+                    <select name="ProductAttributeValues[${index}].ProductAttributeId" class="ef-form-control">
+                        <option value="">-- اختر الخاصية --</option>
+                        @foreach (var attr in (List<SelectListItem>)ViewBag.ProductAttributes)
+                        {
+                                <option value="@attr.Value">@attr.Text</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <input name="ProductAttributeValues[${index}].Value" class="ef-form-control" placeholder="أدخل القيمة" />
+                </td>
+                <td style="text-align: center;">
+                    <button type="button" class="ef-btn ef-btn-delete" onclick="removeRow(this)" title="حذف">🗑️</button>
+                </td>
+            </tr>`;
+            table.insertAdjacentHTML("beforeend", row);
+        }
+
+        // إضافة منتج فرعي جديد
+        function addProductItem() {
+            const container = document.getElementById('productItemsContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            // إخفاء حالة الفراغ
+            if (emptyState) {
+                emptyState.style.display = 'none';
+            }
+
+            const productItemCard = document.createElement('div');
+            productItemCard.className = 'ef-product-item-card';
+            productItemCard.innerHTML = `
+                <!-- رأس الكارت -->
+                <div class="ef-product-item-header">
+                    <div class="ef-product-item-title">
+                        📋 منتج فرعي #${productItemIndex + 1}
+                    </div>
+                    <button type="button" class="ef-remove-item-btn" onclick="removeProductItem(this)">
+                        🗑️ حذف المنتج
+                    </button>
+                </div>
+
+                <!-- محتوى الكارت -->
+                <div class="ef-product-item-content">
+                    <!-- المعلومات الأساسية -->
+                    <div class="ef-basic-info-section">
+                        <div class="ef-section-title">
+                            💰 المعلومات الأساسية
+                        </div>
+                        <div class="ef-basic-info-grid">
+                            <div>
+                                <label class="ef-label">السعر</label>
+                                <input name="ProductItems[${productItemIndex}].Price"
+                                       class="ef-form-control"
+                                       type="number"
+                                       step="0.01"
+                                       placeholder="0.00" />
+                            </div>
+                            <div>
+                                <label class="ef-label">الكمية المتاحة</label>
+                                <input name="ProductItems[${productItemIndex}].Quantity"
+                                       class="ef-form-control"
+                                       type="number"
+                                       placeholder="0" />
+                            </div>
+                            
+                            <div>
+                            <label class="ef-label">الخصم</label>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <input name="ProductItems[${productItemIndex}].Discount"
+                                       class="ef-form-control"
+                                       type="number"
+                                       step="0.01"
+                                       placeholder="0.00"
+                                       style="flex: 1;" />
+
+                                <select name="ProductItems[${productItemIndex}].IsPercentage" class="ef-form-control" style="width: 120px;">
+                                    <option value="false">💵 قيمة</option>
+                                    <option value="true">٪ نسبة</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+
+                    <!-- قسم الألوان الأساسية -->
+                    <div class="ef-colors-section">
+                        <div class="ef-section-title">
+                            🎨 الألوان الأساسية
+                        </div>
+                        <div class="ef-colors-grid">
+                            <!-- لون الخشب -->
+                            <div class="ef-color-card">
+                                <div class="ef-color-card-title">🌳 لون الخشب</div>
+                                <div>
+                                    <label class="ef-label">الاسم (عربي)</label>
+                                    <input type="text"
+                                           name="ProductItems[${productItemIndex}].WoodColorImage.NameAr"
+                                           placeholder="مثال: بني فاتح"
+                                           class="ef-form-control" />
+                                </div>
+                                <div style="margin-top: 0.8rem;">
+                                    <label class="ef-label">الاسم (English)</label>
+                                    <input type="text"
+                                           name="ProductItems[${productItemIndex}].WoodColorImage.NameEn"
+                                           placeholder="e.g: Light Brown"
+                                           class="ef-form-control" />
+                                </div>
+                                <div style="margin-top: 0.8rem;">
+                                    <label class="ef-label">صورة اللون</label>
+                                    <input type="file"
+                                           name="ProductItems[${productItemIndex}].WoodColorImage.ColorImg"
+                                           class="ef-form-control"
+                                           accept="image/*" />
+                                </div>
+                            </div>
+
+                            <!-- لون القماش -->
+                            <div class="ef-color-card">
+                                <div class="ef-color-card-title">🧵 لون القماش</div>
+                                <div>
+                                    <label class="ef-label">الاسم (عربي)</label>
+                                    <input type="text"
+                                           name="ProductItems[${productItemIndex}].FabricColorImage.NameAr"
+                                           placeholder="مثال: أزرق داكن"
+                                           class="ef-form-control" />
+                                </div>
+                                <div style="margin-top: 0.8rem;">
+                                    <label class="ef-label">الاسم (English)</label>
+                                    <input type="text"
+                                           name="ProductItems[${productItemIndex}].FabricColorImage.NameEn"
+                                           placeholder="e.g: Dark Blue"
+                                           class="ef-form-control" />
+                                </div>
+                                <div style="margin-top: 0.8rem;">
+                                    <label class="ef-label">صورة اللون</label>
+                                    <input type="file"
+                                           name="ProductItems[${productItemIndex}].FabricColorImage.ColorImg"
+                                           class="ef-form-control"
+                                           accept="image/*" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- قسم الألوان الإضافية -->
+                    <div class="ef-additional-colors-section">
+                        <div class="ef-section-title">
+                            ✨ ألوان إضافية
+                        </div>
+                        <div class="ef-additional-colors-container" id="additionalColorsContainer_${productItemIndex}">
+                            <!-- سيتم إضافة الألوان الإضافية هنا -->
+                        </div>
+                        <button type="button"
+                                class="ef-add-color-btn"
+                                onclick="addAdditionalColor(${productItemIndex})">
+                            🎨 إضافة لون إضافي
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(productItemCard);
+            productItemIndex++;
+            updateItemNumbers();
+        }
+
+        // حذف منتج فرعي
+        function removeProductItem(button) {
+            const card = button.closest('.ef-product-item-card');
+            const container = document.getElementById('productItemsContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            card.style.animation = 'slideOutUp 0.3s ease-in-out';
+            setTimeout(() => {
+                card.remove();
+                updateItemNumbers();
+
+                // إظهار حالة الفراغ إذا لم تعد هناك عناصر
+                if (container.children.length === 0 && emptyState) {
+                    emptyState.style.display = 'block';
+                }
+            }, 300);
+        }
+
+        // إضافة لون إضافي
+        function addAdditionalColor(itemIndex) {
+            const container = document.getElementById(`additionalColorsContainer_${itemIndex}`);
+            const colorIndex = container.children.length;
+
+            const colorItem = document.createElement('div');
+            colorItem.className = 'ef-additional-color-item';
+            colorItem.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <strong style="color: #7c2d92;">🎨 لون إضافي #${colorIndex + 1}</strong>
+                    <button type="button"
+                            class="ef-remove-color-btn"
+                            onclick="removeAdditionalColor(this)">
+                        🗑️ حذف
+                    </button>
+                </div>
+                <div class="ef-input-grid">
+                    <div>
+                        <label class="ef-label">الاسم (عربي)</label>
+                        <input type="text"
+                               name="ProductItems[${itemIndex}].ProductItemColors[${colorIndex}].NameAr"
+                               placeholder="مثال: أحمر فاتح"
+                               class="ef-form-control" />
+                    </div>
+                    <div>
+                        <label class="ef-label">الاسم (English)</label>
+                        <input type="text"
+                               name="ProductItems[${itemIndex}].ProductItemColors[${colorIndex}].NameEn"
+                               placeholder="e.g: Light Red"
+                               class="ef-form-control" />
+                    </div>
+                </div>
+                <div style="margin-top: 0.8rem;">
+                    <label class="ef-label">صورة اللون</label>
+                    <input type="file"
+                           name="ProductItems[${itemIndex}].ProductItemColors[${colorIndex}].ColorImg"
+                           class="ef-form-control"
+                           accept="image/*" />
+                </div>
+            `;
+
+            container.appendChild(colorItem);
+        }
+
+        // حذف لون إضافي
+        function removeAdditionalColor(button) {
+            const colorItem = button.closest('.ef-additional-color-item');
+            colorItem.style.animation = 'fadeOut 0.2s ease-out';
+            setTimeout(() => {
+                colorItem.remove();
+                updateAllIndices();
+            }, 200);
+        }
+
+        // تحديث أرقام المنتجات
+        function updateItemNumbers() {
+            const cards = document.querySelectorAll('.ef-product-item-card');
+            cards.forEach((card, index) => {
+                const title = card.querySelector('.ef-product-item-title');
+                title.innerHTML = `📋 منتج فرعي #${index + 1}`;
+            });
+            updateAllIndices();
+        }
+
+        // تحديث جميع الفهارس
+        function updateAllIndices() {
+            const cards = document.querySelectorAll('.ef-product-item-card');
+            cards.forEach((card, itemIndex) => {
+                // تحديث الحقول الأساسية
+                const basicInputs = card.querySelectorAll('.ef-basic-info-section input');
+                basicInputs[0].name = `ProductItems[${itemIndex}].Price`;
+                basicInputs[1].name = `ProductItems[${itemIndex}].Quantity`;
+                basicInputs[2].name = `ProductItems[${itemIndex}].Discount`;
+                basicInputs[3].name = `ProductItems[${itemIndex}].IsPercentage`;
+
+                // تحديث حقول الألوان الأساسية
+                const woodInputs = card.querySelectorAll('.ef-color-card:first-of-type input');
+                if (woodInputs[0]) woodInputs[0].name = `ProductItems[${itemIndex}].WoodColorImage.NameAr`;
+                if (woodInputs[1]) woodInputs[1].name = `ProductItems[${itemIndex}].WoodColorImage.NameEn`;
+                if (woodInputs[2]) woodInputs[2].name = `ProductItems[${itemIndex}].WoodColorImage.ColorImg`;
+
+                const fabricInputs = card.querySelectorAll('.ef-color-card:last-of-type input');
+                if (fabricInputs[0]) fabricInputs[0].name = `ProductItems[${itemIndex}].FabricColorImage.NameAr`;
+                if (fabricInputs[1]) fabricInputs[1].name = `ProductItems[${itemIndex}].FabricColorImage.NameEn`;
+                if (fabricInputs[2]) fabricInputs[2].name = `ProductItems[${itemIndex}].FabricColorImage.ColorImg`;
+
+                // تحديث الألوان الإضافية
+                const additionalColors = card.querySelectorAll('.ef-additional-color-item');
+                additionalColors.forEach((colorItem, colorIndex) => {
+                    const colorInputs = colorItem.querySelectorAll('input');
+                    colorInputs[0].name = `ProductItems[${itemIndex}].ProductItemColors[${colorIndex}].NameAr`;
+                    colorInputs[1].name = `ProductItems[${itemIndex}].ProductItemColors[${colorIndex}].NameEn`;
+                    colorInputs[2].name = `ProductItems[${itemIndex}].ProductItemColors[${colorIndex}].ColorImg`;
+
+                    // تحديث عنوان اللون
+                    const colorTitle = colorItem.querySelector('strong');
+                    colorTitle.innerHTML = `🎨 لون إضافي #${colorIndex + 1}`;
+                });
+
+                // تحديث ID حاوية الألوان الإضافية
+                const additionalColorsContainer = card.querySelector('.ef-additional-colors-container');
+                additionalColorsContainer.id = `additionalColorsContainer_${itemIndex}`;
+
+                // تحديث onclick للزر
+                const addColorBtn = card.querySelector('.ef-add-color-btn');
+                addColorBtn.setAttribute('onclick', `addAdditionalColor(${itemIndex})`);
+            });
+        }
+
+        // Form validation and submission enhancement
+        document.querySelector('.ef-form').addEventListener('submit', function(e) {
+            const submitBtn = document.querySelector('.ef-btn-submit');
+            submitBtn.innerHTML = '⏳ جاري الحفظ...';
+            submitBtn.disabled = false;
+        });
+
+        
+        document.head.appendChild(style);
+    </script>
+}

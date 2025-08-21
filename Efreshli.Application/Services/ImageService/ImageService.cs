@@ -78,5 +78,6 @@ namespace Efreshli.Application.Services.File
             if (image == null) return null;
             return image.URL;
         }
+    
     }
 }
