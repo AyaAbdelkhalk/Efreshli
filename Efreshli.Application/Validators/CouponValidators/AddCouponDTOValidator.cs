@@ -1,4 +1,4 @@
-﻿using Efreshli.Application.DTOs.CouponDTOs;
+using Efreshli.Application.DTOs.CouponDTOs;
 using Efreshli.Application.Resources;
 using Efreshli.Application.Services.CouponServices;
 using FluentValidation;
@@ -23,12 +23,16 @@ namespace Efreshli.Application.Validators.CouponValidators
 
             RuleFor(x => x.DiscountValue)
                 .GreaterThan(0).WithMessage(_localizer[SharedResourcesKeys.Validation.MustBeGreaterThanZero]);
-            //.GreaterThan(0).WithMessage("Discount value must be greater than 0");
 
             RuleFor(x => x.UsageLimit)
                 .GreaterThan(0).WithMessage(_localizer[SharedResourcesKeys.Validation.MustBeGreaterThanZero]);
-            //.GreaterThan(0).WithMessage("Usage limit must be greater than 0");
 
+            RuleFor(x => x.ExpireDate.Date)
+                .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.Validation.Required])
+                .GreaterThanOrEqualTo(DateTime.Today).WithMessage(_localizer[SharedResourcesKeys.Validation.FutureDateRequired]);
+            RuleFor(x => x.MinOrderAmount)
+                .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.Validation.Required])
+                .GreaterThan(0).WithMessage(_localizer[SharedResourcesKeys.Validation.MustBeGreaterThanZero]);
             When(x => x.IsPercentage, () =>
             {
                 RuleFor(x => x.DiscountValue)

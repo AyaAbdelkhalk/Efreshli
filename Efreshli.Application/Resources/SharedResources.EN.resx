@@ -398,7 +398,7 @@
     <comment>File type is not allowed</comment>
   </data>
   <data name="Validation.FileDimensionsTooLarge" xml:space="preserve">
-    <value>Image dimensions exceed {0}×{1} pixels</value>
+    <value>Image dimensions exceed {0}�{1} pixels</value>
     <comment>Image dimensions exceed limit</comment>
   </data>
   <data name="Validation.NoFileSelected" xml:space="preserve">
@@ -1698,6 +1698,12 @@
   </data>
   <data name="Efreshli.Coupon.UsedCount" xml:space="preserve">
     <value>Used count</value>
+  </data>
+	<data name="Efreshli.Coupon.ExpireDate" xml:space="preserve">
+    <value>Expire Date</value>
+  </data>
+	<data name="Efreshli.Coupon.MinOrderAmount" xml:space="preserve">
+    <value>Minimum Amount</value>
   </data>
   <data name="Efreshli.Image.URL" xml:space="preserve">
     <value>Image URL</value>

@@ -1,4 +1,4 @@
-﻿using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,9 +9,8 @@ namespace Efreshli.Domain.Models
     {
         [Key]
         public int PaymentId { get; set; }
-        public int OrderId { get; set; }
-        public Order Order { get; set; }
-        [ForeignKey("ApplicationUser")]
+        public Order? Order { get; set; }
+        [ForeignKey(nameof(ApplicationUser))]
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser? ApplicationUser { get; set; }
         public decimal Amount { get; set; }

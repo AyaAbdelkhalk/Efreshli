@@ -1,4 +1,4 @@
-﻿@model Efreshli.Application.DTOs.CouponDTOs.AddCouponDTO
+@model Efreshli.Application.DTOs.CouponDTOs.AddCouponDTO
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
 
 @{
@@ -10,9 +10,9 @@
     <div class="form-container bg-white p-4 rounded shadow-sm">
         <form asp-action="Create" asp-controller="Coupon" method="post" id="couponForm" novalidate>
             @Html.AntiForgeryToken()
-
+            
             <!-- Validation Summary -->
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
             <!-- Code Field -->
             <div class="mb-3">
@@ -47,7 +47,17 @@
                     @_stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.IsPercentage]
                 </label>
             </div>
-
+            <!-- Minimum Order Amount -->
+            <div class="mb-3">
+                <label asp-for="MinOrderAmount" class="form-label" for="MinOrderAmount">
+                    @_stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.MinOrderAmount]
+                </label>
+                <div class="input-group">
+                    <input asp-for="MinOrderAmount" class="form-control" id="MinOrderAmount" type="number" min="0" step="0.01" placeholder="0 for no minimum" />
+                    <span class="input-group-text">@_stringLocalizer[SharedResourcesKeys.Currency.EGP]</span>
+                </div>
+                <span asp-validation-for="MinOrderAmount" class="text-danger"></span>
+            </div>
             <!-- Usage Limit -->
             <div class="mb-3">
                 <label asp-for="UsageLimit" class="form-label" for="UsageLimit">
@@ -56,7 +66,15 @@
                 <input asp-for="UsageLimit" class="form-control" id="UsageLimit" type="number" min="0" placeholder="0 for unlimited" />
                 <span asp-validation-for="UsageLimit" class="text-danger"></span>
             </div>
-
+            <!-- Expiration Date -->
+            <div class="mb-3">
+                <label asp-for="ExpireDate" class="form-label" for="ExpireDate">
+                    @_stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.ExpireDate]
+                </label>
+                <input asp-for="ExpireDate" class="form-control" id="ExpireDate" type="datetime" value="@DateTime.Today.ToString("yyyy-MM-dd")"
+                       min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="ExpireDate" class="text-danger"></span>
+            </div>
             <!-- Actions -->
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button type="reset" class="btn btn-secondary me-md-2">

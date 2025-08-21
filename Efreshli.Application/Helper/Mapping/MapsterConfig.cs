@@ -1,4 +1,4 @@
-﻿using Efreshli.Application.DTOs.BrandDTOs;
+using Efreshli.Application.DTOs.BrandDTOs;
 using Efreshli.Application.DTOs.CategoryDTOs;
 using Efreshli.Application.DTOs.WebsiteInfoDTOs;
 using Efreshli.Domain.Models;

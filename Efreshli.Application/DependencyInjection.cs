@@ -1,4 +1,4 @@
-﻿using Efreshli.Application.DTOs.CategoryDTOs;
+using Efreshli.Application.DTOs.CategoryDTOs;
 using Efreshli.Application.DTOs.CouponDTOs;
 using Efreshli.Application.DTOs.WebsiteInfoDTOs;
 using Efreshli.Application.Helper.Cloudinary;
@@ -9,6 +9,7 @@ using Efreshli.Application.Services.BrandsServices;
 using Efreshli.Application.Services.CategoryServices;
 using Efreshli.Application.Services.CouponServices;
 using Efreshli.Application.Services.File;
+using Efreshli.Application.Services.RoleService;
 using Efreshli.Application.Services.WebsiteInfoServices;
 using Efreshli.Application.Validators.CategoryValidators;
 using Efreshli.Application.Validators.CouponValidators;
@@ -39,13 +40,15 @@ namespace Efreshli.Application
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IBrandsService, BrandsService>();
             services.AddScoped<IWebsiteInfoService, WebsiteInfoService>(); 
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IRoleService, RoleService>();
 
             // Register external services
             services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
 
             // Register all validators from the Application assembly
             //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            //services.AddValidatorsFromAssembly(typeof(AddCouponDTOValidator).Assembly);
+            services.AddValidatorsFromAssembly(typeof(AddCouponDTOValidator).Assembly);
 
 
 
