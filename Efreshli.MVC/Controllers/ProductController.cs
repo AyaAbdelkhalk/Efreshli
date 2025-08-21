@@ -78,7 +78,7 @@ namespace Efreshli.MVC.Controllers
                 return View("Index",response.Data);
             }
             ModelState.AddModelError("", response.Message);
-            return View("Error");
+            return View("Index");
 
             //var response = await _productService.GetMainProductsAsync(categoryId);
 
@@ -139,7 +139,7 @@ namespace Efreshli.MVC.Controllers
                 return NotFound();
             }
             ModelState.AddModelError("", response.Message);
-            return View("Error");
+            return View();
         }
 
         [HttpDelete]
