@@ -1,4 +1,5 @@
 using Efreshli.Application.DTOs.BrandDTOs;
+using Efreshli.Application.DTOs.CartDTOs;
 using Efreshli.Application.DTOs.CategoryDTOs;
 using Efreshli.Application.DTOs.WebsiteInfoDTOs;
 using Efreshli.Domain.Models;
@@ -52,6 +53,11 @@ namespace Efreshli.Application.Helper.Mapping
 
             #endregion
 
+            #region Cart
+            TypeAdapterConfig<Cart, CartDto>.NewConfig()
+                .Map(dest => dest.Items, src => src.Items);
+            TypeAdapterConfig<CartItem, CartItemDto>.NewConfig();
+            #endregion
 
         }
     }

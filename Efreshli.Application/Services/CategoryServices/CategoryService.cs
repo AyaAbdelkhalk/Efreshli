@@ -2,6 +2,7 @@ using Efreshli.Application.DTOs.CategoryDTOs;
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Interfaces;
 using Efreshli.Application.Services.File;
+using Efreshli.Application.Services.ProductServices;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Enums;
 using Efreshli.Domain.Models;
@@ -22,10 +23,12 @@ namespace Efreshli.Application.Services.CategoryServices
         #region Props&Ctor
         private readonly IUnitOfWork _unitOfWork;
         private readonly IImageService _imageService;
-        public CategoryService(IUnitOfWork unitOfWork, IImageService imageService)
+        private readonly IProductService _productService;
+        public CategoryService(IUnitOfWork unitOfWork, IImageService imageService, IProductService productService)
         {
             _unitOfWork = unitOfWork;
             _imageService = imageService;
+            _productService = productService;
         }
         #endregion
 
@@ -49,6 +52,7 @@ namespace Efreshli.Application.Services.CategoryServices
             }
 
             // Handle parent category
+            
             if (category.ParentId.HasValue)
             {
                 var parentCategory = await _unitOfWork.CategoryRepository.GetByIdAsync(category.ParentId.Value);
@@ -91,7 +95,7 @@ namespace Efreshli.Application.Services.CategoryServices
         {
             var result = await _unitOfWork.CategoryRepository.GetAllWithIncludeAsync(
                 predicate: null,
-                includes: new Expression<Func<Category, object>>[] { c => c.Parent, c => c.Image }
+                includes: new Expression<Func<Category, object>>[] { c => c.Parent, c => c.Image  }
             );
 
             if (result == null || !result.Any())
@@ -100,6 +104,13 @@ namespace Efreshli.Application.Services.CategoryServices
             }
 
             var categoryDtos = result.Select(category => category.Adapt<GetCategoryDto>()).ToList();
+            //calculate product count for each category
+            foreach (var categoryDto in categoryDtos)
+            {
+                var x = await _unitOfWork.ProductRepository
+                    .GetAllAsync(p => p.CategoryId == categoryDto.CategoryId);
+                categoryDto.ProductCount = x.Count();
+            }
             return ResponseHandler.Success<IEnumerable<GetCategoryDto>>(categoryDtos);
         }
 
@@ -109,7 +120,6 @@ namespace Efreshli.Application.Services.CategoryServices
                 predicate: c => c.ParentId == null,
                 includes: new Expression<Func<Category, object>>[] { c => c.Image }
             );
-
             var categoryDtos = result.Select(category => category.Adapt<GetCategoryDto>()).ToList();
             return ResponseHandler.Success<IEnumerable<GetCategoryDto>>(categoryDtos);
         }
