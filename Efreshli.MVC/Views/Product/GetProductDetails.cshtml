@@ -1,0 +1,994 @@
+﻿@model Efreshli.Application.DTOs.ProductDTOs.ProductDetailsDto
+
+@{
+    ViewData["Title"] = "تفاصيل المنتج";
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="product-details-container">
+    <!-- Header Section -->
+    <div class="page-header">
+        <h1 class="page-title">📦 Product Details</h1>
+    </div>
+
+        <!-- Action Buttons -->
+        <div class="">
+            <button class="btn btn-secondary" onclick="goBackToList()">
+                <i class="icon">⬅️</i> Back to List
+            </button>
+            <button class="btn btn-danger" onclick="deleteProduct()">
+                <i class="icon">🗑️</i> Delete Product
+            </button>
+        </div>
+    <br />
+
+    <!-- Main Content Grid -->
+    <div class="content-grid">
+
+        <!-- Left Column - Main Info -->
+        <div class="main-column">
+
+            <!-- Basic Information Card -->
+            <div class="info-card">
+                <div class="card-header">
+                    <h3><i class="icon">📋</i> Basic Information</h3>
+                    <button class="btn btn-edit" onclick="editBasicInfo()">
+                        <i class="icon">✏️</i> Edit
+                    </button>
+                </div>
+                <div class="card-content">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="item-header-row">
+                                <label>Product Name (Arabic)</label>
+                            </div>
+                            <p>@Model.NameAr</p>
+                        </div>
+                        <div class="info-item">
+                            <div class="item-header-row">
+                                <label>Product Name (English)</label>
+                            </div>
+                            <p>@Model.NameEn</p>
+                        </div>
+                        <div class="info-item">
+                            <div class="item-header-row">
+                                <label>Description (Arabic)</label>
+                            </div>
+                            <p>@(string.IsNullOrEmpty(Model.DescriptionAr) ? "لا يوجد" : Model.DescriptionAr)</p>
+                        </div>
+                        <div class="info-item">
+                            <div class="item-header-row">
+                                <label>Description (English)</label>
+                            </div>
+                            <p>@(string.IsNullOrEmpty(Model.DescriptionEn) ? "لا يوجد" : Model.DescriptionEn)</p>
+                        </div>
+                        <div class="info-item">
+                            <div class="item-header-row">
+                                <label>Brand</label>
+                            </div>
+                            <p>@(string.IsNullOrEmpty(Model.BrandAr) ? "لا يوجد" : $"{Model.BrandAr} ({Model.BrandEn})")</p>
+                        </div>
+                        <div class="info-item">
+                            <div class="item-header-row">
+                                <label>Category</label>
+                            </div>
+                            <p>@(string.IsNullOrEmpty(Model.CategoryAr) ? "لا يوجد" : $"{Model.CategoryAr} ({Model.CategoryEn})")</p>
+                        </div>
+                        <div class="info-item">
+                            <div class="item-header-row">
+                                <label>Dimensions / Size</label>
+                            </div>
+                            <p>@(string.IsNullOrEmpty(Model.DimensionsOrSize) ? "لا يوجد" : Model.DimensionsOrSize)</p>
+                        </div>
+                        <div class="info-item">
+                            <div class="item-header-row">
+                                <label>SKU</label>
+                            </div>
+                            <p>@(string.IsNullOrEmpty(Model.SKU) ? "لا يوجد" : Model.SKU)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Items Section -->
+            <div class="info-card">
+                <div class="card-header">
+                    <h3><i class="icon">🛒</i> Product Items</h3>
+                    @if (Model.ProductItems != null && Model.ProductItems.Count > 0)
+                    {
+                        <span class="count-badge">@Model.ProductItems.Count items</span>
+                    }
+                </div>
+                <div class="card-content">
+                    @if (Model.ProductItems != null && Model.ProductItems.Count > 0)
+                    {
+                        <div class="product-items-container">
+                            @foreach (var item in Model.ProductItems)
+                            {
+                                <div class="product-item-card">
+                                    <!-- Item Header -->
+                                    <div class="item-header">
+                                        <div class="item-id">Item #@item.ProductItemId</div>
+                                        <div class="item-actions-group">
+                                            <div class="quantity-badge">
+                                                <span>Available:</span>
+                                                <strong>@item.Quantity</strong>
+                                            </div>
+                                            <div class="item-buttons">
+                                                <button class="btn-icon btn-edit" onclick="editProductItem(@item.ProductItemId)" title="Edit Item">✏️</button>
+                                                <button class="btn-icon btn-delete" onclick="deleteItem(@item.ProductItemId)" title="Delete Item">🗑️</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Pricing Info -->
+                                    <div class="pricing-section">
+                                        <div class="price-row">
+                                            <span class="price-label">Base Price:</span>
+                                            <span class="price-value">@item.Price.ToString("N2") EGP</span>
+                                        </div>
+                                        @if (item.Discount.HasValue)
+                                        {
+                                            <div class="price-row">
+                                                <span class="price-label">Discount:</span>
+                                                <span class="discount-badge">
+                                                    @(item.IsPercentage == true ? $"{item.Discount:0.##}%" : $"{item.Discount:0.##} EGP")
+                                                </span>
+                                            </div>
+                                        }
+                                        <div class="price-row final-price">
+                                            <span class="price-label">Final Price:</span>
+                                            <span class="price-value final">@item.FinalPrice.ToString("N2") EGP</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Colors Section -->
+                                    <div class="colors-section">
+                                        <!-- Wood and Fabric Colors (Side by Side) -->
+                                        <div class="wood-fabric-row">
+                                            @if (item.WoodColorImage != null)
+                                            {
+                                                <div class="color-category">
+                                                    <div class="color-category-header">
+                                                        <h5 class="color-category-title">🌳 Wood Color</h5>
+                                                        <div class="color-actions">
+                                                            <button class="btn-icon btn-edit" onclick="editWoodColor(@item.ProductItemId)" title="Edit">✏️</button>
+                                                            <button class="btn-icon btn-delete" onclick="deleteWoodColor(@item.ProductItemId)" title="Delete">🗑️</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="color-item wood-color">
+                                                        @if (!string.IsNullOrEmpty(item.WoodColorImage.ImageUrl))
+                                                        {
+                                                            <div class="color-image">
+                                                                <img src="@item.WoodColorImage.ImageUrl" alt="@item.WoodColorImage.NameAr" />
+                                                            </div>
+                                                        }
+                                                        <div class="color-name">
+                                                            <span class="ar">@item.WoodColorImage.NameAr</span>
+                                                            <span class="en">@item.WoodColorImage.NameEn</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+
+                                            @if (item.FabricColorImage != null)
+                                            {
+                                                <div class="color-category">
+                                                    <div class="color-category-header">
+                                                        <h5 class="color-category-title">🧵 Fabric Color</h5>
+                                                        <div class="color-actions">
+                                                            <button class="btn-icon btn-edit" onclick="editFabricColor(@item.ProductItemId)" title="Edit">✏️</button>
+                                                            <button class="btn-icon btn-delete" onclick="deleteFabricColor(@item.ProductItemId)" title="Delete">🗑️</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="color-item fabric-color">
+                                                        @if (!string.IsNullOrEmpty(item.FabricColorImage.ImageUrl))
+                                                        {
+                                                            <div class="color-image">
+                                                                <img src="@item.FabricColorImage.ImageUrl" alt="@item.FabricColorImage.NameAr" />
+                                                            </div>
+                                                        }
+                                                        <div class="color-name">
+                                                            <span class="ar">@item.FabricColorImage.NameAr</span>
+                                                            <span class="en">@item.FabricColorImage.NameEn</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+
+                                        <!-- Additional Colors -->
+                                        @if (item.ProductItemColors != null && item.ProductItemColors.Count > 0)
+                                        {
+                                            <div class="color-category">
+                                                <div class="color-category-header">
+                                                    <h5 class="color-category-title">✨ Additional Colors</h5>
+                                                    <button class="btn btn-add" onclick="addAdditionalColor(@item.ProductItemId)">
+                                                        <i class="icon">➕</i> Add Color
+                                                    </button>
+                                                </div>
+                                                <div class="additional-colors-grid">
+                                                    @foreach (var color in item.ProductItemColors)
+                                                    {
+                                                        <div class="color-item additional-color" data-color-id="@color.ColorId">
+                                                            <div class="color-item-actions">
+                                                                <button class="btn-icon btn-edit" onclick="editAdditionalColor('@color.ColorId')" title="Edit">✏️</button>
+                                                                <button class="btn-icon btn-delete" onclick="deleteAdditionalColor('@color.ColorId')" title="Delete">🗑️</button>
+                                                            </div>
+                                                            @if (!string.IsNullOrEmpty(color.ImageUrl))
+                                                            {
+                                                                <div class="color-image">
+                                                                    <img src="@color.ImageUrl" alt="@color.NameAr" />
+                                                                </div>
+                                                            }
+                                                            <div class="color-name">
+                                                                <span class="ar">@color.NameAr</span>
+                                                                <span class="en">@color.NameEn</span>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <p>No sub-products available</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column - Media & Specs -->
+        <div class="side-column">
+
+            <!-- Product Images -->
+            <div class="info-card">
+                <div class="card-header">
+                    <h3><i class="icon">📷</i> Product Images</h3>
+                    <div class="header-actions">
+                        @if (Model.ProductImages.Count > 0)
+                        {
+                            <span class="count-badge">@Model.ProductImages.Count images</span>
+                        }
+                        <button class="btn btn-add" onclick="addProductImage()">
+                            <i class="icon">➕</i> Add Image
+                        </button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    @if (Model.ProductImages.Count > 0)
+                    {
+                        <div class="images-gallery">
+                            @foreach (var img in Model.ProductImages)
+                            {
+                                <div class="image-item" data-image-url="@img">
+                                    <div class="image-actions">
+                                        <button class="btn-icon btn-delete" onclick="deleteProductImage('@img')" title="Delete">🗑️</button>
+                                    </div>
+                                    <img src="@img" alt="Product Image" onclick="openImageModal('@img')" />
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <p>No images available</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Specifications -->
+            <div class="info-card">
+                <div class="card-header">
+                    <h3><i class="icon">⚙️</i> Technical Specifications</h3>
+                    <div class="header-actions">
+                        @if (Model.ProductSpecificatoion.Count > 0)
+                        {
+                            <span class="count-badge">@Model.ProductSpecificatoion.Count specs</span>
+                        }
+                        <button class="btn btn-add" onclick="addSpecification()">
+                            <i class="icon">➕</i> Add Spec
+                        </button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    @if (Model.ProductSpecificatoion.Count > 0)
+                    {
+                        <div class="specifications-list">
+                            @foreach (var spec in Model.ProductSpecificatoion)
+                            {
+                                <div class="spec-item" data-spec-id="@spec.ProductAttributeValueId">
+                                    <div class="spec-actions">
+                                        <button class="btn-icon btn-edit" onclick="editSpecification('@spec.ProductAttributeValueId')" title="Edit">✏️</button>
+                                        <button class="btn-icon btn-delete" onclick="deleteSpecification('@spec.ProductAttributeValueId')" title="Delete">🗑️</button>
+                                    </div>
+                                    <div class="spec-label">
+                                        <span class="ar">@spec.ProductAttributeNameAr</span>
+                                        <span class="en">@spec.ProductAttributeNameEn</span>
+                                    </div>
+                                    <div class="spec-value">@spec.Value</div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <p>No specifications available</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Image Modal -->
+<div id="imageModal" class="modal" onclick="closeImageModal()">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <img id="modalImage" src="" alt="">
+    </div>
+</div>
+
+<style>
+    /* ==================== GLOBAL STYLES ==================== */
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        line-height: 1.6;
+        color: #1f2937;
+        background: #f8fafc;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* ==================== CONTAINER & LAYOUT ==================== */
+    .product-details-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 1rem;
+        min-height: 100vh;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        padding: 0.8rem;
+        background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .page-title {
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin: 0;
+        text-shadow: none;
+    }
+
+    .header-actions {
+        display: flex;
+        justify-content: center;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1.2rem;
+        align-items: start;
+    }
+
+    .main-column, .side-column {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+
+    /* ==================== CARDS ==================== */
+    .info-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+        border: 1px solid #f1f5f9;
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .info-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+    .card-header {
+        background: #f8fafc;
+        padding: 0.8rem 1rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .card-header .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+    .icon {
+        font-size: 0.9rem;
+    }
+
+    .count-badge {
+        background: #dc2626;
+        color: white;
+        padding: 0.2rem 0.5rem;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: 500;
+    }
+
+    .card-content {
+        padding: 1rem;
+    }
+
+    /* ==================== BUTTONS ==================== */
+    .btn {
+        padding: 0.4rem 0.8rem;
+        border: none;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        text-decoration: none;
+    }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+    .btn-secondary {
+        background: #64748b;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+    .btn-danger {
+        background: #dc2626;
+        color: white;
+    }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+    .btn-edit {
+        background: #3b82f6;
+        color: white;
+    }
+
+        .btn-edit:hover {
+            background: #2563eb;
+        }
+
+    .btn-add {
+        background: #10b981;
+        color: white;
+    }
+
+        .btn-add:hover {
+            background: #059669;
+        }
+
+    .btn-icon {
+        width: 24px;
+        height: 24px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 0.7rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        padding: 0;
+    }
+
+        .btn-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-icon.btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+
+            .btn-icon.btn-edit:hover {
+                background: #2563eb;
+            }
+
+        .btn-icon.btn-delete {
+            background: #dc2626;
+            color: white;
+        }
+
+            .btn-icon.btn-delete:hover {
+                background: #b91c1c;
+            }
+
+    .item-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.2rem;
+    }
+
+    .item-actions {
+        display: flex;
+        gap: 0.2rem;
+    }
+
+    .item-actions-group {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .item-buttons {
+        display: flex;
+        gap: 0.3rem;
+    }
+
+    .color-category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .color-actions {
+        display: flex;
+        gap: 0.2rem;
+    }
+
+    .color-item-actions {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        display: flex;
+        gap: 1px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .color-item:hover .color-item-actions {
+        opacity: 1;
+    }
+
+    .color-item {
+        position: relative;
+    }
+
+    .image-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .image-actions {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .image-item:hover .image-actions {
+        opacity: 1;
+    }
+
+    .spec-item {
+        position: relative;
+    }
+
+    .spec-actions {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        display: flex;
+        gap: 2px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .spec-item:hover .spec-actions {
+        opacity: 1;
+    }
+
+    /* ==================== INFO GRID ==================== */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.8rem;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+        .info-item label {
+            font-weight: 500;
+            color: #64748b;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .info-item p {
+            margin: 0;
+            padding: 0.5rem 0.6rem;
+            background: #f8fafc;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+            color: #1e293b;
+            font-weight: 400;
+            font-size: 0.8rem;
+            line-height: 1.3;
+        }
+
+    /* ==================== PRODUCT ITEMS ==================== */
+    .product-items-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .product-item-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 0.8rem;
+        transition: all 0.2s ease;
+    }
+
+        .product-item-card:hover {
+            border-color: #dc2626;
+            transform: translateY(-1px);
+            box-shadow: 0 1px 4px rgba(220, 38, 38, 0.06);
+        }
+
+    .item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.6rem;
+        padding-bottom: 0.6rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .item-id {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #dc2626;
+    }
+
+    .quantity-badge {
+        background: #10b981;
+        color: white;
+        padding: 0.2rem 0.5rem;
+        border-radius: 10px;
+        font-weight: 500;
+        font-size: 0.7rem;
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+    }
+
+    /* ==================== PRICING SECTION ==================== */
+    .pricing-section {
+        background: white;
+        border-radius: 4px;
+        padding: 0.6rem;
+        margin-bottom: 0.8rem;
+        border: 1px solid #e2e8f0;
+    }
+
+    .price-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.3rem;
+    }
+
+        .price-row.final-price {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 0.3rem;
+            margin-top: 0.3rem;
+        }
+
+    .price-label {
+        color: #64748b;
+        font-weight: 400;
+        font-size: 0.75rem;
+    }
+
+    .price-value {
+        font-weight: 600;
+        color: #1e293b;
+        font-size: 0.85rem;
+    }
+
+        .price-value.final {
+            color: #10b981;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+    .discount-badge {
+        background: #fee2e2;
+        color: #dc2626;
+        padding: 0.15rem 0.4rem;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.7rem;
+    }
+
+    /* ==================== COLORS SECTION ==================== */
+    .colors-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .wood-fabric-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.8rem;
+    }
+
+    .color-category {
+        background: white;
+        border-radius: 6px;
+        padding: 0.6rem;
+        border: 1px solid #e2e8f0;
+    }
+
+    .color-category-title {
+        margin: 0 0 0.5rem 0;
+        color: #374151;
+        font-weight: 500;
+        font-size: 0.8rem;
+        padding-bottom: 0.3rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .color-item {
+        background: #f8fafc;
+        border-radius: 4px;
+        padding: 0.6rem;
+        text-align: center;
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s ease;
+        width: 100%;
+        max-width: 120px;
+    }
+
+        .color-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+        }
+
+        .color-item.wood-color {
+            border-color: #f59e0b;
+        }
+
+        .color-item.fabric-color {
+            border-color: #3b82f6;
+        }
+
+        .color-item.additional-color {
+            border-color: #10b981;
+        }
+
+    .color-image {
+        margin-bottom: 0.4rem;
+    }
+
+        .color-image img {
+            width: 100%;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 3px;
+            border: 1px solid #e2e8f0;
+        }
+
+    .color-name {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+    }
+
+        .color-name .ar {
+            font-weight: 500;
+            color: #1e293b;
+            font-size: 0.75rem;
+        }
+
+        .color-name .en {
+            color: #64748b;
+            font-size: 0.65rem;
+        }
+
+    .additional-colors-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 0.6rem;
+    }
+
+    /* ==================== IMAGES GALLERY ==================== */
+    .images-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 0.6rem;
+    }
+
+    .image-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+        .image-item:hover {
+            transform: scale(1.02);
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+
+    /* ==================== SPECIFICATIONS ==================== */
+    .specifications-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .spec-item {
+        background: #f8fafc;
+        border-radius: 4px;
+        padding: 0.6rem;
+        border: 1px solid #e2e8f0;
+    }
+
+    .spec-label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.05rem;
+        margin-bottom: 0.3rem;
+    }
+
+        .spec-label .ar {
+            font-weight: 500;
+            color: #1e293b;
+            font-size: 0.75rem;
+        }
+
+        .spec-label .en {
+            color: #64748b;
+            font-size: 0.65rem;
+        }
+
+    .spec-value {
+        color: #475569;
+        font-weight: 400;
+        background: white;
+        padding: 0.3rem 0.4rem;
+        border-radius: 3px;
+        font-size: 0.75rem;
+    }
+
+    /* ==================== EMPTY STATES ==================== */
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: #9ca3af;
+        font-style: italic;
+    }
+
+    /* ==================== IMAGE MODAL ==================== */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.8);
+        cursor: pointer;
+    }
+
+    .modal-content {
+        position: relative;
+        margin: auto;
+        padding: 0;
+        width: 90%;
+        max-width: 700px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        .close:hover {
+            color: #dc2626;
+        }
+
+</style>
+
+<script src="~/js/alerts.js"></script>

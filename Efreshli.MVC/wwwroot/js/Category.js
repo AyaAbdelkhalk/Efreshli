@@ -97,7 +97,7 @@ function displayCategories() {
         categoryElement.classList.add('category-item');
         //categoryElement.setAttribute('onclick', `navigateToSubcategories(${category.categoryId})`);
         const numOfChildren = categories.filter(cat => cat.parentId === category.categoryId).length;
-        const productCount = category.products ? category.products.length : 0;
+        const productCount = category.productCount || 0;
         categoryElement.innerHTML = `
                 <div class="category-card" data-id="${category.categoryId}">
                     <div class="category-image">

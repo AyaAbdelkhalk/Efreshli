@@ -134,6 +134,8 @@ namespace Efreshli.Infrastructure.Data
                     ProductId = 2
                 }
             );
+            
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
