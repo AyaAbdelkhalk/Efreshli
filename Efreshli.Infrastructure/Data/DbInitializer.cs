@@ -1,4 +1,4 @@
-﻿using Efreshli.Domain.Models;
+using Efreshli.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;

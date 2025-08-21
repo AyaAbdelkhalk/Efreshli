@@ -1,4 +1,4 @@
-﻿using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Common.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;

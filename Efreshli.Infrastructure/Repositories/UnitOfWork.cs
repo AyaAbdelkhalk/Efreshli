@@ -1,4 +1,4 @@
-﻿using Efreshli.Application.Interfaces;
+using Efreshli.Application.Interfaces;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
 using Efreshli.Infrastructure.Data;

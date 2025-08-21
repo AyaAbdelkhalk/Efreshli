@@ -1,14 +1,20 @@
-﻿
- @model IEnumerable<Efreshli.Application.DTOs.CouponDTOs.CouponDTO>
+﻿@model IEnumerable<Efreshli.Application.DTOs.CouponDTOs.CouponDTO>
 
 @{
     ViewData["Title"] = _stringLocalizer[SharedResourcesKeys.Title.Management, _stringLocalizer[SharedResourcesKeys.Navigation.Coupon]];
 }
-@* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"> *@
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
+
+
 <div class="container mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex flex-col">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold text-gray-800">@_stringLocalizer[SharedResourcesKeys.Title.Management,_stringLocalizer[SharedResourcesKeys.Navigation.Coupon]]</h2>
+            <a asp-action="Checkout" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                Checkout
+            </a>
             <a asp-action="Create" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
                 <i class="ri-add-line mr-2"></i>@_stringLocalizer[SharedResourcesKeys.Title.CreateItem,_stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.Title]]
             </a>
@@ -16,7 +22,7 @@
 
         <div class="bg-white shadow-sm rounded-lg overflow-hidden">
             <!-- Table -->
-            <div class="overflow-x-auto" dir="rtl" >
+            <div class="overflow-x-auto" dir="rtl">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50" text-start dir="rtl">
                         <tr>
@@ -27,19 +33,23 @@
                                 @_stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.DiscountValue]
                             </th>
                             <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                @_stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.ExpireDate]
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 @_stringLocalizer[SharedResourcesKeys.Status.Title]
                             </th>
                             <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 @_stringLocalizer[SharedResourcesKeys.Efreshli.Coupon.UsedCount]
                             </th>
-                            <th ope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 @_stringLocalizer[SharedResourcesKeys.Actions.Title]
-                          </th>
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @foreach (var item in Model)
                         {
+                            var isExpired = item.ExpireDate < DateTime.Now;
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
@@ -47,40 +57,75 @@
                                             <i class="ri-coupon-line text-blue-600"></i>
                                         </div>
                                         <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900 font-mono">@item.Code</div>                                          
+                                            <div class="text-sm font-medium text-gray-900 font-mono">@item.Code</div>
+                                            @if (item.MinOrderAmount.HasValue && item.MinOrderAmount > 0)
+                                            {
+                                                <div class="text-xs text-gray-500">
+                                                    Min: @item.MinOrderAmount.Value.ToString("C")
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm font-bold @(item.IsPercentage ? "text-green-600" : "text-blue-600")">
-                                        @item.DiscountValue @(item.IsPercentage ? "%" :_stringLocalizer[SharedResourcesKeys.Currency.EGP])
+                                        @item.DiscountValue @(item.IsPercentage ? "%" : _stringLocalizer[SharedResourcesKeys.Currency.EGP])
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm @(isExpired ? "text-red-600" : "text-gray-900")">
+                                        @item.ExpireDate.ToString("dd MMM yyyy")
+                                    </div>
+                                    @if (isExpired)
+                                    {
+                                        <div class="text-xs text-red-500">Expired</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="text-xs text-gray-500">
+                                            @(item.ExpireDate - DateTime.Now)
+                                        </div>
+                                    }
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @(item.IsActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800")">
-                                        @(item.IsActive ? "Active" : "Inactive")
+                                        @(item.IsActive ? _stringLocalizer[SharedResourcesKeys.Status.Active] : _stringLocalizer[SharedResourcesKeys.Status.Inactive])
                                     </span>
+                                    @if (isExpired && item.IsActive)
+                                    {
+                                        <div class="mt-1 text-xs text-red-500">(Auto-expired)</div>
+                                    }
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900">@item.UsedCount / @(item.UsageLimit == int.MaxValue ? "∞" : item.UsageLimit)</div>
                                     @if (item.UsedCount > 0)
                                     {
                                         <div class="mt-1 w-full bg-gray-200 rounded-full h-1.5">
-                                            <div class="bg-blue-600 h-1.5 rounded-full" style="width: @((item.UsedCount * 100 / Math.Min(item.UsageLimit, 100)).ToString())%"></div>
+                                            <div class="bg-blue-600 h-1.5 rounded-full" style="width: @((item.UsedCount * 100 / Math.Max(item.UsageLimit, 1)).ToString())%"></div>
                                         </div>
                                     }
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <div class="flex justify-end space-x-2">
-                                        <a asp-action="Details" asp-route-id="@item.CouponId" class="text-gray-500 hover:text-gray-700 p-1 rounded-md hover:bg-gray-100">
+                                        <a asp-action="Details" asp-route-id="@item.CouponId" class="text-gray-500 hover:text-gray-700 p-1 rounded-md hover:bg-gray-100" title="@_stringLocalizer[SharedResourcesKeys.Actions.View]">
                                             <i class="ri-eye-line"></i>
                                         </a>
-                                        <a asp-action="Edit" asp-route-id="@item.CouponId" class="text-blue-500 hover:text-blue-700 p-1 rounded-md hover:bg-blue-50">
+                                        <a asp-action="Edit" asp-route-id="@item.CouponId" class="text-blue-500 hover:text-blue-700 p-1 rounded-md hover:bg-blue-50" title="@_stringLocalizer[SharedResourcesKeys.Actions.Edit]">
                                             <i class="ri-pencil-line"></i>
                                         </a>
-                                        <a asp-action="Delete" asp-route-id="@item.CouponId" class="text-red-500 hover:text-red-700 p-1 rounded-md hover:bg-red-50">
-                                            <i class="ri-delete-bin-line"></i>
-                                        </a>
+                                        @if (item.UsedCount == 0)
+                                        {
+                                            <a asp-action="Delete" asp-route-id="@item.CouponId" class="text-red-500 hover:text-red-700 p-1 rounded-md hover:bg-red-50" title="@_stringLocalizer[SharedResourcesKeys.Actions.Delete]">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-gray-300 p-1 cursor-not-allowed" title="Can not Delete Used Coupon">
+                                                @* @_stringLocalizer[SharedResourcesKeys.Error.CannotDeleteUsedCoupon] *@
+                                                <i class="ri-delete-bin-line"></i>
+                                            </span>
+                                        }
                                     </div>
                                 </td>
                             </tr>
@@ -94,13 +139,13 @@
                 <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
                         <p class="text-sm text-gray-700">
-                            Showing <span class="font-medium">1</span> to <span class="font-medium">10</span> of <span class="font-medium">@Model.Count()</span> results
+                            @_stringLocalizer[SharedResourcesKeys.Pagination.ShowingItems] <span class="font-medium">1</span> @_stringLocalizer[SharedResourcesKeys.Pagination.Of] <span class="font-medium">10</span> @_stringLocalizer[SharedResourcesKeys.Pagination.Of] <span class="font-medium">@Model.Count()</span> @_stringLocalizer[SharedResourcesKeys.Pagination.Results]
                         </p>
                     </div>
                     <div>
                         <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                             <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <span class="sr-only">Previous</span>
+                                <span class="sr-only">@_stringLocalizer[SharedResourcesKeys.Pagination.PreviousPage]</span>
                                 <i class="ri-arrow-left-s-line"></i>
                             </a>
                             <a href="#" aria-current="page" class="z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium">
@@ -119,7 +164,7 @@
                                 8
                             </a>
                             <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <span class="sr-only">Next</span>
+                                <span class="sr-only">@_stringLocalizer[SharedResourcesKeys.Pagination.NextPage]</span>
                                 <i class="ri-arrow-right-s-line"></i>
                             </a>
                         </nav>
@@ -128,4 +173,16 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add tooltips to action buttons
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+}

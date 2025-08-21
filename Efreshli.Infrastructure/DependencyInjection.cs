@@ -1,17 +1,13 @@
-﻿using CloudinaryDotNet;
 using Efreshli.Application.Interfaces;
-using Efreshli.Domain.Common.Classes;
+using Efreshli.Application.Services.EmailService;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
+using Efreshli.Domain.Settings;
 using Efreshli.Infrastructure.Data;
 using Efreshli.Infrastructure.Repositories;
+using Efreshli.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Efreshli.Infrastructure
 {
@@ -20,7 +16,6 @@ namespace Efreshli.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IGenericRepository<Image>, GenericRepository<Image>>();
-
             services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
             services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();
             services.AddScoped<IGenericRepository<Coupon>, GenericRepository<Coupon>>();
@@ -28,25 +23,23 @@ namespace Efreshli.Infrastructure
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IGenericRepository<Cart>, GenericRepository<Cart>>();
 
-
-
-
-
-
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+
             // Initialize static UserContext
             //UserContext.Initialize(services.BuildServiceProvider());
             DbInitializer.SeedAsync(services.BuildServiceProvider()).GetAwaiter().GetResult();
-            
 
-
+            // FIXED: Email service configuration - use Bind instead
+            services.Configure<EmailSettings>(options =>
+                configuration.GetSection("EmailSettings").Bind(options));
+            services.AddScoped<IEmailService, EmailService>();
             services.AddHttpContextAccessor();
+
             //register repositories
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IBrandsRepository, BrandsRepository>();
             services.AddScoped<ICouponRepository, CouponRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
-
 
             return services;
         }

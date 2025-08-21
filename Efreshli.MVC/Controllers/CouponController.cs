@@ -1,4 +1,4 @@
-﻿using Efreshli.Application.DTOs.CouponDTOs;
+using Efreshli.Application.DTOs.CouponDTOs;
 using Efreshli.Application.Resources;
 using Efreshli.Application.Services.CouponServices;
 using Mapster;
@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Stripe.Checkout;
+using Stripe.FinancialConnections;
 using System.Threading.Tasks;
 
 namespace Efreshli.MVC.Controllers
@@ -32,6 +35,7 @@ namespace Efreshli.MVC.Controllers
         // GET: CouponController/Details/5
         public async Task<ActionResult> Details(int id)
         {
+            
             var coupoun = await _couponService.GetCouponByIdAsync(id);
             return View(coupoun);
         }
@@ -52,8 +56,7 @@ namespace Efreshli.MVC.Controllers
                 if (!ModelState.IsValid)
                 {
                     return View(addCouponDTO);
-                }
-
+                }         
                 var result = await _couponService.CreateCouponAsync(addCouponDTO);
                 if (result != null)
                 {
@@ -166,6 +169,41 @@ namespace Efreshli.MVC.Controllers
             return RedirectToAction(nameof(Details), new { id });
         }
 
+        public IActionResult Checkout()
+        {
+            var Currency = "usd";
+            var surl = "http://localhost:5136/Coupon/Details/1";
+            var cancelurl = "http://localhost:5136/Coupon";
 
+            var options = new Stripe.Checkout.SessionCreateOptions
+            {
+                SuccessUrl = surl,
+                CancelUrl = cancelurl,
+                Mode = "payment",
+                LineItems = new List<Stripe.Checkout.SessionLineItemOptions>
+    {
+        new Stripe.Checkout.SessionLineItemOptions
+        {
+            PriceData = new Stripe.Checkout.SessionLineItemPriceDataOptions
+            {
+                Currency = Currency,
+                UnitAmount = 5000, // amount in cents, e.g. 5000 = $50.00
+                ProductData = new Stripe.Checkout.SessionLineItemPriceDataProductDataOptions
+                {
+                    Name = "Final Payment"
+                }
+            },
+            Quantity = 1
+        }
+    }
+            };
+
+            var service = new Stripe.Checkout.SessionService();
+            Stripe.Checkout.Session session = service.Create(options);
+
+            Response.Headers.Add("Location", session.Url);
+            return new StatusCodeResult(303);
+
+        }
     }
 }

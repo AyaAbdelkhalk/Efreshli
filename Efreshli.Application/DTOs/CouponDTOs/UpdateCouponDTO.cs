@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Efreshli.Application.DTOs.CouponDTOs
 {
@@ -12,5 +12,7 @@ namespace Efreshli.Application.DTOs.CouponDTOs
         public decimal DiscountValue { get; set; }
         public bool IsPercentage { get; set; }
         public int UsageLimit { get; set; }
+        public DateTime ExpireDate { get; set; }
+        public decimal? MinOrderAmount { get; set; }
     }
 }

@@ -1727,6 +1727,12 @@
     <value>عدد مرات الاستخدام</value>
     <comment>Used count</comment>
   </data>
+	<data name="Efreshli.Coupon.ExpireDate" xml:space="preserve">
+    <value>تاريخ الانتهاء</value>
+  </data>
+	<data name="Efreshli.Coupon.MinOrderAmount" xml:space="preserve">
+    <value>اقل قيمة طلب للاستافدة من الخصم</value>
+  </data>
   <data name="Efreshli.Image.URL" xml:space="preserve">
     <value>رابط الصورة</value>
     <comment>Image URL</comment>

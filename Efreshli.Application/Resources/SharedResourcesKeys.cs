@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -646,6 +646,8 @@ namespace Efreshli.Application.Resources
                 public const string FixedAmount = "Efreshli.Coupon.FixedAmount";
                 public const string UsageLimit = "Efreshli.Coupon.UsageLimit";
                 public const string UsedCount = "Efreshli.Coupon.UsedCount";
+                public const string ExpireDate = "Efreshli.Coupon.ExpireDate";
+                public const string MinOrderAmount = "Efreshli.Coupon.MinOrderAmount";
             }
             public static class Image
             {
