@@ -343,83 +343,90 @@
                     <th style="width: 120px;">Actions</th>
                 </tr>
             </thead>
-            @if (Model == null || !Model.Any())
-            {
-                <tr>
-                    <td colspan="6" class="admin-table-cell">لا توجد منتجات لعرضها</td>
-                </tr>
+
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+
+                @foreach (var product in Model)
+                {
+                    <tr class="admin-table-row" style="animation-delay: @(Model.ToList().IndexOf(product) * 0.1)s;">
+                        <!-- Product Image -->
+                        <td class="admin-table-cell admin-product-image-cell">
+                            @if (product.ImageUrl == null || product.ImageUrl == "")
+                            {
+                                <img src="/images/NoImage.png" alt="@product.NameAr" class="admin-product-image" />
+                            }
+                            else
+                            {
+                                <img src="@product.ImageUrl" alt="@product.NameAr" class="admin-product-image" />
+                            }
+                        </td>
+
+                        <!-- Product Name & Description -->
+                        <td class="admin-table-cell">
+                            <h3 class="admin-product-name">@product.NameAr</h3>
+                            @* <p class="admin-product-name">@product.DescriptionAr</p> *@
+                        </td>
+
+                        <!-- Price Information -->
+                        <td class="admin-table-cell">
+                            <div class="admin-product-price">
+                                <i class="fa-solid fa-tag"></i>
+                                @product.Price ج.م
+                            </div>
+                            <div class="admin-final-price">
+                                <i class="fa-solid fa-check-circle"></i>
+                                @product.FinalPrice ج.م
+                            </div>
+                        </td>
+
+                        <!-- Colors Count -->
+                        <td class="admin-table-cell">
+                            <span class="admin-badge colors">
+                                <i class="fa-solid fa-palette" style="font-size: 10px; margin-left: 4px;"></i>
+                                @(product.ProductItemColorsUrls?.Count() ?? 0) ألوان
+                            </span>
+                        </td>
+
+                        <!-- Dimensions -->
+                        <td class="admin-table-cell">
+                            <div class="">
+                                <i class="fa-solid fa-ruler-combined"></i>
+                                @(string.IsNullOrEmpty(product.DimensionsOrSize) ? "غير محدد" : product.DimensionsOrSize)
+                            </div>
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="admin-table-cell">
+                            <div class="admin-table-actions">
+                                <a asp-action="GetProductDetailsForAdmin" asp-controller="Product"
+                                   asp-route-id="@product.ProductId"
+                                   class="admin-icon-btn admin-btn-view" title="عرض التفاصيل">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                                <button class="admin-icon-btn admin-btn-delete" title="حذف المنتج"
+                                        onclick="confirmDelete(@product.ProductId)">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            
             }
-            else
-            {
-                <tbody>
-                    @foreach (var product in Model)
-                    {
-                        <tr class="admin-table-row" style="animation-delay: @(Model.ToList().IndexOf(product) * 0.1)s;">
-                            <!-- Product Image -->
-                            <td class="admin-table-cell admin-product-image-cell">
-                                @if (product.ImageUrl == null || product.ImageUrl == "")
-                                {
-                                    <img src="/images/NoImage.png" alt="@product.NameAr" class="admin-product-image" />
-                                }
-                                else
-                                {
-                                    <img src="@product.ImageUrl" alt="@product.NameAr" class="admin-product-image" />
-                                }
-                            </td>
 
-                            <!-- Product Name & Description -->
-                            <td class="admin-table-cell">
-                                <h3 class="admin-product-name">@product.NameAr</h3>
-                                @* <p class="admin-product-name">@product.DescriptionAr</p> *@
-                            </td>
 
-                            <!-- Price Information -->
-                            <td class="admin-table-cell">
-                                <div class="admin-product-price">
-                                    <i class="fa-solid fa-tag"></i>
-                                    @product.Price ج.م
-                                </div>
-                                <div class="admin-final-price">
-                                    <i class="fa-solid fa-check-circle"></i>
-                                    @product.FinalPrice ج.م
-                                </div>
-                            </td>
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-gray-500 p-4">
+                            لا توجد منتجات متاحة حالياً
+                        </td>
+                    </tr>
+                }
+            </tbody>
 
-                            <!-- Colors Count -->
-                            <td class="admin-table-cell">
-                                <span class="admin-badge colors">
-                                    <i class="fa-solid fa-palette" style="font-size: 10px; margin-left: 4px;"></i>
-                                    @(product.ProductItemColorsUrls?.Count() ?? 0) ألوان
-                                </span>
-                            </td>
-
-                            <!-- Dimensions -->
-                            <td class="admin-table-cell">
-                                <div class="">
-                                    <i class="fa-solid fa-ruler-combined"></i>
-                                    @(string.IsNullOrEmpty(product.DimensionsOrSize) ? "غير محدد" : product.DimensionsOrSize)
-                                </div>
-                            </td>
-
-                            <!-- Actions -->
-                            <td class="admin-table-cell">
-                                <div class="admin-table-actions">
-                                    <a asp-action="GetProductDetailsForAdmin" asp-controller="Product"
-                                       asp-route-id="@product.ProductId"
-                                       class="admin-icon-btn admin-btn-view" title="عرض التفاصيل">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </a>
-                                    <button class="admin-icon-btn admin-btn-delete" title="حذف المنتج"
-                                            onclick="confirmDelete(@product.ProductId)">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            }
-             
         </table>
     </div>
 
