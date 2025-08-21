@@ -12,12 +12,14 @@ namespace Efreshli.Domain.Models
         public string DescriptionAr { get; set; }
         public string DescriptionEn { get; set; }
         public string? DimensionsOrSize { get; set; }
-
+        public string SKU { get; set; }
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
-        public virtual ICollection<Image>? ProductImages { get; set; }
-        public virtual ICollection<ProductAttributeValue>? AttributeValues { get; set; }
+        //public virtual ICollection<Color>? ProductColors { get; set; } = new List<Color>();
+        public virtual ICollection<Image>? ProductImages { get; set; } = new List<Image>();
+        public virtual ICollection<ProductAttributeValue>? AttributeValues { get; set; } = new List<ProductAttributeValue>();
+        public virtual ICollection<ProductItem>? ProductItems { get; set; } = new List<ProductItem>();
     }
 }

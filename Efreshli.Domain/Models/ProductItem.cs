@@ -18,8 +18,8 @@ namespace Efreshli.Domain.Models
         public decimal? Discount { get; set; }
         public bool? IsPercentage { get; set; }
         public int Quantity { get; set; }
-        
-        public string SKU { get; set; }
+        public ICollection<Color>? ProductItemColors { get; set; } = new List<Color>();
+
 
         public int ProductId { get; set; }
         public Product Product { get; set; }
