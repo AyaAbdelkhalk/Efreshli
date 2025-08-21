@@ -62,6 +62,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Stripe;
 using System.Globalization;
 
 namespace Efreshli.MVC
@@ -162,7 +163,7 @@ namespace Efreshli.MVC
             {
                 var settings = sp.GetRequiredService<IOptions<CloudinarySettings>>().Value;
 
-                var account = new Account(
+                var account = new CloudinaryDotNet.Account(
                     settings.CloudName,
                     settings.ApiKey,
                     settings.ApiSecret
@@ -170,6 +171,11 @@ namespace Efreshli.MVC
 
                 return new Cloudinary(account);
             });
+
+
+            #region Stripe
+            StripeConfiguration.ApiKey = builder.Configuration.GetSection("StripeSettings:Secretkey").Get<string>();
+            #endregion
 
             var app = builder.Build();
 

@@ -1,4 +1,4 @@
-﻿using CloudinaryDotNet;
+using CloudinaryDotNet;
 using Efreshli.Application;
 using Efreshli.Application.DTOs.CategoryDTOs;
 using Efreshli.Application.Services;
@@ -50,7 +50,20 @@ namespace Efreshli.API
 
             builder.Services.AddHttpContextAccessor();
 
-            
+            #region CROS
+            var AllowOrogins = "_myAllowSpecificOrigins";
+
+           
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: AllowOrogins,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("http://localhost:4200/");
+                                  });
+            });
+            #endregion
 
 
             #region Cloudinary
@@ -98,14 +111,35 @@ namespace Efreshli.API
 
 
             #region Auth
+            //email
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+            {
+                options.TokenLifespan = TimeSpan.FromHours(24); // Email confirmation tokens expire in 24 hours
+            });
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequiredLength = 3;
+
+                options.SignIn.RequireConfirmedEmail = true; // This is correct for login
+                options.SignIn.RequireConfirmedAccount = true;
+
+                // Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = true;
             })
                 .AddEntityFrameworkStores<EfreshliDbContext>()
                  .AddDefaultTokenProviders();
@@ -206,7 +240,10 @@ namespace Efreshli.API
 
             app.UseSwagger();
             app.UseSwaggerUI();
-
+            #region email
+            app.UseHttpsRedirection();
+            #endregion
+            app.UseCors(AllowOrogins);
             app.UseStaticFiles();
 
             app.UseAuthentication();

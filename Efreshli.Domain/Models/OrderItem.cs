@@ -1,6 +1,7 @@
-﻿using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Efreshli.Domain.Models
 {
@@ -16,5 +17,6 @@ namespace Efreshli.Domain.Models
 
         public int Quantity { get; set; }
         public decimal Price { get; set; }
+       
     }
 }

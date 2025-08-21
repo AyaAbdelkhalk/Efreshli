@@ -1,4 +1,4 @@
-﻿using Efreshli.Application.DTOs.CategoryDTOs;
+using Efreshli.Application.DTOs.CategoryDTOs;
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Domain.Models;
 using System;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +15,7 @@ namespace Efreshli.Application.DTOs.CouponDTOs
         public bool IsPercentage { get; set; }
         public int UsageLimit { get; set; }
         public int UsedCount { get; set; }
+        public DateTime ExpireDate { get; set; }
+        public decimal? MinOrderAmount { get; set; }
     }
 }
