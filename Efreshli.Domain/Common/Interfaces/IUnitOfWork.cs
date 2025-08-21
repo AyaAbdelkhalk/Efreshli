@@ -1,4 +1,4 @@
-﻿using Efreshli.Domain.Models;
+using Efreshli.Domain.Models;
 
 
 namespace Efreshli.Domain.Common.Interfaces

@@ -1,4 +1,4 @@
-﻿using Efreshli.Domain.Common.Interfaces;
+using Efreshli.Domain.Common.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -25,15 +25,8 @@ namespace Efreshli.Domain.Models
 
         public virtual ICollection<Wishlist>? Wishlists { get; set; }
 
-        public virtual ICollection<Cart>? Carts { get; set; }
-
-
-
-
-
-
-
-
+        public virtual Cart? Cart { get; set; }
+        public virtual ICollection<Coupon>? Coupons { get; set; }
 
 
 

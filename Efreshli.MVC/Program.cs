@@ -1,50 +1,3 @@
-
-//using Efreshli.Domain.Common.Classes;
-//using Efreshli.Infrastructure.Data;
-//using Microsoft.EntityFrameworkCore;
-
-//namespace Efreshli.MVC
-//{
-//    public class Program
-//    {
-//        public static void Main(string[] args)
-//        {
-//            var builder = WebApplication.CreateBuilder(args);
-
-//            // Add services to the container.
-//            builder.Services.AddControllersWithViews();
-//            builder.Services.AddDbContext<EfreshliDbContext>(options =>
-//                options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
-
-//            #region RegisterIdentity
-
-
-//            #endregion
-//            var app = builder.Build();
-//            // Initialize static UserContext
-//            UserContext.Initialize(app.Services);
-
-//            // Configure the HTTP request pipeline.
-//            if (!app.Environment.IsDevelopment())
-//            {
-//                app.UseExceptionHandler("/Home/Error");
-//            }
-//            app.UseRouting();
-//            app.UseStaticFiles();
-
-//            app.UseAuthorization();
-
-//            app.MapStaticAssets();
-//            app.MapControllerRoute(
-//                name: "default",
-//                pattern: "{controller=Home}/{action=Index}/{id?}")
-//                .WithStaticAssets();
-
-//            app.Run();
-//        }
-//    }
-//}
-
 using CloudinaryDotNet;
 using Efreshli.Application;
 using Efreshli.Application.DTOs.CouponDTOs;  // This is crucial
@@ -62,6 +15,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Stripe;
 using System.Globalization;
 
 namespace Efreshli.MVC
@@ -162,7 +116,7 @@ namespace Efreshli.MVC
             {
                 var settings = sp.GetRequiredService<IOptions<CloudinarySettings>>().Value;
 
-                var account = new Account(
+                var account = new CloudinaryDotNet.Account(
                     settings.CloudName,
                     settings.ApiKey,
                     settings.ApiSecret
@@ -170,6 +124,11 @@ namespace Efreshli.MVC
 
                 return new Cloudinary(account);
             });
+
+
+            #region Stripe
+            StripeConfiguration.ApiKey = builder.Configuration.GetSection("StripeSettings:Secretkey").Get<string>();
+            #endregion
 
             var app = builder.Build();
 

@@ -1,4 +1,4 @@
-﻿using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Common.Classes;
 using System.ComponentModel.DataAnnotations;
 
 namespace Efreshli.Domain.Models
@@ -13,5 +13,7 @@ namespace Efreshli.Domain.Models
         public bool IsPercentage { get; set; }
         public int UsageLimit { get; set; }
         public int UsedCount { get; set; }
+        public DateTime ExpireDate { get; set; }
+        public decimal? MinOrderAmount { get; set; }
     }
 }

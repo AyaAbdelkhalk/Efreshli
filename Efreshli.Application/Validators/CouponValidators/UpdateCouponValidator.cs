@@ -15,34 +15,39 @@ namespace Efreshli.Application.Validators.CouponValidators
     public class UpdateCouponValidator : AbstractValidator<UpdateCouponDTO>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IStringLocalizer<SharedResources> _stringLocalizer;
+        private readonly IStringLocalizer<SharedResources> _localizer;
 
         public UpdateCouponValidator(IUnitOfWork unitOfWork, IStringLocalizer<SharedResources> stringLocalizer)
         {
             _unitOfWork = unitOfWork;
-            _stringLocalizer = stringLocalizer;
+            _localizer = stringLocalizer;
 
             // Code - required + unique
             RuleFor(x => x.Code)
-                .NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.Validation.Required])
+                .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.Validation.Required])
                 .MustAsync(BeUniqueCode)
-                .WithMessage(_stringLocalizer[SharedResourcesKeys.Validation.UniqueValueRequired]);
+                .WithMessage(_localizer[SharedResourcesKeys.Validation.UniqueValueRequired]);
 
             // Discount Value - must be > 0
             RuleFor(x => x.DiscountValue)
-                .GreaterThan(0).WithMessage(_stringLocalizer[SharedResourcesKeys.Validation.MustBeGreaterThanZero, 0]);
+                .GreaterThan(0).WithMessage(_localizer[SharedResourcesKeys.Validation.MustBeGreaterThanZero, 0]);
 
             // Usage Limit - must be >= 0 (or > 0 if you don't allow unlimited)
             RuleFor(x => x.UsageLimit)
-                .GreaterThanOrEqualTo(0).WithMessage(_stringLocalizer[SharedResourcesKeys.Validation.MustBeGreaterThanZero, 0])
+                .GreaterThanOrEqualTo(0).WithMessage(_localizer[SharedResourcesKeys.Validation.MustBeGreaterThanZero, 0])
                 .MustAsync(ValidUsageLimit);
-
+            RuleFor(x => x.ExpireDate.Date)
+                .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.Validation.Required])
+                .GreaterThanOrEqualTo(DateTime.Today).WithMessage(_localizer[SharedResourcesKeys.Validation.FutureDateRequired]);
+            RuleFor(x => x.MinOrderAmount)
+                .NotEmpty().WithMessage(_localizer[SharedResourcesKeys.Validation.Required])
+                .GreaterThan(0).WithMessage(_localizer[SharedResourcesKeys.Validation.MustBeGreaterThanZero]);
             // If percentage, must be ≤ 100
             When(x => x.IsPercentage, () =>
             {
                 RuleFor(x => x.DiscountValue)
                     .LessThanOrEqualTo(100)
-                    .WithMessage(_stringLocalizer[SharedResourcesKeys.Validation.ValueMustBeLessThan, 100]);
+                    .WithMessage(_localizer[SharedResourcesKeys.Validation.ValueMustBeLessThan, 100]);
             });
             
         }
