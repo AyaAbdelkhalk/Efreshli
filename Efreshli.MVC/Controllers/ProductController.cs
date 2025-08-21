@@ -80,30 +80,8 @@ namespace Efreshli.MVC.Controllers
             ModelState.AddModelError("", response.Message);
             return View("Index");
 
-            //var response = await _productService.GetMainProductsAsync(categoryId);
+           
 
-            //if (response.Succeeded)
-            //{
-            //    // Return JSON for AJAX requests
-            //    if (Request.Headers["Accept"].ToString().Contains("application/json") ||
-            //        Request.Headers["X-Requested-With"].ToString().Contains("XMLHttpRequest"))
-            //    {
-            //        return Json(response.Data);
-            //    }
-
-            //    // Return View for direct access
-            //    return View(response.Data);
-            //}
-
-            //// Handle error case
-            //if (Request.Headers["Accept"].ToString().Contains("application/json") ||
-            //    Request.Headers["X-Requested-With"].ToString().Contains("XMLHttpRequest"))
-            //{
-            //    return Json(new { error = true, message = response.Message });
-            //}
-
-            //ModelState.AddModelError("", response.Message);
-            //return View("Error");
         }
 
         [HttpGet]

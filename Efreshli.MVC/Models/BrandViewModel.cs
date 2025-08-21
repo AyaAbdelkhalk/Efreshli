@@ -1,3 +1,4 @@
+using Efreshli.Application.DTOs.BrandDTOs;
 using System.ComponentModel.DataAnnotations;
 
 namespace Efreshli.MVC.Models
@@ -27,11 +28,14 @@ namespace Efreshli.MVC.Models
 
         [Display(Name = "Updated Date")]
         public DateTime? UpdatedDate { get; set; }
+
+        public string? ImageUrl { get; set; }
     }
 
     public class BrandListViewModel
     {
         public IEnumerable<BrandDisplayViewModel> Brands { get; set; } = new List<BrandDisplayViewModel>();
+        public CreateBrandDto CreateBrandDto { get; set; } = new CreateBrandDto();
         public string? SearchTerm { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int PageSize { get; set; } = 10;
@@ -44,8 +48,9 @@ namespace Efreshli.MVC.Models
         public int BrandId { get; set; }
         public string NameAr { get; set; }
         public string NameEn { get; set; }
-        public int? ImageId { get; set; }
+        public string? ImageUrl { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public int? ImageId { get; set; } 
     }
 }
