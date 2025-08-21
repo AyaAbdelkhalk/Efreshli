@@ -45,6 +45,8 @@ namespace Efreshli.Infrastructure.Data
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EfreshliDbContext).Assembly);
             modelBuilder.ApplyGlobalFilters();
             modelBuilder.RestrictRelation();
+            
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -171,6 +171,27 @@ namespace Efreshli.Infrastructure.Repositories
         }
 
 
+
+
+
+        
+        public async Task<TEntity?> GetByIdWithThenIncludeAsync(
+            int id,
+            CancellationToken cancellationToken = default,
+            params string[] includes)
+        {
+            var query = BuildQueryWithStringIncludes(_dbSet, includes);
+
+            var keyName = _context.Model.FindEntityType(typeof(TEntity))
+                .FindPrimaryKey().Properties
+                .Single().Name;
+
+            return await query.FirstOrDefaultAsync(
+                e => EF.Property<int>(e, keyName).Equals(id),
+                cancellationToken);
+        }
+
+
         #region HelperMethods
         private IQueryable<TEntity> BuildQueryWithIncludes(
            IQueryable<TEntity> query,
@@ -197,6 +218,19 @@ namespace Efreshli.Infrastructure.Repositories
             if (predicate != null)
                 query = query.Where(predicate);
 
+            return query;
+        }
+        private IQueryable<TEntity> BuildQueryWithStringIncludes(
+    IQueryable<TEntity> query,
+    params string[] includes)
+        {
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
             return query;
         }
 

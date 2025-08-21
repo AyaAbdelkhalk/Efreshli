@@ -4,6 +4,7 @@ using Efreshli.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Efreshli.Infrastructure.Migrations
 {
     [DbContext(typeof(EfreshliDbContext))]
-    partial class EfreshliDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250818223721_editproduct")]
+    partial class editproduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -402,7 +405,7 @@ namespace Efreshli.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductItemId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -415,7 +418,7 @@ namespace Efreshli.Infrastructure.Migrations
 
                     b.HasIndex("ImageId");
 
-                    b.HasIndex("ProductItemId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Colors");
                 });
@@ -1481,9 +1484,9 @@ namespace Efreshli.Infrastructure.Migrations
                         .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Efreshli.Domain.Models.ProductItem", null)
-                        .WithMany("ProductItemColors")
-                        .HasForeignKey("ProductItemId")
+                    b.HasOne("Efreshli.Domain.Models.Product", null)
+                        .WithMany("ProductColors")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Image");
@@ -1763,6 +1766,8 @@ namespace Efreshli.Infrastructure.Migrations
                 {
                     b.Navigation("AttributeValues");
 
+                    b.Navigation("ProductColors");
+
                     b.Navigation("ProductImages");
 
                     b.Navigation("ProductItems");
@@ -1771,11 +1776,6 @@ namespace Efreshli.Infrastructure.Migrations
             modelBuilder.Entity("Efreshli.Domain.Models.ProductAttribute", b =>
                 {
                     b.Navigation("AttributeValues");
-                });
-
-            modelBuilder.Entity("Efreshli.Domain.Models.ProductItem", b =>
-                {
-                    b.Navigation("ProductItemColors");
                 });
 
             modelBuilder.Entity("Efreshli.Domain.Models.Wishlist", b =>

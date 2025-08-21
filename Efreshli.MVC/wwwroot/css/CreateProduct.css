@@ -1,0 +1,1014 @@
+﻿/* Global Styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #f8f9fa;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 2rem 0;
+    color: #333;
+}
+
+/* تحسين الحاوية الرئيسية */
+.ef-container {
+    max-width: 90%;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e5e7eb;
+}
+
+/* تحسين العنوان */
+.ef-title {
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+/* Grid Layout for Form Sections */
+.ef-form {
+    display: grid;
+    gap: 1.8rem;
+}
+
+.ef-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+}
+
+/* تحسين حقول الإدخال */
+.ef-form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    transition: border-color 0.2s ease;
+    font-size: 0.95rem;
+    color: #374151;
+}
+
+    .ef-form-control:focus {
+        outline: none;
+        border-color: #dc2626;
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+
+    .ef-form-control:hover {
+        border-color: #9ca3af;
+    }
+
+/* تحسين التسميات */
+.ef-label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+/* تحسين الأزرار */
+.ef-btn {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+/* زر الإضافة */
+.ef-btn-add {
+    background: #dc2626;
+    color: #fff;
+}
+
+    .ef-btn-add:hover {
+        background: #b91c1c;
+    }
+
+/* زر الحفظ */
+.ef-btn-submit {
+    background: #dc2626;
+    color: #fff;
+    font-size: 1.1rem;
+    padding: 14px 28px;
+    width: 200px;
+    margin: 1.5rem auto;
+    display: block;
+}
+
+    .ef-btn-submit:hover {
+        background: #b91c1c;
+    }
+
+/* زر الحذف */
+.ef-btn-delete {
+    background: #ef4444;
+    color: #fff;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+}
+
+    .ef-btn-delete:hover {
+        background: #dc2626;
+    }
+
+/* تحسين الجدول */
+.ef-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1rem;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+    .ef-table th, .ef-table td {
+        border: none;
+        padding: 12px;
+        text-align: right;
+        font-size: 0.9rem;
+    }
+
+    .ef-table th {
+        background: #f9fafb;
+        color: #374151;
+        font-weight: 600;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .ef-table td {
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .ef-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .ef-table tbody tr:hover {
+        background: #f9fafb;
+    }
+
+/* رسائل التحقق */
+.ef-validation {
+    color: #dc2626;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    display: block;
+}
+
+/* تحسين القسم */
+.ef-section {
+    margin-bottom: 1.5rem;
+    padding: 1.2rem;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+    .ef-section h4 {
+        color: #1f2937;
+        font-size: 1.2rem;
+        margin-bottom: 0.8rem;
+        font-weight: 600;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+/* File Input Styling */
+input[type="file"] {
+    padding: 10px !important;
+    border: 1px dashed #d1d5db !important;
+    background: #f9fafb !important;
+    border-radius: 6px !important;
+    cursor: pointer;
+}
+
+    input[type="file"]:hover {
+        border-color: #dc2626 !important;
+    }
+
+/* Checkbox Styling */
+input[type="checkbox"] {
+    width: 16px !important;
+    height: 16px !important;
+    accent-color: #dc2626;
+    cursor: pointer;
+}
+
+/* Select Styling */
+select.ef-form-control {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    background-size: 14px;
+    padding-right: 35px;
+}
+
+/* Product Item Card Layout */
+.ef-product-item {
+    background: #f8f9fa;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+    .ef-product-item:hover {
+        border-color: #dc2626;
+        background: #fef2f2;
+    }
+
+.ef-product-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.ef-product-item-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #dc2626;
+    margin: 0;
+}
+
+.ef-product-item-remove {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background 0.2s ease;
+}
+
+    .ef-product-item-remove:hover {
+        background: #dc2626;
+    }
+
+.ef-subsection {
+    margin-bottom: 1rem;
+}
+
+.ef-subsection-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.6rem;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.ef-three-col-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.8rem;
+}
+
+.ef-two-col-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.8rem;
+}
+
+/* Compact grid layouts for product items */
+.ef-price-quantity-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+}
+
+.ef-discount-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.8rem;
+    align-items: end;
+}
+
+.ef-name-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+}
+
+/* Modern Color Sections Container */
+.ef-colors-main-container {
+    display: grid;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+/* Base Color Card Styling */
+.ef-color-category-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.8rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+    .ef-color-category-card:hover {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.1);
+        transform: translateY(-1px);
+        border-color: #d1d5db;
+    }
+
+/* Category Title Styling */
+.ef-color-category-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* Input Container Grid */
+.ef-color-inputs-container {
+    display: grid;
+    gap: 1.2rem;
+}
+
+/* Name Inputs Grid (Arabic & English side by side) */
+.ef-name-inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* Individual Input Group */
+.ef-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+    .ef-input-group .ef-label {
+        font-weight: 500;
+        font-size: 0.9rem;
+        color: #4b5563;
+        margin-bottom: 0.3rem;
+    }
+
+    .ef-input-group .ef-form-control {
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        background: #ffffff;
+    }
+
+        .ef-input-group .ef-form-control:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .ef-input-group .ef-form-control:hover {
+            border-color: #9ca3af;
+        }
+
+/* File Input Styling */
+.ef-file-input-group {
+    margin-top: 0.5rem;
+}
+
+    .ef-file-input-group .ef-form-control[type="file"] {
+        padding: 0.8rem !important;
+        border: 2px dashed #d1d5db !important;
+        background: #f9fafb !important;
+        border-radius: 8px !important;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 0.9rem;
+    }
+
+        .ef-file-input-group .ef-form-control[type="file"]:hover {
+            border-color: #6366f1 !important;
+            background: #f3f4f6 !important;
+        }
+
+/* Additional Colors Specific Styling */
+.ef-additional-colors-card {
+    border-left: 4px solid #10b981;
+}
+
+    .ef-additional-colors-card .ef-color-category-title {
+        color: #065f46;
+    }
+
+/* Colors Container for Additional Colors */
+.ef-colors-container {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Individual Additional Color Item */
+.ef-additional-color-item {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.2rem;
+    position: relative;
+}
+
+.ef-additional-color-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.ef-additional-color-item-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+/* Add Color Button */
+.ef-add-color-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: #ffffff;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+    .ef-add-color-btn:hover {
+        border-color: #10b981;
+        color: #065f46;
+        background: #f0fdf4;
+    }
+
+/* Remove Color Button */
+.ef-remove-color-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+    .ef-remove-color-btn:hover {
+        background: #dc2626;
+    }
+
+/* Fabric Color Card Accent */
+.ef-fabric-color-card {
+    border-left: 4px solid #3b82f6;
+}
+
+    .ef-fabric-color-card .ef-color-category-title {
+        color: #1e40af;
+    }
+
+/* Wood Color Card Accent */
+.ef-wood-color-card {
+    border-left: 4px solid #f59e0b;
+}
+
+    .ef-wood-color-card .ef-color-category-title {
+        color: #92400e;
+    }
+
+.ef-color-section {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 0.8rem;
+    margin-bottom: 0.6rem;
+}
+
+.ef-color-section-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.ef-color-section .ef-form-control {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+}
+
+.ef-add-color-btn {
+    background: #f3f4f6;
+    border: 1px dashed #d1d5db;
+    color: #6b7280;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+    .ef-add-color-btn:hover {
+        background: #e5e7eb;
+        border-color: #9ca3af;
+        color: #374151;
+    }
+
+.ef-color-item {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 0.8rem;
+    margin-bottom: 0.6rem;
+}
+
+    .ef-color-item input[type="file"] {
+        padding: 6px !important;
+        font-size: 0.8rem !important;
+    }
+
+.ef-color-remove {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    height: fit-content;
+}
+
+    .ef-color-remove:hover {
+        background: #dc2626;
+    }
+
+/* تصميم متجاوب */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem 0;
+    }
+
+    .ef-container {
+        padding: 1.5rem;
+        margin: 0 1rem;
+    }
+
+    .ef-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .ef-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ef-section {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+        .ef-section h4 {
+            font-size: 1.1rem;
+        }
+
+    .ef-btn-submit {
+        width: 100%;
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    .ef-table th, .ef-table td {
+        padding: 8px;
+        font-size: 0.8rem;
+    }
+
+    /* Product Item Mobile Styles */
+    .ef-product-item {
+        padding: 1rem;
+    }
+
+    .ef-three-col-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ef-two-col-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ef-price-quantity-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .ef-discount-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .ef-name-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .ef-color-item {
+        padding: 0.8rem;
+    }
+
+        .ef-color-item .ef-name-grid {
+            grid-template-columns: 1fr !important;
+        }
+
+    .ef-product-item-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    /* Color Category Cards Mobile Styles */
+    .ef-colors-main-container {
+        gap: 1.5rem;
+    }
+
+    .ef-color-category-card {
+        padding: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .ef-color-category-title {
+        font-size: 1.1rem;
+        margin-bottom: 1.2rem;
+        padding-bottom: 0.6rem;
+    }
+
+    .ef-name-inputs-grid {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .ef-color-inputs-container {
+        gap: 1rem;
+    }
+
+    .ef-additional-color-item {
+        padding: 1rem;
+    }
+
+    .ef-additional-color-item-header {
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: stretch;
+    }
+
+    .ef-add-color-btn {
+        padding: 0.8rem;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .ef-container {
+        padding: 1rem;
+    }
+
+    .ef-title {
+        font-size: 1.3rem;
+    }
+
+    .ef-form-control {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .ef-label {
+        font-size: 0.9rem;
+    }
+
+    .ef-btn {
+        padding: 7px 14px;
+        font-size: 0.75rem;
+    }
+
+    .ef-section {
+        padding: 0.7rem;
+    }
+
+        .ef-section h4 {
+            font-size: 0.95rem;
+        }
+
+    .ef-product-item {
+        padding: 0.8rem;
+    }
+
+    .ef-subsection-title {
+        font-size: 0.9rem;
+    }
+
+    .ef-color-section {
+        padding: 0.8rem;
+    }
+
+    /* Color Category Cards for Small Mobile */
+    .ef-color-category-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .ef-color-category-title {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        gap: 0.5rem;
+    }
+
+    .ef-colors-main-container {
+        gap: 1rem;
+    }
+
+    .ef-name-inputs-grid {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+    }
+
+    .ef-color-inputs-container {
+        gap: 0.8rem;
+    }
+
+    .ef-input-group .ef-form-control {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .ef-file-input-group .ef-form-control[type="file"] {
+        padding: 0.6rem !important;
+        font-size: 0.85rem;
+    }
+
+    .ef-additional-color-item {
+        padding: 0.8rem;
+    }
+
+    .ef-additional-color-item-title {
+        font-size: 0.85rem;
+    }
+
+    .ef-add-color-btn {
+        padding: 0.7rem;
+        font-size: 0.8rem;
+    }
+
+    .ef-remove-color-btn {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* Animation Styles */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.ef-additional-color-item {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Focus states for better accessibility */
+.ef-color-category-card:focus-within {
+    border-color: #6366f1;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1);
+}
+
+/* حاوية المنتجات الفرعية */
+.ef-product-items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+/* كارت المنتج الفرعي */
+.ef-product-item-card {
+    background: linear-gradient(135deg, #fefefe 0%, #f8f9fa 100%);
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.8rem;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    animation: slideInUp 0.3s ease-out;
+}
+
+    .ef-product-item-card:hover {
+        border-color: #dc2626;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+/* رأس الكارت */
+.ef-product-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.ef-product-item-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #dc2626;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.ef-remove-item-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+}
+
+    .ef-remove-item-btn:hover {
+        background: linear-gradient(135deg, #dc2626, #b91c1c);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+    }
+
+/* محتوى الكارت */
+.ef-product-item-content {
+    display: grid;
+    gap: 1.5rem;
+}
+
+/* قسم المعلومات الأساسية */
+.ef-basic-info-section {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 1.2rem;
+    border-left: 4px solid #3b82f6;
+}
+
+.ef-section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e40af;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ef-basic-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+/* قسم الألوان الأساسية */
+.ef-colors-section {
+    background: #f0fdf4;
+    border-radius: 8px;
+    padding: 1.2rem;
+    border-left: 4px solid #10b981;
+}
+
+    .ef-colors-section .ef-section-title {
+        color: #065f46;
+    }
+
+.ef-colors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+}
+
+/* كارت اللون */
+.ef-color-card {
+    background: white;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.2s ease;
+}
+
+    .ef-color-card:hover {
+        border-color: #10b981;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+    }
+
+.ef-color-card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+/* قسم الألوان الإضافية */
+.ef-additional-colors-section {
+    background: #fef7ff;
+    border-radius: 8px;
+    padding: 1.2rem;
+    border-left: 4px solid #a855f7;
+}
+
+    .ef-additional-colors-section .ef-section-title {
+        color: #7c2d92;
+    }
+
+.ef-additional-colors-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.ef-additional-color-item {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.2s ease;
+    animation: slideInUp 0.2s ease-out;
+}
+
+    .ef-additional-color-item:hover {
+        border-color: #a855f7;
+        box-shadow: 0 2px 8px rgba(168, 85, 247, 0.1);
+    }

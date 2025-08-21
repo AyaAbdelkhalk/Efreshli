@@ -37,5 +37,9 @@ namespace Efreshli.Domain.Common.Interfaces
         Task SaveChangesAsync();
         Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>>? predicate = null);
 
+        Task<TEntity> GetByIdWithThenIncludeAsync(
+            int id,
+            CancellationToken cancellationToken = default,
+            params string[] includes);
     }
 }
