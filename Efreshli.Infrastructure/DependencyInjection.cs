@@ -24,6 +24,8 @@ namespace Efreshli.Infrastructure
             services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
             services.AddScoped<IGenericRepository<Brand>, GenericRepository<Brand>>();
             services.AddScoped<IGenericRepository<Coupon>, GenericRepository<Coupon>>();
+            services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
+            services.AddScoped<IProductRepository, ProductRepository>();
 
 
 
