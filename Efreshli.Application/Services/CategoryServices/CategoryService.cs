@@ -52,6 +52,7 @@ namespace Efreshli.Application.Services.CategoryServices
             }
 
             // Handle parent category
+            
             if (category.ParentId.HasValue)
             {
                 var parentCategory = await _unitOfWork.CategoryRepository.GetByIdAsync(category.ParentId.Value);
