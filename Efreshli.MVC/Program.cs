@@ -22,7 +22,7 @@ namespace Efreshli.MVC
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
           
@@ -41,7 +41,7 @@ namespace Efreshli.MVC
 
             // 2. Database
             builder.Services.AddDbContext<EfreshliDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"),s=>s.EnableRetryOnFailure()));
 
             // 3. Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -131,11 +131,18 @@ namespace Efreshli.MVC
             #endregion
 
             var app = builder.Build();
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var services = scope.ServiceProvider;
+            //    var context = services.GetRequiredService<EfreshliDbContext>();
+            //    await context.Database.MigrateAsync(); // Apply migrations
+            //    await DbInitializer.SeedAsync(services);
+            //}
 
             // Initialize static UserContext
             //UserContext.Initialize(app.Services);
 
-            
+
             // Error handling
             if (!app.Environment.IsDevelopment())
             {
