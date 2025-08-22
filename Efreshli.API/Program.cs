@@ -108,7 +108,14 @@ namespace Efreshli.API
             #endregion
 
 
-
+            #region Cors
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                        builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+                    );
+            });
+            #endregion
 
 
             #region Auth
@@ -236,6 +243,7 @@ namespace Efreshli.API
             var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(options.Value);
             #endregion
+
 
             var httpContextAccessor = app.Services.GetRequiredService<IHttpContextAccessor>();
 
