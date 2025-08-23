@@ -18,8 +18,10 @@ namespace Efreshli.Application.DTOs.ProductDTOs
         public decimal? FinalPrice { get; set; }
         public string? ImageUrl { get; set; }
         public List<string>? ProductItemColorsUrls { get; set; } = new List<string>();
-        
-        
+
+        public bool IsWishlisted { get; set; } = false;
+
+
 
     }
 }

@@ -46,6 +46,7 @@ namespace Efreshli.Application.Services.AuthServices
             _emailService = emailService;
             _roleService = roleService;
             _logger = logger;
+            _roleManager = roleManager;
         }
 
         public async Task<Response<string>> RegisterAsync(RegisterDto model)
