@@ -9,12 +9,13 @@ using Efreshli.Application.Services.BrandsServices;
 using Efreshli.Application.Services.CategoryServices;
 using Efreshli.Application.Services.CouponServices;
 using Efreshli.Application.Services.File;
-using Efreshli.Application.Services.RoleService;
 using Efreshli.Application.Services.ProductAttributeServices;
 using Efreshli.Application.Services.ProductAttributeValueServices;
 using Efreshli.Application.Services.ProductItemServices;
 using Efreshli.Application.Services.ProductServices;
+using Efreshli.Application.Services.RoleService;
 using Efreshli.Application.Services.WebsiteInfoServices;
+using Efreshli.Application.Services.WishlistServices;
 using Efreshli.Application.Validators.CategoryValidators;
 using Efreshli.Application.Validators.CouponValidators;
 using Efreshli.Application.Validators.WebsiteInfoValidators;
@@ -50,6 +51,7 @@ namespace Efreshli.Application
             services.AddScoped<IProductAttributeService, ProductAttributeService>();
             services.AddScoped<IProductAttributeValueService, ProductAttributeValueService>();
             services.AddScoped<IProductItemService, ProductItemService>();
+            services.AddScoped<IWishlistService, WishlistService>();
 
             // Register external services
             services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
