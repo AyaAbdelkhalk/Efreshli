@@ -216,7 +216,6 @@ namespace Efreshli.Application.Services.ProductServices
                             ?? string.Empty,
                         ProductAttributeNameEn = _unitOfWork.ProductAttributeRepository.GetByIdAsync(av.ProductAttributeId).Result?.NameEn ?? string.Empty
                     }).ToList()
-
                 };
                 prds.Add(prd);
 
