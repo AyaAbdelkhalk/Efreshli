@@ -28,7 +28,7 @@ namespace Efreshli.Application.DTOs.ProductDTOs
         public List<string>? ProductImageUrls { get; set; } = new List<string>();
         public List<ProductAttributeValueResponseDto>? AttributeValues { get; set; } = new List<ProductAttributeValueResponseDto>();
 
-
+        public bool IsWishlisted { get; set; } = false;
 
 
     }
