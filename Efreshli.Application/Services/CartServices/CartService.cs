@@ -3,23 +3,28 @@ using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
 using Mapster;
+using Microsoft.AspNetCore.Http;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace Efreshli.Application.Services.CartServices
 {
     public class CartService : ICartService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CartService(IUnitOfWork unitOfWork)
+        public CartService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Response<CartDto>> GetCartByUserIdAsync(string userId)
         {
             try
             {
+               // userId ??= _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
                 var carts = await _unitOfWork.CartRepository.GetAllWithIncludeAsync(
                     predicate: c => c.ApplicationUserId == userId,
                     includes: new Expression<Func<Cart, object>>[]
@@ -27,7 +32,6 @@ namespace Efreshli.Application.Services.CartServices
                         c => c.Items // ✅ بس Items
                     }
                 );
-
                 var userCart = carts.FirstOrDefault();
 
                 if (userCart == null)

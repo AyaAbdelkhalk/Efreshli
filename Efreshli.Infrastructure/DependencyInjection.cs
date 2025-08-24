@@ -27,7 +27,7 @@ namespace Efreshli.Infrastructure
 
             // Initialize static UserContext
             //UserContext.Initialize(services.BuildServiceProvider());
-            DbInitializer.SeedAsync(services.BuildServiceProvider()).GetAwaiter().GetResult();
+            //DbInitializer.SeedAsync(services.BuildServiceProvider()).GetAwaiter().GetResult();
 
             // FIXED: Email service configuration - use Bind instead
             services.Configure<EmailSettings>(options =>
