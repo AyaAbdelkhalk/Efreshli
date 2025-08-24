@@ -56,6 +56,17 @@ namespace Efreshli.API
 
            
 
+
+//             builder.Services.AddCors(options =>
+//             {
+//                 options.AddPolicy(name: AllowOrogins,
+//                                   policy =>
+//                                   {
+//                                       policy.WithOrigins("http://localhost:4200");
+//                                       policy.AllowAnyHeader();
+//                                   });
+//             });
+
             //builder.Services.AddCors(options =>
             //{
             //    options.AddPolicy(name: AllowOrogins,
@@ -64,6 +75,7 @@ namespace Efreshli.API
             //                          policy.WithOrigins("http://localhost:4200/");
             //                      });
             //});
+
             #endregion
 
 
