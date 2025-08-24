@@ -61,7 +61,8 @@ namespace Efreshli.API
                 options.AddPolicy(name: AllowOrogins,
                                   policy =>
                                   {
-                                      policy.WithOrigins("http://localhost:4200/");
+                                      policy.WithOrigins("http://localhost:4200");
+                                      policy.AllowAnyHeader();
                                   });
             });
             #endregion
