@@ -3,7 +3,184 @@
 @{
     ViewData["Title"] = "Brands";
 }
-<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+
+<style>
+    :root{
+        --brand: #fc0000e5;
+        --brand-2:#d93b49;
+        --success:#2e8b57;
+        --warning:#ff9800;
+        --info:#007bff;
+        --danger:#dc3545;
+        --muted:#6c757d;
+        --bg:#f9f9f9;
+        --text:#222;
+        --radius:12px;
+        --shadow:0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    /* ===== Base ===== */
+    *{box-sizing:border-box}
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.45;
+    }
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+
+    /* ===== Container & Grid (Bootstrap-free) ===== */
+    .container-fluid{max-width:1200px;margin:0 auto;padding:0 16px}
+    .row{display:flex;flex-wrap:wrap;gap:16px}
+    .col-12{flex:0 0 100%}
+    
+    .justify-content-between{justify-content:space-between}
+    .justify-content-center{justify-content:center}
+    .align-items-center{align-items:center}
+    .d-flex{display:flex}
+    .text-center{text-align:center}
+    .text-white{color:#fff !important}
+    .text-muted{color:#6c757d}
+    .bg-light{background:#f5f5f5}
+    .mb-3{margin-bottom:1rem}
+    .py-5{padding:3rem 0}
+
+    /* ===== Cards ===== */
+    .card {
+        border: none;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        background: #fff;
+        margin-bottom: 20px;
+    }
+    .card-header {
+        background: linear-gradient(90deg, var(--brand), var(--brand-2));
+        color: #fff;
+        border-top-left-radius: var(--radius);
+        border-top-right-radius: var(--radius);
+        padding: 15px 20px;
+    }
+    .card-title { margin:0; font-size:1.3rem; font-weight:600; }
+    .card-body { padding: 16px 20px; }
+    .card.bg-primary{background:var(--brand) !important;color:#fff}
+    .card.bg-success{background:var(--success) !important;color:#fff}
+    .card.bg-warning{background:var(--warning) !important;color:#000}
+    .card.bg-info{background:var(--info) !important;color:#fff}
+    .card-body h5 { font-size: 1.6rem; font-weight: bold; }
+
+    /* ===== Buttons ===== */
+    .btn{
+        display:inline-flex;gap:8px;align-items:center;justify-content:center;
+        border-radius:8px;border:1px solid transparent;padding:8px 12px;
+        font-weight:600;cursor:pointer;transition:0.2s ease-in-out;
+        background:#eee;color:#111
+    }
+    .btn-sm{padding:6px 10px;font-size:0.9rem}
+    .btn-primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+
+        .btn-primary:hover {
+            background: #fc0000e5;
+            border-color: #fc0000e5
+        }
+    .btn-info{background:var(--info);color:#fff;border-color:var(--info)}
+    .btn-info:hover{filter:brightness(.9)}
+    .btn-warning{background:#ffc107;color:#000;border-color:#ffc107}
+    .btn-warning:hover{filter:brightness(.95)}
+    .btn-danger{background:var(--danger);color:#fff;border-color:var(--danger)}
+    .btn-danger:hover{filter:brightness(.9)}
+    .btn-secondary{background:#e9ecef;color:#111;border-color:#dee2e6}
+    .btn-secondary:hover{background:#dfe3e7}
+    .btn-outline-info{
+        background:transparent;color:var(--brand);border-color:var(--brand)
+    }
+    .btn-outline-info:hover{background:var(--brand);color:#fff}
+    .btn-outline-secondary{
+        background:transparent;color:#555;border-color:#ddd
+    }
+    .btn-outline-secondary:hover{background:#ddd}
+    .btn-group{display:flex;gap:8px}
+
+    /* ===== Inputs / Selects / Input Group ===== */
+    .form-control, .form-select {
+        width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:8px;
+        outline:none; transition:border .15s ease
+    }
+    .form-control:focus, .form-select:focus { border-color: var(--brand); }
+    .input-group{display:flex}
+    .input-group .form-control{border-right:0;border-radius:8px 0 0 8px}
+    .input-group .btn{border-radius:0 8px 8px 0}
+
+    /* ===== Table ===== */
+    .table-responsive{width:100%;overflow:auto;border-radius:10px}
+    table.table{
+        width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden
+    }
+    .table th, .table td{padding:12px 15px;border-bottom:1px solid #eee;text-align:left}
+    .table thead{background:var(--brand);color:#fff}
+    .table-dark{background:var(--brand) !important;color:#fff}
+    .table-striped tbody tr:nth-child(even){background:#fafafa}
+    .table-hover tbody tr:hover{background:#f1f1f1;cursor:pointer}
+
+    /* ===== Badge ===== */
+    .badge{
+        display:inline-flex;align-items:center;gap:6px;
+        border-radius:6px;padding:6px 10px;font-size:.85rem
+    }
+    .bg-success{background:#d4edda;color:#155724}
+    .bg-secondary{background:#e2e3e5;color:#41464b}
+
+    /* ===== Pagination ===== */
+    .pagination{display:flex;list-style:none;padding-left:0;gap:6px}
+    .page-item{}
+    .page-link{
+        display:inline-block;padding:8px 12px;border-radius:6px;border:1px solid #ddd;color:var(--brand)
+    }
+    .page-link:hover{background:var(--brand);color:#fff}
+    .page-item.active .page-link{background:var(--brand);border-color:var(--brand);color:#fff}
+
+    /* ===== Alerts (with close) ===== */
+    .alert{
+        position:relative;border-radius:8px;font-weight:500;box-shadow:0 2px 6px rgba(0,0,0,0.1);
+        padding:12px 40px 12px 12px;margin-bottom:12px;transition:opacity .25s ease
+    }
+    .alert-success{background:#d4edda;color:#155724;border-left:5px solid #28a745}
+
+    .alert-danger {
+        background: #f8d7da;
+        color: #fc0000e5;
+        border-left: 5px solid #fc0000e5
+    }
+    .alert.hide{opacity:0}
+    .btn-close{
+        position:absolute;right:10px;top:10px;width:24px;height:24px;border:0;background:transparent;
+        font-size:18px;line-height:24px;cursor:pointer;color:#666
+    }
+    .btn-close:after{content:"×"}
+
+    /* ===== Modal (pure CSS/JS) ===== */
+    .modal{
+        display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+        justify-content:center;align-items:center;padding:16px;z-index:1000;
+    }
+    .modal.show{display:flex}
+    .modal-dialog{max-width:520px;width:100%}
+    .modal-content{
+        background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow)
+    }
+    .modal-header,.modal-footer{padding:12px 16px;background:#fafafa}
+    .modal-title{margin:0;font-size:1.1rem}
+    .modal-body{padding:16px}
+    .modal .btn-close{position:static;margin-left:auto}
+
+    /* ===== Form check ===== */
+    .form-check{display:flex;align-items:center;gap:8px}
+    .form-check-input{width:16px;height:16px}
+
+    /* ===== Icons tint in empty state ===== */
+    .text-center i { opacity: 0.5; }
+</style>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -11,32 +188,26 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="card-title">Brand Management</h3>
                     <div>
-                        <button type="button" class="btn btn-success btn-sm" onclick="exportToCSV()">
-                            <i class="fas fa-download"></i> Export CSV
-                        </button>
-                        <button type="button" class="btn btn-info btn-sm" onclick="showAdvancedFilters()">
-                            <i class="fas fa-filter"></i> Advanced Filters
-                        </button>
                         <a asp-action="Create" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Add New Brand
                         </a>
                     </div>
                 </div>
-                
+
                 <div class="card-body">
                     @if (TempData["Success"] != null)
                     {
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <div class="alert alert-success" role="alert">
                             @TempData["Success"]
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <button type="button" class="btn-close" aria-label="Close"></button>
                         </div>
                     }
-                    
+
                     @if (TempData["Error"] != null)
                     {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="alert alert-danger" role="alert">
                             @TempData["Error"]
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <button type="button" class="btn-close" aria-label="Close"></button>
                         </div>
                     }
 
@@ -59,7 +230,7 @@
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="card bg-warning text-white">
+                            <div class="card bg-warning">
                                 <div class="card-body text-center">
                                     <h5>@Model.Brands.Count(b => !b.ImageId.HasValue)</h5>
                                     <small>Without Images</small>
@@ -81,29 +252,14 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="search" 
+                                    <input type="text" class="form-control" name="search"
                                            value="@Model.SearchTerm" placeholder="Search brands..." id="searchInput">
                                     <button class="btn btn-outline-secondary" type="submit">
                                         <i class="fas fa-search"></i> Search
                                     </button>
                                 </div>
                             </div>
-                           @*  <div class="col-md-2">
-                                <select class="form-select" name="pageSize" onchange="this.form.submit()">
-                                    <option value="5"  @(Model.PageSize == 5 ? "selected" : "")  >5 per page</option>
-                                    <option value="10" @(Model.PageSize == 10 ? "selected" : "")  >10 per page</option>
-                                    <option value="20" @(Model.PageSize == 20 ? "selected" : "")  >20 per page</option>
-                                    <option value="50" @(Model.PageSize == 50 ? "selected" : "")  >50 per page</option>
-                                </select>
-                            </div> *@
-                            <div class="col-md-3">
-                                <select class="form-select" name="sortBy" onchange="this.form.submit()">
-                                    <option value="nameAr">Sort by Arabic Name</option>
-                                    <option value="nameEn">Sort by English Name</option>
-                                    <option value="id">Sort by ID</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 d-flex align-items-center" style="gap:10px">
                                 @if (!string.IsNullOrEmpty(Model.SearchTerm))
                                 {
                                     <a asp-action="Index" class="btn btn-outline-secondary">
@@ -124,12 +280,10 @@
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col-md-3">
-                                            <div class="form-check">
+                                            <label class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="selectAll" onchange="toggleSelectAll()">
-                                                <label class="form-check-label" for="selectAll">
-                                                    Select All
-                                                </label>
-                                            </div>
+                                                <span class="form-check-label">Select All</span>
+                                            </label>
                                         </div>
                                         <div class="col-md-6">
                                             <span id="selectedCount">0 items selected</span>
@@ -167,7 +321,7 @@
                                     {
                                         <tr data-brand-id="@brand.BrandId">
                                             <td>
-                                                <input type="checkbox" class="form-check-input brand-checkbox" 
+                                                <input type="checkbox" class="form-check-input brand-checkbox"
                                                        value="@brand.BrandId" onchange="updateSelectedCount()">
                                             </td>
                                             <td>@brand.BrandId</td>
@@ -188,16 +342,16 @@
                                                 }
                                             </td>
                                             <td>
-                                                <div class="btn-group" role="group">
-                                                    <a asp-action="Details" asp-route-id="@brand.BrandId" 
+                                                <div class="btn-group" role="group" aria-label="Row actions">
+                                                    <a asp-action="Details" asp-route-id="@brand.BrandId"
                                                        class="btn btn-sm btn-info" title="View Details">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                    <a asp-action="Edit" asp-route-id="@brand.BrandId" 
+                                                    <a asp-action="Edit" asp-route-id="@brand.BrandId"
                                                        class="btn btn-sm btn-warning" title="Edit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    <a asp-action="Delete" asp-route-id="@brand.BrandId" 
+                                                    <a asp-action="Delete" asp-controller="Brand" asp-route-id="@brand.BrandId"
                                                        class="btn btn-sm btn-danger" title="Delete">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
@@ -217,19 +371,19 @@
                                     @if (Model.CurrentPage > 1)
                                     {
                                         <li class="page-item">
-                                            <a class="page-link" asp-action="Index" 
-                                               asp-route-page="@(Model.CurrentPage - 1)" 
+                                            <a class="page-link" asp-action="Index"
+                                               asp-route-page="@(Model.CurrentPage - 1)"
                                                asp-route-search="@Model.SearchTerm">Previous</a>
                                         </li>
                                     }
 
-                                    @for (int i = Math.Max(1, Model.CurrentPage - 2); 
-                                          i <= Math.Min(Model.TotalPages, Model.CurrentPage + 2); 
+                                    @for (int i = Math.Max(1, Model.CurrentPage - 2);
+                                          i <= Math.Min(Model.TotalPages, Model.CurrentPage + 2);
                                           i++)
                                     {
                                         <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                                            <a class="page-link" asp-action="Index" 
-                                               asp-route-page="@i" 
+                                            <a class="page-link" asp-action="Index"
+                                               asp-route-page="@i"
                                                asp-route-search="@Model.SearchTerm">@i</a>
                                         </li>
                                     }
@@ -237,8 +391,8 @@
                                     @if (Model.CurrentPage < Model.TotalPages)
                                     {
                                         <li class="page-item">
-                                            <a class="page-link" asp-action="Index" 
-                                               asp-route-page="@(Model.CurrentPage + 1)" 
+                                            <a class="page-link" asp-action="Index"
+                                               asp-route-page="@(Model.CurrentPage + 1)"
                                                asp-route-search="@Model.SearchTerm">Next</a>
                                         </li>
                                     }
@@ -267,18 +421,19 @@
                         </div>
                     }
                 </div>
+
             </div>
         </div>
     </div>
 </div>
 
-<!-- Advanced Filters Modal -->
-<div class="modal fade" id="advancedFiltersModal" tabindex="-1">
+<!-- Advanced Filters Modal (pure CSS/JS) -->
+<div class="modal" id="advancedFiltersModal" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" role="document">
             <div class="modal-header">
                 <h5 class="modal-title">Advanced Filters</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" aria-label="Close" onclick="closeModal()"></button>
             </div>
             <div class="modal-body">
                 <form id="advancedFiltersForm">
@@ -299,8 +454,8 @@
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
                 <button type="button" class="btn btn-primary" onclick="applyAdvancedFilters()">Apply Filters</button>
             </div>
         </div>
@@ -308,111 +463,92 @@
 </div>
 
 @section Scripts {
-    <script>
-        let selectedBrands = [];
+<script>
+    let selectedBrands = [];
 
-        function showAdvancedFilters() {
-            new bootstrap.Modal(document.getElementById('advancedFiltersModal')).show();
+    // ===== Modal (no Bootstrap) =====
+    function showAdvancedFilters() {
+        document.getElementById('advancedFiltersModal').classList.add('show');
+    }
+    function closeModal() {
+        document.getElementById('advancedFiltersModal').classList.remove('show');
+    }
+
+  
+    // ===== Bulk actions =====
+    function toggleBulkActions() {
+        const section = document.getElementById('bulkActionsSection');
+        section.style.display = (section.style.display === 'none' || section.style.display === '') ? 'block' : 'none';
+    }
+
+    function toggleSelectAll() {
+        const checkboxes = document.querySelectorAll('.brand-checkbox');
+        const selectAllCheckbox = document.getElementById('selectAll');
+        checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
+        updateSelectedCount();
+    }
+
+    function toggleSelectAllTable() {
+        const checkboxes = document.querySelectorAll('.brand-checkbox');
+        const selectAllTableCheckbox = document.getElementById('selectAllTable');
+        checkboxes.forEach(cb => cb.checked = selectAllTableCheckbox.checked);
+        updateSelectedCount();
+    }
+
+    function updateSelectedCount() {
+        const checkboxes = document.querySelectorAll('.brand-checkbox:checked');
+        const count = checkboxes.length;
+        document.getElementById('selectedCount').textContent = count + ' items selected';
+        selectedBrands = Array.from(checkboxes).map(cb => cb.value);
+    }
+
+    function bulkDelete() {
+        if (selectedBrands.length === 0) {
+            alert('Please select brands to delete');
+            return;
         }
-
-        function applyAdvancedFilters() {
-            const form = document.getElementById('advancedFiltersForm');
-            const formData = new FormData(form);
-            const params = new URLSearchParams();
-            
-            for (let [key, value] of formData.entries()) {
-                if (value) params.append(key, value);
-            }
-            
-            window.location.href = window.location.pathname + '?' + params.toString();
+        if (confirm(`Are you sure you want to delete ${selectedBrands.length} brand(s)?`)) {
+            // Replace with your real bulk delete call (fetch/axios)
+            alert('Bulk delete functionality would be implemented here');
         }
+    }
 
-        function toggleBulkActions() {
-            const section = document.getElementById('bulkActionsSection');
-            section.style.display = section.style.display === 'none' ? 'block' : 'none';
-        }
+    // If you want the top buttons back, just call exportToCSV()/showAdvancedFilters() from any button.
 
-        function toggleSelectAll() {
-            const checkboxes = document.querySelectorAll('.brand-checkbox');
-            const selectAllCheckbox = document.getElementById('selectAll');
-            
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = selectAllCheckbox.checked;
-            });
-            
-            updateSelectedCount();
-        }
-
-        function toggleSelectAllTable() {
-            const checkboxes = document.querySelectorAll('.brand-checkbox');
-            const selectAllTableCheckbox = document.getElementById('selectAllTable');
-            
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = selectAllTableCheckbox.checked;
-            });
-            
-            updateSelectedCount();
-        }
-
-        function updateSelectedCount() {
-            const checkboxes = document.querySelectorAll('.brand-checkbox:checked');
-            const count = checkboxes.length;
-            document.getElementById('selectedCount').textContent = count + ' items selected';
-            
-            selectedBrands = Array.from(checkboxes).map(cb => cb.value);
-        }
-
-        function bulkDelete() {
-            if (selectedBrands.length === 0) {
-                alert('Please select brands to delete');
-                return;
-            }
-            
-            if (confirm(`Are you sure you want to delete ${selectedBrands.length} brand(s)?`)) {
-                // Here you would typically make an AJAX call to delete multiple brands
-                alert('Bulk delete functionality would be implemented here');
-            }
-        }
-
-        function exportToCSV() {
-            const table = document.getElementById('brandsTable');
-            const rows = table.querySelectorAll('tbody tr');
-            let csv = 'ID,Arabic Name,English Name,Has Image\n';
-            
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                const id = cells[1].textContent;
-                const nameAr = cells[2].textContent;
-                const nameEn = cells[3].textContent;
-                const hasImage = cells[4].textContent.includes('Available') ? 'Yes' : 'No';
-                
-                csv += `"${id}","${nameAr}","${nameEn}","${hasImage}"\n`;
-            });
-            
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'brands.csv';
-            a.click();
-            window.URL.revokeObjectURL(url);
-        }
-
-        // Auto-hide alerts after 5 seconds
-        setTimeout(function() {
-            $('.alert').fadeOut('slow');
-        }, 5000);
-
-        // Initialize search functionality
-        $(document).ready(function() {
-            // Auto-submit search after 500ms delay
-            let searchTimeout;
-            $('#searchInput').on('input', function() {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    $('#searchForm').submit();
-                }, 500);
-            });
+    // ===== Alerts: auto-hide + manual close (no jQuery) =====
+    // Auto-hide after 5s
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(el => {
+            el.classList.add('hide');
+            setTimeout(() => el.remove(), 300);
         });
-    </script>
+    }, 5000);
+
+    // Manual close click
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-close')) {
+            const alert = e.target.closest('.alert');
+            const modal = e.target.closest('.modal');
+            if (alert){
+                alert.classList.add('hide');
+                setTimeout(() => alert.remove(), 250);
+            }
+            if (modal){
+                closeModal();
+            }
+        }
+    });
+
+    // ===== Search auto-submit (no jQuery) =====
+    (function(){
+        const input = document.getElementById('searchInput');
+        const form = document.getElementById('searchForm');
+        if (!input || !form) return;
+        let t;
+        input.addEventListener('input', function(){
+            clearTimeout(t);
+            t = setTimeout(() => form.submit(), 500);
+        });
+    })();
+</script>
 }

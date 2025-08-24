@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Efreshli.Infrastructure.Migrations
 {
     [DbContext(typeof(EfreshliDbContext))]
-    [Migration("20250821143304_init2")]
-    partial class init2
+    [Migration("20250821232759_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

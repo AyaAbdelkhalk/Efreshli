@@ -9,9 +9,13 @@ namespace Efreshli.Infrastructure.Data
 {
     public class EfreshliDbContext : IdentityDbContext<ApplicationUser>
     {
-        public EfreshliDbContext(DbContextOptions options) : base(options)
+        public EfreshliDbContext(DbContextOptions<EfreshliDbContext> options)
+        : base(options)
         {
         }
+        //public EfreshliDbContext(DbContextOptions options) : base(options)
+        //{
+        //}
 
         // DbSets
         public DbSet<Category> Categories { get; set; }
