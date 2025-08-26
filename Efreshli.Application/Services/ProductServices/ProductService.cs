@@ -8,13 +8,16 @@ using Efreshli.Application.Interfaces;
 using Efreshli.Application.Services.File;
 using Efreshli.Application.Services.ProductAttributeValueServices;
 using Efreshli.Application.Services.ProductItemServices;
+using Efreshli.Application.Services.WishlistServices;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Enums;
 using Efreshli.Domain.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using static Efreshli.Application.Resources.SharedResourcesKeys.Efreshli;
@@ -29,15 +32,20 @@ namespace Efreshli.Application.Services.ProductServices
         private readonly IProductItemService _productItemService;
         private readonly IProductAttributeValueService _productAttributeValueService;
         private readonly IProductRepository _productRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        //private readonly IWishlistService _wishlistService;
 
-        public ProductService(IUnitOfWork unitOfWork, IImageService imageService, IProductItemService productItemService, IProductAttributeValueService productAttributeValueService, IProductRepository productRepository)
+
+        public ProductService(IUnitOfWork unitOfWork, IImageService imageService, IProductItemService productItemService, IProductAttributeValueService productAttributeValueService, IProductRepository productRepository, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
             _imageService = imageService;
             _productItemService = productItemService;
             _productAttributeValueService = productAttributeValueService;
             _productRepository = productRepository;
-        } 
+            _httpContextAccessor = httpContextAccessor;
+            //_wishlistService = wishlistService;
+        }
         #endregion
 
         public async Task<Response<ProductResponseDTO>> CreateProductAsync(CreateProductDto createProductDto)
@@ -257,6 +265,8 @@ namespace Efreshli.Application.Services.ProductServices
         public async Task<Response<List<MainProductsDto>>> GetMainProductsAsync(int? CategoryId)
         {
             var main = new List<MainProductsDto>();
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            
 
             if (CategoryId == null || CategoryId <= 0)
             {
@@ -297,7 +307,12 @@ namespace Efreshli.Application.Services.ProductServices
                     {
                         mainProduct.FinalPrice = product.ProductItems?.FirstOrDefault()?.Price ?? 0;
                     }
-                    
+                    if (userId != null)
+                    {
+                        //var isWishlisted = await _wishlistService.IsItemWishlisted(product.ProductId);
+                        //mainProduct.IsWishlisted = isWishlisted.Data;
+                    }
+
                     main.Add(mainProduct);
                 }
             }
