@@ -23,7 +23,7 @@ namespace Efreshli.Application.Services.WishlistServices
         Task<Response<List<GetWishlistItemDto>>> GetWishlistItemByWishListIdAsync(int wishlistId);
         Task<Response<GetWishlistItemDto>> AddItemToWishlistAsync(int wishlistId, int itemId);
         Task<Response<GetWishlistItemDto>> RemoveItemFromWishlistAsync(int wishlistId, int itemId);
-        Task<Response<bool>> IsItemWishlisted(string userId, int itemId);
+        Task<Response<bool>> IsItemWishlisted(int itemId);
 
     }
 }

@@ -3,6 +3,7 @@ using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Services.WishlistServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Efreshli.Application.Resources.SharedResourcesKeys;
 
 namespace Efreshli.API.Controllers
 {
@@ -46,5 +47,24 @@ namespace Efreshli.API.Controllers
             var res = await _wishlistService.GetWishlistItemByWishListIdAsync(wishlistId);
             return this.CreateResponse(res);
         }
+        [HttpPost("AddItemToWishlist")]
+        public async Task<IActionResult> AddItemToWishlist(int wishlistId, int itemId)
+        {
+            var res = await _wishlistService.AddItemToWishlistAsync(wishlistId,itemId);
+            return this.CreateResponse(res);
+        }
+        [HttpDelete("RemoveItemFromWishlist")]
+        public async Task<IActionResult> RemoveItemFromWishlist(int wishlistId, int itemId)
+        {
+            var res = await _wishlistService.RemoveItemFromWishlistAsync(wishlistId,itemId);
+            return this.CreateResponse(res);
+        }
+        [HttpGet("IsItemWishlisted")]
+        public async Task<IActionResult> IsItemWishlisted(int itemId)
+        {
+            var res = await _wishlistService.IsItemWishlisted(itemId);
+            return this.CreateResponse(res);
+        }
+
     }
 }

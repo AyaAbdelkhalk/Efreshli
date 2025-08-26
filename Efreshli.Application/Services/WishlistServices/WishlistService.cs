@@ -166,6 +166,7 @@ namespace Efreshli.Application.Services.WishlistServices
                     ItemsCount = wishlist.Result.WishlistItems.Count(),
                     wishlistItemsDto = GetWishlistItemByWishListIdAsync(wishlistId).Result.Data,
                     WishlistUrl = $"api/wishlist/{wishlist.Result.WishlistId}"
+                    
                 };
                 return ResponseHandler.Success(dto);
             }
@@ -240,7 +241,7 @@ namespace Efreshli.Application.Services.WishlistServices
                     dto.WishlistId= wishlistId;
                     dto.WishlistItemId= item.WishlistItemId;
                     dto.ProductId = item.ProductItemId;
-                    dto.IsWishlisted = IsItemWishlisted(_httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier), item.ProductItemId).Result.Data;
+                    dto.IsWishlisted = IsItemWishlisted(item.ProductItemId).Result.Data;
                     wishlistItemDtos.Add(dto);
 
                 }
@@ -261,12 +262,18 @@ namespace Efreshli.Application.Services.WishlistServices
                 WishlistId = wishlistId,
                 ProductId = itemId,
                 WishlistItemId = wishlistItem.WishlistItemId
+
             });
 
         }
 
-        public async Task<Response<bool>> IsItemWishlisted(string userId, int itemId)
+        public async Task<Response<bool>> IsItemWishlisted( int itemId)
         {
+            string userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return ResponseHandler.Unauthorized<bool>("User Not Found");
+            }
             var wishlists = await _unitOfWork.WishlistRepository.GetWhereAsync(w => w.ApplicationUserId == userId);
             if (wishlists == null || wishlists.Count() == 0)
             {
@@ -290,7 +297,7 @@ namespace Efreshli.Application.Services.WishlistServices
             {
                 try
                 {
-                    await _unitOfWork.WishlistItemRepository.RemoveAsync(wishlistItem.WishlistId);
+                    await _unitOfWork.WishlistItemRepository.RemoveAsync(wishlistItem.WishlistItemId);
                     await _unitOfWork.SaveChangesAsync();
                     return ResponseHandler.Success(new GetWishlistItemDto
                     {
