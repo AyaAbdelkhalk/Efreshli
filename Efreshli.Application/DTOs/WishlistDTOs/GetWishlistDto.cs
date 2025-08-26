@@ -11,7 +11,7 @@ namespace Efreshli.Application.DTOs.WishlistDTOs
     {
         public int WishlistId { get; set; }
         public string WishlistName { get; set; }
-        public GetWishlistItemDto wishlistItemDto { get; set; }
+        public List<GetWishlistItemDto> wishlistItemsDto { get; set; } = new List<GetWishlistItemDto>();
         public int ItemsCount { get; set; }
         public string WishlistUrl { get; set; }
 

@@ -46,6 +46,23 @@ namespace Efreshli.Infrastructure.Data
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EfreshliDbContext).Assembly);
             modelBuilder.ApplyGlobalFilters();
             modelBuilder.RestrictRelation();
+            modelBuilder.Entity<ProductItem>()
+                .HasMany(p => p.ProductItemColors)
+                .WithOne(c => c.ProductItem)        
+                .HasForeignKey(c => c.ProductItemId) 
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ProductItem>()
+                .HasOne(p => p.FabricColor)
+                .WithMany()
+                .HasForeignKey(p => p.FabricColorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ProductItem>()
+                .HasOne(p => p.WoodColor)
+                .WithMany()
+                .HasForeignKey(p => p.WoodColorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             // ==========================
             // Categories

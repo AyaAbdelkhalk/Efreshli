@@ -28,5 +28,23 @@ namespace Efreshli.API.Controllers
             var res = await _wishlistService.GetAllWishlistsAsync();
             return this.CreateResponse(res);
         }
+        [HttpPut]
+        public async Task<IActionResult> UpdateWishlist(int id,UpdateWishlistDto dto)
+        {
+            var res = await _wishlistService.UpdateWishlistAsync(id,dto);
+            return this.CreateResponse(res);
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteWishlist(int wishlistId)
+        {
+            var res = await _wishlistService.DeleteWishlistAsync(wishlistId);
+            return this.CreateResponse(res);
+        }
+        [HttpGet("GetWishlistItem")]
+        public async Task<IActionResult> GetWishlistItemByWishListId(int wishlistId)
+        {
+            var res = await _wishlistService.GetWishlistItemByWishListIdAsync(wishlistId);
+            return this.CreateResponse(res);
+        }
     }
 }

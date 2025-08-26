@@ -8,7 +8,7 @@ namespace Efreshli.Application.DTOs.WishlistDTOs
 {
     public class UpdateWishlistDto
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Name { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using Efreshli.Application.DTOs.ProductDTOs.ProductAttributeValueDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductColorDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductItemDto;
+using Efreshli.Application.DTOs.WishlistDTOs.WishlistItemDTOs;
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Interfaces;
 using Efreshli.Application.Services.File;
@@ -22,6 +23,7 @@ namespace Efreshli.Application.Services.ProductServices
 {
     public class ProductService : IProductService
     {
+        #region Ctor
         private readonly IUnitOfWork _unitOfWork;
         private readonly IImageService _imageService;
         private readonly IProductItemService _productItemService;
@@ -35,7 +37,8 @@ namespace Efreshli.Application.Services.ProductServices
             _productItemService = productItemService;
             _productAttributeValueService = productAttributeValueService;
             _productRepository = productRepository;
-        }
+        } 
+        #endregion
 
         public async Task<Response<ProductResponseDTO>> CreateProductAsync(CreateProductDto createProductDto)
         {
@@ -294,6 +297,7 @@ namespace Efreshli.Application.Services.ProductServices
                     {
                         mainProduct.FinalPrice = product.ProductItems?.FirstOrDefault()?.Price ?? 0;
                     }
+                    
                     main.Add(mainProduct);
                 }
             }
@@ -506,6 +510,44 @@ namespace Efreshli.Application.Services.ProductServices
                 }).ToList() : new List<ProductItemDetailsDto>(),
             };
             return ResponseHandler.Success<ProductDetailsDto>(productDetails, "Product details retrieved successfully");
+        }
+
+        public async Task<Response<GetWishlistItemDto>> GetWishlistItemsForUserAsync(int productId)
+        {
+            var clrs = await _productItemService.GetProductItemColorsUrlsAsync(productId);
+            var product = await _unitOfWork.ProductRepository.GetByIdWithIncludeAsync(
+                productId,
+                includes: new System.Linq.Expressions.Expression<Func<Efreshli.Domain.Models.Product, object>>[]
+                {
+                    p => p.ProductImages,
+                    p => p.ProductItems,
+                }
+            );
+            if (product == null)
+            {
+                return ResponseHandler.NotFound<GetWishlistItemDto>();
+            }
+
+            var wishlistItem = new GetWishlistItemDto
+            {
+                ProductId = product.ProductId,
+                NameAr = product.NameAr,
+                NameEn = product.NameEn,
+                DescriptionAr = product.DescriptionAr,
+                DescriptionEn = product.DescriptionEn,
+                DimensionsOrSize = product.DimensionsOrSize,
+                ImageUrl = product.ProductImages?.FirstOrDefault()?.URL,
+                ProductItemColorsUrls = clrs.Data,
+                Discount = product.ProductItems?.FirstOrDefault()?.Discount ?? 0,
+                Price = product.ProductItems?.FirstOrDefault()?.Price ?? 0,
+                FinalPrice = product.ProductItems?.FirstOrDefault()?.Price != null && product.ProductItems?.FirstOrDefault()?.Discount != null
+                    ? (product.ProductItems.FirstOrDefault().IsPercentage.HasValue && product.ProductItems.FirstOrDefault().IsPercentage.Value
+                        ? product.ProductItems.FirstOrDefault().Price - (product.ProductItems.FirstOrDefault().Price * (product.ProductItems.FirstOrDefault().Discount.Value / 100))
+                        : product.ProductItems.FirstOrDefault().Price - product.ProductItems.FirstOrDefault().Discount.Value)
+                    : product.ProductItems?.FirstOrDefault()?.Price
+            };
+
+            return ResponseHandler.Success(wishlistItem);
         }
     }
 }
