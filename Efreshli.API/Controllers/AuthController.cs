@@ -79,5 +79,30 @@ namespace Efreshli.API.Controllers
             var result = await _authService.ResendConfirmationEmailAsync(request.Email);
             return this.CreateResponse(result);
         }
+        // OAuth 
+        [HttpPost("external-login")]
+        public async Task<IActionResult> ExternalLogin([FromBody] ExternalLoginDto model)
+        {
+            var result = await _authService.ExternalLoginAsync(model);
+            return this.CreateResponse(result);
+        }
+
+        #region OAuth
+        //[HttpPost("oauth/register")]
+        //public async Task<IActionResult> OAuthRegister([FromBody] OAuthRegisterDto model)
+        //{
+        //    Console.WriteLine($"OAuthLogin Request: {System.Text.Json.JsonSerializer.Serialize(model)}");
+        //    var result = await _authService.OAuthRegisterAsync(model);
+        //    return this.CreateResponse(result);
+        //}
+
+        //[HttpPost("oauth/login")]
+        //public async Task<IActionResult> OAuthLogin([FromBody] OAuthRegisterDto model)
+        //{
+        //    Console.WriteLine($"OAuthLogin Request: {System.Text.Json.JsonSerializer.Serialize(model)}");
+        //    var result = await _authService.OAuthLoginAsync(model);
+        //    return this.CreateResponse(result);
+        //}
+        #endregion
     }
 }

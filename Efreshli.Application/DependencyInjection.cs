@@ -9,15 +9,16 @@ using Efreshli.Application.Services.BrandsServices;
 using Efreshli.Application.Services.CategoryServices;
 using Efreshli.Application.Services.CouponServices;
 using Efreshli.Application.Services.File;
-using Efreshli.Application.Services.RoleService;
 using Efreshli.Application.Services.ProductAttributeServices;
 using Efreshli.Application.Services.ProductAttributeValueServices;
 using Efreshli.Application.Services.ProductItemServices;
 using Efreshli.Application.Services.ProductServices;
+using Efreshli.Application.Services.RoleService;
 using Efreshli.Application.Services.WebsiteInfoServices;
 using Efreshli.Application.Validators.CategoryValidators;
 using Efreshli.Application.Validators.CouponValidators;
 using Efreshli.Application.Validators.WebsiteInfoValidators;
+using Efreshli.Domain.Settings;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,8 +59,9 @@ namespace Efreshli.Application
             //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(typeof(AddCouponDTOValidator).Assembly);
 
-
-
+            // oAuthService
+            services.Configure<OAuthSettings>(configuration.GetSection("OAuthSettings"));
+            services.AddHttpClient();
 
 
 

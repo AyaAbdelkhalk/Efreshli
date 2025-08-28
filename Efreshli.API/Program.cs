@@ -52,17 +52,23 @@ namespace Efreshli.API
             builder.Services.AddHttpContextAccessor();
 
             #region CROS
-            var AllowOrogins = "_myAllowSpecificOrigins";
-
-           
+            var AllowOrigins = "_myAllowSpecificOrigins";
 
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy(name: AllowOrogins,
-                                  policy =>
-                                  {
-                                      policy.WithOrigins("http://localhost:4200/");
-                                  });
+                options.AddPolicy(name: AllowOrigins,
+                    policy =>
+                    {
+                        policy.WithOrigins(
+                            "https://efresli-front.netlify.app",
+                            "https://*.netlify.app",
+                            "http://localhost:4200",
+                            "https://localhost:4200"
+                        )
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                    });
             });
             #endregion
 
@@ -187,6 +193,22 @@ namespace Efreshli.API
 
             #endregion
 
+            #region OAuth
+            builder.Services.AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                    options.ClientSecret= builder.Configuration["Authentication:Google:ClientSecret"];
+                })
+                .AddFacebook(options =>
+                {
+                    options.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+                    options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+                });
+
+            #endregion
+
+
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddApplication(builder.Configuration);
             builder.Services.AddScoped<ICartService, CartService>();
@@ -238,13 +260,17 @@ namespace Efreshli.API
             #endregion
 
             var httpContextAccessor = app.Services.GetRequiredService<IHttpContextAccessor>();
-
+            //app.Use(async (context, next) =>
+            //{
+            //    Console.WriteLine($"Request: {context.Request.Method} {context.Request.Path}");
+            //    await next();
+            //});
             app.UseSwagger();
             app.UseSwaggerUI();
             #region email
             app.UseHttpsRedirection();
             #endregion
-            app.UseCors(AllowOrogins);
+            app.UseCors(AllowOrigins);
             app.UseStaticFiles();
 
             app.UseAuthentication();
