@@ -1,12 +1,14 @@
-using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Efreshli.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class updatecoupon : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -547,6 +549,7 @@ namespace Efreshli.Infrastructure.Migrations
                     DescriptionAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DescriptionEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DimensionsOrSize = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SKU = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -683,6 +686,7 @@ namespace Efreshli.Infrastructure.Migrations
                     NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageId = table.Column<int>(type: "int", nullable: true),
                     ColorType = table.Column<int>(type: "int", nullable: false),
+                    ProductItemId = table.Column<int>(type: "int", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -714,7 +718,6 @@ namespace Efreshli.Infrastructure.Migrations
                     Discount = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     IsPercentage = table.Column<bool>(type: "bit", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    SKU = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -815,6 +818,33 @@ namespace Efreshli.Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Brands",
+                columns: new[] { "BrandId", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "ImageId", "IsDeleted", "NameAr", "NameEn", "UpdatedBy", "UpdatedDate" },
+                values: new object[,]
+                {
+                    { 100, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, false, "ايكيا", "IKEA", null, null },
+                    { 101, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, false, "هوم سنتر", "Home Center", null, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "CategoryId", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "ImageId", "IsDeleted", "NameAr", "NameEn", "ParentId", "UpdatedBy", "UpdatedDate" },
+                values: new object[,]
+                {
+                    { 100, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, false, "كراسي", "Chairs", null, null, null },
+                    { 101, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, null, false, "طاولات", "Tables", null, null, null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProductAttributes",
+                columns: new[] { "Id", "CategoryId", "CreatedBy", "CreatedDate", "DeletedBy", "DeletedDate", "IsDeleted", "NameAr", "NameEn", "UpdatedBy", "UpdatedDate" },
+                values: new object[,]
+                {
+                    { 100, null, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, false, "اللون", "Color", null, null },
+                    { 101, null, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, false, "المادة", "Material", null, null }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_ApplicationUserId",
                 table: "Addresses",
@@ -899,6 +929,11 @@ namespace Efreshli.Infrastructure.Migrations
                 name: "IX_Colors_ImageId",
                 table: "Colors",
                 column: "ImageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Colors_ProductItemId",
+                table: "Colors",
+                column: "ProductItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Coupons_ApplicationUserId",
@@ -1075,6 +1110,14 @@ namespace Efreshli.Infrastructure.Migrations
                 principalTable: "Images",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Colors_ProductItems_ProductItemId",
+                table: "Colors",
+                column: "ProductItemId",
+                principalTable: "ProductItems",
+                principalColumn: "ProductItemId",
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />
@@ -1087,6 +1130,14 @@ namespace Efreshli.Infrastructure.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Categories_Images_ImageId",
                 table: "Categories");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Colors_Images_ImageId",
+                table: "Colors");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Colors_ProductItems_ProductItemId",
+                table: "Colors");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -1140,9 +1191,6 @@ namespace Efreshli.Infrastructure.Migrations
                 name: "ProductAttributes");
 
             migrationBuilder.DropTable(
-                name: "ProductItems");
-
-            migrationBuilder.DropTable(
                 name: "Wishlists");
 
             migrationBuilder.DropTable(
@@ -1155,13 +1203,16 @@ namespace Efreshli.Infrastructure.Migrations
                 name: "Payments");
 
             migrationBuilder.DropTable(
-                name: "Colors");
-
-            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Images");
+
+            migrationBuilder.DropTable(
+                name: "ProductItems");
+
+            migrationBuilder.DropTable(
+                name: "Colors");
 
             migrationBuilder.DropTable(
                 name: "Products");

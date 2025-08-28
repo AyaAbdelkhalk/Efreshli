@@ -1,53 +1,117 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Efreshli.MVC.Models
-{
-    public class BrandViewModel
-    {
-        public int BrandId { get; set; }
-
-        [Required(ErrorMessage = "Arabic name is required")]
-        [StringLength(100, ErrorMessage = "Arabic name cannot exceed 100 characters")]
-        [Display(Name = "Arabic Name")]
-        public string NameAr { get; set; }
-
-        [Required(ErrorMessage = "English name is required")]
-        [StringLength(100, ErrorMessage = "English name cannot exceed 100 characters")]
-        [Display(Name = "English Name")]
-        public string NameEn { get; set; }
-
-        [Display(Name = "Brand Image")]
-        public IFormFile? BrandImage { get; set; }
-
-        [Display(Name = "Current Image")]
-        public int? ImageId { get; set; }
-
-        [Display(Name = "Created Date")]
-        public DateTime? CreatedDate { get; set; }
-
-        [Display(Name = "Updated Date")]
-        public DateTime? UpdatedDate { get; set; }
+﻿@model Efreshli.Application.DTOs.BrandDTOs.CreateBrandDto
+<style>
+    /* ==== Modern Form Styling ==== */
+    .ef-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
 
-    public class BrandListViewModel
-    {
-        public IEnumerable<BrandDisplayViewModel>
-    Brands { get; set; } = new List<BrandDisplayViewModel>
-        ();
-        public string? SearchTerm { get; set; }
-        public int CurrentPage { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
-        public int TotalCount { get; set; }
-        public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
+    .ef-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #b3202a;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: block;
+            color: #444;
         }
 
-        public class BrandDisplayViewModel
-        {
-        public int BrandId { get; set; }
-        public string NameAr { get; set; }
-        public string NameEn { get; set; }
-        public int? ImageId { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public DateTime? UpdatedDate { get; set; }
+    .form-control {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #b3202a;
+            outline: none;
+            box-shadow: 0 0 4px rgba(179,32,42,0.3);
         }
+
+    .btn-primary {
+        background: #b3202a;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+        .btn-primary:hover {
+            background: #8e1a22;
         }
+
+    /* Secondary button */
+    .btn-secondary {
+        background: #6c757d;
+        color: #fff;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-secondary:hover {
+            background: #565e64;
+        }
+
+    /* Button group inline */
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end; /* or center */
+        margin-top: 20px;
+    }
+</style>
+
+<div class="ef-container">
+    <h2 class="ef-title">Add New Brand</h2>
+
+    <form asp-action="Create" enctype="multipart/form-data" method="post">
+        <div class="form-group">
+            <label asp-for="NameAr"></label>
+            <input asp-for="NameAr" class="form-control" />
+            <span asp-validation-for="NameAr" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NameEn"></label>
+            <input asp-for="NameEn" class="form-control" />
+            <span asp-validation-for="NameEn" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="BrandImage"></label>
+            <input asp-for="BrandImage" type="file" class="form-control" />
+            <span asp-validation-for="BrandImage" class="text-danger"></span>
+        </div>
+
+        <!-- Buttons inline -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Brand</button>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </form>
+</div>
+

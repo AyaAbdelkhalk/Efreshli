@@ -9,6 +9,18 @@
     var isRTL = System.Threading.Thread.CurrentThread.CurrentUICulture.TextInfo.IsRightToLeft;
     var dirAttribute = isRTL ? "rtl" : "ltr";
 }
+@functions {
+    string IsActive(string controller, string action = null)
+    {
+        var currentCtrl = ViewContext.RouteData.Values["controller"]?.ToString();
+        var currentAct = ViewContext.RouteData.Values["action"]?.ToString();
+
+        if (action == null)
+            return currentCtrl == controller ? "active" : "";
+
+        return currentCtrl == controller && currentAct == action ? "active" : "";
+    }
+}
 
 <!DOCTYPE html>
 <html  dir="@dirAttribute" lang="@CultureInfo.CurrentUICulture.Name">
@@ -26,8 +38,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/SidebarStyle.css">
-    <link rel="stylesheet" href="~/css/Brand/Brand.css">
+    @* <link rel="stylesheet" href="~/css/Brand/Brand.css"> *@
     <link rel="stylesheet" href="~/css/Category.css">
 
     @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"> *@
@@ -174,17 +185,17 @@
                 <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
 
                     <a asp-area="" asp-controller="Home" asp-action="Index"
-                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Home","Index")" ">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-dashboard-3-line text-sm"></i>
                         </div>
                         <span class="ml-3 sidebar-text transition-all duration-300 font-medium text-sm">@_stringLocalizer[SharedResourcesKeys.Navigation.Dashboard]</span>
-                        <div class="ml-auto">
+                        <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
                     </a>
                     <a asp-area="" asp-controller="Brand" asp-action="Index"
-                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Brand","Index")" ">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-team-line text-sm"></i>
                         </div>
@@ -194,7 +205,7 @@
                         </div>
                     </a>
                     <a href="#"
-                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group ">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-team-line text-sm"></i>
                         </div>
@@ -216,7 +227,7 @@
                     </a>
 
                     <a asp-area="" asp-controller="Product" asp-action="GetMainProducts"
-                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Product","GetMainProducts")">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-product-hunt-line text-sm"></i>
                         </div>
@@ -227,7 +238,7 @@
                     </a>
 
                     <a asp-area="" asp-controller="Category" asp-action="Index"
-                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Category","Index")">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-bookmark-line text-sm"></i>
                         </div>
@@ -239,7 +250,7 @@
                     <!-- #region name -->
 
                     <a asp-area="" asp-controller="Coupon" asp-action="Index"
-                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Coupon","Index")">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-bookmark-line text-sm"></i>
                         </div>
@@ -316,7 +327,7 @@
 
                     @* ده للهوست *@
 
-                    @* <a href="#" onclick="setLanguage('ar-EG')"
+                   @*  <a href="#" onclick="setLanguage('ar-EG')"
                        class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-bookmark-line text-sm"></i>
@@ -545,5 +556,139 @@
                      location.reload(); // إعادة تحميل الصفحة
              }
     </script>
+    <style>
+         .sidebar-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+        /*
+        .sidebar-collapsed {
+            transform: translateX(-100%);
+        } */
+
+        /* Modern Navigation Items - Default State */
+        .nav-link {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid transparent;
+            color: #6b7280; /* Default gray color */
+            background: transparent;
+        }
+
+            .nav-link:hover:not(.active) {
+                transform: translateX(6px) scale(1.02);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12), 0 4px 10px rgba(0, 0, 0, 0.08);
+                border-color: rgba(156, 163, 175, 0.2);
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.8));
+                color: #374151;
+            }
+
+            /* Active State - Only for the clicked item with stronger specificity */
+            .nav-link.active {
+                color: #ffffff !important;
+                background: linear-gradient(135deg, #fc0000e5, #e11d48) !important;
+                /*box-shadow: 0 6px 20px rgba(252, 0, 0, 0.3), 0 6px 8px rgba(252, 0, 0, 0.2) !important;*/
+                animation: glow 2s ease-in-out infinite alternate !important;
+                border-color: rgba(255, 255, 255, 0.2) !important;
+            }
+
+                .nav-link.active:hover {
+                    transform: translateX(6px) scale(1.05) !important;
+                    background: linear-gradient(135deg, #fc0000e5, #e11d48) !important;
+                    color: #ffffff !important;
+                }
+
+        /* Force active state to persist */
+        body .nav-link.active {
+            color: #ffffff !important;
+            background: linear-gradient(135deg, #fc0000e5, #e11d48) !important;
+        }
+
+        /* Shimmer Effect */
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease-in-out;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        /* Modern Sidebar Design */
+        .sidebar-modern {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 50%, rgba(241, 245, 249, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-open {
+            transform: translateX(0) !important;
+        }
+
+      
+
+        /* Icon wrapper styling */
+        .icon-wrapper {
+            min-width: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Logo transitions */
+        .sidebar-logo {
+            transition: all 0.3s ease;
+        }
+
+        /* Sidebar text transitions */
+        .sidebar-text {
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        /* Active state for icons - Only when nav item is active */
+        .nav-link.active .icon-wrapper {
+            color: #ffffff !important;
+        }
+
+        /* Default icon color */
+        .nav-link .icon-wrapper {
+            color: #6b7280;
+            transition: color 0.3s ease;
+        }
+
+        /* Hover effects for better UX */
+        .nav-link:hover:not(.active) .icon-wrapper {
+            color: #374151;
+            transform: scale(1.1);
+            transition: transform 0.2s ease;
+        }
+
+        .nav-link:hover.active .icon-wrapper {
+            transform: scale(1.1);
+            transition: transform 0.2s ease;
+        }
+
+        /* Profile dropdown styling */
+        #profileMenu {
+            animation: slideIn 0.3s ease-out;
+            z-index: 50;
+        }
+
+        /* Notification badge pulse */
+        .bg-red-500 {
+            animation: pulse 2s infinite;
+        }
+    </style>
 </body>
 </html>
