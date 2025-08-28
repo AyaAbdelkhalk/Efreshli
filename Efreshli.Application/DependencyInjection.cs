@@ -19,6 +19,7 @@ using Efreshli.Application.Services.WishlistServices;
 using Efreshli.Application.Validators.CategoryValidators;
 using Efreshli.Application.Validators.CouponValidators;
 using Efreshli.Application.Validators.WebsiteInfoValidators;
+using Efreshli.Domain.Settings;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,8 +61,9 @@ namespace Efreshli.Application
             //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(typeof(AddCouponDTOValidator).Assembly);
 
-
-
+            // oAuthService
+            services.Configure<OAuthSettings>(configuration.GetSection("OAuthSettings"));
+            services.AddHttpClient();
 
 
 
