@@ -4,426 +4,992 @@
     ViewData["Title"] = "Edit Brand";
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Edit Brand</h3>
-                    <div class="card-tools">
-                        <a asp-action="Index" class="btn btn-secondary btn-sm">
-                            <i class="fas fa-arrow-left"></i> Back to List
-                        </a>
+<style>
+    /* Modern CSS Variables */
+    :root {
+        --primary-color: #dc2626;
+        --primary-dark: #e11d48;
+        --secondary-color: #64748b;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #64748b;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --bg-white: #ffffff;
+        --bg-light: #f8fafc;
+        --bg-gray: #f1f5f9;
+        --border-color: #e2e8f0;
+        --border-radius: 12px;
+        --border-radius-sm: 8px;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+        --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+        --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+        --transition: all 0.3s ease;
+    }
+
+    /* Reset and base styles */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: var(--text-primary);
+        line-height: 1.6;
+    }
+
+    /* Main container */
+    .edit-brand-container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
+
+    /* Header section */
+    .page-header {
+        background: var(--bg-white);
+        border-radius: var(--border-radius);
+        padding: 24px 32px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow-md);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .page-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .page-title i {
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+    .back-button {
+        background: var(--secondary-color);
+        color: white;
+        padding: 10px 20px;
+        border-radius: var(--border-radius-sm);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        transition: var(--transition);
+        border: none;
+        cursor: pointer;
+    }
+
+        .back-button:hover {
+            background: #475569;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+    /* Form container */
+    .form-card {
+        background: var(--bg-white);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+    }
+
+    .form-content {
+        padding: 32px;
+    }
+
+    /* Alert styles */
+    .alert {
+        padding: 16px 20px;
+        border-radius: var(--border-radius-sm);
+        margin-bottom: 24px;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .alert-danger {
+        background: #fef2f2;
+        color: var(--danger-color);
+        border-left: 4px solid var(--danger-color);
+    }
+
+    .alert-success {
+        background: #f0fdf4;
+        color: var(--success-color);
+        border-left: 4px solid var(--success-color);
+    }
+
+    /* Form grid */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+    /* Form labels */
+    .form-label {
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .required {
+        color: var(--danger-color);
+    }
+
+    /* Form inputs */
+    .form-input {
+        padding: 12px 16px;
+        border: 2px solid var(--border-color);
+        border-radius: var(--border-radius-sm);
+        font-size: 14px;
+        transition: var(--transition);
+        background: var(--bg-white);
+    }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input:invalid {
+            border-color: var(--danger-color);
+        }
+
+    /* File input styling */
+    .file-input-wrapper {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .file-input {
+        position: absolute;
+        left: -9999px;
+        opacity: 0;
+    }
+
+    .file-input-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 16px;
+        border: 2px dashed var(--border-color);
+        border-radius: var(--border-radius-sm);
+        cursor: pointer;
+        transition: var(--transition);
+        background: var(--bg-light);
+        text-align: center;
+        min-height: 60px;
+    }
+
+        .file-input-label:hover {
+            border-color: var(--primary-color);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+    /* Image preview */
+    .image-preview-container {
+        border: 2px solid var(--border-color);
+        border-radius: var(--border-radius-sm);
+        padding: 20px;
+        text-align: center;
+        background: var(--bg-light);
+        min-height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .image-preview {
+        max-width: 100%;
+        max-height: 140px;
+        border-radius: var(--border-radius-sm);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .image-placeholder {
+        color: var(--text-secondary);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .image-placeholder i {
+            font-size: 48px;
+            color: var(--border-color);
+        }
+
+    /* Status section */
+    .status-section {
+        background: var(--bg-light);
+        border-radius: var(--border-radius-sm);
+        padding: 24px;
+        margin-bottom: 32px;
+    }
+
+    .status-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .status-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+    }
+
+    .status-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .status-label {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Badge styles */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .badge-success {
+        background: #dcfce7;
+        color: var(--success-color);
+    }
+
+    .badge-warning {
+        background: #fef3c7;
+        color: var(--warning-color);
+    }
+
+    .badge-secondary {
+        background: var(--bg-gray);
+        color: var(--text-secondary);
+    }
+
+    .badge-danger {
+        background: #fecaca;
+        color: var(--danger-color);
+    }
+
+    /* Info section */
+    .info-section {
+        background: var(--bg-light);
+        border-radius: var(--border-radius-sm);
+        padding: 20px;
+        margin-bottom: 32px;
+    }
+
+    .info-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 16px;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .info-label {
+        font-weight: 500;
+        color: var(--text-secondary);
+    }
+
+    .info-value {
+        color: var(--text-primary);
+    }
+
+    /* Form buttons */
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 32px;
+        background: var(--bg-light);
+        border-top: 1px solid var(--border-color);
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border-radius: var(--border-radius-sm);
+        font-weight: 600;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition);
+        text-align: center;
+    }
+
+    .btn-primary {
+        background: var(--primary-color);
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:disabled {
+            background: var(--border-color);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+    .btn-secondary {
+        background: var(--secondary-color);
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background: #475569;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+    .btn-outline {
+        background: transparent;
+        border: 2px solid var(--border-color);
+        color: var(--text-secondary);
+    }
+
+        .btn-outline:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+    .btn-danger {
+        background: var(--danger-color);
+        color: white;
+    }
+
+        .btn-danger:hover {
+            background: #1e293b;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+    .secondary-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    /* Helper text */
+    .helper-text {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-top: 4px;
+    }
+
+    .validation-error {
+        color: var(--danger-color);
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+        width: 100%;
+        height: 6px;
+        background: var(--bg-gray);
+        border-radius: 3px;
+        overflow: hidden;
+        margin-top: 8px;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: var(--primary-color);
+        border-radius: 3px;
+        transition: width 0.3s ease;
+        width: 0%;
+    }
+
+    /* Clear button */
+    .clear-btn {
+        background: none;
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        padding: 6px 12px;
+        border-radius: var(--border-radius-sm);
+        font-size: 12px;
+        cursor: pointer;
+        transition: var(--transition);
+        margin-top: 8px;
+    }
+
+        .clear-btn:hover {
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+</style>
+
+<div class="edit-brand-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-edit"></i>
+            Edit Brand
+        </h1>
+        <a asp-action="Index" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to List
+        </a>
+    </div>
+
+    <!-- Main Form Card -->
+    <div class="form-card">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data" id="editBrandForm">
+            <div class="form-content">
+                <!-- Error Alert -->
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        @TempData["Error"]
+                    </div>
+                }
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display: none;"></div>
+
+                <!-- Hidden inputs -->
+                <input asp-for="BrandId" type="hidden" />
+                <input asp-for="ImageId" type="hidden" />
+
+                <!-- Brand Names Section -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label asp-for="NameAr" class="form-label">
+                            Arabic Name <span class="required">*</span>
+                        </label>
+                        <input asp-for="NameAr" class="form-input" placeholder="Enter brand name in Arabic"
+                               id="nameArInput" onkeyup="validateForm(); trackChanges()" />
+                        <span asp-validation-for="NameAr" class="validation-error"></span>
+                        <div class="helper-text">Required field</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="NameEn" class="form-label">
+                            English Name <span class="required">*</span>
+                        </label>
+                        <input asp-for="NameEn" class="form-input" placeholder="Enter brand name in English"
+                               id="nameEnInput" onkeyup="validateForm(); trackChanges()" />
+                        <span asp-validation-for="NameEn" class="validation-error"></span>
+                        <div class="helper-text">Required field</div>
                     </div>
                 </div>
 
-                <form asp-action="Edit" method="post" enctype="multipart/form-data" id="editBrandForm">
-                    <div class="card-body">
-                        @if (TempData["Error"] != null)
-                        {
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                @TempData["Error"]
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
-                        }
-
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display: none;"></div>
-
-                        <input asp-for="BrandId" type="hidden" />
-                        <input asp-for="ImageId" type="hidden" />
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label asp-for="NameAr" class="form-label">Arabic Name <span class="text-danger">*</span></label>
-                                    <input asp-for="NameAr" class="form-control" placeholder="Enter brand name in Arabic"
-                                           id="nameArInput" onkeyup="validateForm(); trackChanges()" />
-                                    <span asp-validation-for="NameAr" class="text-danger"></span>
-                                    <small class="form-text text-muted">Required field</small>
+                <!-- Image Section -->
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label asp-for="BrandImage" class="form-label">Brand Image</label>
+                        <div class="file-input-wrapper">
+                            <input asp-for="BrandImage" type="file" class="file-input"
+                                   accept="image/*" onchange="previewImage(this); validateForm(); trackChanges()"
+                                   id="brandImageInput" />
+                            <label for="brandImageInput" class="file-input-label">
+                                <div>
+                                    <i class="fas fa-cloud-upload-alt" style="font-size: 20px; margin-bottom: 8px; display: block;"></i>
+                                    <div>Choose new image or drag here</div>
+                                    <div class="helper-text">JPG, PNG, GIF (Max 5MB)</div>
                                 </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label asp-for="NameEn" class="form-label">English Name <span class="text-danger">*</span></label>
-                                    <input asp-for="NameEn" class="form-control" placeholder="Enter brand name in English"
-                                           id="nameEnInput" onkeyup="validateForm(); trackChanges()" />
-                                    <span asp-validation-for="NameEn" class="text-danger"></span>
-                                    <small class="form-text text-muted">Required field</small>
-                                </div>
-                            </div>
+                            </label>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label asp-for="BrandImage" class="form-label">New Brand Image</label>
-                                    <input asp-for="BrandImage" type="file" class="form-control"
-                                           accept="image/*" onchange="previewImage(this); validateForm(); trackChanges()"
-                                           id="brandImageInput" />
-                                    <span asp-validation-for="BrandImage" class="text-danger"></span>
-                                    <small class="form-text text-muted">
-                                        Choose a new image only if you want to change the current image<br>
-                                        Supported formats: JPG, PNG, GIF (Max size: 5MB)
-                                    </small>
-                                    <div class="progress mt-2" id="uploadProgress" style="display: none;">
-                                        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label class="form-label">Image Preview</label>
-                                    <div class="border rounded p-3 text-center" style="min-height: 150px;" id="imagePreviewContainer">
-                                        <img id="imagePreview" src="#" alt="New Image Preview"
-                                             style="max-width: 100%; max-height: 120px; display: none;" />
-                                        <div id="currentImageInfo" class="text-muted">
-                                            @if (Model.ImageId.HasValue)
-                                            {
-                                                <i class="fas fa-image fa-2x mb-2 text-success"></i>
-                                                <br>
-                                                <span class="text-success">Current image exists</span>
-                                                <br>
-                                                <small>Choose a new image to replace it</small>
-                                            }
-                                            else
-                                            {
-                                                <i class="fas fa-image fa-2x mb-2"></i>
-                                                <br>
-                                                <span>No current image</span>
-                                            }
-                                        </div>
-                                    </div>
-                                    <div class="mt-2">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="clearImage()">
-                                            <i class="fas fa-times"></i> Clear New Image
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                        <span asp-validation-for="BrandImage" class="validation-error"></span>
+                        <div class="progress-bar" id="uploadProgress" style="display: none;">
+                            <div class="progress-fill"></div>
                         </div>
-
-                        <!-- Change Tracking Section -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card bg-light">
-                                    <div class="card-header">
-                                        <h6 class="card-title mb-0">
-                                            <i class="fas fa-history"></i> Change Tracking
-                                        </h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <strong>Form Status:</strong>
-                                                <span id="formStatus" class="badge bg-success">Valid</span>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <strong>Changes Made:</strong>
-                                                <span id="changesStatus" class="badge bg-secondary">No Changes</span>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <strong>Image Status:</strong>
-                                                <span id="imageStatus" class="badge bg-secondary">No New Image</span>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <strong>Validation:</strong>
-                                                <span id="validationStatus" class="badge bg-success">Valid</span>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-12">
-                                                <small class="text-muted">
-                                                    <i class="fas fa-info-circle"></i>
-                                                    <strong>Note:</strong> Changes will be tracked automatically. You can preview changes before saving.
-                                                </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group mb-3">
-                                    <label class="form-label">Additional Information</label>
-                                    <div class="card bg-light">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <strong>ID:</strong> @Model.BrandId
-                                                </div>
-                                                <div class="col-md-6">
-                                                    @if (Model.CreatedDate.HasValue)
-                                                    {
-                                                        <strong>Created Date:</strong> @Model.CreatedDate.Value.ToString("yyyy-MM-dd HH:mm")
-                                                    }
-                                                </div>
-                                            </div>
-                                            @if (Model.UpdatedDate.HasValue)
-                                            {
-                                                <div class="row mt-2">
-                                                    <div class="col-md-6">
-                                                        <strong>Last Updated:</strong> @Model.UpdatedDate.Value.ToString("yyyy-MM-dd HH:mm")
-                                                    </div>
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <button type="button" class="clear-btn" onclick="clearImage()">
+                            <i class="fas fa-times"></i> Clear Image
+                        </button>
                     </div>
 
-                    <div class="card-footer">
-                        <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn btn-primary" id="submitBtn">
-                                <i class="fas fa-save"></i> Save Changes
-                            </button>
-                            <div>
-                                <button type="button" class="btn btn-info" onclick="previewChanges()">
-                                    <i class="fas fa-eye"></i> Preview Changes
-                                </button>
-                                <button type="button" class="btn btn-warning" onclick="compareWithOriginal()">
-                                    <i class="fas fa-exchange-alt"></i> Compare
-                                </button>
-                                <a asp-action="Details" asp-route-id="@Model.BrandId" class="btn btn-info">
-                                    <i class="fas fa-eye"></i> View Details
-                                </a>
-                                <a asp-action="Index" class="btn btn-secondary">
-                                    <i class="fas fa-times"></i> Cancel
-                                </a>
+                    <div class="form-group">
+                        <label class="form-label">Image Preview</label>
+                        <div class="image-preview-container" id="imagePreviewContainer">
+                            <img id="imagePreview" src="@Model.ImageUrl" alt="Preview" class="image-preview"
+                                 style="@(Model.ImageId.HasValue && !string.IsNullOrEmpty(Model.ImageUrl) ? "display:block" : "display:none")" />
+                            <div id="currentImageInfo" class="image-placeholder"
+                                 style="@(Model.ImageId.HasValue && !string.IsNullOrEmpty(Model.ImageUrl) ? "display:none" : "display:block")">
+                                @if (Model.ImageId.HasValue)
+                                {
+                                    <i class="fas fa-image" style="color: var(--success-color);"></i>
+                                    <div style="color: var(--success-color); font-weight: 500;">Current image exists</div>
+                                    <div class="helper-text">Choose a new image to replace it</div>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-image"></i>
+                                    <div>No current image</div>
+                                    <div class="helper-text">Upload an image above</div>
+                                }
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Changes Preview Modal -->
-<div class="modal fade" id="changesPreviewModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Changes Preview</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6>Current Values</h6>
-                        <table class="table table-sm">
-                            <tr>
-                                <th>Arabic Name:</th>
-                                <td id="currentNameAr">@Model.NameAr</td>
-                            </tr>
-                            <tr>
-                                <th>English Name:</th>
-                                <td id="currentNameEn">@Model.NameEn</td>
-                            </tr>
-                            <tr>
-                                <th>Image:</th>
-                                <td id="currentImageStatus">
-                                    @if (Model.ImageId.HasValue)
-                                    {
-                                        <span class="badge bg-success">Has Image</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-secondary">No Image</span>
-                                    }
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <h6>New Values</h6>
-                        <table class="table table-sm">
-                            <tr>
-                                <th>Arabic Name:</th>
-                                <td id="newNameAr"></td>
-                            </tr>
-                            <tr>
-                                <th>English Name:</th>
-                                <td id="newNameEn"></td>
-                            </tr>
-                            <tr>
-                                <th>Image:</th>
-                                <td id="newImageStatus"></td>
-                            </tr>
-                        </table>
                     </div>
                 </div>
+
+            
+
+              
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                    @* <a type="submit" class="btn btn-primary" id="submitBtn" onclick="submitForm()" asp-action="Edit">
+                    <i class="fas fa-save"></i>
+                    Save Changes
+                </a> *@
+
+                <div class="secondary-actions">
+                    <button type="button" class="btn btn-outline" onclick="previewChanges()">
+                        <i class="fas fa-eye"></i>
+                        Preview
+                    </button>
+                    <a asp-action="Index" class="btn btn-danger">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </a>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
+
+<!-- JavaScript for Enhanced Functionality -->
+<script>
+    // Global variables for form state tracking
+    let originalData = {
+        nameAr: '@Html.Raw(Model.NameAr)',
+        nameEn: '@Html.Raw(Model.NameEn)',
+        hasImage: @(Model.ImageId.HasValue ? "true" : "false")
+    };
+
+    let currentImage = null;
+    let formValid = true;
+    let hasChanges = false;
+
+    // Initialize form on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        validateForm();
+        updateStatus();
+    });
+
+    // Image preview function
+    function previewImage(input) {
+        const file = input.files[0];
+        const preview = document.getElementById('imagePreview');
+        const container = document.getElementById('imagePreviewContainer');
+        const currentInfo = document.getElementById('currentImageInfo');
+        const progressBar = document.getElementById('uploadProgress');
+
+        if (file) {
+            // Show progress simulation
+            progressBar.style.display = 'block';
+            const progressFill = progressBar.querySelector('.progress-fill');
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 20;
+                progressFill.style.width = progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressBar.style.display = 'none';
+                        progressFill.style.width = '0%';
+                    }, 500);
+                }
+            }, 100);
+
+            // File validation
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+            if (file.size > maxSize) {
+                alert('File size must be less than 5MB');
+                clearImage();
+                return;
+            }
+
+            if (!allowedTypes.includes(file.type)) {
+                alert('Only JPG, PNG, and GIF files are allowed');
+                clearImage();
+                return;
+            }
+
+            // Create image preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+                currentInfo.style.display = 'none';
+                currentImage = file;
+
+                updateImageStatus('New Image Selected', 'warning');
+                updateStatus();
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // Clear image function
+    function clearImage() {
+        const input = document.getElementById('brandImageInput');
+        const preview = document.getElementById('imagePreview');
+        const currentInfo = document.getElementById('currentImageInfo');
+
+        input.value = '';
+        preview.style.display = 'none';
+        currentInfo.style.display = 'block';
+        currentImage = null;
+
+        updateImageStatus('No New Image');
+        trackChanges();
+        updateStatus();
+    }
+
+    // Form validation
+    function validateForm() {
+        const nameAr = document.getElementById('nameArInput').value.trim();
+        const nameEn = document.getElementById('nameEnInput').value.trim();
+        const submitBtn = document.getElementById('submitBtn');
+
+        formValid = nameAr.length > 0 && nameEn.length > 0;
+
+        if (formValid) {
+            updateFormStatus('Valid', 'success');
+            updateValidationStatus('Ready', 'success');
+            submitBtn.disabled = false;
+        } else {
+            updateFormStatus('Invalid', 'danger');
+            updateValidationStatus('Not Ready', 'danger');
+            submitBtn.disabled = true;
+        }
+
+        updateStatus();
+    }
+
+    // Track changes
+    function trackChanges() {
+        const nameAr = document.getElementById('nameArInput').value.trim();
+        const nameEn = document.getElementById('nameEnInput').value.trim();
+
+        hasChanges = (nameAr !== originalData.nameAr) ||
+                    (nameEn !== originalData.nameEn) ||
+                    (currentImage !== null);
+
+        if (hasChanges) {
+            updateChangesStatus('Changes Made', 'warning');
+        } else {
+            updateChangesStatus('No Changes', 'secondary');
+        }
+
+        updateStatus();
+    }
+
+    // Status update functions
+    function updateFormStatus(text, type) {
+        const status = document.getElementById('formStatus');
+        status.textContent = text;
+        status.className = `badge badge-${type}`;
+    }
+
+    function updateChangesStatus(text, type) {
+        const status = document.getElementById('changesStatus');
+        status.textContent = text;
+        status.className = `badge badge-${type}`;
+    }
+
+    function updateImageStatus(text, type = 'secondary') {
+        const status = document.getElementById('imageStatus');
+        status.textContent = text;
+        status.className = `badge badge-${type}`;
+    }
+
+    function updateValidationStatus(text, type) {
+        const status = document.getElementById('validationStatus');
+        status.textContent = text;
+        status.className = `badge badge-${type}`;
+    }
+
+    // General status update
+    function updateStatus() {
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (formValid && hasChanges) {
+            submitBtn.classList.remove('btn-secondary');
+            submitBtn.classList.add('btn-primary');
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+        } else if (formValid && !hasChanges) {
+            submitBtn.classList.remove('btn-primary');
+            submitBtn.classList.add('btn-secondary');
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> No Changes';
+        } else {
+            submitBtn.classList.remove('btn-primary');
+            submitBtn.classList.add('btn-secondary');
+            submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Complete Required Fields';
+        }
+    }
+
+    // Preview changes function
+    function previewChanges() {
+        const nameAr = document.getElementById('nameArInput').value.trim();
+        const nameEn = document.getElementById('nameEnInput').value.trim();
+
+        // Create preview modal
+        const modal = document.createElement('div');
+        modal.className = 'preview-modal';
+        modal.innerHTML = `
+            <div class="preview-overlay" onclick="closePreview()"></div>
+            <div class="preview-content">
+                <div class="preview-header">
+                    <h3><i class="fas fa-eye"></i> Preview Changes</h3>
+                    <button onclick="closePreview()" class="close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="preview-body">
+                    <div class="preview-grid">
+                        <div class="preview-section">
+                            <h4>Current</h4>
+                            <div class="preview-card">
+                                <div><strong>Arabic Name:</strong> ${originalData.nameAr}</div>
+                                <div><strong>English Name:</strong> ${originalData.nameEn}</div>
+                                <div><strong>Image:</strong> ${originalData.hasImage ? 'Has Image' : 'No Image'}</div>
+                            </div>
+                        </div>
+                        <div class="preview-section">
+                            <h4>New</h4>
+                            <div class="preview-card">
+                                <div><strong>Arabic Name:</strong> ${nameAr}</div>
+                                <div><strong>English Name:</strong> ${nameEn}</div>
+                                <div><strong>Image:</strong> ${currentImage ? 'New Image Selected' : (originalData.hasImage ? 'Keep Current' : 'No Image')}</div>
+                            </div>
+                        </div>
+                    </div>
+                    ${currentImage ? `
+                        <div class="new-image-preview">
+                            <h4>New Image Preview</h4>
+                            <img src="${document.getElementById('imagePreview').src}" style="max-width: 200px; max-height: 200px; border-radius: 8px; box-shadow: var(--shadow-sm);" />
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="preview-footer">
+                    <button onclick="closePreview()" class="btn btn-secondary">Close</button>
+                    <button onclick="submitForm()" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Add modal styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .preview-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .preview-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+            }
+            .preview-content {
+                background: white;
+                border-radius: var(--border-radius);
+                max-width: 800px;
+                width: 90%;
+                max-height: 90vh;
+                overflow-y: auto;
+                z-index: 1001;
+                box-shadow: var(--shadow-lg);
+            }
+            .preview-header {
+                padding: 20px 24px;
+                border-bottom: 1px solid var(--border-color);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .preview-header h3 {
+                margin: 0;
+                color: var(--text-primary);
+            }
+            .close-btn {
+                background: none;
+                border: none;
+                font-size: 18px;
+                cursor: pointer;
+                color: var(--text-secondary);
+                padding: 4px;
+            }
+            .preview-body {
+                padding: 24px;
+            }
+            .preview-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                margin-bottom: 24px;
+            }
+            .preview-section h4 {
+                margin-bottom: 12px;
+                color: var(--text-primary);
+            }
+            .preview-card {
+                background: var(--bg-light);
+                padding: 16px;
+                border-radius: var(--border-radius-sm);
+                border: 1px solid var(--border-color);
+            }
+            .preview-card div {
+                margin-bottom: 8px;
+            }
+            .new-image-preview {
+                text-align: center;
+                margin-top: 20px;
+            }
+            .new-image-preview h4 {
+                margin-bottom: 12px;
+            }
+            .preview-footer {
+                padding: 20px 24px;
+                border-top: 1px solid var(--border-color);
+                display: flex;
+                justify-content: flex-end;
+                gap: 12px;
+            }
+        `;
+
+        document.head.appendChild(style);
+        document.body.appendChild(modal);
+    }
+
+    // Close preview modal
+    function closePreview() {
+        const modal = document.querySelector('.preview-modal');
+        if (modal) {
+            modal.remove();
+        }
+    }
+
+    // Submit form
+    function submitForm() {
+        document.getElementById('editBrandForm').submit();
+    }
+
+    // Form submission handler
+    document.getElementById('editBrandForm').addEventListener('submit', function(e) {
+        if (!formValid) {
+            e.preventDefault();
+            alert('Please fill in all required fields');
+            return;
+        }
+
+        if (!hasChanges) {
+            e.preventDefault();
+            alert('No changes have been made');
+            return;
+        }
+
+        // Show loading state
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl + S to save
+        if (e.ctrlKey && e.key === 's') {
+            e.preventDefault();
+            if (formValid && hasChanges) {
+                document.getElementById('editBrandForm').submit();
+            }
+        }
+
+        // Escape to close preview
+        if (e.key === 'Escape') {
+            closePreview();
+        }
+    });
+</script>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-    <script>
-        let originalValues = {
-            nameAr: '@Model.NameAr',
-            nameEn: '@Model.NameEn',
-            hasImage: @(Model.ImageId.HasValue ? "true" : "false")
-        };
-
-        let hasChanges = false;
-
-        function previewImage(input) {
-            const preview = document.getElementById('imagePreview');
-            const currentInfo = document.getElementById('currentImageInfo');
-            const imageStatus = document.getElementById('imageStatus');
-
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-
-                // Validate file size (5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    alert('File size must be less than 5MB');
-                    input.value = '';
-                    return;
-                }
-
-                // Validate file type
-                if (!file.type.startsWith('image/')) {
-                    alert('Please select an image file');
-                    input.value = '';
-                    return;
-                }
-
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                    currentInfo.style.display = 'none';
-                    imageStatus.textContent = 'New Image Selected';
-                    imageStatus.className = 'badge bg-success';
-                }
-
-                reader.readAsDataURL(file);
-            } else {
-                preview.style.display = 'none';
-                currentInfo.style.display = 'block';
-                imageStatus.textContent = 'No New Image';
-                imageStatus.className = 'badge bg-secondary';
-            }
-        }
-
-        function validateForm() {
-            const nameAr = document.getElementById('nameArInput').value.trim();
-            const nameEn = document.getElementById('nameEnInput').value.trim();
-            const submitBtn = document.getElementById('submitBtn');
-            const formStatus = document.getElementById('formStatus');
-            const validationStatus = document.getElementById('validationStatus');
-
-            if (nameAr && nameEn) {
-                submitBtn.disabled = false;
-                formStatus.textContent = 'Valid';
-                formStatus.className = 'badge bg-success';
-                validationStatus.textContent = 'Valid';
-                validationStatus.className = 'badge bg-success';
-            } else {
-                submitBtn.disabled = true;
-                formStatus.textContent = 'Invalid';
-                formStatus.className = 'badge bg-danger';
-                validationStatus.textContent = 'Invalid';
-                validationStatus.className = 'badge bg-danger';
-            }
-        }
-
-        function trackChanges() {
-            const nameAr = document.getElementById('nameArInput').value.trim();
-            const nameEn = document.getElementById('nameEnInput').value.trim();
-            const imageInput = document.getElementById('brandImageInput');
-            const changesStatus = document.getElementById('changesStatus');
-
-            const hasNameChanges = nameAr !== originalValues.nameAr || nameEn !== originalValues.nameEn;
-            const hasImageChanges = imageInput.files && imageInput.files.length > 0;
-
-            hasChanges = hasNameChanges || hasImageChanges;
-
-            if (hasChanges) {
-                changesStatus.textContent = 'Changes Detected';
-                changesStatus.className = 'badge bg-warning';
-            } else {
-                changesStatus.textContent = 'No Changes';
-                changesStatus.className = 'badge bg-secondary';
-            }
-        }
-
-        function clearImage() {
-            document.getElementById('brandImageInput').value = '';
-            document.getElementById('imagePreview').style.display = 'none';
-            document.getElementById('currentImageInfo').style.display = 'block';
-            document.getElementById('imageStatus').textContent = 'No New Image';
-            document.getElementById('imageStatus').className = 'badge bg-secondary';
-            trackChanges();
-        }
-
-        function previewChanges() {
-            const nameAr = document.getElementById('nameArInput').value;
-            const nameEn = document.getElementById('nameEnInput').value;
-            const imageInput = document.getElementById('brandImageInput');
-
-            document.getElementById('newNameAr').textContent = nameAr || 'Not provided';
-            document.getElementById('newNameEn').textContent = nameEn || 'Not provided';
-
-            if (imageInput.files && imageInput.files[0]) {
-                document.getElementById('newImageStatus').innerHTML = '<span class="badge bg-success">New Image Selected</span>';
-            } else {
-                document.getElementById('newImageStatus').innerHTML = '<span class="badge bg-secondary">No New Image</span>';
-            }
-
-            new bootstrap.Modal(document.getElementById('changesPreviewModal')).show();
-        }
-
-        function compareWithOriginal() {
-            const nameAr = document.getElementById('nameArInput').value;
-            const nameEn = document.getElementById('nameEnInput').value;
-
-            let changes = [];
-
-            if (nameAr !== originalValues.nameAr) {
-                changes.push(`Arabic name changed from "${originalValues.nameAr}" to "${nameAr}"`);
-            }
-
-            if (nameEn !== originalValues.nameEn) {
-                changes.push(`English name changed from "${originalValues.nameEn}" to "${nameEn}"`);
-            }
-
-            if (changes.length > 0) {
-                alert('Changes detected:\n\n' + changes.join('\n'));
-            } else {
-                alert('No changes detected in the form fields.');
-            }
-        }
-
-        // Auto-hide alerts after 5 seconds
-        setTimeout(function() {
-            $('.alert').fadeOut('slow');
-        }, 5000);
-
-        // Show validation summary if there are errors
-        $(document).ready(function() {
-            if ($('.field-validation-error').length > 0) {
-                $('.alert-danger').show();
-            }
-
-            // Initialize form validation and change tracking
-            validateForm();
-            trackChanges();
-        });
-    </script>
 }

@@ -51,7 +51,9 @@ namespace Efreshli.Application.Services.AuthServices
             _emailService = emailService;
             _roleService = roleService;
             _logger = logger;
+
             _httpClientFactory = httpClientFactory;
+            _roleManager = roleManager;
         }
 
         public async Task<Response<string>> RegisterAsync(RegisterDto model)
@@ -204,24 +206,35 @@ namespace Efreshli.Application.Services.AuthServices
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
                     return ResponseHandler.Success(true, "If the email exists, a password reset link has been sent");
                 }
 
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-                // Send email with reset token
-                await _emailService.SendPasswordResetEmailAsync(user.Email, encodedToken);
+                // Fire-and-forget: don't block API response
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await _emailService.SendPasswordResetEmailAsync(user.Email, encodedToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log internally, dont throw
+                        _logger.LogError(ex, "Failed to send reset email for {Email}", user.Email);
+                    }
+                });
 
-                return ResponseHandler.Success(true, "Password reset email sent");
+                // Respond immediately
+                return ResponseHandler.Success(true, "If the email exists, a password reset link has been sent");
             }
             catch (Exception ex)
             {
-                return ResponseHandler.BadRequest<bool>($"Password reset failed: {ex.Message}");
+                _logger.LogError(ex, "Error during ForgotPasswordAsync for {Email}", model.Email);
+                return ResponseHandler.BadRequest<bool>("Password reset failed. Please try again later.");
             }
         }
-
         public async Task<Response<bool>> ResetPasswordAsync(ResetPasswordDto model)
         {
             try

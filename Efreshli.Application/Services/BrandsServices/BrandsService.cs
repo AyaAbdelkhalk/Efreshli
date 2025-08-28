@@ -1,10 +1,13 @@
 ﻿using Efreshli.Application.DTOs.BrandDTOs;
+using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Interfaces;
 using Efreshli.Application.Services.CategoryServices;
 using Efreshli.Application.Services.File;
 using Efreshli.Domain.Enums;
 using Efreshli.Domain.Models;
 using Mapster;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,24 +26,27 @@ namespace Efreshli.Application.Services.BrandsServices
             _brandsRepository = brandsRepository;
             _imageService = imageService;
         }
-
-        public async Task<BrandResponseDto> CreateBrandAsync(CreateBrandDto brandDto)
+        
+        public async Task<Response<BrandResponseDto>> CreateBrandAsync(CreateBrandDto brandDto)
         {
             var brand = brandDto.Adapt<Brand>();
             if (brandDto.BrandImage != null)
             {
                 var image = await _imageService.UploadImageAsync(brandDto.BrandImage,ImageReferenceType.Brand,brand.BrandId);
                 brand.ImageId = image.Id;
+                brand.Image = image;
             }
             var createdBrand = await _brandsRepository.AddAsync(brand);
             await _brandsRepository.SaveChangesAsync();
-            return new BrandResponseDto 
+            var b = new BrandResponseDto 
             {
                 BrandId = createdBrand.BrandId,
                 NameAr = createdBrand.NameAr,
                 NameEn = createdBrand.NameEn,
-                ImageId = createdBrand.ImageId
+                ImageUrl = createdBrand.ImageId.HasValue ? _imageService.GetImageUrl((int)createdBrand.ImageId) : null,
+                ImageId = createdBrand.ImageId,
             };
+            return ResponseHandler.Success(b);
         }
 
         public async Task<bool> DeleteBrandAsync(int id)
@@ -73,7 +79,15 @@ namespace Efreshli.Application.Services.BrandsServices
             {
                 return null; 
             }
-            return brand.Adapt<BrandResponseDto>();
+            return new BrandResponseDto
+            {
+                BrandId = brand.BrandId,
+                NameAr = brand.NameAr,
+                NameEn = brand.NameEn,
+                ImageUrl = brand.ImageId.HasValue ? _imageService.GetImageUrl((int)brand.ImageId) : null,
+                ImageId = brand.ImageId.HasValue ? brand.ImageId : null,
+
+            };
 
         }
 
@@ -102,7 +116,14 @@ namespace Efreshli.Application.Services.BrandsServices
             }
             var updatedBrand = await _brandsRepository.UpdateAsync(brand);
             await _brandsRepository.SaveChangesAsync();
-            return updatedBrand.Adapt<BrandResponseDto>();
+            return new BrandResponseDto
+            {
+                BrandId = updatedBrand.BrandId,
+                NameAr = updatedBrand.NameAr,
+                NameEn = updatedBrand.NameEn,
+                ImageUrl = updatedBrand.ImageId.HasValue ? _imageService.GetImageUrl((int)updatedBrand.ImageId) : null,
+                ImageId = updatedBrand.ImageId  
+            };
         }
     }
 }

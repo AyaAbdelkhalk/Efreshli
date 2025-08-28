@@ -343,7 +343,11 @@
                     <th style="width: 120px;">Actions</th>
                 </tr>
             </thead>
+
             <tbody>
+                @if (Model != null && Model.Any())
+                {
+
                 @foreach (var product in Model)
                 {
                     <tr class="admin-table-row" style="animation-delay: @(Model.ToList().IndexOf(product) * 0.1)s;">
@@ -381,7 +385,7 @@
                         <td class="admin-table-cell">
                             <span class="admin-badge colors">
                                 <i class="fa-solid fa-palette" style="font-size: 10px; margin-left: 4px;"></i>
-                                @(product.ProductItemColorsUrls?.Count() ?? 0) ألوان
+                                @(product.ProductItemColorsUrls?.Count ?? 0) Color
                             </span>
                         </td>
 
@@ -409,7 +413,20 @@
                         </td>
                     </tr>
                 }
+            
+            }
+
+
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-gray-500 p-4">
+                            لا توجد منتجات متاحة حالياً
+                        </td>
+                    </tr>
+                }
             </tbody>
+
         </table>
     </div>
 

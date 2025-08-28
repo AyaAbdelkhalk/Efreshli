@@ -1,4 +1,5 @@
 ﻿using Efreshli.Application.DTOs.BrandDTOs;
+using Efreshli.Application.Helper.ResultPattern;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Efreshli.Application.Services.BrandsServices
     {
         Task<IEnumerable<BrandResponseDto>> GetAllBrandsAsync(string? search = null, int page = 1, int pageSize = 10);
         Task<BrandResponseDto?> GetBrandByIdAsync(int id);
-        Task<BrandResponseDto> CreateBrandAsync(CreateBrandDto brandDto);
+        Task<Response<BrandResponseDto>> CreateBrandAsync(CreateBrandDto brandDto);
         Task<BrandResponseDto?> UpdateBrandAsync(int id, UpdateBrandDto brandDto);
         Task<bool> DeleteBrandAsync(int id);
     }

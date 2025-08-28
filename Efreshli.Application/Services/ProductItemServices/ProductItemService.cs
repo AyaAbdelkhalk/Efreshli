@@ -43,60 +43,74 @@ namespace Efreshli.Application.Services.ProductItemServices
                 await _unitOfWork.ProductItemRepository.AddAsync(productItem);
                 await _unitOfWork.SaveChangesAsync();
 
-                //add fabric
-                if (createProductItemDto.FabricColorImage != null)
+                try
                 {
-                    var img = await _imageService.UploadImageAsync(createProductItemDto.FabricColorImage.ColorImg, Domain.Enums.ImageReferenceType.Color, productItem.ProductItemId);
-                    var fabricColor = new Domain.Models.Color
+                    //add fabric
+                    if (createProductItemDto.FabricColorImage != null && createProductItemDto.FabricColorImage.ColorImg != null)
                     {
-                        NameAr = createProductItemDto.FabricColorImage.NameAr,
-                        NameEn = createProductItemDto.FabricColorImage.NameEn,
-                        ImageId = img.Id,
-                        Image = img,
-                        ColorType = Domain.Enums.ColorType.FabricColor
-                    };
-                    await _unitOfWork.ColorRepository.AddAsync(fabricColor);
-                    await _unitOfWork.SaveChangesAsync();
-                    productItem.FabricColorId = fabricColor.Id;
-                    productItem.FabricColor = fabricColor;
-                }
-                if (createProductItemDto.WoodColorImage != null)
-                {
-                    var img = await _imageService.UploadImageAsync(createProductItemDto.WoodColorImage.ColorImg, Domain.Enums.ImageReferenceType.Color, productItem.ProductItemId);
-                    var woodColor = new Domain.Models.Color
-                    {
-                        NameAr = createProductItemDto.WoodColorImage.NameAr,
-                        NameEn = createProductItemDto.WoodColorImage.NameEn,
-                        ImageId = img.Id,
-                        Image = img,
-                        ColorType = Domain.Enums.ColorType.WoodColor
-                    };
-                    await _unitOfWork.ColorRepository.AddAsync(woodColor);
-                    await _unitOfWork.SaveChangesAsync();
-                    productItem.WoodColorId = woodColor.Id;
-                    productItem.WoodColor = woodColor;
-                }
-                //add item colors
-                if (createProductItemDto.ProductItemColors != null && createProductItemDto.ProductItemColors.Any())
-                {
-                    foreach (var colorDto in createProductItemDto.ProductItemColors)
-                    {
-                        var img = await _imageService.UploadImageAsync(colorDto.ColorImg, Domain.Enums.ImageReferenceType.Color, productItem.ProductItemId);
-                        var itemColor = new Domain.Models.Color
+                        var img = await _imageService.UploadImageAsync(createProductItemDto.FabricColorImage.ColorImg, Domain.Enums.ImageReferenceType.Color, productItem.ProductItemId);
+                        var fabricColor = new Domain.Models.Color
                         {
-                            NameAr = colorDto.NameAr,
-                            NameEn = colorDto.NameEn,
+                            NameAr = createProductItemDto.FabricColorImage.NameAr,
+                            NameEn = createProductItemDto.FabricColorImage.NameEn,
                             ImageId = img.Id,
                             Image = img,
-                            ColorType = Domain.Enums.ColorType.GenericColor
+                            ColorType = Domain.Enums.ColorType.FabricColor
                         };
-                        await _unitOfWork.ColorRepository.AddAsync(itemColor);
-                        productItem.ProductItemColors.Add(itemColor);
+                        await _unitOfWork.ColorRepository.AddAsync(fabricColor);
+                        await _unitOfWork.SaveChangesAsync();
+                        productItem.FabricColorId = fabricColor.Id;
+                        productItem.FabricColor = fabricColor;
                     }
-                }
+                    if (createProductItemDto.WoodColorImage != null && createProductItemDto.WoodColorImage.ColorImg != null)
+                    {
+                        var img = await _imageService.UploadImageAsync(createProductItemDto.WoodColorImage.ColorImg, Domain.Enums.ImageReferenceType.Color, productItem.ProductItemId);
+                        var woodColor = new Domain.Models.Color
+                        {
+                            NameAr = createProductItemDto.WoodColorImage.NameAr,
+                            NameEn = createProductItemDto.WoodColorImage.NameEn,
+                            ImageId = img.Id,
+                            Image = img,
+                            ColorType = Domain.Enums.ColorType.WoodColor
+                        };
+                        await _unitOfWork.ColorRepository.AddAsync(woodColor);
+                        await _unitOfWork.SaveChangesAsync();
+                        productItem.WoodColorId = woodColor.Id;
+                        productItem.WoodColor = woodColor;
+                    }
+                    //add item colors
+                    if (createProductItemDto.ProductItemColors != null && createProductItemDto.ProductItemColors.Any())
+                    {
+                        foreach (var colorDto in createProductItemDto.ProductItemColors)
+                        {
+                            var img = await _imageService.UploadImageAsync(colorDto.ColorImg, Domain.Enums.ImageReferenceType.Color, productItem.ProductItemId);
+                            var itemColor = new Domain.Models.Color
+                            {
+                                NameAr = colorDto.NameAr,
+                                NameEn = colorDto.NameEn,
+                                ImageId = img.Id,
+                                Image = img,
+                                ColorType = Domain.Enums.ColorType.GenericColor,
+                                ProductItem = productItem,
+                                ProductItemId = productItem.ProductItemId
 
-                await _unitOfWork.ProductItemRepository.UpdateAsync(productItem);
-                await _unitOfWork.SaveChangesAsync();
+                            };
+                            await _unitOfWork.ColorRepository.AddAsync(itemColor);
+                            productItem.ProductItemColors.Add(itemColor);
+                            await _unitOfWork.SaveChangesAsync();
+
+                        }
+                        await _unitOfWork.SaveChangesAsync();
+
+                    }
+
+                    await _unitOfWork.ProductItemRepository.UpdateAsync(productItem);
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    return ResponseHandler.BadRequest<ProductItemResponseDto>($"An error occurred while uploading images or creating colors: {ex.Message}");
+                }
                 //var prd = await _unitOfWork.ProductRepository.GetByIdWithIncludeAsync(productItem.ProductId,
                 //    includes: 
 
@@ -255,10 +269,10 @@ namespace Efreshli.Application.Services.ProductItemServices
                     return ResponseHandler.NotFound<List<string>>("Product item not found.");
                 }
                 var colorUrls = new List<string>();
-                //if (productItem.ProductItemColors != null && productItem.ProductItemColors.Any())
-                //{
-                //    colorUrls.AddRange(productItem.ProductItemColors.Select(c => c.Image?.URL).Where(url => url != null));
-                //}
+                if (productItem.ProductItemColors != null && productItem.ProductItemColors.Any())
+                {
+                    colorUrls.AddRange(productItem.ProductItemColors.Select(c => c.Image?.URL).Where(url => url != null));
+                }
                 return ResponseHandler.Success(colorUrls, "Product item colors URLs retrieved successfully.");
             }
             catch (Exception ex)

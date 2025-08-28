@@ -52,6 +52,7 @@ namespace Efreshli.API
             builder.Services.AddHttpContextAccessor();
 
             #region CROS
+
             var AllowOrigins = "_myAllowSpecificOrigins";
 
             builder.Services.AddCors(options =>
@@ -70,6 +71,7 @@ namespace Efreshli.API
                         .AllowCredentials();
                     });
             });
+
             #endregion
 
 
@@ -114,7 +116,15 @@ namespace Efreshli.API
             #endregion
 
 
+            #region Cors
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                        builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+                    );
+            });
 
+            #endregion
 
 
             #region Auth
@@ -259,18 +269,16 @@ namespace Efreshli.API
             app.UseRequestLocalization(options.Value);
             #endregion
 
+
             var httpContextAccessor = app.Services.GetRequiredService<IHttpContextAccessor>();
-            //app.Use(async (context, next) =>
-            //{
-            //    Console.WriteLine($"Request: {context.Request.Method} {context.Request.Path}");
-            //    await next();
-            //});
+           
             app.UseSwagger();
             app.UseSwaggerUI();
             #region email
             app.UseHttpsRedirection();
             #endregion
             app.UseCors(AllowOrigins);
+
             app.UseStaticFiles();
 
             app.UseAuthentication();

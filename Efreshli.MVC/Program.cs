@@ -1,50 +1,3 @@
-
-//using Efreshli.Domain.Common.Classes;
-//using Efreshli.Infrastructure.Data;
-//using Microsoft.EntityFrameworkCore;
-
-//namespace Efreshli.MVC
-//{
-//    public class Program
-//    {
-//        public static void Main(string[] args)
-//        {
-//            var builder = WebApplication.CreateBuilder(args);
-
-//            // Add services to the container.
-//            builder.Services.AddControllersWithViews();
-//            builder.Services.AddDbContext<EfreshliDbContext>(options =>
-//                options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
-
-//            #region RegisterIdentity
-
-
-//            #endregion
-//            var app = builder.Build();
-//            // Initialize static UserContext
-//            UserContext.Initialize(app.Services);
-
-//            // Configure the HTTP request pipeline.
-//            if (!app.Environment.IsDevelopment())
-//            {
-//                app.UseExceptionHandler("/Home/Error");
-//            }
-//            app.UseRouting();
-//            app.UseStaticFiles();
-
-//            app.UseAuthorization();
-
-//            app.MapStaticAssets();
-//            app.MapControllerRoute(
-//                name: "default",
-//                pattern: "{controller=Home}/{action=Index}/{id?}")
-//                .WithStaticAssets();
-
-//            app.Run();
-//        }
-//    }
-//}
-
 using CloudinaryDotNet;
 using Efreshli.Application;
 using Efreshli.Application.DTOs.CouponDTOs;  // This is crucial
@@ -69,7 +22,7 @@ namespace Efreshli.MVC
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
           
@@ -88,7 +41,7 @@ namespace Efreshli.MVC
 
             // 2. Database
             builder.Services.AddDbContext<EfreshliDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"),s=>s.EnableRetryOnFailure()));
 
             // 3. Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -178,11 +131,18 @@ namespace Efreshli.MVC
             #endregion
 
             var app = builder.Build();
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var services = scope.ServiceProvider;
+            //    var context = services.GetRequiredService<EfreshliDbContext>();
+            //    await context.Database.MigrateAsync(); // Apply migrations
+            //    await DbInitializer.SeedAsync(services);
+            //}
 
             // Initialize static UserContext
             //UserContext.Initialize(app.Services);
 
-            
+
             // Error handling
             if (!app.Environment.IsDevelopment())
             {

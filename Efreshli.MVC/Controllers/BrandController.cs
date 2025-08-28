@@ -2,6 +2,7 @@
 using Efreshli.MVC.Models;
 using Efreshli.Application.Services.BrandsServices;
 using Efreshli.Application.DTOs.BrandDTOs;
+using Efreshli.Application.Services.File;
 
 namespace Efreshli.MVC.Controllers
 {
@@ -9,11 +10,13 @@ namespace Efreshli.MVC.Controllers
     {
         private readonly IBrandsService _brandsService;
         private readonly ILogger<BrandController> _logger;
+        private readonly IImageService _imageService; // Add this line
 
-        public BrandController(IBrandsService brandsService, ILogger<BrandController> logger)
+        public BrandController(IBrandsService brandsService, ILogger<BrandController> logger, IImageService imageService) // Modify this line
         {
             _brandsService = brandsService;
             _logger = logger;
+            _imageService = imageService; // Add this line
         }
 
         // GET: Brand
@@ -49,16 +52,11 @@ namespace Efreshli.MVC.Controllers
         }
 
         // GET: Brand/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             try
             {
-                var brand = await _brandsService.GetBrandByIdAsync(id.Value);
+                var brand = await _brandsService.GetBrandByIdAsync(id);
                 if (brand == null)
                 {
                     return NotFound();
@@ -69,6 +67,7 @@ namespace Efreshli.MVC.Controllers
                     BrandId = brand.BrandId,
                     NameAr = brand.NameAr,
                     NameEn = brand.NameEn,
+                    ImageUrl = brand.ImageId.HasValue ? _imageService.GetImageUrl(brand.ImageId.Value) : null,
                     ImageId = brand.ImageId
                 };
 
@@ -85,29 +84,23 @@ namespace Efreshli.MVC.Controllers
         // GET: Brand/Create
         public IActionResult Create()
         {
-            return View(new BrandViewModel());
+            return View();
         }
 
         // POST: Brand/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(BrandViewModel model)
+        public async Task<IActionResult> Create(CreateBrandDto model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
             try
             {
-                var createDto = new CreateBrandDto
+                
+                var result = await _brandsService.CreateBrandAsync(model);
+                if (!result.Succeeded)
                 {
-                    NameAr = model.NameAr,
-                    NameEn = model.NameEn,
-                    BrandImage = model.BrandImage
-                };
-
-                var result = await _brandsService.CreateBrandAsync(createDto);
+                    TempData["Error"] = result.Errors;
+                    return View(model);
+                }
 
                 TempData["Success"] = "Brand created successfully!";
                 return RedirectToAction(nameof(Index));
@@ -141,7 +134,8 @@ namespace Efreshli.MVC.Controllers
                     BrandId = brand.BrandId,
                     NameAr = brand.NameAr,
                     NameEn = brand.NameEn,
-                    ImageId = brand.ImageId
+                    ImageId = brand.ImageId,
+                    ImageUrl = brand.ImageId.HasValue ? _imageService.GetImageUrl(brand.ImageId.Value) : null
                 };
 
                 return View(viewModel);
@@ -219,7 +213,8 @@ namespace Efreshli.MVC.Controllers
                     BrandId = brand.BrandId,
                     NameAr = brand.NameAr,
                     NameEn = brand.NameEn,
-                    ImageId = brand.ImageId
+                    ImageId = brand.ImageId,
+
                 };
 
                 return View(viewModel);

@@ -144,6 +144,39 @@
 
                                     <!-- Colors Section -->
                                     <div class="colors-section">
+                                        <!-- Additional Colors -->
+                                        @if (item.ProductItemColors != null && item.ProductItemColors.Count > 0)
+                                        {
+                                            <div class="color-category">
+                                                <div class="color-category-header">
+                                                    <h5 class="color-category-title">✨ Additional Colors</h5>
+                                                    <button class="btn btn-add" onclick="addAdditionalColor(@item.ProductItemId)">
+                                                        <i class="icon">➕</i> Add Color
+                                                    </button>
+                                                </div>
+                                                <div class="additional-colors-grid">
+                                                    @foreach (var color in item.ProductItemColors)
+                                                    {
+                                                        <div class="color-item additional-color" data-color-id="@color.ColorId">
+                                                            <div class="color-item-actions">
+                                                                <button class="btn-icon btn-edit" onclick="editAdditionalColor('@color.ColorId')" title="Edit">✏️</button>
+                                                                <button class="btn-icon btn-delete" onclick="deleteAdditionalColor('@color.ColorId')" title="Delete">🗑️</button>
+                                                            </div>
+                                                            @if (!string.IsNullOrEmpty(color.ImageUrl))
+                                                            {
+                                                                <div class="color-image">
+                                                                    <img src="@color.ImageUrl" alt="@color.NameAr" />
+                                                                </div>
+                                                            }
+                                                            <div class="color-name">
+                                                                <span class="ar">@color.NameAr</span>
+                                                                <span class="en">@color.NameEn</span>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
                                         <!-- Wood and Fabric Colors (Side by Side) -->
                                         <div class="wood-fabric-row">
                                             @if (item.WoodColorImage != null)
@@ -197,39 +230,7 @@
                                             }
                                         </div>
 
-                                        <!-- Additional Colors -->
-                                        @if (item.ProductItemColors != null && item.ProductItemColors.Count > 0)
-                                        {
-                                            <div class="color-category">
-                                                <div class="color-category-header">
-                                                    <h5 class="color-category-title">✨ Additional Colors</h5>
-                                                    <button class="btn btn-add" onclick="addAdditionalColor(@item.ProductItemId)">
-                                                        <i class="icon">➕</i> Add Color
-                                                    </button>
-                                                </div>
-                                                <div class="additional-colors-grid">
-                                                    @foreach (var color in item.ProductItemColors)
-                                                    {
-                                                        <div class="color-item additional-color" data-color-id="@color.ColorId">
-                                                            <div class="color-item-actions">
-                                                                <button class="btn-icon btn-edit" onclick="editAdditionalColor('@color.ColorId')" title="Edit">✏️</button>
-                                                                <button class="btn-icon btn-delete" onclick="deleteAdditionalColor('@color.ColorId')" title="Delete">🗑️</button>
-                                                            </div>
-                                                            @if (!string.IsNullOrEmpty(color.ImageUrl))
-                                                            {
-                                                                <div class="color-image">
-                                                                    <img src="@color.ImageUrl" alt="@color.NameAr" />
-                                                                </div>
-                                                            }
-                                                            <div class="color-name">
-                                                                <span class="ar">@color.NameAr</span>
-                                                                <span class="en">@color.NameEn</span>
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                </div>
-                                            </div>
-                                        }
+                                        
                                     </div>
                                 </div>
                             }

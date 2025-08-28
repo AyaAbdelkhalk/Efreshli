@@ -502,15 +502,15 @@
     <comment>Reset form fields to default</comment>
   </data>
   <data name="Actions.Edit" xml:space="preserve">
-    <value>Edit {0}</value>
+    <value>Edit </value>
     <comment>Edit action</comment>
   </data>
   <data name="Actions.Delete" xml:space="preserve">
-    <value>Delete {0}</value>
+    <value>Delete</value>
     <comment>Delete action</comment>
   </data>
   <data name="Actions.Create" xml:space="preserve">
-    <value>Create {0}</value>
+    <value>Create</value>
     <comment>Create action</comment>
   </data>
   <data name="Actions.Add" xml:space="preserve">
