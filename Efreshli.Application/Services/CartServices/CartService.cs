@@ -12,19 +12,18 @@ namespace Efreshli.Application.Services.CartServices
     public class CartService : ICartService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserContext _userContext;
 
-        public CartService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
+        public CartService(IUnitOfWork unitOfWork, IUserContext userContext)
         {
             _unitOfWork = unitOfWork;
-            _httpContextAccessor = httpContextAccessor;
+            _userContext = userContext;
         }
 
         public async Task<Response<CartDto>> GetCartByUserIdAsync(string userId)
         {
             try
             {
-               // userId ??= _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
                 var carts = await _unitOfWork.CartRepository.GetAllWithIncludeAsync(
                     predicate: c => c.ApplicationUserId == userId,
                     includes: new Expression<Func<Cart, object>>[]
