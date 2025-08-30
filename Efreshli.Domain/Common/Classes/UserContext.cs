@@ -3,79 +3,50 @@ using Efreshli.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using System.Security.Claims;
 
 namespace Efreshli.Domain.Common.Classes
 {
 
-    public static class UserContext
+    public class UserContext : IUserContext
     {
-        private static IServiceProvider? _serviceProvider;
-
-        public static void Initialize(IServiceProvider serviceProvider)
+        private IHttpContextAccessor _httpContextAccessor;
+        public UserContext(IHttpContextAccessor httpContextAccessor)
         {
-            _serviceProvider = serviceProvider;
+            _httpContextAccessor = httpContextAccessor;
         }
-
-        public static string? CurrentUserId
+        public string? CurrentUserId
         {
             get
             {
-                using var scope = _serviceProvider?.CreateScope();
-                var httpContextAccessor = scope?.ServiceProvider.GetService<IHttpContextAccessor>();
-                var userManager = scope?.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-                
-                var user = httpContextAccessor?.HttpContext?.User;
-                return user != null ? userManager?.GetUserId(user) : null;
+                var user = _httpContextAccessor.HttpContext?.User;
+                if (user == null || !user.Identity.IsAuthenticated)
+                    return null;
+                var userId = user.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+                return userId;
             }
         }
-
-        public static string? CurrentUserName
+        public string CurrentUserName
         {
             get
             {
-                using var scope = _serviceProvider?.CreateScope();
-                var httpContextAccessor = scope?.ServiceProvider.GetService<IHttpContextAccessor>();
-                var userManager = scope?.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-                
-                var user = httpContextAccessor?.HttpContext?.User;
-                return user != null ? userManager?.GetUserName(user) : null;
+                var user = _httpContextAccessor.HttpContext?.User;
+                if (user == null || !user.Identity.IsAuthenticated)
+                    return "Anonymous";
+                var userName = user.Identity.Name ?? "Anonymous";
+                return userName;
             }
         }
-
-        public static bool IsAuthenticated
+        public bool IsAuthenticated
         {
             get
             {
-                using var scope = _serviceProvider?.CreateScope();
-                var httpContextAccessor = scope?.ServiceProvider.GetService<IHttpContextAccessor>();
-                
-                var user = httpContextAccessor?.HttpContext?.User;
-                return user?.Identity?.IsAuthenticated ?? false;
+                var user = _httpContextAccessor.HttpContext?.User;
+                return user != null && user.Identity.IsAuthenticated;
             }
         }
 
-        public static ApplicationUser? ApplicationUser
-        {
-            get
-            {
-                using var scope = _serviceProvider?.CreateScope();
-                var httpContextAccessor = scope?.ServiceProvider.GetService<IHttpContextAccessor>();
-                var userManager = scope?.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-                
-                var user = httpContextAccessor?.HttpContext?.User;
-                return user != null ? userManager?.GetUserAsync(user).Result : null;
-            }
-        }
 
-        // Alternative method for async operations
-        public static async Task<ApplicationUser?> GetApplicationUserAsync()
-        {
-            using var scope = _serviceProvider?.CreateScope();
-            var httpContextAccessor = scope?.ServiceProvider.GetService<IHttpContextAccessor>();
-            var userManager = scope?.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-            
-            var user = httpContextAccessor?.HttpContext?.User;
-            return user != null ? await userManager?.GetUserAsync(user)! : null;
-        }
+
     }
 }

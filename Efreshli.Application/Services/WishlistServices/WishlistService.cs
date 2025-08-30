@@ -20,22 +20,22 @@ namespace Efreshli.Application.Services.WishlistServices
     {
         #region Ctor
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IProductService _productService;
+        private readonly IUserContext _userContext;
 
 
-        public WishlistService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IProductService productService)
+        public WishlistService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IProductService productService, IUserContext userContext)
         {
             _unitOfWork = unitOfWork;
-            _httpContextAccessor = httpContextAccessor;
             _productService = productService;
+            _userContext = userContext;
         }
         #endregion
 
         #region WishList
         public async Task<Response<GetWishlistDto>> CreateWishlistAsync(CreateWishlistDto createWishlistDto)
         {
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId =_userContext.CurrentUserId;///////////current user
             if (userId == null)
             {
                 return ResponseHandler.Unauthorized<GetWishlistDto>("User Not Found");
@@ -61,7 +61,7 @@ namespace Efreshli.Application.Services.WishlistServices
 
         public async Task<Response<List<GetWishlistDto>>> GetAllWishlistsAsync()
         {
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);///////////current user
+            var userId = _userContext.CurrentUserId;
             if (userId == null)
             {
                 return ResponseHandler.Unauthorized<List<GetWishlistDto>>("User Not Found");
@@ -115,7 +115,7 @@ namespace Efreshli.Application.Services.WishlistServices
             {
                 return ResponseHandler.NotFound<GetWishlistDto>();
             }
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = _userContext.CurrentUserId;
             if (userId == null)
             {
                 return ResponseHandler.Unauthorized<GetWishlistDto>("User Not Found");
@@ -182,7 +182,7 @@ namespace Efreshli.Application.Services.WishlistServices
         public async Task<Response<UpdateWishlistDto>> UpdateWishlistAsync(int wishlistId, UpdateWishlistDto updateWishlistDto)
         {
             var wishlist = await _unitOfWork.WishlistRepository.GetByIdAsync(wishlistId);
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = _userContext.CurrentUserId;
             if (userId == null)
             {
                 return ResponseHandler.Unauthorized<UpdateWishlistDto>("User Not Found");
@@ -256,7 +256,7 @@ namespace Efreshli.Application.Services.WishlistServices
             {
                 return ResponseHandler.NotFound<GetWishlistItemDto>("Wishlist not found");
             }
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = _userContext.CurrentUserId;
             if (userId == null)
             {
                 return ResponseHandler.Unauthorized<GetWishlistItemDto>("User Not Found");
@@ -291,7 +291,7 @@ namespace Efreshli.Application.Services.WishlistServices
 
         public async Task<Response<bool>> IsItemWishlisted( int itemId)
         {
-            string userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = _userContext.CurrentUserId;
             if (userId == null)
             {
                 return ResponseHandler.Unauthorized<bool>("User Not Found");
@@ -318,7 +318,7 @@ namespace Efreshli.Application.Services.WishlistServices
             {
                 return ResponseHandler.NotFound<GetWishlistItemDto>("Wishlist not found");
             }
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = _userContext.CurrentUserId;
             if (userId == null)
             {
                 return ResponseHandler.Unauthorized<GetWishlistItemDto>("User Not Found");

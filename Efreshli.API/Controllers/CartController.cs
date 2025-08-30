@@ -1,5 +1,6 @@
 ﻿using Efreshli.Application.DTOs.CartDTOs;
 using Efreshli.Application.Services.CartServices;
+using Efreshli.Domain.Common.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,13 +14,15 @@ namespace Efreshli.API.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
+        private readonly IUserContext _userContext;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, IUserContext userContext)
         {
             _cartService = cartService;
+            _userContext = userContext;
         }
 
-        
+
         [HttpGet]
         public async Task<IActionResult> GetCart()
         {
@@ -126,9 +129,14 @@ namespace Efreshli.API.Controllers
         #region Helper Methods
 
      
-        private string GetCurrentUserId()
+        private string? GetCurrentUserId()
         {
-            return User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new UnauthorizedAccessException("User not authenticated");
+            var userId = _userContext.CurrentUserId;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return null;
+            }
+            return userId;
         }
 
         #endregion
