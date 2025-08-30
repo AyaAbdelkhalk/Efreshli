@@ -110,30 +110,6 @@ namespace Efreshli.Infrastructure.Data
                 }
             }
         }
-        private static string GetCurrentUserId()
-        {
-            try
-            {
-                // First try to get from UserContext (middleware sets this)
-                if (!string.IsNullOrEmpty(UserContext.CurrentUserId))
-                {
-                    return UserContext.CurrentUserId;
-                }
-            }
-            catch (Exception)
-            {
-                // If UserContext is not initialized or fails, fallback to HttpContext
-                var httpContext = new HttpContextAccessor().HttpContext;
-                if (httpContext?.User?.Identity?.IsAuthenticated == true)
-                {
-                    return httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                        ?? httpContext.User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value
-                        ?? httpContext.User.FindFirst("uid")?.Value;
-                }
 
-            }
-
-            return null;
-        }
     }
 }

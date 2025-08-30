@@ -28,9 +28,16 @@ namespace Efreshli.API.Controllers
             return this.CreateResponse(response);
         }
         [HttpGet("GetMainProducts/{categoryId:int?}")]
+          
         public async Task<IActionResult> GetMainProducts(int? categoryId= null)
         {
             var response = await _productService.GetMainProductsAsync(categoryId);
+            return this.CreateResponse(response);
+        }
+        [HttpGet("GetMainProducts")]
+        public async Task<IActionResult> GetMainProducts()
+        {
+            var response = await _productService.GetMainProductsAsync(null);
             return this.CreateResponse(response);
         }
     }

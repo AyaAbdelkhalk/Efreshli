@@ -17,7 +17,6 @@ namespace Efreshli.API.Controllers
         {
             _categoryService = categoryService;
         }
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {

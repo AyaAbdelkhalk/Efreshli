@@ -9,7 +9,10 @@ namespace Efreshli.Domain.Common.Interfaces
 {
     public interface IUserContext
     {
-        public string? GetCurrentUserId();
-        public Task<ApplicationUser?> GetCurrentUserDetailsAsync();
+        string? CurrentUserId { get; }
+        string CurrentUserName { get; }
+        bool IsAuthenticated { get; }
+
+
     }
 }
