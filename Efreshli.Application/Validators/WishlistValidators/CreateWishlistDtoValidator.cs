@@ -21,6 +21,11 @@ namespace Efreshli.Application.Validators.WishlistValidators
             _unitOfWork = unitOfWork;
             _contextAccessor = contextAccessor;
 
+            RuleFor(x => x.Name)
+                .NotEmpty().WithMessage("Wishlist name is required.")
+                .MaximumLength(500).WithMessage("Wishlist name must not exceed 50 characters.")
+                .MustAsync(async (name, cancellation) => await IsUniquName(name)).WithMessage("Wishlist name must be unique.");
+
         }
         private async Task<bool> IsUniquName(string newname)
         {
