@@ -14,6 +14,8 @@ namespace Efreshli.Application.DTOs.WishlistDTOs.WishlistItemDTOs
         public int ProductId { get; set; }
         public string NameAr { get; set; }
         public string NameEn { get; set; }
+        public string CategoryNameAr { get; set; }
+        public string CategoryNameEn { get; set; }
         public string DescriptionAr { get; set; }
         public string DescriptionEn { get; set; }
         public string? DimensionsOrSize { get; set; }
