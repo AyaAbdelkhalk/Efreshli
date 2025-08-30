@@ -81,7 +81,7 @@ namespace Efreshli.Application.Services.WishlistServices
                     var wishlist = new Domain.Models.Wishlist
                     {
                         ApplicationUserId = userId, //////////create first for current user
-                        Name = "My Favourite"
+                        Name = "My Favorites"
 
                     };
                     await _unitOfWork.WishlistRepository.AddAsync(wishlist);
@@ -100,6 +100,7 @@ namespace Efreshli.Application.Services.WishlistServices
                     WishlistId = w.WishlistId,
                     WishlistName = w.Name,
                     ItemsCount = w.WishlistItems.Count(),
+                    MainImages = GetMainImagesUrlsAsync(w.WishlistId).Result.Data,
                     wishlistItemsDto = GetWishlistItemByWishListIdAsync(w.WishlistId).Result.Data,
                     WishlistUrl = $"api/wishlist/{w.WishlistId}"
 
@@ -250,11 +251,32 @@ namespace Efreshli.Application.Services.WishlistServices
         }
         public async Task<Response<GetWishlistItemDto>> AddItemToWishlistAsync(int wishlistId, int itemId)
         {
+            var wishlist = await _unitOfWork.WishlistRepository.GetByIdAsync(wishlistId);
+            if (wishlist == null)
+            {
+                return ResponseHandler.NotFound<GetWishlistItemDto>("Wishlist not found");
+            }
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return ResponseHandler.Unauthorized<GetWishlistItemDto>("User Not Found");
+            }
+            if (wishlist.ApplicationUserId != userId)
+            {
+                return ResponseHandler.Unauthorized<GetWishlistItemDto>();
+            }
+            var existingItems = await _unitOfWork.WishlistItemRepository.GetWhereAsync(w => w.WishlistId == wishlistId && w.ProductItemId == itemId);
+            if (existingItems != null && existingItems.Count() > 0)
+            {
+                return ResponseHandler.BadRequest<GetWishlistItemDto>("Already Exists In this Wishlist");
+            }
+
             var wishlistItem = new Domain.Models.WishlistItem
             {
                 WishlistId = wishlistId,
                 ProductItemId = itemId
             };
+
             await _unitOfWork.WishlistItemRepository.AddAsync(wishlistItem);
             await _unitOfWork.SaveChangesAsync();
             return ResponseHandler.Success(new GetWishlistItemDto
@@ -291,7 +313,27 @@ namespace Efreshli.Application.Services.WishlistServices
         }
         public async Task<Response<GetWishlistItemDto>> RemoveItemFromWishlistAsync(int wishlistId, int itemId)
         {
+            var wishlist = await _unitOfWork.WishlistRepository.GetByIdAsync(wishlistId);
+            if (wishlist == null)
+            {
+                return ResponseHandler.NotFound<GetWishlistItemDto>("Wishlist not found");
+            }
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return ResponseHandler.Unauthorized<GetWishlistItemDto>("User Not Found");
+            }
+            if (wishlist.ApplicationUserId != userId)
+            {
+                return ResponseHandler.Unauthorized<GetWishlistItemDto>();
+            }
+
+
             var wishlistItems = await _unitOfWork.WishlistItemRepository.GetWhereAsync(w => w.WishlistId == wishlistId && w.ProductItemId == itemId);
+            if (wishlistItems == null)
+            {
+                return ResponseHandler.NotFound<GetWishlistItemDto>("Item not found in wishlist");
+            }
             var wishlistItem = wishlistItems.FirstOrDefault();
             if (wishlistItem != null)
             {
@@ -314,8 +356,40 @@ namespace Efreshli.Application.Services.WishlistServices
             }
             return ResponseHandler.NotFound<GetWishlistItemDto>();
         }
-        
+
+        public async Task<Response<List<string>>> GetMainImagesUrlsAsync(int wishlistId)
+        {
+            var wishlistItems = await _unitOfWork.WishlistItemRepository.GetAllWithIncludeAsync(
+                w => w.WishlistId == wishlistId,
+                includes: new Expression<Func<WishlistItem, object>>[]
+                {
+                    c=>c.ProductItem!
+                }
+                );
+            if (wishlistItems == null || wishlistItems.Count() == 0)
+            {
+                return ResponseHandler.Success(new List<string>());
+            }
+            var imageUrls = new List<string>();
+            foreach (var item in wishlistItems)
+            {
+                var productItem = await _productService.GetWishlistItemsForUserAsync(item.ProductItemId);
+                if (productItem.Succeeded && productItem.Data != null)
+                {
+                    var dtores = await _productService.GetWishlistItemsForUserAsync(item.ProductItemId);
+                    var dto = dtores.Data;
+                    if (!string.IsNullOrEmpty(dto.ImageUrl))
+                    {
+                        imageUrls.Add(dto.ImageUrl);
+                    }
+                }
+            }
+            return ResponseHandler.Success(imageUrls);
+
+        }
+
         #endregion
+
 
 
     }

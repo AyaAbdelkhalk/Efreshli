@@ -8,6 +8,7 @@ using Efreshli.Application.Interfaces;
 using Efreshli.Application.Services.File;
 using Efreshli.Application.Services.ProductAttributeValueServices;
 using Efreshli.Application.Services.ProductItemServices;
+using Efreshli.Application.Services.SharedServices;
 using Efreshli.Application.Services.WishlistServices;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Enums;
@@ -33,10 +34,11 @@ namespace Efreshli.Application.Services.ProductServices
         private readonly IProductAttributeValueService _productAttributeValueService;
         private readonly IProductRepository _productRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISharedService _sharedService;
         //private readonly IWishlistService _wishlistService;
 
 
-        public ProductService(IUnitOfWork unitOfWork, IImageService imageService, IProductItemService productItemService, IProductAttributeValueService productAttributeValueService, IProductRepository productRepository, IHttpContextAccessor httpContextAccessor)
+        public ProductService(IUnitOfWork unitOfWork, IImageService imageService, IProductItemService productItemService, IProductAttributeValueService productAttributeValueService, IProductRepository productRepository, IHttpContextAccessor httpContextAccessor, ISharedService sharedService)
         {
             _unitOfWork = unitOfWork;
             _imageService = imageService;
@@ -44,6 +46,7 @@ namespace Efreshli.Application.Services.ProductServices
             _productAttributeValueService = productAttributeValueService;
             _productRepository = productRepository;
             _httpContextAccessor = httpContextAccessor;
+            _sharedService = sharedService;
             //_wishlistService = wishlistService;
         }
         #endregion
@@ -184,6 +187,8 @@ namespace Efreshli.Application.Services.ProductServices
 
         public async Task<Response<List<ProductResponseDTO>>> GetAllProductsAsync()
         {
+            string userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userrole = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role);
             var products = await _unitOfWork.ProductRepository.GetAllWithIncludeAsync(
                 predicate: null,
                 includes: new System.Linq.Expressions.Expression<Func<Efreshli.Domain.Models.Product, object>>[]
@@ -228,6 +233,11 @@ namespace Efreshli.Application.Services.ProductServices
                         ProductAttributeNameEn = _unitOfWork.ProductAttributeRepository.GetByIdAsync(av.ProductAttributeId).Result?.NameEn ?? string.Empty
                     }).ToList()
                 };
+                if(userId != null && userrole!="Admin")
+                {
+                    var isWishlisted = await _sharedService.IsItemWishlisted(product.ProductId);
+                    prd.IsWishlisted = isWishlisted.Data;
+                }
                 prds.Add(prd);
 
             }
@@ -266,7 +276,8 @@ namespace Efreshli.Application.Services.ProductServices
         {
             var main = new List<MainProductsDto>();
             var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            
+            var userrole = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Role);
+
 
             if (CategoryId == null || CategoryId <= 0)
             {
@@ -309,8 +320,8 @@ namespace Efreshli.Application.Services.ProductServices
                     }
                     if (userId != null)
                     {
-                        //var isWishlisted = await _wishlistService.IsItemWishlisted(product.ProductId);
-                        //mainProduct.IsWishlisted = isWishlisted.Data;
+                        var isWishlisted = await _sharedService.IsItemWishlisted(product.ProductId);
+                        mainProduct.IsWishlisted = isWishlisted.Data;
                     }
 
                     main.Add(mainProduct);
@@ -355,6 +366,11 @@ namespace Efreshli.Application.Services.ProductServices
                     if (mainProduct.FinalPrice == null || mainProduct.FinalPrice <= 0)
                     {
                         mainProduct.FinalPrice = product.ProductItems?.FirstOrDefault()?.Price ?? 0;
+                    }
+                    if (userId != null && userrole != "Admin")
+                    {
+                        var isWishlisted = await _sharedService.IsItemWishlisted(product.ProductId);
+                        mainProduct.IsWishlisted = isWishlisted.Data;
                     }
                     main.Add(mainProduct);
                 }
@@ -536,6 +552,7 @@ namespace Efreshli.Application.Services.ProductServices
                 {
                     p => p.ProductImages,
                     p => p.ProductItems,
+                    p => p.Category
                 }
             );
             if (product == null)
@@ -551,8 +568,11 @@ namespace Efreshli.Application.Services.ProductServices
                 DescriptionAr = product.DescriptionAr,
                 DescriptionEn = product.DescriptionEn,
                 DimensionsOrSize = product.DimensionsOrSize,
+                CategoryNameAr = product.Category?.NameAr,
+                CategoryNameEn = product.Category?.NameEn,
                 ImageUrl = product.ProductImages?.FirstOrDefault()?.URL,
                 ProductItemColorsUrls = clrs.Data,
+                IsWishlisted = true,
                 Discount = product.ProductItems?.FirstOrDefault()?.Discount ?? 0,
                 Price = product.ProductItems?.FirstOrDefault()?.Price ?? 0,
                 FinalPrice = product.ProductItems?.FirstOrDefault()?.Price != null && product.ProductItems?.FirstOrDefault()?.Discount != null

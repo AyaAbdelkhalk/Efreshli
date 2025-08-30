@@ -18,6 +18,7 @@ namespace Efreshli.Application.Services.WishlistServices
         //Task<Response<ShareWishlistDto>> ShareWishlistAsync(int wishlistId);
         Task<Response<UpdateWishlistDto>> UpdateWishlistAsync(int wishlistId, UpdateWishlistDto updateWishlistDto);
         Task<Response<GetWishlistDto>> DeleteWishlistAsync(int wishlistId);
+        Task<Response<List<string>>> GetMainImagesUrlsAsync(int wishlistId);
 
         //WishList Items
         Task<Response<List<GetWishlistItemDto>>> GetWishlistItemByWishListIdAsync(int wishlistId);
