@@ -5,26 +5,55 @@
 @using Microsoft.Identity;
 @inject IOptions<RequestLocalizationOptions> LocOptions
 @inject IStringLocalizer<SharedResources> _stringLocalizer
+@using Microsoft.AspNetCore.Mvc.Localization
 
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+    var pageKey = $"{currentController}_{currentAction}";
+}
 @{
     var isRTL = System.Threading.Thread.CurrentThread.CurrentUICulture.TextInfo.IsRightToLeft;
     var dirAttribute = isRTL ? "rtl" : "ltr";
 }
+
 @functions {
-    string IsActive(string controller, string action = null)
+    string IsActive(string controller = null, string action = null, string cssClass = "active")
     {
-        var currentCtrl = ViewContext.RouteData.Values["controller"]?.ToString();
-        var currentAct = ViewContext.RouteData.Values["action"]?.ToString();
+        var routeData = ViewContext.RouteData;
+        var routeAction = routeData.Values["action"]?.ToString();
+        var routeController = routeData.Values["controller"]?.ToString();
 
-        if (action == null)
-            return currentCtrl == controller ? "active" : "";
+        // If no controller specified, can't determine active state
+        if (string.IsNullOrEmpty(controller))
+        {
+            return "";
+        }
 
-        return currentCtrl == controller && currentAct == action ? "active" : "";
+        // Check if the current controller matches the link's controller
+        bool isControllerMatch = string.Equals(controller, routeController, StringComparison.OrdinalIgnoreCase);
+
+        // If the controller doesn't match, this link can't be active
+        if (!isControllerMatch)
+        {
+            return "";
+        }
+
+        // If a specific action was provided, check if it matches
+        if (!string.IsNullOrEmpty(action))
+        {
+            bool isActionMatch = string.Equals(action, routeAction, StringComparison.OrdinalIgnoreCase);
+            return isActionMatch ? cssClass : "";
+        }
+
+        // If no specific action was provided, any action in this controller makes it active
+        // This ensures the sidebar stays highlighted for all pages within the same controller
+        return cssClass;
     }
 }
-
 <!DOCTYPE html>
-<html  dir="@dirAttribute" lang="@CultureInfo.CurrentUICulture.Name">
+<html dir="@dirAttribute" lang="@CultureInfo.CurrentUICulture.Name">
 
 
 <head>
@@ -41,26 +70,27 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     @* <link rel="stylesheet" href="~/css/Brand/Brand.css"> *@
     <link rel="stylesheet" href="~/css/Category.css">
+    <link rel="stylesheet" href="~/css/AdminSidebar/Sidebar.css">
 
     @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"> *@
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script> 
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 
- <!-- #region client side validation using IQuery -->
+    <!-- #region client side validation using IQuery -->
 
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-  
-        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/localization/messages_ar.js"></script>
-        <script>
-            console.log("Arabic validation messages loaded");
-        </script>
-    
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/localization/messages_ar.js"></script>
+    <script>
+        console.log("Arabic validation messages loaded");
+    </script>
+
     @* else
     {
         <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/localization/messages_en.js"></script>
     } *@
     <script src="/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
-<!-- #endregion -->
+    <!-- #endregion -->
     <script>tailwind.config = { theme: { extend: { colors: { primary: '#fc0000e5', secondary: '#6366f1', accent: '#f1f5f9', dark: '#1e293b' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '28px', 'full': '9999px', 'button': '8px' }, animation: { float: 'float 3s ease-in-out infinite', glow: 'glow 2s ease-in-out infinite alternate', slideIn: 'slideIn 0.5s ease-out' }, fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], display: ['Inter', 'system-ui', 'sans-serif'] } } } }</script>
     <style>
         .sidebar-language {
@@ -186,7 +216,7 @@
                 <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
 
                     <a asp-area="" asp-controller="Home" asp-action="Index"
-                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Home","Index")" ">
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Home")">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-dashboard-3-line text-sm"></i>
                         </div>
@@ -196,7 +226,7 @@
                         </div>
                     </a>
                     <a asp-area="" asp-controller="Brand" asp-action="Index"
-                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Brand","Index")" ">
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Brand")">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-team-line text-sm"></i>
                         </div>
@@ -215,7 +245,7 @@
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
                     </a>
-                   
+
                     <a href="#"
                        class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
@@ -228,7 +258,7 @@
                     </a>
 
                     <a asp-area="" asp-controller="Product" asp-action="GetMainProducts"
-                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Product","GetMainProducts")">
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Product")">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-product-hunt-line text-sm"></i>
                         </div>
@@ -239,7 +269,7 @@
                     </a>
 
                     <a asp-area="" asp-controller="Category" asp-action="Index"
-                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Category","Index")">
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Category")">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-bookmark-line text-sm"></i>
                         </div>
@@ -251,7 +281,7 @@
                     <!-- #region name -->
 
                     <a asp-area="" asp-controller="Coupon" asp-action="Index"
-                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Coupon","Index")">
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("Coupon")">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-bookmark-line text-sm"></i>
                         </div>
@@ -304,7 +334,7 @@
 
                     @* ده للوكال هوست بس *@
                     <!-- #region Language -->
-                    <a asp-area="" asp-controller="" asp-action="setLanguage" asp-route-culture="ar-EG" 
+                    @*  <a asp-area="" asp-controller="" asp-action="setLanguage" asp-route-culture="ar-EG" 
                        class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-bookmark-line text-sm"></i>
@@ -325,10 +355,10 @@
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
                     </a>
-
+ *@
                     @* ده للهوست *@
 
-                 @*    <a href="#" onclick="setLanguage('ar-EG')"
+                    <a href="#" onclick="setLanguage('ar-EG')"
                        class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-bookmark-line text-sm"></i>
@@ -348,9 +378,9 @@
                         <div class="ml-auto  opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
-                    </a> *@
+                    </a>
 
-<!-- #endregion -->
+                    <!-- #endregion -->
 
 
                 </nav>
@@ -481,7 +511,7 @@
                     </div>
                 </div>
             </header>
-        
+
 
             <main class="flex-1 p-4 lg:p-0 lg:pt-3 rounded-2xl min-h-0 overflow-auto">
 
@@ -505,191 +535,63 @@
             </main>
         </div>
     </div>
-            @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
     <script src="~/js/Notification.js" asp-append-version="true"></script>
-            <script src="~/js/SidebarScript.js"></script>
 
-            <script>
+    <script>
 
-                                function showConfirmationModal(options) {
-                    const modal = $('#confirmationModal');
+                            function showConfirmationModal(options) {
+                const modal = $('#confirmationModal');
 
-                    // Set dynamic content
-                    if (options.message) {
-                        modal.find('.modal-body').html(options.message);
-                    }
-
-                    // Set form action
-                    modal.find('form').attr('action', options.formAction);
-
-                    // Set item ID
-                    modal.find('input[name="id"]').val(options.itemId);
-
-                    // Change modal color based on action type
-                    if (options.actionType === 'delete') {
-                        modal.find('.modal-header').removeClass('bg-warning bg-primary').addClass('bg-danger');
-                    } else if (options.actionType === 'warning') {
-                        modal.find('.modal-header').removeClass('bg-danger bg-primary').addClass('bg-warning');
-                    }
-
-                    modal.modal('show');
+                // Set dynamic content
+                if (options.message) {
+                    modal.find('.modal-body').html(options.message);
                 }
 
-                // Data attributes initialization
-                $(document).on('click', '[data-toggle="confirm-modal"]', function() {
-                    const $el = $(this);
-                    showConfirmationModal({
-                        formAction: $el.data('form-action'),
-                        itemId: $el.data('item-id'),
-                        actionType: $el.data('action-type'),
-                        message: $el.data('message')
-                    });
+                // Set form action
+                modal.find('form').attr('action', options.formAction);
+
+                // Set item ID
+                modal.find('input[name="id"]').val(options.itemId);
+
+                // Change modal color based on action type
+                if (options.actionType === 'delete') {
+                    modal.find('.modal-header').removeClass('bg-warning bg-primary').addClass('bg-danger');
+                } else if (options.actionType === 'warning') {
+                    modal.find('.modal-header').removeClass('bg-danger bg-primary').addClass('bg-warning');
+                }
+
+                modal.modal('show');
+            }
+
+            // Data attributes initialization
+            $(document).on('click', '[data-toggle="confirm-modal"]', function() {
+                const $el = $(this);
+                showConfirmationModal({
+                    formAction: $el.data('form-action'),
+                    itemId: $el.data('item-id'),
+                    actionType: $el.data('action-type'),
+                    message: $el.data('message')
                 });
-                     document.addEventListener("DOMContentLoaded", function () {
-            const match = document.cookie.match(/LanguagePreference=([^;]+)/);
-                if (match) {
-                    const culture = match[1].split('|')[0].split('=')[1];
-                    document.getElementById("languageSelect").value = culture;
-                }
-             });
-                function setLanguage(culture) {
-                     document.cookie = `LanguagePreference=c=${culture}|uic=${culture}; path=/`;
-                     location.reload(); // إعادة تحميل الصفحة
-             }
+            });
+                 document.addEventListener("DOMContentLoaded", function () {
+        const match = document.cookie.match(/LanguagePreference=([^;]+)/);
+            if (match) {
+                const culture = match[1].split('|')[0].split('=')[1];
+                document.getElementById("languageSelect").value = culture;
+            }
+         });
+            function setLanguage(culture) {
+                 document.cookie = `LanguagePreference=c=${culture}|uic=${culture}; path=/`;
+                 location.reload(); // إعادة تحميل الصفحة
+         }
+
+
+
+
+
     </script>
-    <style>
-         .sidebar-transition {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: transform;
-        }
-        /*
-        .sidebar-collapsed {
-            transform: translateX(-100%);
-        } */
+    <script src="~/js/Sidebar.js"></script>
 
-        /* Modern Navigation Items - Default State */
-        .nav-link {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-            border: 1px solid transparent;
-            color: #6b7280; /* Default gray color */
-            background: transparent;
-        }
-
-            .nav-link:hover:not(.active) {
-                transform: translateX(6px) scale(1.02);
-                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12), 0 4px 10px rgba(0, 0, 0, 0.08);
-                border-color: rgba(156, 163, 175, 0.2);
-                background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 250, 252, 0.8));
-                color: #374151;
-            }
-
-            /* Active State - Only for the clicked item with stronger specificity */
-            .nav-link.active {
-                color: #ffffff !important;
-                background: linear-gradient(135deg, #fc0000e5, #e11d48) !important;
-                /*box-shadow: 0 6px 20px rgba(252, 0, 0, 0.3), 0 6px 8px rgba(252, 0, 0, 0.2) !important;*/
-                animation: glow 2s ease-in-out infinite alternate !important;
-                border-color: rgba(255, 255, 255, 0.2) !important;
-            }
-
-                .nav-link.active:hover {
-                    transform: translateX(6px) scale(1.05) !important;
-                    background: linear-gradient(135deg, #fc0000e5, #e11d48) !important;
-                    color: #ffffff !important;
-                }
-
-        /* Force active state to persist */
-        body .nav-link.active {
-            color: #ffffff !important;
-            background: linear-gradient(135deg, #fc0000e5, #e11d48) !important;
-        }
-
-        /* Shimmer Effect */
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s ease-in-out;
-        }
-
-        .nav-link:hover::before {
-            left: 100%;
-        }
-
-        /* Modern Sidebar Design */
-        .sidebar-modern {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 50%, rgba(241, 245, 249, 0.95) 100%);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-            border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .sidebar-open {
-            transform: translateX(0) !important;
-        }
-
-      
-
-        /* Icon wrapper styling */
-        .icon-wrapper {
-            min-width: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Logo transitions */
-        .sidebar-logo {
-            transition: all 0.3s ease;
-        }
-
-        /* Sidebar text transitions */
-        .sidebar-text {
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        /* Active state for icons - Only when nav item is active */
-        .nav-link.active .icon-wrapper {
-            color: #ffffff !important;
-        }
-
-        /* Default icon color */
-        .nav-link .icon-wrapper {
-            color: #6b7280;
-            transition: color 0.3s ease;
-        }
-
-        /* Hover effects for better UX */
-        .nav-link:hover:not(.active) .icon-wrapper {
-            color: #374151;
-            transform: scale(1.1);
-            transition: transform 0.2s ease;
-        }
-
-        .nav-link:hover.active .icon-wrapper {
-            transform: scale(1.1);
-            transition: transform 0.2s ease;
-        }
-
-        /* Profile dropdown styling */
-        #profileMenu {
-            animation: slideIn 0.3s ease-out;
-            z-index: 50;
-        }
-
-        /* Notification badge pulse */
-        .bg-red-500 {
-            animation: pulse 2s infinite;
-        }
-    </style>
 </body>
 </html>
