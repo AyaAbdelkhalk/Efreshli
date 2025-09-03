@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Efreshli.MVC.Models;
 using Efreshli.Application.Services.BrandsServices;
 using Efreshli.Application.DTOs.BrandDTOs;
 using Efreshli.Application.Services.File;
+using Microsoft.AspNetCore.Authorization;
+using Efreshli.Domain.Enums;
 
 namespace Efreshli.MVC.Controllers
 {
+    [Authorize(UserRoles.Admin)]
     public class BrandController : Controller
     {
         private readonly IBrandsService _brandsService;

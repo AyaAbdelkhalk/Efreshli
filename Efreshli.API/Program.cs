@@ -45,7 +45,8 @@ namespace Efreshli.API
             builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddDbContext<EfreshliDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"),
+                sqlServerOptions => sqlServerOptions.EnableRetryOnFailure()));
 
             //builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
@@ -117,12 +118,12 @@ namespace Efreshli.API
 
 
             #region Cors
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAll",
-                        builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
-                    );
-            });
+            //builder.Services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllowAll",
+            //            builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
+            //        );
+            //});
 
             #endregion
 
