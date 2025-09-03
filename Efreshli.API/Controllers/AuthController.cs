@@ -50,7 +50,7 @@ namespace Efreshli.API.Controllers
         }
 
         [HttpPost("create-admin")]
-        [Authorize(Roles = UserRoles.Admin)] // Only admins can create other admins
+        //[Authorize(Roles = UserRoles.Admin)] // Only admins can create other admins
         public async Task<IActionResult> CreateAdmin([FromBody] CreateAdminDto model)
         {
             var result = await _authService.CreateAdminAsync(model);

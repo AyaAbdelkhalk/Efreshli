@@ -2,10 +2,13 @@
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Interfaces;
 using Efreshli.Application.Services.CategoryServices;
+using Efreshli.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Efreshli.MVC.Controllers
 {
+    [Authorize(UserRoles.Admin)]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;

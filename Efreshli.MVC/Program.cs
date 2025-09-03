@@ -4,6 +4,7 @@ using Efreshli.Application.DTOs.CouponDTOs;  // This is crucial
 using Efreshli.Application.Validators.CouponValidators;
 using Efreshli.Common;
 using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Enums;
 using Efreshli.Domain.Models;
 using Efreshli.Domain.Settings;
 using Efreshli.Infrastructure;
@@ -54,6 +55,14 @@ namespace Efreshli.MVC
             })
             .AddEntityFrameworkStores<EfreshliDbContext>()
             .AddDefaultTokenProviders();
+            // 3.1 Authorization Policies 
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(UserRoles.Admin, policy =>
+                    policy.RequireRole(UserRoles.Admin));
+            });
+
+
 
             // 4. JWT Settings (optional for MVC, but keep if used)
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWT"));
@@ -167,7 +176,7 @@ namespace Efreshli.MVC
             // MVC routes
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Login}");
 
 
             app.Run();

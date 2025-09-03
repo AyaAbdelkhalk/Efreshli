@@ -1,4 +1,4 @@
-using Efreshli.Application.DTOs.IdentityDTOs;
+﻿using Efreshli.Application.DTOs.IdentityDTOs;
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Services.EmailService;
 using Efreshli.Application.Services.RoleService;
@@ -83,7 +83,8 @@ namespace Efreshli.Application.Services.AuthServices
                     PhoneNumber = model.PhoneNumber,
                     CreatedBy = model.Email,
                     CreatedDate = DateTime.UtcNow,
-                    EmailConfirmed = false
+                    EmailConfirmed = false,
+                    Role = UserRoles.Customer,
                 };
 
                 // Create user
@@ -280,7 +281,8 @@ namespace Efreshli.Application.Services.AuthServices
                     LastName = model.LastName,
                     PhoneNumber = model.PhoneNumber,
                     CreatedBy = "System", // or current admin user
-                    CreatedDate = DateTime.UtcNow
+                    CreatedDate = DateTime.UtcNow,
+                    Role = UserRoles.Admin
                 };
 
                 var result = await _userManager.CreateAsync(adminUser, model.Password);
@@ -443,6 +445,7 @@ namespace Efreshli.Application.Services.AuthServices
         public async Task<Response<bool>> ResendConfirmationEmailAsync(string email)
         {
             try
+                
             {
                 var user = await _userManager.FindByEmailAsync(email);
                 if (user == null)
