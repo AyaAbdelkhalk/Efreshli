@@ -16,7 +16,7 @@ namespace Efreshli.Domain.Models
         public string? FullName => $"{FirstName} {LastName}";
 
         public int? ImageId { get; set; }
-
+        public string? Role { get; set; }
         public virtual Image? Image { get; set; }
 
         public virtual ICollection<Address>? Addresses { get; set; }

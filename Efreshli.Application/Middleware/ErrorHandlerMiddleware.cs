@@ -1,4 +1,4 @@
-﻿using Efreshli.Application.Helper.ResultPattern;
+using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Resources;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;

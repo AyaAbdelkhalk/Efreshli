@@ -1,17 +1,20 @@
-﻿using Efreshli.Application.DTOs.ProductDTOs;
+using Efreshli.Application.DTOs.ProductDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductItemDto;
 using Efreshli.Application.Services.BrandsServices;
 using Efreshli.Application.Services.CategoryServices;
+using Efreshli.Application.Services.ProductAttributeServices;
 using Efreshli.Application.Services.ProductItemServices;
 using Efreshli.Application.Services.ProductServices;
+using Efreshli.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Efreshli.Application.Services.ProductAttributeServices;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Efreshli.MVC.Controllers
 {
+    [Authorize(UserRoles.Admin)]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;

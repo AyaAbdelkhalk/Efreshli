@@ -1,0 +1,22 @@
+using Efreshli.Application.DTOs.IdentityDTOs;
+using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Enums;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Efreshli.Application.Services.UserService
+{
+    public interface IUserService
+    {
+
+        Task<int> TotalCount();
+        Task<int> CustomersCount();
+        Task<int> AdminsCount();
+        Task<PaginatedResult<UserDto>> PageResult(string userRole=null);
+
+    }
+}

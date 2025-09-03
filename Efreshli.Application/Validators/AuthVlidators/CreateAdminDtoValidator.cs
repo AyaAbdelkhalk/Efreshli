@@ -1,17 +1,20 @@
 using Efreshli.Application.DTOs.IdentityDTOs;
+using Efreshli.Domain.Models;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace Efreshli.Application.Validators.AuthVlidators
 {
     public class CreateAdminDtoValidator : AbstractValidator<CreateAdminDto>
     {
-        public CreateAdminDtoValidator()
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public CreateAdminDtoValidator(UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
+
+
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("First name is required")
                 .MaximumLength(50).WithMessage("First name cannot exceed 50 characters");
@@ -22,7 +25,8 @@ namespace Efreshli.Application.Validators.AuthVlidators
 
             RuleFor(x => x.Email)
                 .NotEmpty().WithMessage("Email is required")
-                .EmailAddress().WithMessage("Invalid email format");
+                .EmailAddress().WithMessage("Invalid email format")
+                .MustAsync(async (email, cancellation) => !await UserExists(email)).WithMessage("This email already used."); ;
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("Password is required")
@@ -30,6 +34,13 @@ namespace Efreshli.Application.Validators.AuthVlidators
 
             RuleFor(x => x.ConfirmPassword)
                 .Equal(x => x.Password).WithMessage("Passwords do not match");
+           
+
+        }
+        private async Task<bool> UserExists(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            return user != null;
         }
     }
 }

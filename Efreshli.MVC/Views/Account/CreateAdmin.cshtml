@@ -1,0 +1,109 @@
+@model Efreshli.Application.DTOs.IdentityDTOs.CreateAdminDto
+@{
+    ViewData["Title"] = "Create Admin";
+    Layout = "";
+}
+<link href="~/css/Account/CreateAdmin.css" rel="stylesheet" />
+<div class="signup-container">
+    
+    <div class="right-side">
+        <h2 class="form-title">Create Admin</h2>
+
+        <form asp-controller="Account" asp-action="CreateAdmin" method="post" class="signup-form">
+            <div class="input-row">
+                <div>
+                    <label class="label-text" asp-for="FirstName"></label>
+                    <input type="text" asp-for="FirstName" placeholder="Enter your first name" 
+                           class="@(ViewData.ModelState["FirstName"]?.Errors.Any() == true ? "error" : "")">
+                    <span asp-validation-for="FirstName" class="error-text"></span>
+                </div>
+                <div>
+                    <label class="label-text" asp-for="LastName"></label>
+                    <input type="text" asp-for="LastName" placeholder="Enter your last name" 
+                           class="@(ViewData.ModelState["LastName"]?.Errors.Any() == true ? "error" : "")">
+                    <span asp-validation-for="LastName" class="error-text"></span>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div>
+                    <label class="label-text" asp-for="Email"></label>
+                    <input type="email" asp-for="Email" placeholder="Enter your email address" 
+                           class="@(ViewData.ModelState["Email"]?.Errors.Any() == true ? "error" : "")">
+                    <span asp-validation-for="Email" class="error-text"></span>
+                </div>
+                <div>
+                    <label class="label-text" asp-for="PhoneNumber"></label>
+                    <div class="phone-input">
+                        <img src="/images/Flag.png" alt="Flag">
+                        <input type="tel" asp-for="PhoneNumber" placeholder="EX: 01001234567" 
+                               class="@(ViewData.ModelState["PhoneNumber"]?.Errors.Any() == true ? "error" : "")">
+                    </div>
+                    <span asp-validation-for="PhoneNumber" class="error-text"></span>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div style="position: relative;">
+                    <label class="label-text" asp-for="Password"></label>
+                    <input type="password" asp-for="Password" id="password" placeholder="Enter your password" 
+                           class="@(ViewData.ModelState["Password"]?.Errors.Any() == true ? "error" : "")">
+                    <img src="/images/Eye.png" alt="Toggle Password" id="togglePassword" 
+                         style="position: absolute; right: 10px; top: 35px; cursor: pointer;">
+                    <span asp-validation-for="Password" class="error-text"></span>
+                </div>
+                <div style="position: relative;">
+                    <label class="label-text" asp-for="ConfirmPassword"></label>
+                    <input type="password" asp-for="ConfirmPassword" id="confirmPassword" placeholder="Confirm password" 
+                           class="@(ViewData.ModelState["ConfirmPassword"]?.Errors.Any() == true ? "error" : "")">
+                    <img src="/images/Eye.png" alt="Toggle Password" id="toggleConfirmPassword"
+                         style="position: absolute; right: 10px; top: 35px; cursor: pointer;">
+                    <span asp-validation-for="ConfirmPassword" class="error-text"></span>
+                </div>
+            </div>
+
+            <button type="submit" class="signup-btn">Create Admin</button>
+
+            @if (ViewData.ModelState[""]?.Errors.Any() == true)
+            {
+                <div class="server-error">
+                    @Html.ValidationSummary(true)
+                </div>
+            }
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="success-message">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password toggle functionality
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                });
+            }
+            
+            if (toggleConfirmPassword && confirmPasswordInput) {
+                toggleConfirmPassword.addEventListener('click', function() {
+                    const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    confirmPasswordInput.setAttribute('type', type);
+                });
+            }
+        });
+      </script>

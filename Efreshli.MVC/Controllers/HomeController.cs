@@ -1,10 +1,13 @@
+using Efreshli.Domain.Enums;
 using Efreshli.MVC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Efreshli.MVC.Controllers
 {
+    [Authorize(UserRoles.Admin)]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
