@@ -1,7 +1,9 @@
 using Efreshli.Application.DTOs.CouponDTOs;
 using Efreshli.Application.Resources;
 using Efreshli.Application.Services.CouponServices;
+using Efreshli.Domain.Enums;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace Efreshli.MVC.Controllers
 {
+    [Authorize(UserRoles.Admin)]
     public class CouponController : Controller
     {
         private readonly ICouponService _couponService;

@@ -1,13 +1,11 @@
 using Efreshli.Application.DTOs.IdentityDTOs;
+
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Efreshli.Application.Validators.AuthVlidators
 {
+   
     public class ExternalLoginDtoValidator : AbstractValidator<ExternalLoginDto>
     {
         public ExternalLoginDtoValidator()
