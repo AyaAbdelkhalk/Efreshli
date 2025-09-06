@@ -9,6 +9,8 @@ using Efreshli.Application.Services.BrandsServices;
 using Efreshli.Application.Services.CategoryServices;
 using Efreshli.Application.Services.CouponServices;
 using Efreshli.Application.Services.File;
+using Efreshli.Application.Services.FilterServices;
+using Efreshli.Application.Services.HomeServices;
 using Efreshli.Application.Services.ProductAttributeServices;
 using Efreshli.Application.Services.ProductAttributeValueServices;
 using Efreshli.Application.Services.ProductItemServices;
@@ -57,6 +59,8 @@ namespace Efreshli.Application
             services.AddScoped<IProductItemService, ProductItemService>();
             services.AddScoped<IWishlistService, WishlistService>();
             services.AddScoped<ISharedService, SharedService>();
+            services.AddScoped<IHomeService, HomeService>();
+            services.AddScoped<IFilterService, FilterService>();
 
             // Register external services
             services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
