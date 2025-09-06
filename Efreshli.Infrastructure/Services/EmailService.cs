@@ -1,4 +1,7 @@
+using Efreshli.Application.DTOs;
+using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Services.EmailService;
+using Efreshli.Domain.Models;
 using Efreshli.Domain.Settings;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -20,6 +23,7 @@ namespace Efreshli.Infrastructure.Services
             _logger = logger;
         }
 
+        #region Auth
         public async Task SendConfirmationEmailAsync(string email, string token)
         {
             try
@@ -177,6 +181,103 @@ namespace Efreshli.Infrastructure.Services
                 }
             }
         }
+
+
+        #endregion
+
+        #region Notofication
+        public async Task SendContactUsNotificationAsync(ContactUs contactUs)
+        {
+            var subject = $"New Contact Us Message from {contactUs.FullName}";
+            var body = $@"
+            <h2>Contact Us Submission</h2>
+            <p><strong>Name:</strong> {contactUs.FullName}</p>
+            <p><strong>Email:</strong> {contactUs.Email}</p>
+            <p><strong>Phone:</strong> {contactUs.PhoneNumber}</p>
+            <p><strong>Message:</strong></p>
+            <p>{contactUs.Message}</p>";
+
+            await SendEmailAsync(_emailSettings.Username, subject, body);
+            _logger.LogInformation("Contact us notification sent for {Email}", contactUs.Email);
+        }
+        public async Task<Response<string>> SendBecomeAVendordNotificationAsync(BecomeAVendorRequestDto request)
+        {
+            try
+            {
+                var subject = $"New Vendor Application - {request.BrandName}";
+                var body = $@"
+            <h2>New Vendor Application Received</h2>
+            <p><strong>Full Name:</strong> {request.FullName}</p>
+            <p><strong>Email:</strong> {request.Email}</p>
+            <p><strong>Phone Number:</strong> {request.PhoneNumber}</p>
+            <p><strong>Brand Name:</strong> {request.BrandName}</p>
+            <p><strong>Brand Category:</strong> {request.BrandCategory}</p>
+            <p><strong>Delegated Person Position:</strong> {request.DelegatedPersonPosition}</p>
+            <p><strong>Website:</strong> <a href='{request.WebsiteLink}'>{request.WebsiteLink}</a></p>
+            <p><strong>Instagram:</strong> <a href='{request.InstagramLink}'>{request.InstagramLink}</a></p>
+            <p><strong>Has 14% Tax Registration:</strong> {(request.HasTax14 ? "Yes" : "No")}</p>
+            <p><strong>Supports Electronic Invoices:</strong> {(request.HasElectronicInvoices ? "Yes" : "No")}</p>
+            <p><em>Attached files included if provided.</em></p>";
+
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("Efreshli", _emailSettings.FromEmail));
+                message.To.Add(new MailboxAddress("", _emailSettings.Username)); // send to your support/admin inbox
+                message.Subject = subject;
+
+                var bodyBuilder = new BodyBuilder
+                {
+                    HtmlBody = body
+                };
+
+                // Attach portfolio if provided
+                if (request.Portfolio != null && request.Portfolio.Length > 0)
+                {
+                    using var ms = new MemoryStream();
+                    await request.Portfolio.CopyToAsync(ms);
+                    bodyBuilder.Attachments.Add(
+                        request.Portfolio.FileName,
+                        ms.ToArray(),
+                        ContentType.Parse(request.Portfolio.ContentType)
+                    );
+                }
+
+                // Attach Commercial Registration/Tax Card if provided
+                if (request.CommercialRegistrationAndTaxCard != null && request.CommercialRegistrationAndTaxCard.Length > 0)
+                {
+                    using var ms = new MemoryStream();
+                    await request.CommercialRegistrationAndTaxCard.CopyToAsync(ms);
+                    bodyBuilder.Attachments.Add(
+                        request.CommercialRegistrationAndTaxCard.FileName,
+                        ms.ToArray(),
+                        ContentType.Parse(request.CommercialRegistrationAndTaxCard.ContentType)
+                    );
+                }
+
+                message.Body = bodyBuilder.ToMessageBody();
+
+                using var client = new SmtpClient();
+                await client.ConnectAsync(_emailSettings.SmtpServer, _emailSettings.Port, GetSecureSocketOptions());
+
+                if (!string.IsNullOrEmpty(_emailSettings.Username))
+                {
+                    await client.AuthenticateAsync(_emailSettings.Username, _emailSettings.Password);
+                }
+
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
+
+                return ResponseHandler.Success("SentSuccessfully");
+            
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send vendor application notification for {Email}", request.Email);
+                throw;
+            }
+        }
+        #endregion
+
+
 
         private SecureSocketOptions GetSecureSocketOptions()
         {

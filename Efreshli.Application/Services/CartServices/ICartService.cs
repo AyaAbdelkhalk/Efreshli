@@ -16,5 +16,8 @@ namespace Efreshli.Application.Services.CartServices
         Task<Response<bool>> RemoveCartItemAsync(string userId, int cartItemId);
         Task<Response<bool>> ClearCartAsync(string userId);
         Task<Response<int>> GetCartItemsCountAsync(string userId);
+        
+        //Mina 
+        Task<decimal> GetGrandTotalOfCart(string userId);
     }
 }

@@ -1,4 +1,5 @@
 using Efreshli.Application.DTOs.IdentityDTOs;
+using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Enums;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,6 +18,7 @@ namespace Efreshli.Application.Services.UserService
         Task<int> CustomersCount();
         Task<int> AdminsCount();
         Task<PaginatedResult<UserDto>> PageResult(string userRole=null);
+        Task<Response<string>> UpdateProfileAsync(UpdateProfileDto updateProfileDto);
 
     }
 }
