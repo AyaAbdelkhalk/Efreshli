@@ -90,7 +90,7 @@ namespace Efreshli.MVC.Controllers
         public async Task<IActionResult> Logout()
         {
           await _signInManager.SignOutAsync();
-          return View("login");
+            return RedirectToAction("Login");
         }
     }
 }
