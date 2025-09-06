@@ -48,9 +48,15 @@ namespace Efreshli.API.Controllers
             var result = await _authService.ResetPasswordAsync(model);
             return this.CreateResponse(result);
         }
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto model)
+        {
+            var result = await _authService.ChangePasswordAsync(model);
+            return this.CreateResponse(result);
+        }
 
         [HttpPost("create-admin")]
-        //[Authorize(Roles = UserRoles.Admin)] // Only admins can create other admins
+        [Authorize(Roles = UserRoles.Admin)] // Only admins can create other admins
         public async Task<IActionResult> CreateAdmin([FromBody] CreateAdminDto model)
         {
             var result = await _authService.CreateAdminAsync(model);
@@ -86,7 +92,7 @@ namespace Efreshli.API.Controllers
             var result = await _authService.ExternalLoginAsync(model);
             return this.CreateResponse(result);
         }
-
+        
         #region OAuth
         //[HttpPost("oauth/register")]
         //public async Task<IActionResult> OAuthRegister([FromBody] OAuthRegisterDto model)

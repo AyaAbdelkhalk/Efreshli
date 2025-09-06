@@ -1,3 +1,6 @@
+using Efreshli.Application.DTOs;
+using Efreshli.Application.Helper.ResultPattern;
+using Efreshli.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +14,7 @@ namespace Efreshli.Application.Services.EmailService
     {
         Task SendConfirmationEmailAsync(string email, string token, string UserFirstName);
         Task SendPasswordResetEmailAsync(string email, string token);
+        Task SendContactUsNotificationAsync(ContactUs contactUs);
+        Task<Response<string>> SendBecomeAVendordNotificationAsync(BecomeAVendorRequestDto contactUs);
     }
 }

@@ -4,9 +4,11 @@ using Efreshli.Application.DTOs.WebsiteInfoDTOs;
 using Efreshli.Application.Helper.Cloudinary;
 using Efreshli.Application.Helper.Mapping;
 using Efreshli.Application.Interfaces;
+using Efreshli.Application.Services.AddressServices;
 using Efreshli.Application.Services.AuthServices;
 using Efreshli.Application.Services.BrandsServices;
 using Efreshli.Application.Services.CategoryServices;
+using Efreshli.Application.Services.ContactUsServices;
 using Efreshli.Application.Services.CouponServices;
 using Efreshli.Application.Services.File;
 using Efreshli.Application.Services.FilterServices;
@@ -17,6 +19,7 @@ using Efreshli.Application.Services.ProductItemServices;
 using Efreshli.Application.Services.ProductServices;
 using Efreshli.Application.Services.RoleService;
 using Efreshli.Application.Services.SharedServices;
+using Efreshli.Application.Services.UserService;
 using Efreshli.Application.Services.WebsiteInfoServices;
 using Efreshli.Application.Services.WishlistServices;
 using Efreshli.Application.Validators.CategoryValidators;
@@ -59,6 +62,10 @@ namespace Efreshli.Application
             services.AddScoped<IProductItemService, ProductItemService>();
             services.AddScoped<IWishlistService, WishlistService>();
             services.AddScoped<ISharedService, SharedService>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAddressService, AddressService>();
+            services.AddScoped<IContactUsService, ContactUsService>();
             services.AddScoped<IHomeService, HomeService>();
             services.AddScoped<IFilterService, FilterService>();
 

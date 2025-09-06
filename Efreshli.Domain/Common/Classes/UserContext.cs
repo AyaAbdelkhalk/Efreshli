@@ -1,4 +1,4 @@
-﻿using Efreshli.Domain.Common.Interfaces;
+using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -46,7 +46,20 @@ namespace Efreshli.Domain.Common.Classes
             }
         }
 
+        public bool HasPassword
+        {
+            get
+            {
+                var user = _httpContextAccessor.HttpContext?.User;
+                if (user == null || !user.Identity.IsAuthenticated)
+                    return false;
 
+                var hasPasswordClaim = user.FindFirst("hasPassword");
+                if (hasPasswordClaim == null || string.IsNullOrEmpty(hasPasswordClaim.Value))
+                    return false;
 
+                return bool.TryParse(hasPasswordClaim.Value, out var result) && result;
+            }
+        }
     }
 }
