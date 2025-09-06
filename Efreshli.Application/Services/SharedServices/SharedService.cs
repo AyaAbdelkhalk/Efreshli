@@ -1,4 +1,4 @@
-﻿using Efreshli.Application.Helper.ResultPattern;
+using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Domain.Common.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
