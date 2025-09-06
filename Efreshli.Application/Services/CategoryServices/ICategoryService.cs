@@ -20,5 +20,9 @@ namespace Efreshli.Application.Services.CategoryServices
         public Task<Response<bool>> DeleteCategoryAsync(int id);
         public Task<Response<IEnumerable<GetCategoryDto>>> GetCategoryHierarchyAsync();
 
+        //Task<Response<List<CategoryHeaderDto>>> GetMainCategoriesForHeaderAsync();
+        //Task<Response<List<CategoryDropdownDto>>> GetSubCategoriesForDropdownAsync(int parentId);
+        //Task<Response<CategoryHierarchyDto>> GetCategoryHierarchyAsync(int categoryId);
+        //Task<Response<List<CategoryHierarchyDto>>> GetFullCategoryTreeAsync();
     }
 }
