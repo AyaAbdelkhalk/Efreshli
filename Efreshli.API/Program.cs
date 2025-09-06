@@ -63,7 +63,7 @@ namespace Efreshli.API
                     {
                         policy.WithOrigins(
                             "https://efresli-front.netlify.app",
-                            "https://*.netlify.app",
+                            "https://efeshli-front.vercel.app/",
                             "http://localhost:4200",
                             "https://localhost:4200"
                         )
