@@ -13,6 +13,8 @@ namespace Efreshli.Application.DTOs.ProductDTOs
         public string NameEn { get; set; }
         public string DescriptionAr { get; set; }
         public string DescriptionEn { get; set; }
+        public string CategoryNameAr { get; set; }
+        public string CategoryNameEn { get; set; }
         public string? DimensionsOrSize { get; set; }
         public decimal Price { get; set; }
         public decimal? FinalPrice { get; set; }

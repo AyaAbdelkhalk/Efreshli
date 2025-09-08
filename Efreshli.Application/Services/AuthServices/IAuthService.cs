@@ -14,10 +14,12 @@ namespace Efreshli.Application.Services.AuthServices
         Task<Response<string>> LoginAsync(LoginDto model);
         Task<Response<bool>> ForgotPasswordAsync(ForgotPasswordDto model);
         Task<Response<bool>> ResetPasswordAsync(ResetPasswordDto model);
+        Task<Response<bool>> ChangePasswordAsync(ChangePasswordDto model);
         Task<Response<string>> CreateAdminAsync(CreateAdminDto model);
         Task<Response<bool>> ResendConfirmationEmailAsync(string email);
         Task<Response<bool>> ConfirmEmailAsync(string email, string token);
         Task<Response<string>> ExternalLoginAsync(ExternalLoginDto model);
+      
 
         //Task<Response<string>> OAuthRegisterAsync(OAuthRegisterDto model);
         //Task<Response<string>> OAuthLoginAsync(OAuthRegisterDto model);

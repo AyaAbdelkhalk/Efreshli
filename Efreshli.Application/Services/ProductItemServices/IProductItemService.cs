@@ -18,6 +18,7 @@ namespace Efreshli.Application.Services.ProductItemServices
         Task<Response<bool>> DeleteProductItemAsync(int productItemId);
         Task<Response<List<string>>> GetProductItemColorsUrlsAsync(int productItemId);
         Task<Response<List<ProductDetailsColorDto>>> GetProductItemColorsDetailsAsync(int productItemId);
+        Task<Dictionary<int, List<string>>> GetProductsColorsUrlsDictionaryAsync(List<int> productIds);
 
 
     }

@@ -1,9 +1,12 @@
-﻿using Efreshli.Application.DTOs.ProductDTOs.ProductColorDTOs;
+﻿using CloudinaryDotNet;
+using Efreshli.Application.DTOs.ProductDTOs.ProductColorDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductItemDto;
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Services.File;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Enums;
+using Efreshli.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -377,5 +380,65 @@ namespace Efreshli.Application.Services.ProductItemServices
                 return ResponseHandler.BadRequest<List<ProductDetailsColorDto>>($"An error occurred while retrieving product item colors details: {ex.Message}");
             }
         }
+
+        public async Task<Dictionary<int, List<string>>> GetProductsColorsUrlsDictionaryAsync(List<int> productIds)
+        {
+            if (!productIds.Any())
+                return new Dictionary<int, List<string>>();
+
+            // الطريقة الأولى: استعلام مباشر مع Include صحيح
+            var productItems = await _unitOfWork.ProductItemRepository.GetAllWithIncludeAsync(
+                predicate: pi => productIds.Contains(pi.ProductId),
+                includes: new Expression<Func<ProductItem, object>>[]
+                {
+                pi => pi.ProductItemColors,  // ✅ جلب الألوان
+                pi => pi.Product             // ✅ جلب المنتج للتأكد
+                }
+            );
+
+            var result = new Dictionary<int, List<string>>();
+
+            foreach (var item in productItems)
+            {
+                if (!result.ContainsKey(item.ProductId))
+                {
+                    result[item.ProductId] = new List<string>();
+                }
+
+                if (item.ProductItemColors?.Any() == true)
+                {
+                    foreach (var color in item.ProductItemColors)
+                    {
+                        // نحتاج نجيب الصورة بشكل منفصل لأن العلاقة معقدة
+                        var colorWithImage = await GetColorWithImageAsync(color.Id);
+
+                        if (colorWithImage != null)
+                        {
+                            result[item.ProductId].Add(colorWithImage.Image?.URL ?? string.Empty);
+                        }
+                    }
+                }
+            }
+
+            // إزالة الألوان المكررة لكل منتج
+            foreach (var productId in result.Keys.ToList())
+            {
+                result[productId] = result[productId].Distinct().ToList();
+
+            }
+
+            return result;
+        }
+        private async Task<Color?> GetColorWithImageAsync(int colorId)
+        {
+            return await _unitOfWork.ColorRepository.GetByIdWithIncludeAsync(
+                id: colorId,
+                includes: new Expression<Func<Color, object>>[]
+                {
+                c => c.Image  // ✅ جلب الصورة
+                }
+            );
+        }
     }
+
 }
