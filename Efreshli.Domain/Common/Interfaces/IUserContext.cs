@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +10,8 @@ namespace Efreshli.Domain.Common.Interfaces
     public interface IUserContext
     {
         string? CurrentUserId { get; }
+        bool HasPassword { get; }
         string CurrentUserName { get; }
         bool IsAuthenticated { get; }
-
-
     }
 }
