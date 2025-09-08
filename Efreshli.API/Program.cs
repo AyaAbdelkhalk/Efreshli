@@ -12,6 +12,7 @@ using Efreshli.Domain.Models;
 using Efreshli.Domain.Settings;
 using Efreshli.Infrastructure;
 using Efreshli.Infrastructure.Data;
+using Efreshli.Infrastructure.Data.Seeders;
 using Efreshli.Infrastructure.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -32,7 +33,7 @@ namespace Efreshli.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -292,6 +293,20 @@ namespace Efreshli.API
             app.UseAuthorization();
 
             app.MapControllers();
+
+            // Seed test data
+            using (var scope = app.Services.CreateScope())
+            {
+                try
+                {
+                    await TestDataSeeder.SeedTestDataAsync(scope.ServiceProvider);
+                }
+                catch (Exception ex)
+                {
+                    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred while seeding test data");
+                }
+            }
 
             app.Run();
         }

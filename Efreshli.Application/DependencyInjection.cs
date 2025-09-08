@@ -22,6 +22,8 @@ using Efreshli.Application.Services.SharedServices;
 using Efreshli.Application.Services.UserService;
 using Efreshli.Application.Services.WebsiteInfoServices;
 using Efreshli.Application.Services.WishlistServices;
+using Efreshli.Application.Services.OrderServices;
+using Efreshli.Application.Services.CartServices;
 using Efreshli.Application.Validators.CategoryValidators;
 using Efreshli.Application.Validators.CouponValidators;
 using Efreshli.Application.Validators.WebsiteInfoValidators;
@@ -62,6 +64,8 @@ namespace Efreshli.Application
             services.AddScoped<IProductItemService, ProductItemService>();
             services.AddScoped<IWishlistService, WishlistService>();
             services.AddScoped<ISharedService, SharedService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICartService, CartService>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAddressService, AddressService>();
