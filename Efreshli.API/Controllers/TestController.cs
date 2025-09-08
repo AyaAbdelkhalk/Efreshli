@@ -2,6 +2,7 @@ using Efreshli.Application.DTOs.CouponDTOs;
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Services.CouponServices;
 using Efreshli.Application.Services.File;
+using Efreshli.Infrastructure.Data.Seeders;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -71,6 +72,55 @@ namespace Efreshli.API.Controllers
                 // Log the exception
                 return StatusCode(500, "An error occurred while validating the coupon");
             }
+        }
+
+        /// <summary>
+        /// Seed test data for order testing
+        /// </summary>
+        [HttpPost("seed-test-data")]
+        public async Task<IActionResult> SeedTestData()
+        {
+            try
+            {
+                await TestDataSeeder.SeedTestDataAsync(HttpContext.RequestServices);
+                return Ok(new { message = "Test data seeded successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = $"Error seeding test data: {ex.Message}" });
+            }
+        }
+
+        /// <summary>
+        /// Get test user info for order testing
+        /// </summary>
+        [HttpGet("test-user-info")]
+        public IActionResult GetTestUserInfo()
+        {
+            return Ok(new
+            {
+                testUser = new
+                {
+                    email = "testuser@example.com",
+                    password = "TestUser@123",
+                    username = "testuser"
+                },
+                availableCoupons = new object[]
+                {
+                    new { code = "SAVE10", discount = "10%", minOrder = 1000 },
+                    new { code = "FLAT500", discount = "500 EGP", minOrder = 5000 },
+                    new { code = "EXPIRED", discount = "20%", status = "Expired (for testing)" }
+                },
+                orderTestingSteps = new string[]
+                {
+                    "1. Use POST /api/test/seed-test-data to create test data",
+                    "2. Login with test user credentials",
+                    "3. Use GET /api/order/checkout-preview to see cart summary",
+                    "4. Use GET /api/order/checkout-preview?couponId=1 to test with coupon",
+                    "5. Use POST /api/order/create with AddressId and optional CouponId",
+                    "6. Use GET /api/order/my-orders to see created orders"
+                }
+            });
         }
 
     }
