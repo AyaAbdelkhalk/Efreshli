@@ -128,8 +128,8 @@ namespace Efreshli.Infrastructure.Data.Seeders
                         ApplicationUserId = userId,
                         FullAddress = "123 Main Street, Apt 4B",
                         PhoneNumber = "01234567890",
-                        Governorate = "Cairo",
-                        City = "Nasr City",
+                        Area = "Giza",
+                        FloorNumber = 6,
                         IsDefault = true,
                         CreatedBy = "System"
                     },
@@ -138,8 +138,8 @@ namespace Efreshli.Infrastructure.Data.Seeders
                         ApplicationUserId = userId,
                         FullAddress = "456 Secondary Avenue",
                         PhoneNumber = "01098765432",
-                        Governorate = "Giza",
-                        City = "6th of October",
+                        Area = "Giza",
+                        FloorNumber = 6,
                         IsDefault = false,
                         CreatedBy = "System"
                     }

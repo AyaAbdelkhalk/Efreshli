@@ -590,5 +590,21 @@ namespace Efreshli.Application.Services.ProductServices
 
             return ResponseHandler.Success(wishlistItem);
         }
+
+        public async Task<Response<LocalizedProductDetailsDto>> GetProductDetailsAsync(int productId)
+        {
+            if (productId <= 0)
+            {
+                return ResponseHandler.ValidationError<LocalizedProductDetailsDto>("Invalid product ID");
+            }
+            var product = await _productRepository.GetProductByIdAsync(productId);
+            if (product == null)
+            {
+                return ResponseHandler.NotFound<LocalizedProductDetailsDto>("Product not found");
+            }
+            return ResponseHandler.Success(new LocalizedProductDetailsDto
+            {
+            });
+        }
     }
 }

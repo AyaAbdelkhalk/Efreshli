@@ -533,7 +533,7 @@ namespace Efreshli.Application.Services.OrderServices
                 CouponCode = coupon?.Code,
                 Status = order.Status,
                 AddressId = order.AddressId,
-                DeliveryAddress = address != null ? $"{address.FullAddress}, {address.City}, {address.Governorate}" : null,
+                DeliveryAddress = address != null ? $"{address.FullAddress}, {address.Area}, {address.FloorNumber}" : null,
                 PaymentId = order.PaymentId,
                 PaymentMethod = payment?.PaymentMethod ?? PaymentMethod.CashOnDelivery,
                 PaymentStatus = payment?.PaymentStatus ?? PaymentStatus.Pending,
