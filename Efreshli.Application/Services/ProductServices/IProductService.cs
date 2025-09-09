@@ -15,6 +15,8 @@ namespace Efreshli.Application.Services.ProductServices
         Task<Response<List<ProductResponseDTO>>> GetAllProductsAsync();
         Task<Response<List<MainProductsDto>>> GetMainProductsAsync(int? CategoryId);
         Task<Response<ProductDetailsDto>> GetProductDetailsForAdminAsync(int productId);
+        Task<Response<LocalizedProductDetailsDto>> GetProductDetailsAsync(int productId);
+
         Task<Response<GetWishlistItemDto>> GetWishlistItemsForUserAsync(int productId);
 
 
