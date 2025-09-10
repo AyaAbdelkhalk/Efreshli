@@ -1,4 +1,4 @@
-﻿using Efreshli.Application.DTOs.ProductDTOs.ProductAttributeValueDTOs;
+using Efreshli.Application.DTOs.ProductDTOs.ProductAttributeValueDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductItemDto;
 using System;
 using System.Collections.Generic;
@@ -19,6 +19,7 @@ namespace Efreshli.Application.DTOs.ProductDTOs
         public string? Category { get; set; }
 
         public List<string> ProductImages { get; set; } = new List<string>();
+        public string? Model_3D { get; set; }
         public List<ProductAttributeValueResponseDto> ProductSpecificatoion { get; set; } = new List<ProductAttributeValueResponseDto>();
         public List<ProductItemDetailsDto> ProductItems { get; set; } = new List<ProductItemDetailsDto>();
     }

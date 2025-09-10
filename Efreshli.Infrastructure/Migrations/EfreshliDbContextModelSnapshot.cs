@@ -604,7 +604,6 @@ namespace Efreshli.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PublicId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ReferenceId")
@@ -857,6 +856,9 @@ namespace Efreshli.Infrastructure.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Model_3_URL")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NameAr")
                         .IsRequired()
