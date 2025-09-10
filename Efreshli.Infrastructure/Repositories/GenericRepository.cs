@@ -1,3 +1,4 @@
+using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
 using Efreshli.Infrastructure.Data;
@@ -190,6 +191,172 @@ namespace Efreshli.Infrastructure.Repositories
                 e => EF.Property<int>(e, keyName).Equals(id),
                 cancellationToken);
         }
+
+
+
+
+
+        public async Task<PaginatedResult<TEntity>> GetPagedAsync(int pageNumber = 1, int pageSize = 24, Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includes)
+        {
+            // Validate parameters
+            if (pageNumber < 1) pageNumber = 1;
+            if (pageSize < 1) pageSize = 24;
+            if (pageSize > 100) pageSize = 100; // Prevent large page sizes
+
+            // Build the query
+            IQueryable<TEntity> query = _dbSet.AsNoTracking();
+
+            // Apply includes first for better query planning
+            query = BuildQueryWithIncludes(query, includes);
+
+            // Apply filtering
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            // Get total count before pagination (with same filters)
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            // Apply ordering - default by primary key if not specified
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+            else
+            {
+                // Default ordering by primary key for consistent pagination
+                var keyName = _context.Model.FindEntityType(typeof(TEntity))
+                    .FindPrimaryKey().Properties
+                    .Single().Name;
+
+                query = query.OrderBy(e => EF.Property<object>(e, keyName));
+            }
+
+            // Apply pagination
+            var skip = (pageNumber - 1) * pageSize;
+            query = query.Skip(skip).Take(pageSize);
+
+            // Execute query
+            var items = await query.ToListAsync(cancellationToken);
+
+            // Return paginated result
+            return new PaginatedResult<TEntity>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize),
+                HasNextPage = pageNumber < Math.Ceiling((double)totalCount / pageSize),
+                HasPreviousPage = pageNumber > 1
+            };
+        }
+
+        public async Task<PaginatedResult<TEntity>> GetPagedWithStringIncludesAsync(int pageNumber = 1, int pageSize = 24, Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, CancellationToken cancellationToken = default, params string[] includes)
+        {
+            // Validate parameters
+            if (pageNumber < 1) pageNumber = 1;
+            if (pageSize < 1) pageSize = 24;
+            if (pageSize > 100) pageSize = 100;
+
+            // Build the query
+            IQueryable<TEntity> query = _dbSet.AsNoTracking();
+
+            // Apply string includes
+            query = BuildQueryWithStringIncludes(query, includes);
+
+            // Apply filtering
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            // Get total count
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            // Apply ordering
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+            else
+            {
+                var keyName = _context.Model.FindEntityType(typeof(TEntity))
+                    .FindPrimaryKey().Properties
+                    .Single().Name;
+
+                query = query.OrderBy(e => EF.Property<object>(e, keyName));
+            }
+
+            // Apply pagination
+            var skip = (pageNumber - 1) * pageSize;
+            query = query.Skip(skip).Take(pageSize);
+
+            // Execute query
+            var items = await query.ToListAsync(cancellationToken);
+
+            // Return result
+            return new PaginatedResult<TEntity>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize),
+                HasNextPage = pageNumber < Math.Ceiling((double)totalCount / pageSize),
+                HasPreviousPage = pageNumber > 1
+            };
+        }
+
+        public async Task<PaginatedResult<TResult>> GetPagedWithProjectionAsync<TResult>(Expression<Func<TEntity, TResult>> selector, int pageNumber = 1, int pageSize = 24, Expression<Func<TEntity, bool>>? predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includes)
+        {
+            if (pageNumber < 1) pageNumber = 1;
+            if (pageSize < 1) pageSize = 24;
+            if (pageSize > 100) pageSize = 100;
+
+            IQueryable<TEntity> query = _dbSet.AsNoTracking();
+
+            // Apply includes
+            query = BuildQueryWithIncludes(query, includes);
+
+            // Apply filtering
+            if (predicate != null)
+                query = query.Where(predicate);
+
+            // Get count before projection
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            // Apply ordering
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+            else
+            {
+                var keyName = _context.Model.FindEntityType(typeof(TEntity))
+                    .FindPrimaryKey().Properties
+                    .Single().Name;
+
+                query = query.OrderBy(e => EF.Property<object>(e, keyName));
+            }
+
+            // Apply pagination and projection
+            var skip = (pageNumber - 1) * pageSize;
+            var projectedItems = await query
+                .Skip(skip)
+                .Take(pageSize)
+                .Select(selector)
+                .ToListAsync(cancellationToken);
+
+            return new PaginatedResult<TResult>
+            {
+                Items = projectedItems,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize),
+                HasNextPage = pageNumber < Math.Ceiling((double)totalCount / pageSize),
+                HasPreviousPage = pageNumber > 1
+            };
+        }
+
 
 
         #region HelperMethods

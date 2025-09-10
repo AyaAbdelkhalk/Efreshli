@@ -27,7 +27,7 @@ namespace Efreshli.Infrastructure
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IGenericRepository<Cart>, GenericRepository<Cart>>();
 
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Initialize static UserContext
             //UserContext.Initialize(services.BuildServiceProvider());

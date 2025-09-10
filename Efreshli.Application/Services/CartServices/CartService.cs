@@ -304,5 +304,10 @@ namespace Efreshli.Application.Services.CartServices
 
             return cartDto;
         }
+
+        public async Task<decimal> GetGrandTotalOfCart(string userId)
+        {
+          return   GetCartByUserIdAsync(userId).Result.Data.GrandTotal;
+        }
     }
 }
