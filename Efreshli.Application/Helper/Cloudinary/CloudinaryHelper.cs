@@ -1,4 +1,4 @@
-﻿using CloudinaryDotNet;
+using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Efreshli.Domain.Settings;
 using Microsoft.AspNetCore.Http;
@@ -27,6 +27,11 @@ namespace Efreshli.Application.Helper.Cloudinary
             ImageUploadResult uploadResult = await _cloudinary.UploadAsync(imageUploadParams);
 
             return uploadResult; //?? throw new InvalidOperationException("Image upload failed.");
-        }  
+        }
+        public async Task<RawUploadResult> UploadRawAsync(RawUploadParams rawUploadParams)
+        {
+            RawUploadResult uploadResult = await _cloudinary.UploadAsync(rawUploadParams);
+            return uploadResult;
+        }
     }
 }
