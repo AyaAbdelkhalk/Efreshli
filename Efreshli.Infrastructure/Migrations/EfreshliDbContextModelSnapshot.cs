@@ -34,7 +34,7 @@ namespace Efreshli.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("City")
+                    b.Property<string>("Area")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -50,11 +50,10 @@ namespace Efreshli.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FullAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FloorNumber")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Governorate")
+                    b.Property<string>("FullAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -63,6 +62,10 @@ namespace Efreshli.Infrastructure.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -118,9 +121,6 @@ namespace Efreshli.Infrastructure.Migrations
 
                     b.Property<int?>("ImageId")
                         .HasColumnType("int");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");

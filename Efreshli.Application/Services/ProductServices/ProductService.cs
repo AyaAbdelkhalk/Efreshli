@@ -287,6 +287,7 @@ namespace Efreshli.Application.Services.ProductServices
                     {
                         p => p.ProductImages,
                         p => p.ProductItems,
+                        p => p.Category
 
                     }
                 );
@@ -305,6 +306,8 @@ namespace Efreshli.Application.Services.ProductServices
                         DescriptionAr = product.DescriptionAr,
                         DescriptionEn = product.DescriptionEn,
                         DimensionsOrSize = product.DimensionsOrSize,
+                        CategoryNameAr = product.Category?.NameAr,
+                        CategoryNameEn = product.Category?.NameEn,
                         ImageUrl = product.ProductImages?.FirstOrDefault()?.URL,
                         ProductItemColorsUrls = clrs.Data,
                         Price = product.ProductItems?.FirstOrDefault()?.Price ?? 0,
@@ -335,7 +338,8 @@ namespace Efreshli.Application.Services.ProductServices
                     includes: new System.Linq.Expressions.Expression<Func<Efreshli.Domain.Models.Product, object>>[]
                     {
                     p => p.ProductImages,
-                    p => p.ProductItems
+                    p => p.ProductItems,
+                    p => p.Category
                     }
                 );
                 if (products == null || !products.Any())
@@ -353,6 +357,8 @@ namespace Efreshli.Application.Services.ProductServices
                         DescriptionAr = product.DescriptionAr,
                         DescriptionEn = product.DescriptionEn,
                         DimensionsOrSize = product.DimensionsOrSize,
+                        CategoryNameAr = product.Category?.NameAr,
+                        CategoryNameEn = product.Category?.NameEn,
                         ProductItemColorsUrls = clrs.Data,
                         ImageUrl = product.ProductImages?.FirstOrDefault()?.URL,
                         Price = product.ProductItems?.FirstOrDefault()?.Price ?? 0,
@@ -583,6 +589,22 @@ namespace Efreshli.Application.Services.ProductServices
             };
 
             return ResponseHandler.Success(wishlistItem);
+        }
+
+        public async Task<Response<LocalizedProductDetailsDto>> GetProductDetailsAsync(int productId)
+        {
+            if (productId <= 0)
+            {
+                return ResponseHandler.ValidationError<LocalizedProductDetailsDto>("Invalid product ID");
+            }
+            var product = await _productRepository.GetProductByIdAsync(productId);
+            if (product == null)
+            {
+                return ResponseHandler.NotFound<LocalizedProductDetailsDto>("Product not found");
+            }
+            return ResponseHandler.Success(new LocalizedProductDetailsDto
+            {
+            });
         }
     }
 }

@@ -1,3 +1,4 @@
+using Efreshli.Domain.Common.Classes;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
@@ -41,5 +42,31 @@ namespace Efreshli.Domain.Common.Interfaces
             int id,
             CancellationToken cancellationToken = default,
             params string[] includes);
+
+
+        Task<PaginatedResult<TEntity>> GetPagedAsync(
+    int pageNumber = 1,
+    int pageSize = 10,
+    Expression<Func<TEntity, bool>>? predicate = null,
+    Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+    CancellationToken cancellationToken = default,
+    params Expression<Func<TEntity, object>>[] includes);
+
+        Task<PaginatedResult<TEntity>> GetPagedWithStringIncludesAsync(
+            int pageNumber = 1,
+            int pageSize = 10,
+            Expression<Func<TEntity, bool>>? predicate = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            CancellationToken cancellationToken = default,
+            params string[] includes);
+
+        Task<PaginatedResult<TResult>> GetPagedWithProjectionAsync<TResult>(
+            Expression<Func<TEntity, TResult>> selector,
+            int pageNumber = 1,
+            int pageSize = 10,
+            Expression<Func<TEntity, bool>>? predicate = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            CancellationToken cancellationToken = default,
+            params Expression<Func<TEntity, object>>[] includes);
     }
 }

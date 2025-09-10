@@ -1,5 +1,4 @@
-// Sidebar Toggle Functionality
-document.addEventListener('DOMContentLoaded', function () {
+﻿document.addEventListener('DOMContentLoaded', function () {
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
@@ -80,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// Navigation Active State Management - Enhanced for default Dashboard state
+// Navigation Active State Management - Fixed to only highlight based on current route
 document.addEventListener('DOMContentLoaded', function () {
     const navItems = document.querySelectorAll('.nav-link');
     console.log('Found nav items:', navItems.length);
@@ -88,125 +87,97 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to clear all active states
     function clearAllActiveStates() {
         navItems.forEach(item => {
-            item.classList.remove('active');
+            // Only remove JavaScript-added active classes, preserve server-side ones
+            if (!item.hasAttribute('data-server-active')) {
+                item.classList.remove('active');
+            }
         });
     }
 
-    // Function to set active state for specific item
-    function setActiveItem(activeItem) {
-        clearAllActiveStates();
-        activeItem.classList.add('active');
-
-        // Save the active state in localStorage
-        const itemText = activeItem.querySelector('.sidebar-text')?.textContent;
-        const itemHref = activeItem.getAttribute('href') || '';
-        const itemController = activeItem.getAttribute('asp-controller') || '';
-        const itemAction = activeItem.getAttribute('asp-action') || '';
-
-        localStorage.setItem('activeNavItem', JSON.stringify({
-            text: itemText,
-            href: itemHref,
-            controller: itemController,
-            action: itemAction
-        }));
-
-        console.log('Active set to:', itemText);
-    }
-
-    // Function to set Dashboard as default active
-    function setDashboardAsDefault() {
-        const dashboardItem = document.querySelector('.nav-link[href*="Home"], .nav-link[asp-controller="Home"]');
-        if (dashboardItem) {
-            dashboardItem.classList.add('active');
-            console.log('Dashboard set as default active');
-        }
-    }
-
-    // Function to restore active state from localStorage
-    function restoreActiveState() {
-        const savedActiveItem = localStorage.getItem('activeNavItem');
-        if (savedActiveItem) {
-            try {
-                const activeData = JSON.parse(savedActiveItem);
-
-                // Find matching nav item
-                let itemFound = false;
-                navItems.forEach(item => {
-                    const itemText = item.querySelector('.sidebar-text')?.textContent;
-                    const itemHref = item.getAttribute('href') || '';
-                    const itemController = item.getAttribute('asp-controller') || '';
-                    const itemAction = item.getAttribute('asp-action') || '';
-
-                    // Check if this item matches the saved one
-                    if ((activeData.text === itemText) ||
-                        (activeData.href && activeData.href === itemHref) ||
-                        (activeData.controller === itemController && activeData.action === itemAction)) {
-                        item.classList.add('active');
-                        itemFound = true;
-                        console.log('Restored active state to:', itemText);
-                    }
-                });
-
-                // If no saved item found, set Dashboard as default
-                if (!itemFound) {
-                    setDashboardAsDefault();
-                }
-            } catch (e) {
-                console.log('Error restoring active state:', e);
-                setDashboardAsDefault();
-            }
-        } else {
-            // No saved state, set Dashboard as default
-            setDashboardAsDefault();
-        }
-    }
-
-    // Function to set active based on current URL
-    function setActiveFromCurrentUrl() {
+    // Function to set active based on current URL/Route
+    function setActiveFromCurrentRoute() {
         const currentPath = window.location.pathname.toLowerCase();
         let activeItemFound = false;
 
-        navItems.forEach((item) => {
-            const href = item.getAttribute('href') || '';
-            const controller = item.getAttribute('asp-controller') || '';
-            const action = item.getAttribute('asp-action') || '';
+        console.log('Current path:', currentPath);
 
-            // Check if current URL matches this nav item
-            if (href && currentPath.includes(href.toLowerCase())) {
-                setActiveItem(item);
+        // First, mark any existing server-side active states
+        navItems.forEach((item) => {
+            if (item.classList.contains('active')) {
+                item.setAttribute('data-server-active', 'true');
                 activeItemFound = true;
-            } else if (controller && action) {
-                const routePath = `/${controller.toLowerCase()}/${action.toLowerCase()}`;
-                if (currentPath.includes(routePath) || currentPath.includes(controller.toLowerCase())) {
-                    setActiveItem(item);
-                    activeItemFound = true;
-                }
+                console.log('Found server-side active state:', item.querySelector('.sidebar-text')?.textContent);
             }
         });
+
+        // If no server-side active state found, try to set based on URL
+        if (!activeItemFound) {
+            navItems.forEach((item) => {
+                const controller = item.getAttribute('asp-controller') || '';
+                const action = item.getAttribute('asp-action') || '';
+                const href = item.getAttribute('href') || '';
+
+                // Check if current URL matches this nav item's controller
+                if (controller && currentPath.includes(`/${controller.toLowerCase()}`)) {
+                    item.classList.add('active');
+                    activeItemFound = true;
+                    console.log(`Set active via JS: ${controller} - Current path: ${currentPath}`);
+                }
+
+                // Fallback: check href for direct matches (for links without controllers)
+                else if (href && href !== '#' && currentPath === href.toLowerCase()) {
+                    item.classList.add('active');
+                    activeItemFound = true;
+                    console.log(`Set active via href: ${href}`);
+                }
+
+                // Special case for Home/Dashboard - check if we're at root
+                else if (controller.toLowerCase() === 'home' && (currentPath === '/' || currentPath === '' || currentPath === '/home' || currentPath.includes('/home/'))) {
+                    item.classList.add('active');
+                    activeItemFound = true;
+                    console.log('Set active: Home (root path)');
+                }
+            });
+        }
+
+        // If still no match found, set Dashboard/Home as default
+        if (!activeItemFound) {
+            const dashboardItem = document.querySelector('.nav-link[asp-controller="Home"]');
+            if (dashboardItem) {
+                dashboardItem.classList.add('active');
+                console.log('Set default active: Dashboard');
+            }
+        }
 
         return activeItemFound;
     }
 
-    // Set up click handlers
-    navItems.forEach((item, index) => {
+    // Only set up click handlers for actual navigation (not all clicks)
+    navItems.forEach((item) => {
         item.addEventListener('click', function (e) {
-            console.log(`Clicked item ${index}: ${this.querySelector('.sidebar-text')?.textContent}`);
-            setActiveItem(this);
+            const href = this.getAttribute('href');
+            const controller = this.getAttribute('asp-controller');
+
+            // Only handle navigation clicks, not buttons or other elements
+            if (href && href !== '#' || controller) {
+                console.log(`Navigation clicked: ${controller || href}`);
+                // Don't set active state here - let the page reload and handle it naturally
+                // The active state will be set correctly when the new page loads
+            }
         });
     });
 
-    // Initialize active state
-    clearAllActiveStates();
+    // Initialize active state based on current route only
+    setActiveFromCurrentRoute();
 
-    // Try to set active based on current URL first
-    const urlActiveSet = setActiveFromCurrentUrl();
+    console.log('Navigation initialized - checking for active states...');
 
-    // If no URL match, try to restore from localStorage or set Dashboard as default
-    if (!urlActiveSet) {
-        restoreActiveState();
-    }
-
-    console.log('Navigation initialized');
+    // Debug: Show which items are currently active
+    navItems.forEach((item, index) => {
+        if (item.classList.contains('active')) {
+            console.log(`Active item ${index}:`, item.querySelector('.sidebar-text')?.textContent);
+        }
+    });
 });
 
 // Search functionality (optional enhancement)

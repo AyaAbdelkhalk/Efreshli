@@ -2,9 +2,11 @@
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Services.EmailService;
 using Efreshli.Application.Services.RoleService;
+using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Enums;
 using Efreshli.Domain.Models;
 using Efreshli.Domain.Settings;
+using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +37,7 @@ namespace Efreshli.Application.Services.AuthServices
         private readonly IRoleService _roleService;
         private readonly ILogger<AuthService> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IUserContext _userContext;
         public AuthService(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -43,7 +46,8 @@ namespace Efreshli.Application.Services.AuthServices
             RoleManager<IdentityRole> roleManager,
             IRoleService roleService,
             ILogger<AuthService> logger,
-            IHttpClientFactory httpClientFactory)
+            IHttpClientFactory httpClientFactory,
+            IUserContext userContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -54,6 +58,7 @@ namespace Efreshli.Application.Services.AuthServices
 
             _httpClientFactory = httpClientFactory;
             _roleManager = roleManager;
+            _userContext = userContext;
         }
 
         public async Task<Response<string>> RegisterAsync(RegisterDto model)
@@ -332,7 +337,9 @@ namespace Efreshli.Application.Services.AuthServices
                 new Claim(JwtRegisteredClaimNames.Iat,
                          new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(),
                          ClaimValueTypes.Integer64),
-                new Claim("fullName", user.FullName ?? "")
+                new Claim("fullName", user.FullName ?? ""),
+                new Claim("hasPassword", (!string.IsNullOrEmpty(user.PasswordHash)).ToString().ToLower())
+                
             };
 
                 // Add user roles to claims
@@ -619,6 +626,36 @@ namespace Efreshli.Application.Services.AuthServices
                 FirstName = payload.FirstName,
                 LastName = payload.LastName
             };
+        }
+
+        public async Task<Response<string>> UpdateProfileAsync(string email, UpdateProfileDto updateProfileDto)
+        {
+          var user=await _userManager.FindByEmailAsync(email);
+            if (user == null) return ResponseHandler.NotFound<string>("");
+           var mappedUser= updateProfileDto.Adapt(user);
+           var update= _userManager.UpdateAsync(mappedUser);
+            if (user == null) return ResponseHandler.BadRequest<string>("");
+            return ResponseHandler.Success<string>("Updated Successfully");
+            
+        }
+
+        public async Task<Response<bool>> ChangePasswordAsync(ChangePasswordDto model)
+        {
+            var userId=_userContext.CurrentUserId;
+            if (userId == null) return ResponseHandler.Unauthorized<bool>();
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return ResponseHandler.NotFound<bool>();
+
+            if (! await _userManager.HasPasswordAsync(user))
+            {
+                var result =await _userManager.AddPasswordAsync(user, model.NewPassword);
+                if(! result.Succeeded) return ResponseHandler.BadRequest<bool>("");
+                return ResponseHandler.Success<bool>(true);
+            }
+           
+            var resut = await _userManager.ChangePasswordAsync(user, model.CurrentPassword,model.NewPassword);
+             if(!resut.Succeeded) return ResponseHandler.BadRequest<bool>("Your current password does not matches with the password you provided. Please try again.");
+             return ResponseHandler.Success<bool>(true);
         }
 
         // Helper classes for deserializing provider payloads
