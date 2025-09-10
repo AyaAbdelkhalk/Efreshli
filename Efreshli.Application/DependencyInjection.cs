@@ -39,6 +39,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Efreshli.Application.Services.StabilityServices;
+using Efreshli.Application.Services.ImageService;
 
 namespace Efreshli.Application
 {
@@ -75,7 +77,8 @@ namespace Efreshli.Application
 
             // Register external services
             services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
-
+            services.AddScoped<IStabilityService, StabilityService>();
+            services.AddScoped<IFileService, FileService>();
             // Register all validators from the Application assembly
             //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(typeof(AddCouponDTOValidator).Assembly);
