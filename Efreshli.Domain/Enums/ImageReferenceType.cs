@@ -14,6 +14,7 @@ namespace Efreshli.Domain.Enums
         Category = 4,
         Brand = 5,
         Review=6,
+        Model_3D=7,
         Other
 
     }

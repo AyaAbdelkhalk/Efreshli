@@ -6,9 +6,11 @@ using Efreshli.Application.DTOs.WishlistDTOs.WishlistItemDTOs;
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Interfaces;
 using Efreshli.Application.Services.File;
+using Efreshli.Application.Services.ImageService;
 using Efreshli.Application.Services.ProductAttributeValueServices;
 using Efreshli.Application.Services.ProductItemServices;
 using Efreshli.Application.Services.SharedServices;
+using Efreshli.Application.Services.StabilityServices;
 using Efreshli.Application.Services.WishlistServices;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Enums;
@@ -35,10 +37,13 @@ namespace Efreshli.Application.Services.ProductServices
         private readonly IProductRepository _productRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISharedService _sharedService;
+        private readonly IStabilityService _stabilityService;
+       
         //private readonly IWishlistService _wishlistService;
 
 
-        public ProductService(IUnitOfWork unitOfWork, IImageService imageService, IProductItemService productItemService, IProductAttributeValueService productAttributeValueService, IProductRepository productRepository, IHttpContextAccessor httpContextAccessor, ISharedService sharedService)
+        public ProductService(IUnitOfWork unitOfWork, IImageService imageService, IProductItemService productItemService, IProductAttributeValueService productAttributeValueService, IProductRepository productRepository, IHttpContextAccessor httpContextAccessor, ISharedService sharedService,
+            IStabilityService stabilityService, IFileService fileService)
         {
             _unitOfWork = unitOfWork;
             _imageService = imageService;
@@ -47,6 +52,8 @@ namespace Efreshli.Application.Services.ProductServices
             _productRepository = productRepository;
             _httpContextAccessor = httpContextAccessor;
             _sharedService = sharedService;
+            _stabilityService = stabilityService;
+           
             //_wishlistService = wishlistService;
         }
         #endregion
@@ -87,7 +94,26 @@ namespace Efreshli.Application.Services.ProductServices
                     }
                 }
             }
+            if (createProductDto.Model_3d?.Length>0)
+            {
+                //var ext= Path.GetExtension(createProductDto.Model_3d.Name);
+                var name= Path.GetExtension(createProductDto.Model_3d.FileName);
+                if (createProductDto.Model_3d.FileName.Contains(".glb"))
+                {
+                   var img=await  _imageService.UploadGlbAsync(createProductDto.Model_3d, product.ProductId);
+                    product.ProductImages.Add(img);
 
+                }
+                else
+                {
+                  var glb=await  _stabilityService.ConvertToGlbAsync(createProductDto.Model_3d);
+                  var img=await _imageService.UploadGlbAsync(glb, product.ProductId);
+                    product.ProductImages.Add(img);
+                }
+
+
+                
+            }
             if (createProductDto.ProductAttributeValues != null)
             {
                 foreach (var attrV in createProductDto.ProductAttributeValues)
@@ -598,6 +624,7 @@ namespace Efreshli.Application.Services.ProductServices
                 return ResponseHandler.ValidationError<LocalizedProductDetailsDto>("Invalid product ID");
             }
             var product = await _productRepository.GetProductByIdAsync(productId);
+          
             if (product == null)
             {
                 return ResponseHandler.NotFound<LocalizedProductDetailsDto>("Product not found");
