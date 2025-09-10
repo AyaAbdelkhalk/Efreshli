@@ -28,7 +28,6 @@ namespace Efreshli.MVC
             var builder = WebApplication.CreateBuilder(args);
           
             builder.Services.AddValidatorsFromAssemblyContaining<AddCouponDTO>(ServiceLifetime.Scoped);
-            //builder.Services.AddScoped<IValidator<AddCouponDTO>, AddCouponDTOValidator>();
 
             //builder.Services.AddControllersWithViews();
 

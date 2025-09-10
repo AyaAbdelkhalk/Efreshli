@@ -1,4 +1,4 @@
-﻿using CloudinaryDotNet.Actions;
+using CloudinaryDotNet.Actions;
 using Efreshli.Domain.Enums;
 using Efreshli.Domain.Models;
 using Microsoft.AspNetCore.Http;

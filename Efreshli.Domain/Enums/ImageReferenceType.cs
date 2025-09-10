@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +13,7 @@ namespace Efreshli.Domain.Enums
         User = 3,
         Category = 4,
         Brand = 5,
+        Review=6,
         Other
 
     }
