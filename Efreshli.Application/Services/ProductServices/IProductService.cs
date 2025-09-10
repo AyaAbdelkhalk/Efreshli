@@ -1,4 +1,4 @@
-﻿using Efreshli.Application.DTOs.ProductDTOs;
+using Efreshli.Application.DTOs.ProductDTOs;
 using Efreshli.Application.DTOs.WishlistDTOs.WishlistItemDTOs;
 using Efreshli.Application.Helper.ResultPattern;
 using System;

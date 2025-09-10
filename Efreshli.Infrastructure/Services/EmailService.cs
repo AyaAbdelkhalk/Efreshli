@@ -1,3 +1,8 @@
+<<<<<<< Updated upstream
+=======
+using Efreshli.Application.DTOs.ContactUs;
+using Efreshli.Application.Helper.ResultPattern;
+>>>>>>> Stashed changes
 using Efreshli.Application.Services.EmailService;
 using Efreshli.Domain.Settings;
 using MailKit.Net.Smtp;

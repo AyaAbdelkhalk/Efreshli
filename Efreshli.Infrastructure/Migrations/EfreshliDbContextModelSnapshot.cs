@@ -613,6 +613,9 @@ namespace Efreshli.Infrastructure.Migrations
                     b.Property<int?>("ReferenceType")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ReviewId")
+                        .HasColumnType("int");
+
                     b.Property<string>("URL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -626,6 +629,8 @@ namespace Efreshli.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("ReviewId");
 
                     b.ToTable("Images");
                 });
@@ -1594,6 +1599,11 @@ namespace Efreshli.Infrastructure.Migrations
                         .WithMany("ProductImages")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Efreshli.Domain.Models.Review", null)
+                        .WithMany("Images")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Efreshli.Domain.Models.Order", b =>
@@ -1740,7 +1750,7 @@ namespace Efreshli.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Efreshli.Domain.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1871,6 +1881,8 @@ namespace Efreshli.Infrastructure.Migrations
                     b.Navigation("ProductImages");
 
                     b.Navigation("ProductItems");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("Efreshli.Domain.Models.ProductAttribute", b =>
@@ -1881,6 +1893,11 @@ namespace Efreshli.Infrastructure.Migrations
             modelBuilder.Entity("Efreshli.Domain.Models.ProductItem", b =>
                 {
                     b.Navigation("ProductItemColors");
+                });
+
+            modelBuilder.Entity("Efreshli.Domain.Models.Review", b =>
+                {
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("Efreshli.Domain.Models.Wishlist", b =>

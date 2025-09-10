@@ -1,4 +1,4 @@
-﻿using Efreshli.Application.DTOs.ProductDTOs;
+using Efreshli.Application.DTOs.ProductDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductAttributeValueDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductColorDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductItemDto;

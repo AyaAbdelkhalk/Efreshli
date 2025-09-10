@@ -1,3 +1,9 @@
+<<<<<<< Updated upstream
+=======
+using Efreshli.Application.DTOs.ContactUs;
+using Efreshli.Application.Helper.ResultPattern;
+using Efreshli.Domain.Models;
+>>>>>>> Stashed changes
 using System;
 using System.Collections.Generic;
 using System.Linq;
