@@ -1,3 +1,7 @@
+
+using Efreshli.Application.DTOs.ContactUs;
+using Efreshli.Application.Helper.ResultPattern;
+
 using Efreshli.Application.DTOs;
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Services.EmailService;

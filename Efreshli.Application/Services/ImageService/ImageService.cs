@@ -58,7 +58,38 @@ namespace Efreshli.Application.Services.File
 
             return image;
         }
+        public async Task<Image> UploadGlbAsync(IFormFile file, ImageReferenceType referenceType, int referenceId)
+        {
+            if (file == null || file.Length == 0)
+                throw new ArgumentException("Invalid file.");
 
+            await using var stream = file.OpenReadStream();
+
+            var uploadParams = new RawUploadParams
+            {
+                File = new FileDescription(file.FileName, stream),
+                PublicId = $"3d_models/{Guid.NewGuid()}"
+                // ⚠️ Don't set ResourceType here, it's automatically "raw"
+            };
+
+            var uploadResult = await _cloudinary.UploadRawAsync(uploadParams);
+
+            if (uploadResult.Error != null)
+                throw new Exception($"Cloudinary upload failed: {uploadResult.Error.Message}");
+
+            var image = new Image
+            {
+                URL = uploadResult.SecureUrl?.AbsoluteUri,
+                PublicId = uploadResult.PublicId,
+                ReferenceType = referenceType,
+                ReferenceId = referenceId
+            };
+
+            await _imageRepo.AddAsync(image);
+            await _imageRepo.SaveChangesAsync();
+
+            return image;
+        }
         public async Task<bool> DeleteImageAsync(int imageId)
         {
             var image = await _imageRepo.GetByIdAsync(imageId);

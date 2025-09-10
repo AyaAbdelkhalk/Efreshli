@@ -1,8 +1,11 @@
-﻿using Efreshli.Application.DTOs.ProductDTOs;
-using Efreshli.Application.Services.ProductServices;
+using Efreshli.Application.DTOs.ProductDTOs;
 using Efreshli.Application.Helper.ResultPattern;
+using Efreshli.Application.Services.ProductServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 
 namespace Efreshli.API.Controllers
 {
@@ -40,11 +43,16 @@ namespace Efreshli.API.Controllers
             var response = await _productService.GetMainProductsAsync(null);
             return this.CreateResponse(response);
         }
-        [HttpGet("GetProductById/{productId:int}")]
+
+
+     
+
+     [HttpGet("GetProductById/{productId:int}")]
         public async Task<IActionResult> GetProductById(int productId)
         {
             var response = await _productService.GetProductDetailsAsync(productId);
             return this.CreateResponse(response);
         }
+
     }
 }
