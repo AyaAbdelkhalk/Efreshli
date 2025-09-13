@@ -11,6 +11,7 @@ namespace Efreshli.Application.Services.CategoryServices
 {
     public interface ICategoryService
     {
+        //Admin
         public Task<Response<GetCategoryDto>> AddCategoryAsync(AddCategoryDto category);
         public Task<Response<GetCategoryDto>> GetCategoryByIdAsync(int id);
         public Task<Response<IEnumerable<GetCategoryDto>>> GetAllCategoriesAsync();
@@ -20,9 +21,13 @@ namespace Efreshli.Application.Services.CategoryServices
         public Task<Response<bool>> DeleteCategoryAsync(int id);
         public Task<Response<IEnumerable<GetCategoryDto>>> GetCategoryHierarchyAsync();
 
+        //User
+        Task<Response<List<LocalizedCategoryDto>>> GetCategoryChildrenAsync(int? categoryId);
+
+
+
         //Task<Response<List<CategoryHeaderDto>>> GetMainCategoriesForHeaderAsync();
         //Task<Response<List<CategoryDropdownDto>>> GetSubCategoriesForDropdownAsync(int parentId);
-        //Task<Response<CategoryHierarchyDto>> GetCategoryHierarchyAsync(int categoryId);
         //Task<Response<List<CategoryHierarchyDto>>> GetFullCategoryTreeAsync();
     }
 }

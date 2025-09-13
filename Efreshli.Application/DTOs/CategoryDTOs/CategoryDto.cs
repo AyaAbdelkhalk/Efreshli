@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Efreshli.Application.DTOs.CategoryDTOs
 {
-    public class CategoryDto
+    public class LocalizedCategoryDto
     {
         public int CategoryId { get; set; }
         public string Name { get; set; }
         public string? ImageUrl { get; set; }
-        public List<CategoryDto> SubCategories { get; set; } = new();
+        //public List<LocalizedCategoryDto> SubCategories { get; set; } = new();
         public bool HasSubCategories { get; set; }
     }
 }
