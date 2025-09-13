@@ -18,7 +18,17 @@ namespace Efreshli.Application.Services.ProductServices
         Task<Response<LocalizedProductDetailsDto>> GetProductDetailsAsync(int productId);
 
         Task<Response<GetWishlistItemDto>> GetWishlistItemsForUserAsync(int productId);
+        Task<Response<List<MainProductsDto>>> GetRecommendedProducts(int categoryId);
+        //Frequently bought together
+        //Task<Response<List<LocalizedProductInfoDto>>> GetFrequentlyBoughtTogether(int productId);
 
+
+
+
+        Task<bool> DeleteProductAsync(int productId);
+        //Task<bool> DeleteProductItemAsync(int productItemId);
+        //Task<bool> DeleteProductAttributeAsync(int productAttributeId);
+        //Task<bool> DeleteProductAttributeValueAsync(int productAttributeValueId);
 
         //Task<int> CreateProductItemAsync(CreateProductItemDto createProductItemDto);
         //Task<int> CreateProductAttributeAsync(CreateProductAttributeDto createProductAttributeDto);
@@ -27,9 +37,5 @@ namespace Efreshli.Application.Services.ProductServices
         //Task<bool> UpdateProductItemAsync(UpdateProductItemDto updateProductItemDto);
         //Task<bool> UpdateProductAttributeAsync(UpdateProductAttributeDto updateProductAttributeDto);
         //Task<bool> UpdateProductAttributeValueAsync(UpdateProductAttributeValueDto updateProductAttributeValueDto);
-        Task<bool> DeleteProductAsync(int productId);
-        //Task<bool> DeleteProductItemAsync(int productItemId);
-        //Task<bool> DeleteProductAttributeAsync(int productAttributeId);
-        //Task<bool> DeleteProductAttributeValueAsync(int productAttributeValueId);
     }
 }

@@ -59,10 +59,17 @@ namespace Efreshli.API.Controllers
 
      
 
-     [HttpGet("GetProductById/{productId:int}")]
+        [HttpGet("GetProductById/{productId:int}")]
         public async Task<IActionResult> GetProductById(int productId)
         {
             var response = await _productService.GetProductDetailsAsync(productId);
+            return this.CreateResponse(response);
+        }
+
+        [HttpGet("GetRecommendedProducts/{categoryId:int}")]
+        public async Task<IActionResult> GetRecommendedProducts(int categoryId)
+        {
+            var response = await _productService.GetRecommendedProducts(categoryId);
             return this.CreateResponse(response);
         }
 
