@@ -1,4 +1,5 @@
 using Efreshli.Application.DTOs.ProductDTOs.ProductAttributeValueDTOs;
+using Efreshli.Application.DTOs.ProductDTOs.ProductColorDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductItemDto;
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,15 @@ namespace Efreshli.Application.DTOs.ProductDTOs
         public string? DimensionsOrSize { get; set; }
         public string? SKU { get; set; }
         public string? Category { get; set; }
-
-        public List<string> ProductImages { get; set; } = new List<string>();
         public string? Model_3D { get; set; }
-        public List<ProductAttributeValueResponseDto> ProductSpecificatoion { get; set; } = new List<ProductAttributeValueResponseDto>();
-        public List<ProductItemDetailsDto> ProductItems { get; set; } = new List<ProductItemDetailsDto>();
+        public decimal MainPrice { get; set; }
+        public decimal? MainFinalPrice { get; set; }
+        public decimal MainDiscount { get; set; }
+        public bool IsWishlisted { get; set; } = false;
+        public List<string> ProductImages { get; set; } = new List<string>();
+        public List<LocalizedColorDto> Fabrics { get; set; } = new List<LocalizedColorDto>();
+        public List<LocalizedColorDto> Woods { get; set; } = new List<LocalizedColorDto>(); 
+        public List<ProductAttributeValueResponseDto> ProductSpecification { get; set; } = new List<ProductAttributeValueResponseDto>();
+
     }
 }
