@@ -17,8 +17,8 @@ namespace Efreshli.Domain.Models
         public Category Category { get; set; }
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
-
         //public string? Tags { get; set; }
+        public List<string>? Tags { get; set; } = new();
         public string? Model_3_URL { get; set; }
 
         //public virtual ICollection<Color>? ProductColors { get; set; } = new List<Color>();
