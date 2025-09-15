@@ -1,6 +1,7 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Efreshli.Application.Helper.Cloudinary;
+using Efreshli.Application.Services.ImageService;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Enums;
 using Efreshli.Domain.Models;
@@ -19,11 +20,12 @@ namespace Efreshli.Application.Services.File
     {
         private readonly ICloudinaryHelper _cloudinary;
         private readonly IGenericRepository<Image> _imageRepo;
-
-        public ImageService(ICloudinaryHelper cloudinary, IGenericRepository<Image> imageRepo)
+        private readonly IFileService _fileService;
+        public ImageService(ICloudinaryHelper cloudinary, IGenericRepository<Image> imageRepo, IFileService fileService)
         {
             _cloudinary = cloudinary;
             _imageRepo = imageRepo;
+            _fileService = fileService;
         }
 
         public async Task<Image> UploadImageAsync(IFormFile file, ImageReferenceType referenceType, int referenceId)
@@ -58,7 +60,39 @@ namespace Efreshli.Application.Services.File
 
             return image;
         }
+        public async Task<Image> UploadGlbAsync(IFormFile file,  int referenceId)
+        {
+            if (file == null || file.Length == 0)
+                throw new ArgumentException("Invalid file.");
+            string BaseMvcURL = "http://efreshli-admin.runasp.net";
+          var url=BaseMvcURL+await  _fileService.UploadImage(file);
+            //await using var stream = file.OpenReadStream();
 
+            //var uploadParams = new RawUploadParams
+            //{
+            //    File = new FileDescription(file.FileName, stream),
+            //    PublicId = $"3d_models/{Guid.NewGuid()}"
+            //    // ⚠️ Don't set ResourceType here, it's automatically "raw"
+            //};
+
+            //var uploadResult = await _cloudinary.UploadRawAsync(uploadParams);
+
+            //if (uploadResult.Error != null)
+            //    throw new Exception($"Cloudinary upload failed: {uploadResult.Error.Message}");
+
+            var image = new Image
+            {
+                URL = url,
+                //PublicId = uploadResult.PublicId,
+                ReferenceType = ImageReferenceType.Model_3D,
+                ReferenceId = referenceId
+            };
+
+            await _imageRepo.AddAsync(image);
+            await _imageRepo.SaveChangesAsync();
+
+            return image;
+        }
         public async Task<bool> DeleteImageAsync(int imageId)
         {
             var image = await _imageRepo.GetByIdAsync(imageId);

@@ -1,4 +1,4 @@
-﻿using Efreshli.Application.DTOs.ProductDTOs.ProductAttributeDTOs;
+using Efreshli.Application.DTOs.ProductDTOs.ProductAttributeDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductAttributeValueDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductColorDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductItemDto;
@@ -23,7 +23,8 @@ namespace Efreshli.Application.DTOs.ProductDTOs
         public int BrandId { get; set; }
         //public List<CreateProductColorDto>? ProductColors { get; set; } = new List<CreateProductColorDto>();
         public List<CreateProductAttributeValueDto>? ProductAttributeValues { get; set; } = new List<CreateProductAttributeValueDto>();
-        public List<IFormFile>? Images { get; set; } = new List<IFormFile>();
+        public IFormFile? Model_3d { get; set; }
+        public List<IFormFile?> Images { get; set; } = new List<IFormFile>();
         public List<CreateProductItemDto>? ProductItems { get; set; } = new List<CreateProductItemDto>();
 
 

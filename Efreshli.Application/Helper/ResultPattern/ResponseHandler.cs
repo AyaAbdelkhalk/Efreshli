@@ -1,4 +1,6 @@
+using Efreshli.Application.Resources;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +12,10 @@ namespace Efreshli.Application.Helper.ResultPattern
 {
     public static class ResponseHandler
     {
+      
         public static Response<T> Updated<T>(T entity)
         {
+           
             return new Response<T>()
             {
                 StatusCode = HttpStatusCode.OK,
