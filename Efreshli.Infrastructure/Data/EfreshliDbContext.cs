@@ -142,21 +142,26 @@ namespace Efreshli.Infrastructure.Data
             //        //SKU = "CHAIR001",
             //        ProductId = 1
             //    },
-                //new ProductItem
-                //{
-                //    ProductItemId = 2,
-                //    Price = 2500m,
-                //    FabricColorId = null,
-                //    WoodColorId = null,
-                //    Discount = null,
-                //    IsPercentage = null,
-                //    Quantity = 15,
-                //    //SKU = "TABLE001",
-                //    ProductId = 2
-                //}
+            //new ProductItem
+            //{
+            //    ProductItemId = 2,
+            //    Price = 2500m,
+            //    FabricColorId = null,
+            //    WoodColorId = null,
+            //    Discount = null,
+            //    IsPercentage = null,
+            //    Quantity = 15,
+            //    //SKU = "TABLE001",
+            //    ProductId = 2
+            //}
             //);
-            
 
+            modelBuilder.Entity<Product>()
+                .Property(p => p.Tags)
+                .HasConversion(
+                    v => string.Join(",", v),         // List → string
+                    v => v.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList() // string → List
+                );
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
