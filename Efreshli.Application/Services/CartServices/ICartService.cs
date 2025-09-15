@@ -1,9 +1,5 @@
 using Efreshli.Application.DTOs.CartDTOs;
 using Efreshli.Application.Helper.ResultPattern;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Efreshli.Application.Services.CartServices
@@ -16,8 +12,7 @@ namespace Efreshli.Application.Services.CartServices
         Task<Response<bool>> RemoveCartItemAsync(string userId, int cartItemId);
         Task<Response<bool>> ClearCartAsync(string userId);
         Task<Response<int>> GetCartItemsCountAsync(string userId);
-        
-        //Mina 
         Task<decimal> GetGrandTotalOfCart(string userId);
+
     }
 }
