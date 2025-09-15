@@ -14,7 +14,5 @@ namespace Efreshli.Application.Services.CartServices
         Task<Response<int>> GetCartItemsCountAsync(string userId);
         Task<decimal> GetGrandTotalOfCart(string userId);
 
-    
-      
     }
 }

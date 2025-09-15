@@ -17,6 +17,10 @@ namespace Efreshli.Domain.Common.Interfaces
         public bool IsDeleted { get; set; } 
         public string? DeletedBy { get; set; }
         public DateTime? DeletedDate { get; set; }
+        public string GetLocalized(string textAr, string textEn)
+        {
+            return string.IsNullOrEmpty(textAr) ? textEn : textAr;
+        }
 
     }
 }

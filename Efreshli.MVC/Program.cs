@@ -18,6 +18,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Stripe;
 using System.Globalization;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace Efreshli.MVC
 {
@@ -28,7 +29,6 @@ namespace Efreshli.MVC
             var builder = WebApplication.CreateBuilder(args);
           
             builder.Services.AddValidatorsFromAssemblyContaining<AddCouponDTO>(ServiceLifetime.Scoped);
-            //builder.Services.AddScoped<IValidator<AddCouponDTO>, AddCouponDTOValidator>();
 
             //builder.Services.AddControllersWithViews();
 
@@ -62,7 +62,12 @@ namespace Efreshli.MVC
                     policy.RequireRole(UserRoles.Admin));
             });
 
-
+            #region Kestrel
+            builder.WebHost.ConfigureKestrel((context, options) =>
+            {
+                options.Configure(context.Configuration.GetSection("Kestrel"));
+            });
+            #endregion
 
             // 4. JWT Settings (optional for MVC, but keep if used)
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWT"));
@@ -134,7 +139,21 @@ namespace Efreshli.MVC
                 return new Cloudinary(account);
             });
 
-
+            #region Cors
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowHosts",
+                    policy =>
+                    {
+                        policy.WithOrigins(
+                            "http://localhost:4200",
+                            "https://efeshli-front.vercel.app"
+                        )
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    });
+            });
+            #endregion
             #region Stripe
             StripeConfiguration.ApiKey = builder.Configuration.GetSection("StripeSettings:Secretkey").Get<string>();
             #endregion
@@ -157,8 +176,14 @@ namespace Efreshli.MVC
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
-            app.UseStaticFiles();
+            var provider = new FileExtensionContentTypeProvider();
+            provider.Mappings[".glb"] = "model/gltf-binary";
+            app.UseCors("AllowHosts");
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = provider
+            });
+            //app.UseStaticFiles();
             var locOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(locOptions.Value);
             app.Use(async (context, next) =>
@@ -168,7 +193,7 @@ namespace Efreshli.MVC
                 await next();
             });
             app.UseRouting();
-
+           
             // Auth middlewares if needed
             app.UseAuthentication();
             app.UseAuthorization();
