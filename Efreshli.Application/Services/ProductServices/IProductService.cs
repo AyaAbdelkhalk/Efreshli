@@ -1,6 +1,7 @@
 using Efreshli.Application.DTOs.ProductDTOs;
 using Efreshli.Application.DTOs.WishlistDTOs.WishlistItemDTOs;
 using Efreshli.Application.Helper.ResultPattern;
+using Efreshli.Domain.Common.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,5 +38,12 @@ namespace Efreshli.Application.Services.ProductServices
         //Task<bool> UpdateProductItemAsync(UpdateProductItemDto updateProductItemDto);
         //Task<bool> UpdateProductAttributeAsync(UpdateProductAttributeDto updateProductAttributeDto);
         //Task<bool> UpdateProductAttributeValueAsync(UpdateProductAttributeValueDto updateProductAttributeValueDto);
+
+        //for Home
+        //new arrivals
+        Task<Response<PaginatedResult<FilteredProductsDto>>> GetNewArrivals(int pageNumber = 1, int pageSize = 24);
+        //product in same brand
+
+
     }
 }

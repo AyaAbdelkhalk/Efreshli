@@ -15,9 +15,11 @@ namespace Efreshli.Application.DTOs.ProductDTOs
         public string Name { get; set; }
         public string Description { get; set; }
         public string? Brand { get; set; }
+        public int? BrandId { get; set; }
         public string? DimensionsOrSize { get; set; }
         public string? SKU { get; set; }
         public string? Category { get; set; }
+        public int? CategoryId { get; set; }
         public string? Model_3D { get; set; }
         public decimal MainPrice { get; set; }
         public decimal? MainFinalPrice { get; set; }
