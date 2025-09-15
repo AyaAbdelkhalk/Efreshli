@@ -1,6 +1,135 @@
-﻿@{
+﻿@model Efreshli.MVC.Models.ViewModels.DashboardViewModel
+@{
     ViewData["Title"] = "Dashboard";
     Layout = "_AdminLayout";
 }
 
-<a href="@Url.Action("Index", "Products")" >Hi from home controsssller</a>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+        <div class="flex items-center">
+            <div class="p-3 rounded-lg bg-blue-100 text-blue-600 mr-4">
+                <i class="ri-shopping-cart-2-line text-xl"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Total Orders</p>
+                <p class="text-2xl font-bold">@Model.TotalOrders</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+        <div class="flex items-center">
+            <div class="p-3 rounded-lg bg-green-100 text-green-600 mr-4">
+                <i class="ri-product-hunt-line text-xl"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Total Products</p>
+                <p class="text-2xl font-bold">@Model.TotalProducts</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
+        <div class="flex items-center">
+            <div class="p-3 rounded-lg bg-purple-100 text-purple-600 mr-4">
+                <i class="ri-user-line text-xl"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Total Users</p>
+                <p class="text-2xl font-bold">@Model.TotalUsers</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500">
+        <div class="flex items-center">
+            <div class="p-3 rounded-lg bg-yellow-100 text-yellow-600 mr-4">
+                <i class="ri-money-dollar-circle-line text-xl"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Total Revenue</p>
+                <p class="text-2xl font-bold">@Model.TotalRevenue.ToString("C")</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Order Status Chart -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Order Status Distribution</h3>
+        <div class="h-80">
+            <canvas id="orderStatusChart"></canvas>
+        </div>
+    </div>
+    
+    <!-- Payment Method Chart -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Payment Methods</h3>
+        <div class="h-80">
+            <canvas id="paymentMethodChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Category Distribution Chart -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Products by Category</h3>
+        <div class="h-80">
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+    
+    <!-- Recent Orders -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Recent Orders</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach (var order in Model.RecentOrders)
+                    {
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#@order.OrderId</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@order.CustomerName</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@order.TotalPrice.ToString("C")</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    @(order.Status == "Delivered" ? "bg-green-100 text-green-800" : 
+                                      order.Status == "Shipped" ? "bg-blue-100 text-blue-800" : 
+                                      order.Status == "Processing" ? "bg-yellow-100 text-yellow-800" : 
+                                      order.Status == "Pending" ? "bg-purple-100 text-purple-800" : 
+                                      "bg-red-100 text-red-800")">
+                                    @order.Status
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Pass data to JavaScript -->
+<script>
+    window.dashboardData = {
+        orderStatus: @Html.Raw(Json.Serialize(Model.OrderStatusData)),
+        paymentMethod: @Html.Raw(Json.Serialize(Model.PaymentMethodData)),
+        categoryProductCount: @Html.Raw(Json.Serialize(Model.CategoryProductCount))
+    };
+</script>
+
+@section Scripts {
+    <script src="~/js/dashboard-charts.js"></script>
+}

@@ -2,6 +2,7 @@
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
+using Efreshli.Domain.Enums;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using System.Linq.Expressions;
@@ -28,7 +29,7 @@ namespace Efreshli.Application.Services.CartServices
                     predicate: c => c.ApplicationUserId == userId,
                     includes: new Expression<Func<Cart, object>>[]
                     {
-                        c => c.Items // ✅ بس Items
+                        c => c.Items
                     }
                 );
                 var userCart = carts.FirstOrDefault();
@@ -276,38 +277,84 @@ namespace Efreshli.Application.Services.CartServices
                 {
                     var productItem = item.ProductItem ?? await _unitOfWork.ProductItemRepository.GetByIdWithIncludeAsync(
                         item.ProductItemId,
-                        includes: new Expression<Func<ProductItem, object>>[] { pi => pi.Product }
+                        includes: new Expression<Func<ProductItem, object>>[]
+                        {
+                            pi => pi.Product,
+                            pi => pi.Product.Category,
+                            pi => pi.Product.Brand,
+                            pi => pi.FabricColor,
+                            pi => pi.FabricColor.Image,
+                            pi => pi.WoodColor,
+                            pi => pi.WoodColor.Image
+                        }
                     );
 
-                    if (productItem != null)
+                    if (productItem?.Product != null)
                     {
-                        itemDtos.Add(new CartItemDto
+                        // Get product images
+                        var productImages = await GetProductImagesAsync(productItem.ProductId);
+
+                        var itemDto = new CartItemDto
                         {
                             CartItemId = item.CartItemId,
                             ProductItemId = item.ProductItemId,
-                            ProductName = productItem.Product?.NameEn ?? "Unknown Product",
+                            ProductName = productItem.Product.NameEn ?? "Unknown Product",
                             Price = productItem.Price,
                             Quantity = item.RequiredQuantity,
-                            TotalPrice = productItem.Price * item.RequiredQuantity
-                        });
+                            TotalPrice = productItem.Price * item.RequiredQuantity,
+                            DimensionsOrSize = productItem.Product.DimensionsOrSize ?? string.Empty,
+                            SKU = productItem.Product.SKU ?? string.Empty,
+                            CategoryId = productItem.Product.CategoryId,
+                            CategoryName = productItem.Product.Category?.NameEn ?? string.Empty,
+                            BrandId = productItem.Product.BrandId,
+                            BrandName = productItem.Product.Brand?.NameEn ?? string.Empty,
+                            ImageUrls = productImages,
+                            FabricColorId = productItem.FabricColorId ?? 0,
+                            FabricColorName = productItem.FabricColor?.NameEn ?? string.Empty,
+                            FabricColorImageUrl = productItem.FabricColor?.Image?.URL ?? string.Empty,
+                            WoodColorId = productItem.WoodColorId ?? 0,
+                            WoodColorName = productItem.WoodColor?.NameEn ?? string.Empty,
+                            WoodColorImageUrl = productItem.WoodColor?.Image?.URL ?? string.Empty
+                        };
+
+                        itemDtos.Add(itemDto);
                     }
                 }
 
                 cartDto.Items = itemDtos;
                 cartDto.GrandTotal = itemDtos.Sum(i => i.TotalPrice);
+                cartDto.Total = itemDtos.Sum(i => i.Price); // Set Total equal to GrandTotal or apply different logic if needed
             }
             else
             {
                 cartDto.Items = new List<CartItemDto>();
                 cartDto.GrandTotal = 0;
+                cartDto.Total = 0;
             }
 
             return cartDto;
         }
 
+        private async Task<List<string>> GetProductImagesAsync(int productId)
+        {
+            try
+            {
+                var images = await _unitOfWork.ImageRepository.GetAllAsync(
+                    predicate: img => img.ReferenceType == ImageReferenceType.Product && img.ReferenceId == productId
+                );
+
+                return images?.Select(img => img.URL).ToList() ?? new List<string>();
+            }
+            catch
+            {
+                return new List<string>();
+            }
+        }
+
         public async Task<decimal> GetGrandTotalOfCart(string userId)
         {
-          return   GetCartByUserIdAsync(userId).Result.Data.GrandTotal;
+            var result = await GetCartByUserIdAsync(userId);
+            return result.Data?.GrandTotal ?? 0;
         }
     }
 }
