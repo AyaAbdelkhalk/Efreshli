@@ -1,4 +1,4 @@
-﻿using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Common.Classes;
 using System.ComponentModel.DataAnnotations;
 
 namespace Efreshli.Domain.Models

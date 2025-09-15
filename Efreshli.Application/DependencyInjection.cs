@@ -4,17 +4,22 @@ using Efreshli.Application.DTOs.WebsiteInfoDTOs;
 using Efreshli.Application.Helper.Cloudinary;
 using Efreshli.Application.Helper.Mapping;
 using Efreshli.Application.Interfaces;
+using Efreshli.Application.Services.AddressServices;
 using Efreshli.Application.Services.AuthServices;
 using Efreshli.Application.Services.BrandsServices;
 using Efreshli.Application.Services.CategoryServices;
+using Efreshli.Application.Services.ContactUsServices;
 using Efreshli.Application.Services.CouponServices;
 using Efreshli.Application.Services.File;
+using Efreshli.Application.Services.FilterServices;
+using Efreshli.Application.Services.HomeServices;
 using Efreshli.Application.Services.ProductAttributeServices;
 using Efreshli.Application.Services.ProductAttributeValueServices;
 using Efreshli.Application.Services.ProductItemServices;
 using Efreshli.Application.Services.ProductServices;
 using Efreshli.Application.Services.RoleService;
 using Efreshli.Application.Services.SharedServices;
+using Efreshli.Application.Services.UserService;
 using Efreshli.Application.Services.WebsiteInfoServices;
 using Efreshli.Application.Services.WishlistServices;
 using Efreshli.Application.Services.OrderServices;
@@ -34,6 +39,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Efreshli.Application.Services.StabilityServices;
+using Efreshli.Application.Services.ImageService;
 
 namespace Efreshli.Application
 {
@@ -62,9 +69,16 @@ namespace Efreshli.Application
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICartService, CartService>();
 
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAddressService, AddressService>();
+            services.AddScoped<IContactUsService, ContactUsService>();
+            services.AddScoped<IHomeService, HomeService>();
+            services.AddScoped<IFilterService, FilterService>();
+
             // Register external services
             services.AddScoped<ICloudinaryHelper, CloudinaryHelper>();
-
+            services.AddScoped<IStabilityService, StabilityService>();
+            services.AddScoped<IFileService, FileService>();
             // Register all validators from the Application assembly
             //services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(typeof(AddCouponDTOValidator).Assembly);

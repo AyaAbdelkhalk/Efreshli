@@ -1,4 +1,4 @@
-﻿using Efreshli.Domain.Common.Classes;
+using Efreshli.Domain.Common.Classes;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,5 +15,6 @@ namespace Efreshli.Domain.Models
         [ForeignKey("ApplicationUser")]
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser? ApplicationUser { get; set; }
+        public virtual ICollection<Image>? Images { get; set; }
     }
 }
