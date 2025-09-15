@@ -72,6 +72,22 @@ namespace Efreshli.Application.Services.BrandsServices
             return brandDtos;
         }
 
+        public async Task<Response<IEnumerable<LocalizedBrandResponseDto>>> GetAllBrandsForUserAsync(string? search = null, int page = 1, int pageSize = 10)
+        {
+           var brands = await _brandsRepository.GetAllAsync();
+            if (!string.IsNullOrEmpty(search))
+            {
+                brands = brands.Where(b => b.NameEn.Contains(search, StringComparison.OrdinalIgnoreCase) || b.NameAr.Contains(search, StringComparison.OrdinalIgnoreCase));
+            }
+            var brandDtos = brands.Select(b => new LocalizedBrandResponseDto
+            {
+                BrandId = b.BrandId,
+                Name = b.GetLocalized(b.NameAr,b.NameEn), // Assuming English for user-facing
+                ImageUrl = b.ImageId.HasValue ? _imageService.GetImageUrl((int)b.ImageId) : null
+            });
+            return ResponseHandler.Success(brandDtos);
+        }
+
         public async Task<BrandResponseDto?> GetBrandByIdAsync(int id)
         {
             var brand = await _brandsRepository.GetByIdAsync(id);

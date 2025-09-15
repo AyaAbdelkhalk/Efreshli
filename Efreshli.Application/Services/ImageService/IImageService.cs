@@ -1,4 +1,4 @@
-﻿using CloudinaryDotNet.Actions;
+using CloudinaryDotNet.Actions;
 using Efreshli.Domain.Enums;
 using Efreshli.Domain.Models;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +14,7 @@ namespace Efreshli.Application.Services.File
     {
 
         Task<Image> UploadImageAsync(IFormFile file, ImageReferenceType referenceType, int referenceId);
+        Task<Image> UploadGlbAsync(IFormFile file, int referenceId);
         Task<bool> DeleteImageAsync(int imageId); 
         string GetImageUrl(int imageId);
     }

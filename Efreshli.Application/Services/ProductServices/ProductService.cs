@@ -1,4 +1,4 @@
-﻿using Efreshli.Application.DTOs.ProductDTOs;
+using Efreshli.Application.DTOs.ProductDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductAttributeValueDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductColorDTOs;
 using Efreshli.Application.DTOs.ProductDTOs.ProductItemDto;
@@ -6,14 +6,18 @@ using Efreshli.Application.DTOs.WishlistDTOs.WishlistItemDTOs;
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Interfaces;
 using Efreshli.Application.Services.File;
+using Efreshli.Application.Services.HomeServices;
+using Efreshli.Application.Services.ImageService;
 using Efreshli.Application.Services.ProductAttributeValueServices;
 using Efreshli.Application.Services.ProductItemServices;
 using Efreshli.Application.Services.SharedServices;
+using Efreshli.Application.Services.StabilityServices;
 using Efreshli.Application.Services.WishlistServices;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Enums;
 using Efreshli.Domain.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -35,10 +39,14 @@ namespace Efreshli.Application.Services.ProductServices
         private readonly IProductRepository _productRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISharedService _sharedService;
+        private readonly IStabilityService _stabilityService;
+        private readonly IUserContext _userContext;
+
         //private readonly IWishlistService _wishlistService;
 
 
-        public ProductService(IUnitOfWork unitOfWork, IImageService imageService, IProductItemService productItemService, IProductAttributeValueService productAttributeValueService, IProductRepository productRepository, IHttpContextAccessor httpContextAccessor, ISharedService sharedService)
+        public ProductService(IUnitOfWork unitOfWork, IImageService imageService, IProductItemService productItemService, IProductAttributeValueService productAttributeValueService, IProductRepository productRepository, IHttpContextAccessor httpContextAccessor, ISharedService sharedService,
+            IStabilityService stabilityService, IFileService fileService, IUserContext userContext)
         {
             _unitOfWork = unitOfWork;
             _imageService = imageService;
@@ -47,6 +55,9 @@ namespace Efreshli.Application.Services.ProductServices
             _productRepository = productRepository;
             _httpContextAccessor = httpContextAccessor;
             _sharedService = sharedService;
+            _stabilityService = stabilityService;
+            _userContext = userContext;
+
             //_wishlistService = wishlistService;
         }
         #endregion
@@ -87,7 +98,26 @@ namespace Efreshli.Application.Services.ProductServices
                     }
                 }
             }
+            if (createProductDto.Model_3d?.Length>0)
+            {
+                //var ext= Path.GetExtension(createProductDto.Model_3d.Name);
+                var name= Path.GetExtension(createProductDto.Model_3d.FileName);
+                if (createProductDto.Model_3d.FileName.Contains(".glb"))
+                {
+                   var img=await  _imageService.UploadGlbAsync(createProductDto.Model_3d, product.ProductId);
+                    product.ProductImages.Add(img);
 
+                }
+                else
+                {
+                  var glb=await  _stabilityService.ConvertToGlbAsync(createProductDto.Model_3d);
+                  var img=await _imageService.UploadGlbAsync(glb, product.ProductId);
+                    product.ProductImages.Add(img);
+                }
+
+
+                
+            }
             if (createProductDto.ProductAttributeValues != null)
             {
                 foreach (var attrV in createProductDto.ProductAttributeValues)
@@ -287,6 +317,7 @@ namespace Efreshli.Application.Services.ProductServices
                     {
                         p => p.ProductImages,
                         p => p.ProductItems,
+                        p => p.Category
 
                     }
                 );
@@ -305,6 +336,8 @@ namespace Efreshli.Application.Services.ProductServices
                         DescriptionAr = product.DescriptionAr,
                         DescriptionEn = product.DescriptionEn,
                         DimensionsOrSize = product.DimensionsOrSize,
+                        CategoryNameAr = product.Category?.NameAr,
+                        CategoryNameEn = product.Category?.NameEn,
                         ImageUrl = product.ProductImages?.FirstOrDefault()?.URL,
                         ProductItemColorsUrls = clrs.Data,
                         Price = product.ProductItems?.FirstOrDefault()?.Price ?? 0,
@@ -335,7 +368,8 @@ namespace Efreshli.Application.Services.ProductServices
                     includes: new System.Linq.Expressions.Expression<Func<Efreshli.Domain.Models.Product, object>>[]
                     {
                     p => p.ProductImages,
-                    p => p.ProductItems
+                    p => p.ProductItems,
+                    p => p.Category
                     }
                 );
                 if (products == null || !products.Any())
@@ -353,8 +387,11 @@ namespace Efreshli.Application.Services.ProductServices
                         DescriptionAr = product.DescriptionAr,
                         DescriptionEn = product.DescriptionEn,
                         DimensionsOrSize = product.DimensionsOrSize,
+                        CategoryNameAr = product.Category?.NameAr,
+                        CategoryNameEn = product.Category?.NameEn,
                         ProductItemColorsUrls = clrs.Data,
                         ImageUrl = product.ProductImages?.FirstOrDefault()?.URL,
+                        Discount = product.ProductItems?.FirstOrDefault()?.Discount ?? 0,
                         Price = product.ProductItems?.FirstOrDefault()?.Price ?? 0,
                         FinalPrice = product.ProductItems?.FirstOrDefault()?.Price != null && product.ProductItems?.FirstOrDefault()?.Discount != null
                             ? (product.ProductItems.FirstOrDefault().IsPercentage.HasValue && product.ProductItems.FirstOrDefault().IsPercentage.Value
@@ -367,7 +404,7 @@ namespace Efreshli.Application.Services.ProductServices
                     {
                         mainProduct.FinalPrice = product.ProductItems?.FirstOrDefault()?.Price ?? 0;
                     }
-                    if (userId != null && userrole != "Admin")
+                    if (userId != null)
                     {
                         var isWishlisted = await _sharedService.IsItemWishlisted(product.ProductId);
                         mainProduct.IsWishlisted = isWishlisted.Data;
@@ -434,9 +471,6 @@ namespace Efreshli.Application.Services.ProductServices
         //    return ResponseHandler.Success<ProductDetailsDto>(productDetails, "Product details retrieved successfully");
         //} 
         #endregion
-
-
-
 
 
         public async Task<bool> DeleteProductAsync(int productId)
@@ -584,5 +618,79 @@ namespace Efreshli.Application.Services.ProductServices
 
             return ResponseHandler.Success(wishlistItem);
         }
+
+        public async Task<Response<LocalizedProductDetailsDto>> GetProductDetailsAsync(int productId)
+        {
+            if (productId <= 0)
+            {
+                return ResponseHandler.ValidationError<LocalizedProductDetailsDto>("Invalid product ID");
+            }
+            var product = await _productRepository.GetProductByIdAsync(productId);
+
+            var userId = _userContext.CurrentUserId;
+            if (product != null && product.ProductItems != null && product.ProductItems.Any())
+            {
+                var best=HomeService.SelectBestProductItem(product.ProductItems.ToList());
+                var resdto = new LocalizedProductDetailsDto
+                {
+                    ProductId = productId,
+                    Name = product.GetLocalized(product.NameAr, product.NameEn),
+                    Description = product.GetLocalized(product.DescriptionAr, product.DescriptionEn),
+                    Category = product.Category != null ? product.GetLocalized(product.Category.NameAr, product.Category.NameEn) : null,
+                    Brand = product.Brand != null ? product.GetLocalized(product.Brand.NameAr, product.Brand.NameEn) : null,
+                    DimensionsOrSize = product.DimensionsOrSize,
+                    SKU = product.SKU,
+                    ProductImages = product.ProductImages?.Where(img => img != null).Select(img => img.URL).ToList() ?? new List<string>(),
+                    Model_3D = product.Model_3_URL,
+                    ProductSpecification = product.AttributeValues != null ? product.AttributeValues.Select(av => new ProductAttributeValueResponseDto
+                    {
+                        ProductAttributeValueId = av.ProductAttributeId,
+                        Value = av.Value,
+                        ProductAttributeNameAr = av.ProductAttribute != null ? product.GetLocalized(av.ProductAttribute.NameAr, av.ProductAttribute.NameEn) : null,
+                        ProductAttributeNameEn = av.ProductAttribute != null ? product.GetLocalized(av.ProductAttribute.NameAr, av.ProductAttribute.NameEn) : null
+                    }).ToList() : new List<ProductAttributeValueResponseDto>(),
+                    Fabrics = product.ProductItems != null ? product.ProductItems.Where(pi => pi.FabricColor != null).Select(pi => new LocalizedColorDto
+                    {
+                        ColorId = pi.FabricColor.Id,
+                        Name = pi.FabricColor != null ? product.GetLocalized(pi.FabricColor.NameAr, pi.FabricColor.NameEn) : null,
+                        ImageUrl = pi.FabricColor.Image != null ? pi.FabricColor.Image.URL : null
+                    }).DistinctBy(c => c.ColorId).ToList() : new List<LocalizedColorDto>(),
+                    Woods = product.ProductItems != null ? product.ProductItems.Where(pi => pi.WoodColor != null).Select(pi => new LocalizedColorDto
+                    {
+                        ColorId = pi.WoodColor.Id,
+                        Name = pi.WoodColor != null ? product.GetLocalized(pi.WoodColor.NameAr, pi.WoodColor.NameEn) : null,
+                        ImageUrl = pi.WoodColor.Image != null ? pi.WoodColor.Image.URL : null
+                    }).DistinctBy(c => c.ColorId).ToList() : new List<LocalizedColorDto>(),
+                    MainPrice = best.Price,
+                    MainDiscount = best.Discount ?? 0,
+                    MainFinalPrice = HomeService.CalculateFinalPrice(best)
+
+
+                };
+                if (userId != null) 
+                {
+                    var isWishlisted = await _sharedService.IsItemWishlisted(product.ProductId);
+                    resdto.IsWishlisted = isWishlisted.Data;
+                }
+                return ResponseHandler.Success(resdto);
+            }
+            return ResponseHandler.NotFound<LocalizedProductDetailsDto>("Product not found");
+        }
+
+        public async Task<Response<List<MainProductsDto>>> GetRecommendedProducts(int categoryId)
+        {
+            var res= GetMainProductsAsync(categoryId);
+            if (res.Result.Data != null && res.Result.Data.Any())
+            {
+                var rnd = new Random();
+                var recommended = res.Result.Data.OrderBy(x => rnd.Next()).Take(10).ToList();
+                return ResponseHandler.Success(recommended, "Recommended products retrieved successfully");
+            }
+            return ResponseHandler.Success(new List<MainProductsDto>(), "No recommended products available");
+        }
+
+        //public async Task<Response<List<LocalizedProductInfoDto>>> GetFrequentlyBoughtTogether(int productId)
+        //{
+        //}
     }
 }

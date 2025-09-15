@@ -17,10 +17,22 @@ namespace Efreshli.API.Controllers
         {
             _categoryService = categoryService;
         }
-        [HttpGet]
+        [HttpGet("for test mvc")]
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
+            return this.CreateResponse(categories);
+        }
+        [HttpGet("Categories")]
+        public async Task<IActionResult> GetMainCategories()
+        {
+            var categories = await _categoryService.GetCategoryChildrenAsync(null);
+            return this.CreateResponse(categories);
+        }
+        [HttpGet("Categories/{pid}")]
+        public async Task<IActionResult> GetSubCategories(int pid)
+        {
+            var categories = await _categoryService.GetCategoryChildrenAsync(pid);
             return this.CreateResponse(categories);
         }
         [HttpGet("{id}")]

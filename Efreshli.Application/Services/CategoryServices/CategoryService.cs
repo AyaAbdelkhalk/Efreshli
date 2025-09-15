@@ -254,6 +254,55 @@ namespace Efreshli.Application.Services.CategoryServices
             return ResponseHandler.Success<IEnumerable<GetCategoryDto>>(categoryDtos);
         }
 
+
+        //User
+        public async Task<Response<List<LocalizedCategoryDto>>> GetCategoryChildrenAsync(int? parentCategoryId)
+        {
+            var categories = await _unitOfWork.CategoryRepository.GetAllWithIncludeAsync(
+                predicate: c => c.ParentId == parentCategoryId,
+                includes: new Expression<Func<Category, object>>[] { c => c.Image }
+            );
+
+            if (!categories.Any())
+            {
+                return ResponseHandler.Success(new List<LocalizedCategoryDto>());
+            }
+
+            var categoryDtos = new List<LocalizedCategoryDto>(categories.ToList().Count);
+
+            if (parentCategoryId.HasValue)
+            {
+                var categoryIds = categories.Select(c => c.CategoryId).ToList();
+                var categoriesWithChildren = await _unitOfWork.CategoryRepository
+                    .GetAllAsync(c => categoryIds.Contains(c.ParentId.Value))
+                    .ContinueWith(task => task.Result.Select(c => c.ParentId.Value).Distinct().ToHashSet());
+                var dtoList = categories.ToList();
+                foreach (var category in dtoList)
+                {
+                    var dto = MapToLocalizedCategoryDto(category);
+                    categoryDtos.Add(dto);
+                }
+                foreach (var dto in categoryDtos)
+                {
+                    dto.HasSubCategories = categoriesWithChildren.Contains(dto.CategoryId);
+                }
+            }
+            else
+            {
+                foreach (var category in categories)
+                {
+                    var dto = MapToLocalizedCategoryDto(category);
+                    var ss = await _unitOfWork.CategoryRepository.GetWhereAsync(c => c.ParentId == category.CategoryId);
+                    dto.HasSubCategories = ss.Any();
+                    categoryDtos.Add(dto);
+                }
+            }
+
+            return ResponseHandler.Success(categoryDtos);
+        }
+
+
+
         #region Helper Methods
 
         private async Task<bool> WouldCreateCircularReference(int categoryId, int potentialParentId)
@@ -312,6 +361,16 @@ namespace Efreshli.Application.Services.CategoryServices
             return dto;
         }
 
+
         #endregion
+        private LocalizedCategoryDto MapToLocalizedCategoryDto(Category category)
+        {
+            return new LocalizedCategoryDto
+            {
+                CategoryId = category.CategoryId,
+                Name = category.GetLocalized(category.NameAr, category.NameEn),
+                ImageUrl = category.Image != null ? _imageService.GetImageUrl(category.ImageId.Value) : null
+            };
+        }
     }
 }
