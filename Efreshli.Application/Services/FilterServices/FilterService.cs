@@ -1,10 +1,12 @@
 ﻿using Efreshli.Application.DTOs;
 using Efreshli.Application.DTOs.ProductDTOs;
+using Efreshli.Application.Helper.Pagination;
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Services.HomeServices;
 using Efreshli.Application.Services.SharedServices;
 using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Common.Interfaces;
+using Efreshli.Domain.Enums;
 using Efreshli.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -33,10 +35,16 @@ namespace Efreshli.Application.Services.FilterServices
         #region FilterBarData
         public async Task<Response<List<DropDownDto>>> GetBrandsByCategoryId(int categoryId)
         {
-            var brands = await _unitOfWork.ProductRepository.GetAll()
-                .Where(p => p.CategoryId == categoryId)
-                .Include(p => p.Brand)
-                .Where(p => p.Brand != null) 
+            var query = _unitOfWork.ProductRepository.GetAll()
+                    .Include(p => p.Brand)
+                    .Where(p => p.Brand != null);
+
+            if (categoryId > 0)
+            {
+                query = query.Where(p => p.CategoryId == categoryId);
+            }
+
+            var brands = await query
                 .GroupBy(p => new { p.Brand.BrandId, p.Brand.NameEn })
                 .Select(g => new DropDownDto
                 {
@@ -44,6 +52,7 @@ namespace Efreshli.Application.Services.FilterServices
                     Name = g.Key.NameEn,
                     Count = g.Count()
                 })
+                .OrderBy(b => b.Name) 
                 .ToListAsync();
 
             return ResponseHandler.Success(brands);
@@ -96,15 +105,7 @@ namespace Efreshli.Application.Services.FilterServices
         }
         #endregion
 
-        public async Task<Response<PaginatedResult<FilteredProductsDto>>> GetFilteredProductsAsync(
-            int? categoryId,
-            List<int>? brandIds,
-            int? fabricColorId,
-            int? woodColorId,
-            decimal? fromPrice,
-            decimal? toPrice,
-            int pageNumber = 1,
-            int pageSize = 24)
+        public async Task<Response<PaginatedResult<FilteredProductsDto>>> GetFilteredProductsAsync(ProductFilterRequest request)
         {
             try
             {
@@ -124,21 +125,24 @@ namespace Efreshli.Application.Services.FilterServices
                     .Where(p => p.ProductItems.Any())
                     .AsQueryable();
 
-                query = ApplyFilters(query, categoryId, brandIds, fabricColorId, woodColorId, fromPrice, toPrice);
+                query = ApplyFilters(query, request.CategoryId, request.BrandIds, request.FabricColorId, request.WoodColorId, request.MinPrice, request.MaxPrice);
+
+                query = ApplySorting(query, request.SortBy);
 
                 var totalCount = await query.CountAsync();
                 if (totalCount == 0)
                 {
                     return ResponseHandler.Success(
-                        PaginatedResult<FilteredProductsDto>.Empty(pageNumber, pageSize),
+                        PaginatedResult<FilteredProductsDto>.Empty(request.PageNumber, request.PageSize),
                         "No products found matching the criteria.");
                 }
 
-                var products = await query
-                    .OrderBy(p => p.NameEn)
-                    .Skip((pageNumber - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToListAsync();
+                //var products = await query
+                //    .OrderBy(p => p.NameEn)
+                //    .Skip((pageNumber - 1) * pageSize)
+                //    .Take(pageSize)
+                //    .ToListAsync();
+                var products = await query.ToPagedList(request.PageNumber, request.PageSize);
 
                 var productIds = products.Select(p => p.ProductId).ToList();
                 var wishlistedProductIds = await GetWishlistedProductIdsBatchAsync(productIds);
@@ -150,11 +154,11 @@ namespace Efreshli.Application.Services.FilterServices
                 {
                     Items = filteredProducts,
                     TotalCount = totalCount,
-                    PageNumber = pageNumber,
-                    PageSize = pageSize,
-                    TotalPages = (int)Math.Ceiling((double)totalCount / pageSize),
-                    HasNextPage = pageNumber < (int)Math.Ceiling((double)totalCount / pageSize),
-                    HasPreviousPage = pageNumber > 1
+                    PageNumber = request.PageNumber,
+                    PageSize = request.PageSize,
+                    TotalPages = (int)Math.Ceiling((double)totalCount / request.PageSize),
+                    HasNextPage = request.PageNumber < (int)Math.Ceiling((double)totalCount / request.PageSize),
+                    HasPreviousPage = request.PageNumber > 1
                 };
 
                 return ResponseHandler.Success(paginatedResult);
@@ -201,6 +205,9 @@ namespace Efreshli.Application.Services.FilterServices
             {
                 query = ApplyPriceFilter(query, fromPrice, toPrice);
             }
+
+
+
 
             return query;
         }
@@ -269,10 +276,12 @@ namespace Efreshli.Application.Services.FilterServices
                 var dto = new FilteredProductsDto
                 {
                     ProductId = product.ProductId,
-                    ProductName = product.NameEn ?? string.Empty,
-                    Description = product.DescriptionEn ?? string.Empty,
+                    Name = product.GetLocalized(product.NameEn, product.NameAr) ?? string.Empty,
+                    Description = product.GetLocalized(product.DescriptionEn, product.DescriptionAr) ?? string.Empty,
                     DimensionsOrSize = product.DimensionsOrSize,
-                    CategoryName = product.Category?.NameEn ?? "Uncategorized",
+                    Category = product.Category?.GetLocalized(product.Category.NameEn, product.Category.NameAr) ?? string.Empty,
+                    CategoryId = product.CategoryId,
+                    BrandId = product.BrandId,
                     Price = bestItem.Price,
                     FinalPrice = finalPrice,
                     ImageUrl = product.ProductImages?.FirstOrDefault()?.URL ?? string.Empty,
@@ -287,7 +296,7 @@ namespace Efreshli.Application.Services.FilterServices
             return filteredProducts;
         }
 
-        private static List<string> GetProductColorUrls(List<ProductItem> productItems)
+        public static List<string> GetProductColorUrls(List<ProductItem> productItems)
         {
             var colorUrls = new HashSet<string>();
 
@@ -308,6 +317,28 @@ namespace Efreshli.Application.Services.FilterServices
             }
 
             return colorUrls.ToList();
+        }
+
+        private static IQueryable<Product> ApplySorting(IQueryable<Product> query, ProductSortBy sortBy)
+        {
+            return sortBy switch
+            {
+                ProductSortBy.LatestProducts => query.OrderByDescending(p => p.CreatedDate),
+
+                ProductSortBy.PriceHighToLow => query.OrderByDescending(p =>
+                    p.ProductItems.Where(pi => pi != null).Any() ?
+                    p.ProductItems.Where(pi => pi != null).Min(pi => pi.Price) : 0),
+
+                ProductSortBy.PriceLowToHigh => query.OrderBy(p =>
+                    p.ProductItems.Where(pi => pi != null).Any() ?
+                    p.ProductItems.Where(pi => pi != null).Min(pi => pi.Price) : decimal.MaxValue),
+
+                ProductSortBy.Recommended => query.OrderByDescending(p => p.CreatedDate)
+                    .ThenBy(p => p.ProductItems.Where(pi => pi != null).Any() ?
+                                p.ProductItems.Where(pi => pi != null).Min(pi => pi.Price) : decimal.MaxValue),
+
+                _ => query.OrderByDescending(p => p.CreatedDate)
+            };
         }
 
         #endregion

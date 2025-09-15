@@ -23,6 +23,7 @@ namespace Efreshli.Application.DTOs.ProductDTOs
         public string? CategoryNameEn { get; set; }
         public string BrandNameAr { get; set; }
         public string BrandNameEn { get; set; }
+        public string? Tags { get; set; }
         public List<ProductColorDto>? ProductItemColors { get; set; } = new List<ProductColorDto>();
         public List<ProductItemResponseDto>? ProductItems { get; set; } = new List<ProductItemResponseDto>();
         public List<string>? ProductImageUrls { get; set; } = new List<string>();
