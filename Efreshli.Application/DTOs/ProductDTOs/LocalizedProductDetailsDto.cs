@@ -28,7 +28,7 @@ namespace Efreshli.Application.DTOs.ProductDTOs
         public List<string> ProductImages { get; set; } = new List<string>();
         public List<LocalizedColorDto> Fabrics { get; set; } = new List<LocalizedColorDto>();
         public List<LocalizedColorDto> Woods { get; set; } = new List<LocalizedColorDto>(); 
-        public List<ProductAttributeValueResponseDto> ProductSpecification { get; set; } = new List<ProductAttributeValueResponseDto>();
+        public List<LocalizedProductAttributeValueResponseDto> ProductSpecification { get; set; } = new List<LocalizedProductAttributeValueResponseDto>();
 
     }
 }

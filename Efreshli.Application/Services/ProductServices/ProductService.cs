@@ -597,7 +597,7 @@ namespace Efreshli.Application.Services.ProductServices
             return ResponseHandler.Success<ProductDetailsDto>(productDetails, "Product details retrieved successfully");
         }
 
-        public async Task<Response<GetWishlistItemDto>> GetWishlistItemsForUserAsync(int productId)
+        public async Task<Response<LocalizedGetWishlistItemDto>> GetWishlistItemsForUserAsync(int productId)
         {
             var clrs = await _productItemService.GetProductItemColorsUrlsAsync(productId);
             var product = await _unitOfWork.ProductRepository.GetByIdWithIncludeAsync(
@@ -611,19 +611,16 @@ namespace Efreshli.Application.Services.ProductServices
             );
             if (product == null)
             {
-                return ResponseHandler.NotFound<GetWishlistItemDto>();
+                return ResponseHandler.NotFound<LocalizedGetWishlistItemDto>();
             }
 
-            var wishlistItem = new GetWishlistItemDto
+            var wishlistItem = new LocalizedGetWishlistItemDto
             {
                 ProductId = product.ProductId,
-                NameAr = product.NameAr,
-                NameEn = product.NameEn,
-                DescriptionAr = product.DescriptionAr,
-                DescriptionEn = product.DescriptionEn,
+                Name = product.GetLocalized(product.NameAr, product.NameEn),
+                Description = product.GetLocalized(product.DescriptionAr, product.DescriptionEn),
                 DimensionsOrSize = product.DimensionsOrSize,
-                CategoryNameAr = product.Category?.NameAr,
-                CategoryNameEn = product.Category?.NameEn,
+                Category = product.GetLocalized(product.Category?.NameAr, product.Category?.NameEn),
                 ImageUrl = product.ProductImages?.FirstOrDefault()?.URL,
                 ProductItemColorsUrls = clrs.Data,
                 IsWishlisted = true,
@@ -664,13 +661,11 @@ namespace Efreshli.Application.Services.ProductServices
                     SKU = product.SKU,
                     ProductImages = product.ProductImages?.Where(img => img != null && img.ReferenceType != ImageReferenceType.Model_3D).Select(img => img.URL).ToList() ?? new List<string>(),
                     Model_3D = product.ProductImages?.Where(img => img != null && img.ReferenceType == ImageReferenceType.Model_3D).Select(img => img.URL).FirstOrDefault(),
-                    ProductSpecification = product.AttributeValues != null ? product.AttributeValues.Select(av => new ProductAttributeValueResponseDto
+                    ProductSpecification = product.AttributeValues != null ? product.AttributeValues.Select(av => new LocalizedProductAttributeValueResponseDto
                     {
-                        ProductAttributeValueId = av.ProductAttributeId,
-                        Value = av.Value,
-                        ProductAttributeNameAr = av.ProductAttribute != null ? product.GetLocalized(av.ProductAttribute.NameAr, av.ProductAttribute.NameEn) : null,
-                        ProductAttributeNameEn = av.ProductAttribute != null ? product.GetLocalized(av.ProductAttribute.NameAr, av.ProductAttribute.NameEn) : null
-                    }).ToList() : new List<ProductAttributeValueResponseDto>(),
+                        Name = av.ProductAttribute != null ? product.GetLocalized(av.ProductAttribute.NameAr, av.ProductAttribute.NameEn) : null,
+                        Value = av.Value
+                    }).ToList() : new List<LocalizedProductAttributeValueResponseDto>(),
                     Fabrics = product.ProductItems != null ? product.ProductItems.Where(pi => pi.FabricColor != null).Select(pi => new LocalizedColorDto
                     {
                         ColorId = pi.FabricColor.Id,

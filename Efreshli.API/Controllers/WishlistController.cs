@@ -41,10 +41,10 @@ namespace Efreshli.API.Controllers
             var res = await _wishlistService.DeleteWishlistAsync(wishlistId);
             return this.CreateResponse(res);
         }
-        [HttpGet("GetWishlistItem")]
+        [HttpGet("{wishlistId}")]
         public async Task<IActionResult> GetWishlistItemByWishListId(int wishlistId)
         {
-            var res = await _wishlistService.GetWishlistItemByWishListIdAsync(wishlistId);
+            var res = await _wishlistService.GetWishlistByIdAsync(wishlistId);
             return this.CreateResponse(res);
         }
         [HttpPost("AddItemToWishlist")]
@@ -63,6 +63,19 @@ namespace Efreshli.API.Controllers
         public async Task<IActionResult> IsItemWishlisted(int itemId)
         {
             var res = await _wishlistService.IsItemWishlisted(itemId);
+            return this.CreateResponse(res);
+        }
+
+        [HttpGet("IsProductInWishlist")]
+        public async Task<IActionResult> IsProductInWishlist(int productId, int wishlistId)
+        {
+            var res = await _wishlistService.IsProductInWishlistAsync(productId, wishlistId);
+            return this.CreateResponse(res);
+        }
+        [HttpGet("GetWishlistsDropDown")]
+        public async Task<IActionResult> GetWishlistsDropDown(int productId)
+        {
+            var res = await _wishlistService.GetWishlistsDropDownAsync(productId);
             return this.CreateResponse(res);
         }
 

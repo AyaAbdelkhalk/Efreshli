@@ -62,20 +62,21 @@ namespace Efreshli.API
                 options.AddPolicy(name: AllowOrigins,
                     policy =>
                     {
-                        policy.WithOrigins(
+                        //policy.WithOrigins(
 
-                            "https://efresli-front.netlify.app",
-                            "https://efeshli-front.vercel.app/",
+                        //    "https://efresli-front.netlify.app",
+                        //    "https://efeshli-front.vercel.app/",
 
-                            "https://efeshli-front.vercel.app",
-                            "https://*.netlify.app",
+                        //    "https://efeshli-front.vercel.app",
+                        //    "https://*.netlify.app",
 
-                            "http://localhost:4200",
-                            "https://localhost:4200"
-                        )
+                        //    "http://localhost:4200",
+                        //    "https://localhost:4200"
+                        //)
+                        policy.AllowAnyOrigin()
                         .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
+                        .AllowAnyMethod();
+                        //.AllowCredentials();
                     });
             });
 
