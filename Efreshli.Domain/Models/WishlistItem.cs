@@ -10,7 +10,7 @@ namespace Efreshli.Domain.Models
         public int WishlistId { get; set; }
         public  virtual Wishlist? Wishlist { get; set; }
 
-        public int ProductItemId { get; set; }
-        public virtual ProductItem? ProductItem { get; set; }
+        public int ProductId { get; set; }
+        public virtual Product? Product { get; set; }
     }
 }
