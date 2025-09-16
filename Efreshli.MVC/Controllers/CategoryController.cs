@@ -71,8 +71,8 @@ namespace Efreshli.MVC.Controllers
             return Json(new { success = false, message = response.Message, errors = response.Errors });
         }
 
-        // API لتعديل كاتيجوري
         [HttpPut]
+        [Route("Category/UpdateCategory/{id:int}")]
         public async Task<IActionResult> UpdateCategory(int id, [FromForm] UpdateCategoryDto categoryDto)
         {
             if (!ModelState.IsValid)
@@ -92,6 +92,7 @@ namespace Efreshli.MVC.Controllers
 
         // API لحذف كاتيجوري
         [HttpDelete]
+        [Route("Category/DeleteCategory/{id:int}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var response = await _categoryService.DeleteCategoryAsync(id);

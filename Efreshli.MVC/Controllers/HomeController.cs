@@ -49,11 +49,13 @@ namespace Efreshli.MVC.Controllers
             // Get category product count
             var categories = await _unitOfWork.CategoryRepository.GetAllAsync();
             var products = await _unitOfWork.ProductRepository.GetAllAsync();
-            model.CategoryProductCount = categories.ToDictionary(
-                c => CultureInfo.CurrentUICulture.Name == "ar-EG" ? c.NameAr : c.NameEn,
-                c => products.Count(p => p.CategoryId == c.CategoryId)
-            );
-            
+            model.CategoryProductCount = categories
+                .DistinctBy(c => CultureInfo.CurrentUICulture.Name == "ar-EG" ? c.NameAr : c.NameEn)
+                .ToDictionary(
+                    c => CultureInfo.CurrentUICulture.Name == "ar-EG" ? c.NameAr : c.NameEn,
+                    c => products.Count(p => p.CategoryId == c.CategoryId)
+                );
+
             // Get recent orders
             model.RecentOrders = orders
                 .OrderByDescending(o => o.CreatedDate)
