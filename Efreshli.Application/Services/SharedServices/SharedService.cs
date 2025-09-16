@@ -35,7 +35,7 @@ namespace Efreshli.Application.Services.SharedServices
             }
             foreach (var wishlist in wishlists)
             {
-                var wishlistItems = await _unitOfWork.WishlistItemRepository.GetWhereAsync(w => w.WishlistId == wishlist.WishlistId && w.ProductItemId == itemId);
+                var wishlistItems = await _unitOfWork.WishlistItemRepository.GetWhereAsync(w => w.WishlistId == wishlist.WishlistId && w.ProductId == itemId);
                 if (wishlistItems != null && wishlistItems.Count() > 0)
                 {
                     return ResponseHandler.Success(true);
@@ -58,7 +58,7 @@ namespace Efreshli.Application.Services.SharedServices
                 var wishlistItems = await _unitOfWork.WishlistItemRepository.GetWhereAsync(w => w.WishlistId == wishlist.WishlistId);
                 if (wishlistItems != null && wishlistItems.Count() > 0)
                 {
-                    wishlistedProductIds.AddRange(wishlistItems.Select(wi => wi.ProductItemId));
+                    wishlistedProductIds.AddRange(wishlistItems.Select(wi => wi.ProductId));
                 }
             }
 
@@ -82,10 +82,10 @@ namespace Efreshli.Application.Services.SharedServices
             var wishlistedIds = new List<int>();
             foreach (var wishlist in wishlists)
             {
-                var wishlistItems = await _unitOfWork.WishlistItemRepository.GetWhereAsync(wi => wi.WishlistId == wishlist.WishlistId && productIds.Contains(wi.ProductItemId));
+                var wishlistItems = await _unitOfWork.WishlistItemRepository.GetWhereAsync(wi => wi.WishlistId == wishlist.WishlistId && productIds.Contains(wi.ProductId));
                 if (wishlistItems != null && wishlistItems.Any())
                 {
-                    wishlistedIds.AddRange(wishlistItems.Select(wi => wi.ProductItemId));
+                    wishlistedIds.AddRange(wishlistItems.Select(wi => wi.ProductId));
                 }
             }
 
