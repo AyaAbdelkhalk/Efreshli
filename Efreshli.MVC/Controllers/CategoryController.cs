@@ -72,22 +72,23 @@ namespace Efreshli.MVC.Controllers
         }
 
         [HttpPut]
-        [Route("Category/UpdateCategory/{id:int}")]
         public async Task<IActionResult> UpdateCategory(int id, [FromForm] UpdateCategoryDto categoryDto)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return Json(new { success = false, message = "البيانات غير صحيحة", errors = ModelState });
+                var result = await _categoryService.UpdateCategoryAsync(id, categoryDto);
+
+                if (result.Succeeded)
+                {
+                    return Json(new { success = true, message = "Category updated successfully" });
+                }
+
+                return Json(new { success = false, message = result.Message });
             }
-
-            var response = await _categoryService.UpdateCategoryAsync(id, categoryDto);
-
-            if (response.Succeeded)
+            catch (Exception ex)
             {
-                return Json(new { success = true, data = response.Data, message = "تم تعديل الكاتيجوري بنجاح" });
+                return Json(new { success = false, message = "An error occurred while updating the category" });
             }
-
-            return Json(new { success = false, message = response.Message, errors = response.Errors });
         }
 
         // API لحذف كاتيجوري
