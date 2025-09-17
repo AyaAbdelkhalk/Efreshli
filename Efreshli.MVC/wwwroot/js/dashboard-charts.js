@@ -14,25 +14,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const categoryLabels = Object.keys(categoryProductCountData);
     const categoryValues = Object.values(categoryProductCountData);
     
-    // Define colors for charts
+    // Define soft, calm colors for charts (pastel tones)
     const backgroundColors = [
-        'rgba(255, 99, 132, 0.8)',
-        'rgba(54, 162, 235, 0.8)',
-        'rgba(255, 206, 86, 0.8)',
-        'rgba(75, 192, 192, 0.8)',
-        'rgba(153, 102, 255, 0.8)',
-        'rgba(255, 159, 64, 0.8)',
-        'rgba(199, 199, 199, 0.8)'
+        'rgba(173, 216, 230, 0.8)', // Light blue
+        'rgba(144, 238, 144, 0.8)', // Light green
+        'rgba(255, 182, 193, 0.8)', // Light pink
+        'rgba(221, 160, 221, 0.8)', // Plum
+        'rgba(255, 218, 185, 0.8)', // Peach
+        'rgba(175, 238, 238, 0.8)', // Pale turquoise
+        'rgba(240, 230, 140, 0.8)', // Khaki
+        'rgba(211, 211, 211, 0.8)'  // Light gray
     ];
     
     const borderColors = [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)',
-        'rgba(199, 199, 199, 1)'
+        'rgba(173, 216, 230, 1)', // Light blue
+        'rgba(144, 238, 144, 1)', // Light green
+        'rgba(255, 182, 193, 1)', // Light pink
+        'rgba(221, 160, 221, 1)', // Plum
+        'rgba(255, 218, 185, 1)', // Peach
+        'rgba(175, 238, 238, 1)', // Pale turquoise
+        'rgba(240, 230, 140, 1)', // Khaki
+        'rgba(211, 211, 211, 1)'  // Light gray
     ];
     
     // Order Status Chart
