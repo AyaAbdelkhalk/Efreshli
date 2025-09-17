@@ -22,6 +22,7 @@ namespace Efreshli.Application.DTOs.ProductDTOs
         public string? SKU { get; set; }
         public string? CategoryEn { get; set; }
         public string? CategoryAr { get; set; }
+        public List<string> Tags { get; set; } = new List<string>();
 
         public List<string> ProductImages { get; set; } = new List<string>();
         public List<ProductAttributeValueResponseDto> ProductSpecificatoion { get; set; } = new List<ProductAttributeValueResponseDto>();

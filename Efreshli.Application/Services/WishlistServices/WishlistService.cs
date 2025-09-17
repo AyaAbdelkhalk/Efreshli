@@ -54,7 +54,6 @@ namespace Efreshli.Application.Services.WishlistServices
                 WishlistId = wishlist.WishlistId,
                 WishlistName = wishlist.Name,
                 ItemsCount = 0,
-                wishlistItemsDto = new List<GetWishlistItemDto>(),
                 WishlistUrl = $"api/wishlist/{wishlist.WishlistId}"
             });
         }
@@ -101,7 +100,7 @@ namespace Efreshli.Application.Services.WishlistServices
                     WishlistName = w.Name,
                     ItemsCount = w.WishlistItems.Count(),
                     MainImages = GetMainImagesUrlsAsync(w.WishlistId).Result.Data,
-                    wishlistItemsDto = GetWishlistItemByWishListIdAsync(w.WishlistId).Result.Data,
+                    //wishlistItemsDto = GetWishlistItemByWishListIdAsync(w.WishlistId).Result.Data,
                     WishlistUrl = $"api/wishlist/{w.WishlistId}"
 
                 }).ToList();
@@ -133,7 +132,6 @@ namespace Efreshli.Application.Services.WishlistServices
                     WishlistId = wishlistId,
                     WishlistName = wishlist.Name,
                     ItemsCount = 0,
-                    wishlistItemsDto = new List<GetWishlistItemDto>(),
                     WishlistUrl = $"api/wishlist/{wishlist.WishlistId}"
                 };
                 return ResponseHandler.Success<GetWishlistDto>(dto, "Wishlist deleted successfully.");
@@ -145,7 +143,7 @@ namespace Efreshli.Application.Services.WishlistServices
 
         }
 
-        public async Task<Response<GetWishlistDto>> GetWishlistByIdAsync(int wishlistId)
+        public async Task<Response<GetWishlistDetailsDto>> GetWishlistByIdAsync(int wishlistId)
         {
             var wishlist = _unitOfWork.WishlistRepository.GetByIdWithIncludeAsync(
                 wishlistId
@@ -156,16 +154,16 @@ namespace Efreshli.Application.Services.WishlistServices
                 );
             if (wishlist == null)
             {
-                return ResponseHandler.NotFound<GetWishlistDto>("Wishlist not found");
+                return ResponseHandler.NotFound<GetWishlistDetailsDto>("Wishlist not found");
             }
             try
             {
-                var dto = new GetWishlistDto
+                var dto = new GetWishlistDetailsDto
                 {
                     WishlistId = wishlist.Result.WishlistId,
                     WishlistName = wishlist.Result.Name,
                     ItemsCount = wishlist.Result.WishlistItems.Count(),
-                    wishlistItemsDto = GetWishlistItemByWishListIdAsync(wishlistId).Result.Data,
+                    wishlistItemsDto = GetWishlistItemsByWishListIdAsync(wishlistId).Result.Data,
                     WishlistUrl = $"api/wishlist/{wishlist.Result.WishlistId}"
                     
                 };
@@ -173,7 +171,7 @@ namespace Efreshli.Application.Services.WishlistServices
             }
             catch (Exception ex)
             {
-                return ResponseHandler.BadRequest<GetWishlistDto>($"An error occurred while retrieving the wishlist. {ex.Message}");
+                return ResponseHandler.BadRequest<GetWishlistDetailsDto>($"An error occurred while retrieving the wishlist. {ex.Message}");
             }
             
 
@@ -218,68 +216,68 @@ namespace Efreshli.Application.Services.WishlistServices
 
         #region WishList Item
 
-        public async Task<Response<List<GetWishlistItemDto>>> GetWishlistItemByWishListIdAsync(int wishlistId)
+        public async Task<Response<List<LocalizedGetWishlistItemDto>>> GetWishlistItemsByWishListIdAsync(int wishlistId)
         {
             var wishlistItems = await _unitOfWork.WishlistItemRepository.GetAllWithIncludeAsync(
                 w => w.WishlistId == wishlistId,
                 includes: new Expression<Func<WishlistItem, object>>[]
                 {
-                    c=>c.ProductItem!
+                    c=>c.Product!
                 }
                 );
             if (wishlistItems == null || wishlistItems.Count() == 0)
             {
-                return ResponseHandler.Success(new List<GetWishlistItemDto>());
+                return ResponseHandler.Success(new List<LocalizedGetWishlistItemDto>());
             }
-            var wishlistItemDtos = new List<GetWishlistItemDto>();
+            var wishlistItemDtos = new List<LocalizedGetWishlistItemDto>();
             foreach (var item in wishlistItems)
             {
-                var productItem = await _productService.GetWishlistItemsForUserAsync(item.ProductItemId);
+                var productItem = await _productService.GetWishlistItemsForUserAsync(item.ProductId);
                 if (productItem.Succeeded && productItem.Data != null)
                 {
-                    var dtores = await _productService.GetWishlistItemsForUserAsync(item.ProductItemId);
+                    var dtores = await _productService.GetWishlistItemsForUserAsync(item.ProductId);
                     var dto = dtores.Data;
                     dto.WishlistId= wishlistId;
                     dto.WishlistItemId= item.WishlistItemId;
-                    dto.ProductId = item.ProductItemId;
-                    dto.IsWishlisted = IsItemWishlisted(item.ProductItemId).Result.Data;
+                    dto.ProductId = item.ProductId;
+                    dto.IsWishlisted = IsItemWishlisted(item.ProductId).Result.Data;
                     wishlistItemDtos.Add(dto);
 
                 }
             }
             return ResponseHandler.Success(wishlistItemDtos);
         }
-        public async Task<Response<GetWishlistItemDto>> AddItemToWishlistAsync(int wishlistId, int itemId)
+        public async Task<Response<LocalizedGetWishlistItemDto>> AddItemToWishlistAsync(int wishlistId, int itemId)
         {
             var wishlist = await _unitOfWork.WishlistRepository.GetByIdAsync(wishlistId);
             if (wishlist == null)
             {
-                return ResponseHandler.NotFound<GetWishlistItemDto>("Wishlist not found");
+                return ResponseHandler.NotFound<LocalizedGetWishlistItemDto>("Wishlist not found");
             }
             var userId = _userContext.CurrentUserId;
             if (userId == null)
             {
-                return ResponseHandler.Unauthorized<GetWishlistItemDto>("User Not Found");
+                return ResponseHandler.Unauthorized<LocalizedGetWishlistItemDto>("User Not Found");
             }
             if (wishlist.ApplicationUserId != userId)
             {
-                return ResponseHandler.Unauthorized<GetWishlistItemDto>();
+                return ResponseHandler.Unauthorized<LocalizedGetWishlistItemDto>();
             }
-            var existingItems = await _unitOfWork.WishlistItemRepository.GetWhereAsync(w => w.WishlistId == wishlistId && w.ProductItemId == itemId);
+            var existingItems = await _unitOfWork.WishlistItemRepository.GetWhereAsync(w => w.WishlistId == wishlistId && w.ProductId == itemId);
             if (existingItems != null && existingItems.Count() > 0)
             {
-                return ResponseHandler.BadRequest<GetWishlistItemDto>("Already Exists In this Wishlist");
+                return ResponseHandler.BadRequest<LocalizedGetWishlistItemDto>("Already Exists In this Wishlist");
             }
 
             var wishlistItem = new Domain.Models.WishlistItem
             {
                 WishlistId = wishlistId,
-                ProductItemId = itemId
+                ProductId = itemId
             };
 
             await _unitOfWork.WishlistItemRepository.AddAsync(wishlistItem);
             await _unitOfWork.SaveChangesAsync();
-            return ResponseHandler.Success(new GetWishlistItemDto
+            return ResponseHandler.Success(new LocalizedGetWishlistItemDto
             {
                 WishlistId = wishlistId,
                 ProductId = itemId,
@@ -303,7 +301,7 @@ namespace Efreshli.Application.Services.WishlistServices
             }
             foreach (var wishlist in wishlists)
             {
-                var wishlistItems = await _unitOfWork.WishlistItemRepository.GetWhereAsync(w => w.WishlistId == wishlist.WishlistId && w.ProductItemId == itemId);
+                var wishlistItems = await _unitOfWork.WishlistItemRepository.GetWhereAsync(w => w.WishlistId == wishlist.WishlistId && w.ProductId == itemId);
                 if (wishlistItems != null && wishlistItems.Count() > 0)
                 {
                     return ResponseHandler.Success(true);
@@ -311,28 +309,28 @@ namespace Efreshli.Application.Services.WishlistServices
             }
             return ResponseHandler.Success(false);
         }
-        public async Task<Response<GetWishlistItemDto>> RemoveItemFromWishlistAsync(int wishlistId, int itemId)
+        public async Task<Response<LocalizedGetWishlistItemDto>> RemoveItemFromWishlistAsync(int wishlistId, int itemId)
         {
             var wishlist = await _unitOfWork.WishlistRepository.GetByIdAsync(wishlistId);
             if (wishlist == null)
             {
-                return ResponseHandler.NotFound<GetWishlistItemDto>("Wishlist not found");
+                return ResponseHandler.NotFound<LocalizedGetWishlistItemDto>("Wishlist not found");
             }
             var userId = _userContext.CurrentUserId;
             if (userId == null)
             {
-                return ResponseHandler.Unauthorized<GetWishlistItemDto>("User Not Found");
+                return ResponseHandler.Unauthorized<LocalizedGetWishlistItemDto>("User Not Found");
             }
             if (wishlist.ApplicationUserId != userId)
             {
-                return ResponseHandler.Unauthorized<GetWishlistItemDto>();
+                return ResponseHandler.Unauthorized<LocalizedGetWishlistItemDto>();
             }
 
 
-            var wishlistItems = await _unitOfWork.WishlistItemRepository.GetWhereAsync(w => w.WishlistId == wishlistId && w.ProductItemId == itemId);
+            var wishlistItems = await _unitOfWork.WishlistItemRepository.GetWhereAsync(w => w.WishlistId == wishlistId && w.ProductId == itemId);
             if (wishlistItems == null)
             {
-                return ResponseHandler.NotFound<GetWishlistItemDto>("Item not found in wishlist");
+                return ResponseHandler.NotFound<LocalizedGetWishlistItemDto>("Item not found in wishlist");
             }
             var wishlistItem = wishlistItems.FirstOrDefault();
             if (wishlistItem != null)
@@ -341,7 +339,7 @@ namespace Efreshli.Application.Services.WishlistServices
                 {
                     await _unitOfWork.WishlistItemRepository.RemoveAsync(wishlistItem.WishlistItemId);
                     await _unitOfWork.SaveChangesAsync();
-                    return ResponseHandler.Success(new GetWishlistItemDto
+                    return ResponseHandler.Success(new LocalizedGetWishlistItemDto
                     {
                         WishlistId = wishlistId,
                         ProductId = itemId,
@@ -350,11 +348,11 @@ namespace Efreshli.Application.Services.WishlistServices
                 }
                 catch (Exception ex)
                 {
-                    return ResponseHandler.BadRequest<GetWishlistItemDto>($"An error occurred while removing the item from the wishlist. {ex.Message}");
+                    return ResponseHandler.BadRequest<LocalizedGetWishlistItemDto>($"An error occurred while removing the item from the wishlist. {ex.Message}");
                 }
 
             }
-            return ResponseHandler.NotFound<GetWishlistItemDto>();
+            return ResponseHandler.NotFound<LocalizedGetWishlistItemDto>();
         }
 
         public async Task<Response<List<string>>> GetMainImagesUrlsAsync(int wishlistId)
@@ -363,7 +361,7 @@ namespace Efreshli.Application.Services.WishlistServices
                 w => w.WishlistId == wishlistId,
                 includes: new Expression<Func<WishlistItem, object>>[]
                 {
-                    c=>c.ProductItem!
+                    c=>c.Product!
                 }
                 );
             if (wishlistItems == null || wishlistItems.Count() == 0)
@@ -373,10 +371,10 @@ namespace Efreshli.Application.Services.WishlistServices
             var imageUrls = new List<string>();
             foreach (var item in wishlistItems)
             {
-                var productItem = await _productService.GetWishlistItemsForUserAsync(item.ProductItemId);
+                var productItem = await _productService.GetWishlistItemsForUserAsync(item.ProductId);
                 if (productItem.Succeeded && productItem.Data != null)
                 {
-                    var dtores = await _productService.GetWishlistItemsForUserAsync(item.ProductItemId);
+                    var dtores = await _productService.GetWishlistItemsForUserAsync(item.ProductId);
                     var dto = dtores.Data;
                     if (!string.IsNullOrEmpty(dto.ImageUrl))
                     {
@@ -386,6 +384,83 @@ namespace Efreshli.Application.Services.WishlistServices
             }
             return ResponseHandler.Success(imageUrls);
 
+        }
+
+        public async Task<Response<bool>> IsProductInWishlistAsync(int productId, int wishlistId)
+        {
+            var userid= _userContext.CurrentUserId;
+            if (userid == null)
+            {
+                return ResponseHandler.Unauthorized<bool>("User Not Found");
+            }
+            var wishlist = await _unitOfWork.WishlistRepository.GetByIdAsync(wishlistId);
+            if (wishlist == null)
+            {
+                return ResponseHandler.NotFound<bool>("Wishlist not found");
+            }
+            if (wishlist.ApplicationUserId != userid)
+            {
+                return ResponseHandler.Unauthorized<bool>();
+            }
+            var wishlistItems = await _unitOfWork.WishlistItemRepository.GetAllWithIncludeAsync(
+                w => w.WishlistId == wishlistId,
+                includes: new Expression<Func<WishlistItem, object>>[]
+                {
+                    c=>c.Product!
+                }
+                );
+            if (wishlistItems == null || wishlistItems.Count() == 0)
+                {
+                return ResponseHandler.Success(false);
+            }
+            foreach (var item in wishlistItems)
+            {
+                var productItem = await _productService.GetWishlistItemsForUserAsync(item.ProductId);
+                if (productItem.Succeeded && productItem.Data != null)
+                {
+                    var dtores = await _productService.GetWishlistItemsForUserAsync(item.ProductId);
+                    var dto = dtores.Data;
+                    if (dto.ProductId == productId)
+                    {
+                        return ResponseHandler.Success(true);
+                    }
+                }
+            }
+            return ResponseHandler.Success(false);
+
+        }
+
+        public async Task<Response<List<GetWishlistDropDownDto>>> GetWishlistsDropDownAsync(int productId)
+        {
+            var userId = _userContext.CurrentUserId;
+            if (userId == null)
+            {
+                return ResponseHandler.Unauthorized<List<GetWishlistDropDownDto>>("User Not Found");
+            }
+            var wishlists = await _unitOfWork.WishlistRepository.GetAllWithIncludeAsync(
+                                w => w.ApplicationUserId == userId,  ///////get wishlist of current user
+                                includes: new Expression<Func<Wishlist, object>>[]
+                                {
+                        c=>c.WishlistItems
+                                }
+                            );
+            if (wishlists == null || wishlists.Count() == 0)
+            {
+                return ResponseHandler.Success(new List<GetWishlistDropDownDto>());
+            }
+            var wishlistDtos = new List<GetWishlistDropDownDto>();
+            foreach (var wishlist in wishlists)
+            {
+                var isInWishlist = await IsProductInWishlistAsync(productId, wishlist.WishlistId);
+                wishlistDtos.Add(new GetWishlistDropDownDto
+                {
+                    WishlistId = wishlist.WishlistId,
+                    WishlistName = wishlist.Name,
+                    ItemsCount = wishlist.WishlistItems.Count(),
+                    IsInWishlist = isInWishlist.Data
+                });
+            }
+            return ResponseHandler.Success(wishlistDtos);
         }
 
         #endregion

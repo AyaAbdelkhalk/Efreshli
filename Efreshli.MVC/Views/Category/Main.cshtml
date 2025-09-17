@@ -95,10 +95,10 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+        @*         <div class="form-group">
                     <label for="imageUrl">أو رابط الصورة</label>
                     <input type="url" id="imageUrl" name="imageUrl" placeholder="https://example.com/image.jpg">
-                </div>
+                </div> *@
 
                 <div class="form-group">
                     <label for="parentId">الفئة الأب</label>
@@ -151,103 +151,9 @@
         noImage: '@_stringLocalizer["NoImageAvailable"]',
         searchPlaceholder: '@_stringLocalizer["SearchCategories"]',
         subCategories: '@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.SubCategories]',
-        products: '@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.Products]'
+        products: '@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.Products]',
+        mainCategories: '@_stringLocalizer[SharedResourcesKeys.Efreshli.Category.MainCategories]'
     };
-
-    // Modal functions
-    function openAddModal() {
-        console.log('openAddModal called');
-        const modal = document.getElementById('categoryModal');
-        if (modal) {
-            modal.style.display = 'flex';
-            modal.classList.add('active');
-            console.log('Modal should be visible now');
-        } else {
-            console.error('Modal not found');
-        }
-    }
-
-    function closeModal() {
-        console.log('closeModal called');
-        const modal = document.getElementById('categoryModal');
-        if (modal) {
-            modal.style.display = 'none';
-            modal.classList.remove('active');
-            resetForm();
-        }
-    }
-
-    function closeDeleteModal() {
-        const modal = document.getElementById('deleteModal');
-        if (modal) {
-            modal.style.display = 'none';
-            modal.classList.remove('active');
-        }
-    }
-
-    function resetForm() {
-        const form = document.getElementById('categoryForm');
-        if (form) {
-            form.reset();
-        }
-    }
-
-    function handleFormSubmit(event) {
-        event.preventDefault();
-        console.log('Form submitted');
-        // Add form handling logic here
-    }
-
-    function searchCategories() {
-        console.log('Search function called');
-        // Add search logic here
-    }
-
-    function navigateToLevel(level) {
-        console.log('Navigate to level:', level);
-        // Add navigation logic here
-    }
-
-    function confirmDelete() {
-        console.log('Confirm delete called');
-        closeDeleteModal();
-    }
-
-    // Make functions globally available
-    window.openAddModal = openAddModal;
-    window.closeModal = closeModal;
-    window.closeDeleteModal = closeDeleteModal;
-    window.handleFormSubmit = handleFormSubmit;
-    window.searchCategories = searchCategories;
-    window.navigateToLevel = navigateToLevel;
-    window.confirmDelete = confirmDelete;
-
-    // Close modals when clicking outside
-    document.addEventListener('click', function(e) {
-        const categoryModal = document.getElementById('categoryModal');
-        const deleteModal = document.getElementById('deleteModal');
-
-        if (e.target === categoryModal) {
-            closeModal();
-        }
-        if (e.target === deleteModal) {
-            closeDeleteModal();
-        }
-    });
-
-    // Close modals with Escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            const categoryModal = document.getElementById('categoryModal');
-            const deleteModal = document.getElementById('deleteModal');
-
-            if (categoryModal.classList.contains('active')) {
-                closeModal();
-            }
-            if (deleteModal.classList.contains('active')) {
-                closeDeleteModal();
-            }
-        }
-    });
+   
 </script>
 <script src="~/js/Category.js"></script>

@@ -4,6 +4,7 @@ using Efreshli.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Efreshli.Infrastructure.Migrations
 {
     [DbContext(typeof(EfreshliDbContext))]
-    partial class EfreshliDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250914210927_addtagsinprd")]
+    partial class addtagsinprd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1341,7 +1344,7 @@ namespace Efreshli.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("ProductItemId")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -1355,7 +1358,7 @@ namespace Efreshli.Infrastructure.Migrations
 
                     b.HasKey("WishlistItemId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductItemId");
 
                     b.HasIndex("WishlistId");
 
@@ -1778,9 +1781,9 @@ namespace Efreshli.Infrastructure.Migrations
 
             modelBuilder.Entity("Efreshli.Domain.Models.WishlistItem", b =>
                 {
-                    b.HasOne("Efreshli.Domain.Models.Product", "Product")
+                    b.HasOne("Efreshli.Domain.Models.ProductItem", "ProductItem")
                         .WithMany()
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductItemId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1790,7 +1793,7 @@ namespace Efreshli.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.Navigation("ProductItem");
 
                     b.Navigation("Wishlist");
                 });
