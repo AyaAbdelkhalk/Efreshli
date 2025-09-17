@@ -38,7 +38,7 @@ namespace Efreshli.API.Controllers
         //filter
         [HttpGet("filter")]
         public async Task<IActionResult> FilterProducts(
-            string keyword,
+            string? keyword=null,
             int pageNumber = 1,
             int pageSize = 24,
             ProductSortBy sortBy = ProductSortBy.Recommended,
@@ -51,6 +51,7 @@ namespace Efreshli.API.Controllers
         {
             var filterRequest = new ProductFilterRequest
             {
+                Keyword = keyword,
                 PageNumber = pageNumber,
                 PageSize = pageSize,
                 SortBy = sortBy,

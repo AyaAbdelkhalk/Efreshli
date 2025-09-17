@@ -7,6 +7,7 @@ using Efreshli.Application.Services.SharedServices;
 using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,14 +43,22 @@ namespace Efreshli.Application.Services.HomeServices
         public async Task<Response<PaginatedResult<FilteredProductsDto>>> SearchProducts(string keyword, int pageNumber, int pageSize)
         {
             var userId = _userContext.CurrentUserId;
+            var lowerKeyword = keyword?.ToLower();
 
             //1: Use database-level pagination instead of loading all products
             var paginatedProducts = await _unitOfWork.ProductRepository.GetPagedAsync(
                 pageNumber: pageNumber,
                 pageSize: pageSize,
-                //search using name and description in both languages and tags
 
-                predicate: p => p.ProductItems.Any() && p.ProductImages.Any() &&(p.Tags.Contains(keyword))||(p.NameEn.ToLower().Contains(keyword.ToLower())|| p.NameAr.ToLower().Contains(keyword.ToLower()) || p.DescriptionEn.ToLower().Contains(keyword.ToLower()) || p.DescriptionAr.ToLower().Contains(keyword.ToLower())),
+                predicate: p => p.ProductItems.Any() &&
+                p.ProductImages.Any() &&
+               (string.IsNullOrEmpty(lowerKeyword) ||
+                        //(p.Tags != null && p.Tags.Any(t => t != null && t.ToLower().Contains(lowerKeyword))) ||
+                        (p.NameEn != null && p.NameEn.ToLower().Contains(lowerKeyword)) ||
+                        (p.NameAr != null && p.NameAr.ToLower().Contains(lowerKeyword)) ||
+                        (p.DescriptionEn != null && p.DescriptionEn.ToLower().Contains(lowerKeyword)) ||
+                        (p.DescriptionAr != null && p.DescriptionAr.ToLower().Contains(lowerKeyword))),
+
                 orderBy: query => query.OrderBy(p => p.NameEn), // Consistent ordering
                 includes: new Expression<Func<Domain.Models.Product, object>>[]
                 {

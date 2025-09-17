@@ -108,7 +108,7 @@ namespace Efreshli.Application.Services.FilterServices
         public async Task<Response<PaginatedResult<FilteredProductsDto>>> GetFilteredProductsAsync(ProductFilterRequest request)
         {
             try
-            {
+             {
                 var query = _unitOfWork.ProductRepository.GetAll()
                     .Include(p => p.Brand)
                     .Include(p => p.Category)
@@ -327,15 +327,27 @@ namespace Efreshli.Application.Services.FilterServices
 
                 ProductSortBy.PriceHighToLow => query.OrderByDescending(p =>
                     p.ProductItems.Where(pi => pi != null).Any() ?
-                    p.ProductItems.Where(pi => pi != null).Min(pi => pi.Price) : 0),
+                    p.ProductItems.Where(pi => pi != null).FirstOrDefault().Price : 0),
 
                 ProductSortBy.PriceLowToHigh => query.OrderBy(p =>
                     p.ProductItems.Where(pi => pi != null).Any() ?
-                    p.ProductItems.Where(pi => pi != null).Min(pi => pi.Price) : decimal.MaxValue),
+                    p.ProductItems.Where(pi => pi != null).FirstOrDefault().Price : decimal.MaxValue),
 
-                ProductSortBy.Recommended => query.OrderByDescending(p => p.CreatedDate)
-                    .ThenBy(p => p.ProductItems.Where(pi => pi != null).Any() ?
-                                p.ProductItems.Where(pi => pi != null).Min(pi => pi.Price) : decimal.MaxValue),
+                ProductSortBy.Recommended => query
+                    // أولاً: المنتجات الحديثة (آخر 30 يوم لها أولوية)
+                   .OrderByDescending(p => p.CreatedDate > DateTime.Now.AddDays(-30))
+                   // ثانياً: المنتجات ذات التقييمات العالية
+                   .ThenByDescending(p => p.Reviews.Any() ? p.Reviews.Average(r => r.Rate) : 0)
+                   // ثالثاً: المنتجات الأكثر مبيعاً (إذا كان لديك حقل Sales)
+                   .ThenByDescending(p => p.ProductItems.Sum(pi => pi.Quantity))
+                   // رابعاً: المنتجات ذات الخصومات
+                   .ThenByDescending(p => p.ProductItems.Any(pi => pi.Discount > 0))
+                   // خامساً: الأسعار المنخفضة
+                   .ThenBy(p => p.ProductItems.Any(pi => pi != null) ?
+                               p.ProductItems.Where(pi => pi != null).FirstOrDefault().Price : decimal.MaxValue)
+                   // أخيراً: الأحدث
+                   .ThenByDescending(p => p.CreatedDate),
+
 
                 _ => query.OrderByDescending(p => p.CreatedDate)
             };
