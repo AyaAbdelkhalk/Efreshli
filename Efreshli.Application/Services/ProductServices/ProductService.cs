@@ -708,7 +708,7 @@ namespace Efreshli.Application.Services.ProductServices
 
         public async Task<Response<PaginatedResult<FilteredProductsDto>>> GetNewArrivals(int pageNumber = 1, int pageSize = 24)
         {
-            var products = _unitOfWork.ProductRepository.GetAll();
+            var products = _unitOfWork.ProductRepository.GetAll().ToList();
             if (products == null || !products.Any())
             {
                 return ResponseHandler.Success(PaginatedResult<FilteredProductsDto>.Empty(pageNumber, pageSize), "No new arrivals found");

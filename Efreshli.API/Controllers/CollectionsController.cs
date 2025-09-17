@@ -22,19 +22,15 @@ namespace Efreshli.API.Controllers
             _homeService = homeService;
             _filterService = filterService;
         }
-        [HttpGet]
-        [Route("newProducts")]
+        [HttpGet("newProducts")]
         public async Task<IActionResult> GetNewArrivals(int pageNumber = 1, int pageSize = 24)
         {
             var result = await _productService.GetNewArrivals(pageNumber, pageSize);
-            if (result.Succeeded)
-            {
-                return this.CreateResponse(result);
-            }
-            return BadRequest(result);
+            return this.CreateResponse(result);
+
         }
         [HttpGet("{keyword}")]
-        public async Task<IActionResult> GetCollections(string keyword,
+        public async Task<IActionResult> GetCollections(string? keyword=null,
             ProductSortBy sortBy = ProductSortBy.Recommended,
             int pageNumber = 1, int pageSize = 24)
         {
