@@ -71,6 +71,27 @@
                         </div>
                         <div class="info-item">
                             <div class="item-header-row">
+                                <label>Tags</label>
+                            </div>
+                            @if (Model.Tags != null && Model.Tags.Any())
+                            {
+                                <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                                    @foreach (var tag in Model.Tags)
+                                    {
+                                        <span class="badge bg-primary me-1" style="background: #7c2d92 !important; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px;">
+                                            #@tag
+                                        </span>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <p style="color: #6b7280; font-style: italic;">لا يوجد </p>
+                            }
+                        </div>
+
+                        <div class="info-item">
+                            <div class="item-header-row">
                                 <label>Category</label>
                             </div>
                             <p>@(string.IsNullOrEmpty(Model.CategoryAr) ? "لا يوجد" : $"{Model.CategoryAr} ({Model.CategoryEn})")</p>
