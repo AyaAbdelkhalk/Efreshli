@@ -1,4 +1,4 @@
-﻿@using Efreshli.Application.Resources
+﻿﻿@using Efreshli.Application.Resources
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<SharedResources> _stringLocalizer
 @using Efreshli.Application.DTOs.ProductDTOs
@@ -92,7 +92,7 @@
 
             <div>
                 <label class="ef-label">3D مودل</label>
-                <input type="file" name="Model_3D"  class="ef-form-control" accept=".glb/image/*" />
+                <input type="file" name="Model_3D" class="ef-form-control" accept=".glb/image/*" />
                 <small style="color: #6b7280; margin-top: 5px; display: block;">يمكنك اضافة 3 موديل للمنتج</small>
             </div>
         </div>
@@ -182,7 +182,7 @@
                         <option value="">-- اختر الخاصية --</option>
                         @foreach (var attr in (List<SelectListItem>)ViewBag.ProductAttributes)
                         {
-                                <option value="@attr.Value">@attr.Text</option>
+                                    <option value="@attr.Value">@attr.Text</option>
                         }
                     </select>
                 </td>
@@ -242,7 +242,7 @@
                                        type="number"
                                        placeholder="0" />
                             </div>
-                            
+
                             <div>
                             <label class="ef-label">الخصم</label>
                             <div style="display: flex; gap: 0.5rem;">
@@ -510,7 +510,7 @@
             submitBtn.disabled = false;
         });
 
-        
+
         document.head.appendChild(style);
     </script>
 }
