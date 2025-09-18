@@ -7,9 +7,10 @@ namespace Efreshli.Application.DTOs.OrderDTOs
     {
         [Required]
         public int AddressId { get; set; }
-        
-        public int? CouponId { get; set; }
-        
+
+        //public int? CouponId { get; set; }
+        public string? CouponCode { get; set; }
+
         [Required]
         public PaymentMethod PaymentMethod { get; set; }
         

@@ -11,10 +11,7 @@ namespace Efreshli.Application.Validators.OrderValidators
                 .GreaterThan(0)
                 .WithMessage("Address ID must be greater than 0");
 
-            RuleFor(x => x.CouponId)
-                .GreaterThan(0)
-                .When(x => x.CouponId.HasValue)
-                .WithMessage("Coupon ID must be greater than 0 when provided");
+            
 
             RuleFor(x => x.PaymentMethod)
                 .IsInEnum()

@@ -6,6 +6,7 @@ using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Enums;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
@@ -38,15 +39,18 @@ namespace Efreshli.Application.Services.UserService
             return customersCount;
         }
 
-        public Task<PaginatedResult<UserDto>> PageResult(string userRole = null)
+        public async Task<Response<UserProfileResponseDto>> GetProfileDataAsync()
         {
-            throw new NotImplementedException();
+            var user = await _unitOfWork.UserRepository.GetAll().FirstOrDefaultAsync(x => x.Id == _userContext.CurrentUserId);
+            var result = new UserProfileResponseDto { Email = user.Email, FirstName = user.FirstName, LastName = user.LastName, PhoneNumber = user.PhoneNumber };
+            return ResponseHandler.Success(result);
         }
 
         public Task<int> TotalCount()
         {
             throw new NotImplementedException();
         }
+
         public async Task<Response<string>> UpdateProfileAsync( UpdateProfileDto updateProfileDto)
         {
             var userId = _userContext.CurrentUserId;
