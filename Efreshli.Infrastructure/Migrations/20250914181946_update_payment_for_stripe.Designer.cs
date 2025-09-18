@@ -4,6 +4,7 @@ using Efreshli.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Efreshli.Infrastructure.Migrations
 {
     [DbContext(typeof(EfreshliDbContext))]
-    partial class EfreshliDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250914181946_update_payment_for_stripe")]
+    partial class update_payment_for_stripe
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -705,7 +708,9 @@ namespace Efreshli.Infrastructure.Migrations
 
                     b.HasIndex("CouponId");
 
-                    b.HasIndex("PaymentId");
+                    b.HasIndex("PaymentId")
+                        .IsUnique()
+                        .HasFilter("[PaymentId] IS NOT NULL");
 
                     b.ToTable("Orders");
                 });
@@ -793,9 +798,6 @@ namespace Efreshli.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
 
@@ -820,8 +822,6 @@ namespace Efreshli.Infrastructure.Migrations
                     b.HasKey("PaymentId");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Payments");
                 });
@@ -1636,8 +1636,8 @@ namespace Efreshli.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Efreshli.Domain.Models.Payment", "Payment")
-                        .WithMany()
-                        .HasForeignKey("PaymentId")
+                        .WithOne("Order")
+                        .HasForeignKey("Efreshli.Domain.Models.Order", "PaymentId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ApplicationUser");
@@ -1676,15 +1676,7 @@ namespace Efreshli.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Efreshli.Domain.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("ApplicationUser");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Efreshli.Domain.Models.Product", b =>
@@ -1886,6 +1878,11 @@ namespace Efreshli.Infrastructure.Migrations
             modelBuilder.Entity("Efreshli.Domain.Models.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("Efreshli.Domain.Models.Payment", b =>
+                {
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Efreshli.Domain.Models.Product", b =>

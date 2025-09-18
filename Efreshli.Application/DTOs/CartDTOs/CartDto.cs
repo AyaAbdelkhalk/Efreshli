@@ -12,5 +12,7 @@ namespace Efreshli.Application.DTOs.CartDTOs
         public string ApplicationUserId { get; set; }
         public List<CartItemDto> Items { get; set; }
         public decimal GrandTotal { get; set; } // مجموع أسعار كل المنتجات في السلة
+        public decimal Total { get; set; }
+
     }
 }

@@ -7,6 +7,6 @@ namespace Efreshli.MVC.Models
         public int TotlaUsers { get; set; } = 0;
         public int TotalAdmins { get; set; } = 0;
         public int TotalCustomers { get; set; } = 0;
-        public List<UserDto>? Users { get; set; } = default;
+        public List<UserProfileResponseDto>? Users { get; set; } = default;
     }
 }

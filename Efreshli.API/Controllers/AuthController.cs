@@ -27,7 +27,7 @@ namespace Efreshli.API.Controllers
             var result = await _authService.RegisterAsync(model);
             return this.CreateResponse(result);
         }
-
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {

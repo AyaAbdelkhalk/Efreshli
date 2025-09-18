@@ -65,11 +65,8 @@ namespace Efreshli.API
                         policy.WithOrigins(
 
                             "https://efresli-front.netlify.app",
-                            "https://efeshli-front.vercel.app/",
-
                             "https://efeshli-front.vercel.app",
                             "https://*.netlify.app",
-
                             "http://localhost:4200",
                             "https://localhost:4200"
                         )
@@ -275,13 +272,15 @@ namespace Efreshli.API
             #region email
             app.UseHttpsRedirection();
             #endregion
+            app.UseHttpsRedirection();
+
+            // CORS must go before authentication/authorization
             app.UseCors(AllowOrigins);
 
-            app.UseStaticFiles();
-
             app.UseAuthentication();
-
             app.UseAuthorization();
+
+            app.UseStaticFiles();
 
             app.MapControllers();
 
