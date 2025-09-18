@@ -11,6 +11,8 @@ namespace Efreshli.Application.Services.ProductAttributeServices
     public interface IProductAttributeService
     {
         Task<Response<List<ProductAttributeResponseDto>>> GetAllAttributesAsync();
+        Task<Response<List<LocalizedProductAttributeResponseDto>>> GetAllAttributesByIdAsync(int? CategoryId);
+
         Task<Response<ProductAttributeResponseDto>> GetAttributeByIdAsync(int id);
         Task<Response<ProductAttributeResponseDto>> CreateAttributeAsync(CreateProductAttributeDto createDto);
 

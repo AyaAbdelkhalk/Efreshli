@@ -162,9 +162,16 @@ namespace Efreshli.MVC.Controllers
             }).ToList();
             ViewBag.ProductAttributes = productAttributes.Select(pa => new SelectListItem
             {
-                Value = pa.ProductAttributeId.ToString(), 
+                Value = pa.ProductAttributeId.ToString(),
                 Text = pa.ProductAttributeNameEn
             }).ToList();
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAttributesByCategory(int? categoryId)
+        {
+            var result = await _productAttributeService.GetAllAttributesByIdAsync(categoryId);
+            return Json(result.Data); // Â —Ã⁄ ﬁ«∆„… «·Œ’«∆’ ›ﬁÿ
+        }
+
     }
 }
