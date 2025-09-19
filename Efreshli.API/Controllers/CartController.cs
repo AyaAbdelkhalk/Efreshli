@@ -1,10 +1,14 @@
+
 using Efreshli.Application.DTOs.CartDTOs;
+
+
 using Efreshli.Application.Services.CartServices;
 using Efreshli.Domain.Common.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Efreshli.API.Controllers
 {
@@ -126,9 +130,30 @@ namespace Efreshli.API.Controllers
             return BadRequest(result);
         }
 
+        // Add this method to your CartController
+        //[HttpGet("summary")]
+        //public async Task<IActionResult> GetCartSummary()
+        //{
+        //    var userId = GetCurrentUserId();
+        //    if (string.IsNullOrEmpty(userId))
+        //    {
+        //        return Unauthorized("User not found");
+        //    }
+
+        //    var result = await _cartService.GetCartSummaryAsync(userId);
+
+        //    if (result.Succeeded)
+        //    {
+        //        return Ok(result);
+        //    }
+
+        //    return BadRequest(result);
+        //}
+
+      
         #region Helper Methods
 
-     
+
         private string? GetCurrentUserId()
         {
             var userId = _userContext.CurrentUserId;

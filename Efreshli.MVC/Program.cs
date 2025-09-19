@@ -138,7 +138,6 @@ namespace Efreshli.MVC
 
                 return new Cloudinary(account);
             });
-
             #region Cors
             builder.Services.AddCors(options =>
             {
@@ -176,7 +175,8 @@ namespace Efreshli.MVC
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            var provider = new FileExtensionContentTypeProvider();
+            
+        var provider = new FileExtensionContentTypeProvider();
             provider.Mappings[".glb"] = "model/gltf-binary";
             app.UseCors("AllowHosts");
             app.UseStaticFiles(new StaticFileOptions
@@ -192,6 +192,7 @@ namespace Efreshli.MVC
                 Console.WriteLine($"Current Culture: {culture}"); // Debug check
                 await next();
             });
+
             app.UseRouting();
            
             // Auth middlewares if needed
@@ -201,9 +202,12 @@ namespace Efreshli.MVC
             // MVC routes
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Account}/{action=Login}");
+                   pattern: "",
+            defaults: new { controller = "Account", action = "Login" });
 
-
+            app.MapControllerRoute(
+                name: "withId",
+                pattern: "{controller}/{action}/{id?}");
             app.Run();
         }
     }

@@ -1,6 +1,594 @@
-﻿@{
+﻿@model Efreshli.MVC.Models.ViewModels.DashboardViewModel
+@{
     ViewData["Title"] = "Dashboard";
     Layout = "_AdminLayout";
 }
 
-<a href="@Url.Action("Index", "Products")" >Hi from home controsssller</a>
+<!-- Dashboard Header -->
+<div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+    <p class="text-gray-600">Welcome to your analytics dashboard</p>
+</div>
+
+<!-- Summary Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500">
+        <div class="flex items-center">
+            <div class="p-3 rounded-lg bg-blue-100 text-blue-600 mr-4">
+                <i class="ri-shopping-cart-2-line text-xl"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Total Orders</p>
+                <p class="text-2xl font-bold">@Model.TotalOrders</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">
+        <div class="flex items-center">
+            <div class="p-3 rounded-lg bg-green-100 text-green-600 mr-4">
+                <i class="ri-product-hunt-line text-xl"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Total Products</p>
+                <p class="text-2xl font-bold">@Model.TotalProducts</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-purple-500">
+        <div class="flex items-center">
+            <div class="p-3 rounded-lg bg-purple-100 text-purple-600 mr-4">
+                <i class="ri-user-line text-xl"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Total Users</p>
+                <p class="text-2xl font-bold">@Model.TotalUsers</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white rounded-xl shadow-md p-6 border-l-4 border-yellow-500">
+        <div class="flex items-center">
+            <div class="p-3 rounded-lg bg-yellow-100 text-yellow-600 mr-4">
+                <i class="ri-money-dollar-circle-line text-xl"></i>
+            </div>
+            <div>
+                <p class="text-gray-500 text-sm">Total Revenue</p>
+                <p class="text-2xl font-bold">@Model.TotalRevenue.ToString("C")</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sales Overview Section -->
+<div class="bg-white rounded-xl shadow-md p-6 mb-6">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-semibold text-gray-800">Sales Overview</h2>
+        <div class="flex space-x-2">
+            <button class="px-3 py-1 text-sm bg-blue-100 text-blue-600 rounded-lg" data-period="daily">Daily</button>
+            <button class="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-lg" data-period="weekly">Weekly</button>
+            <button class="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-lg" data-period="monthly">Monthly</button>
+        </div>
+    </div>
+    <div class="h-80">
+        <canvas id="salesChart"></canvas>
+    </div>
+</div>
+
+<!-- Analytics Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Sales Growth -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Sales Growth</h3>
+        <div class="space-y-4">
+            <div class="flex justify-between items-center p-4 bg-blue-50 rounded-lg">
+                <div>
+                    <p class="text-gray-600">Weekly Growth</p>
+                    <p class="text-2xl font-bold @(Model.SalesGrowth.WeeklyGrowthPercentage >= 0 ? "text-green-600" : "text-red-600")">
+                        @(Model.SalesGrowth.WeeklyGrowthPercentage >= 0 ? "+" : "")@Model.SalesGrowth.WeeklyGrowthPercentage.ToString("F2")%
+                    </p>
+                </div>
+                <div class="text-right">
+                    <p class="text-gray-600">Value</p>
+                    <p class="text-lg font-semibold @(Model.SalesGrowth.WeeklyGrowthValue >= 0 ? "text-green-600" : "text-red-600")">
+                        @(Model.SalesGrowth.WeeklyGrowthValue >= 0 ? "+" : "")@Model.SalesGrowth.WeeklyGrowthValue.ToString("C")
+                    </p>
+                </div>
+            </div>
+            <div class="flex justify-between items-center p-4 bg-green-50 rounded-lg">
+                <div>
+                    <p class="text-gray-600">Monthly Growth</p>
+                    <p class="text-2xl font-bold @(Model.SalesGrowth.MonthlyGrowthPercentage >= 0 ? "text-green-600" : "text-red-600")">
+                        @(Model.SalesGrowth.MonthlyGrowthPercentage >= 0 ? "+" : "")@Model.SalesGrowth.MonthlyGrowthPercentage.ToString("F2")%
+                    </p>
+                </div>
+                <div class="text-right">
+                    <p class="text-gray-600">Value</p>
+                    <p class="text-lg font-semibold @(Model.SalesGrowth.MonthlyGrowthValue >= 0 ? "text-green-600" : "text-red-600")">
+                        @(Model.SalesGrowth.MonthlyGrowthValue >= 0 ? "+" : "")@Model.SalesGrowth.MonthlyGrowthValue.ToString("C")
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Highest Revenue Day -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Peak Sales Day</h3>
+        <div class="flex flex-col items-center justify-center h-full">
+            <div class="text-4xl font-bold text-yellow-500 mb-2">@Model.HighestRevenueAmount.ToString("C")</div>
+            <div class="text-lg text-gray-700 mb-1">Highest Revenue Day</div>
+            <div class="text-gray-500">@Model.HighestRevenueDay.ToString("MMMM dd, yyyy")</div>
+            <div class="mt-4 w-16 h-1 bg-yellow-400 rounded-full"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Product Analytics -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Top Selling Products -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Top Selling Products</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Units Sold</th>
+                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach (var product in Model.TopSellingProducts.Take(5))
+                    {
+                        <tr>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">@product.ProductName</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">@product.Category</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">@product.UnitsSold</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm font-semibold text-gray-900">@product.Revenue.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Sales by Category -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Sales by Category</h3>
+        <div class="h-64">
+            <canvas id="categorySalesChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Analytics -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Best vs Least Selling Products -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Product Performance</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <h4 class="font-medium text-green-600 mb-2">Best Sellers</h4>
+                <ul class="space-y-2">
+                    @foreach (var product in Model.BestSellingProducts.Take(3))
+                    {
+                        <li class="flex justify-between text-sm">
+                            <span>@product.ProductName</span>
+                            <span class="font-medium">@product.Revenue.ToString("C")</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-medium text-red-600 mb-2">Low Performers</h4>
+                <ul class="space-y-2">
+                    @foreach (var product in Model.LeastSellingProducts.Take(3))
+                    {
+                        <li class="flex justify-between text-sm">
+                            <span>@product.ProductName</span>
+                            <span class="font-medium">@product.Revenue.ToString("C")</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Frequently Bought Together -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Frequently Bought Together</h3>
+        <div class="space-y-3">
+            @foreach (var pair in Model.FrequentlyBoughtTogether.Take(5))
+            {
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex-1">
+                        <p class="font-medium text-sm">@pair.Product1Name</p>
+                        <p class="text-gray-500 text-xs">+</p>
+                        <p class="font-medium text-sm">@pair.Product2Name</p>
+                    </div>
+                    <div class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+                        Bought together @pair.Frequency times
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Inventory and Orders -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Out of Stock Alerts -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Low Stock Alerts</h3>
+        @if (Model.OutOfStockProducts.Any())
+        {
+            <div class="space-y-3">
+                @foreach (var product in Model.OutOfStockProducts.Take(5))
+                {
+                    <div class="flex items-center justify-between p-3 border border-red-200 rounded-lg bg-red-50">
+                        <div>
+                            <p class="font-medium">@product.ProductName</p>
+                            <p class="text-sm text-gray-600">Current stock: @product.CurrentStock</p>
+                        </div>
+                        <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs font-medium">
+                            Low Stock
+                        </span>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-8 text-gray-500">
+                <i class="ri-checkbox-circle-line text-3xl text-green-500 mb-2"></i>
+                <p>All products are well-stocked</p>
+            </div>
+        }
+    </div>
+    
+    <!-- Order Status Breakdown -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Order Status Distribution</h3>
+        <div class="h-64">
+            <canvas id="orderStatusBreakdownChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Weekly Revenue Trend -->
+<div class="bg-white rounded-xl shadow-md p-6 mb-6">
+    <h3 class="text-lg font-semibold mb-4">Weekly Revenue Trend</h3>
+    <div class="h-80">
+        <canvas id="revenueTrendChart"></canvas>
+    </div>
+</div>
+
+<!-- Existing Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Order Status Chart -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Order Status Distribution</h3>
+        <div class="h-80">
+            <canvas id="orderStatusChart"></canvas>
+        </div>
+    </div>
+    
+    <!-- Payment Method Chart -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Payment Methods</h3>
+        <div class="h-80">
+            <canvas id="paymentMethodChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Category Distribution Chart -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Products by Category</h3>
+        <div class="h-80">
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+    
+    <!-- Recent Orders -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h3 class="text-lg font-semibold mb-4">Recent Orders</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach (var order in Model.RecentOrders)
+                    {
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#@order.OrderId</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@order.CustomerName</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@order.TotalPrice.ToString("C")</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    @(order.Status == "Delivered" ? "bg-green-100 text-green-800" : 
+                                      order.Status == "Shipped" ? "bg-blue-100 text-blue-800" : 
+                                      order.Status == "Processing" ? "bg-yellow-100 text-yellow-800" : 
+                                      order.Status == "Pending" ? "bg-purple-100 text-purple-800" : 
+                                      "bg-red-100 text-red-800")">
+                                    @order.Status
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Pass data to JavaScript -->
+<script>
+    window.dashboardData = {
+        orderStatus: @Html.Raw(Json.Serialize(Model.OrderStatusData)),
+        paymentMethod: @Html.Raw(Json.Serialize(Model.PaymentMethodData)),
+        categoryProductCount: @Html.Raw(Json.Serialize(Model.CategoryProductCount)),
+        dailySales: @Html.Raw(Json.Serialize(Model.DailySales)),
+        weeklySales: @Html.Raw(Json.Serialize(Model.WeeklySales)),
+        monthlySales: @Html.Raw(Json.Serialize(Model.MonthlySales)),
+        categorySales: @Html.Raw(Json.Serialize(Model.CategorySales)),
+        orderStatusBreakdown: @Html.Raw(Json.Serialize(Model.OrderStatusBreakdown)),
+        weeklyRevenueTrend: @Html.Raw(Json.Serialize(Model.WeeklyRevenueTrend.Select(x => new { 
+            WeekStartDate = x.WeekStartDate.ToString("yyyy-MM-dd"), 
+            Revenue = x.Revenue, 
+            GrowthPercentage = x.GrowthPercentage 
+        })))
+    };
+</script>
+
+@section Scripts {
+    <script src="~/js/dashboard-charts.js"></script>
+    <script>
+        // Add new chart functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sales Chart
+            const salesCtx = document.getElementById('salesChart').getContext('2d');
+            let salesChart;
+            
+            function updateSalesChart(period) {
+                let labels, values;
+                
+                switch(period) {
+                    case 'daily':
+                        labels = Object.keys(window.dashboardData.dailySales).map(date => new Date(date).toLocaleDateString());
+                        values = Object.values(window.dashboardData.dailySales);
+                        break;
+                    case 'weekly':
+                        labels = Object.keys(window.dashboardData.weeklySales).map(date => {
+                            const d = new Date(date);
+                            return `${d.toLocaleDateString()} - ${new Date(d.setDate(d.getDate() + 6)).toLocaleDateString()}`;
+                        });
+                        values = Object.values(window.dashboardData.weeklySales);
+                        break;
+                    case 'monthly':
+                        labels = Object.keys(window.dashboardData.monthlySales).map(date => {
+                            const d = new Date(date);
+                            return d.toLocaleDateString('default', { month: 'short', year: 'numeric' });
+                        });
+                        values = Object.values(window.dashboardData.monthlySales);
+                        break;
+                }
+                
+                if (salesChart) {
+                    salesChart.destroy();
+                }
+                
+                salesChart = new Chart(salesCtx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Revenue',
+                            data: values,
+                            borderColor: 'rgb(54, 162, 235)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return 'EGP ' + value.toLocaleString();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Initial chart load
+            updateSalesChart('daily');
+            
+            // Period switcher
+            document.querySelectorAll('[data-period]').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('[data-period]').forEach(btn => {
+                        btn.classList.remove('bg-blue-100', 'text-blue-600');
+                        btn.classList.add('bg-gray-100', 'text-gray-600');
+                    });
+                    this.classList.remove('bg-gray-100', 'text-gray-600');
+                    this.classList.add('bg-blue-100', 'text-blue-600');
+                    updateSalesChart(this.dataset.period);
+                });
+            });
+            
+            // Category Sales Chart
+            const categorySalesCtx = document.getElementById('categorySalesChart').getContext('2d');
+            const categorySalesChart = new Chart(categorySalesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(window.dashboardData.categorySales),
+                    datasets: [{
+                        data: Object.values(window.dashboardData.categorySales),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+            
+            // Order Status Breakdown Chart
+            const orderStatusBreakdownCtx = document.getElementById('orderStatusBreakdownChart').getContext('2d');
+            const orderStatusBreakdownChart = new Chart(orderStatusBreakdownCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(window.dashboardData.orderStatusBreakdown),
+                    datasets: [{
+                        label: 'Orders',
+                        data: Object.values(window.dashboardData.orderStatusBreakdown),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Weekly Revenue Trend Chart
+            const revenueTrendCtx = document.getElementById('revenueTrendChart').getContext('2d');
+            const revenueTrendData = window.dashboardData.weeklyRevenueTrend;
+            const revenueTrendChart = new Chart(revenueTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: revenueTrendData.map(item => {
+                        const date = new Date(item.WeekStartDate);
+                        return `${date.toLocaleDateString()} - ${new Date(date.setDate(date.getDate() + 6)).toLocaleDateString()}`;
+                    }),
+                    datasets: [
+                        {
+                            label: 'Revenue',
+                            data: revenueTrendData.map(item => item.Revenue),
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Growth %',
+                            data: revenueTrendData.map(item => item.GrowthPercentage),
+                            borderColor: 'rgb(255, 159, 64)',
+                            backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.3,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Revenue (EGP)'
+                            }
+                        },
+                        y1: {
+                            beginAtZero: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Growth (%)'
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

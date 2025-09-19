@@ -1,6 +1,7 @@
 using Efreshli.Application.DTOs.ProductDTOs;
 using Efreshli.Application.DTOs.WishlistDTOs.WishlistItemDTOs;
 using Efreshli.Application.Helper.ResultPattern;
+using Efreshli.Domain.Common.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,18 @@ namespace Efreshli.Application.Services.ProductServices
         Task<Response<ProductDetailsDto>> GetProductDetailsForAdminAsync(int productId);
         Task<Response<LocalizedProductDetailsDto>> GetProductDetailsAsync(int productId);
 
-        Task<Response<GetWishlistItemDto>> GetWishlistItemsForUserAsync(int productId);
+        Task<Response<LocalizedGetWishlistItemDto>> GetWishlistItemsForUserAsync(int productId);
+        Task<Response<List<MainProductsDto>>> GetRecommendedProducts(int categoryId);
+        //Frequently bought together
+        //Task<Response<List<LocalizedProductInfoDto>>> GetFrequentlyBoughtTogether(int productId);
 
+
+
+
+        Task<bool> DeleteProductAsync(int productId);
+        //Task<bool> DeleteProductItemAsync(int productItemId);
+        //Task<bool> DeleteProductAttributeAsync(int productAttributeId);
+        //Task<bool> DeleteProductAttributeValueAsync(int productAttributeValueId);
 
         //Task<int> CreateProductItemAsync(CreateProductItemDto createProductItemDto);
         //Task<int> CreateProductAttributeAsync(CreateProductAttributeDto createProductAttributeDto);
@@ -27,9 +38,12 @@ namespace Efreshli.Application.Services.ProductServices
         //Task<bool> UpdateProductItemAsync(UpdateProductItemDto updateProductItemDto);
         //Task<bool> UpdateProductAttributeAsync(UpdateProductAttributeDto updateProductAttributeDto);
         //Task<bool> UpdateProductAttributeValueAsync(UpdateProductAttributeValueDto updateProductAttributeValueDto);
-        Task<bool> DeleteProductAsync(int productId);
-        //Task<bool> DeleteProductItemAsync(int productItemId);
-        //Task<bool> DeleteProductAttributeAsync(int productAttributeId);
-        //Task<bool> DeleteProductAttributeValueAsync(int productAttributeValueId);
+
+        //for Home
+        //new arrivals
+        Task<Response<PaginatedResult<FilteredProductsDto>>> GetNewArrivals(int pageNumber = 1, int pageSize = 24);
+        //product in same brand
+
+
     }
 }

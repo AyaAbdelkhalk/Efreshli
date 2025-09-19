@@ -123,15 +123,23 @@ namespace Efreshli.MVC.Controllers
             return View();
         }
 
+
         [HttpDelete]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var response = await _productService.DeleteProductAsync(id);
-            if (response)
+            try
             {
-                return Ok(new { success = true });
+                var response = await _productService.DeleteProductAsync(id);
+                if (response)
+                {
+                    return Json(new { success = true, message = " „ Õ–› «·„‰ Ã »‰Ã«Õ" });
+                }
+                return Json(new { success = false, message = "›‘· ›Ì Õ–› «·„‰ Ã" });
             }
-            return BadRequest(new { success = false, message = "Failed to delete product" });
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "ÕœÀ Œÿ√ √À‰«¡ «·Õ–›: " + ex.Message });
+            }
         }
 
         private async Task PopulateDropdownData()
@@ -154,9 +162,16 @@ namespace Efreshli.MVC.Controllers
             }).ToList();
             ViewBag.ProductAttributes = productAttributes.Select(pa => new SelectListItem
             {
-                Value = pa.ProductAttributeId.ToString(), 
+                Value = pa.ProductAttributeId.ToString(),
                 Text = pa.ProductAttributeNameEn
             }).ToList();
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAttributesByCategory(int? categoryId)
+        {
+            var result = await _productAttributeService.GetAllAttributesByIdAsync(categoryId);
+            return Json(result.Data); // Â —Ã⁄ ﬁ«∆„… «·Œ’«∆’ ›ﬁÿ
+        }
+
     }
 }

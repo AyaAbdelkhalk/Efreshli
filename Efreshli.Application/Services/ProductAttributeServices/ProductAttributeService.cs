@@ -57,12 +57,38 @@ namespace Efreshli.Application.Services.ProductAttributeServices
 
         public async Task<Response<List<ProductAttributeResponseDto>>> GetAllAttributesAsync()
         {
+
             var attributes = await _unitOfWork.ProductAttributeRepository.GetAllAsync();
-            var responseDtos = attributes.Select(attribute => new ProductAttributeResponseDto
+            var responseDtos = attributes
+                .GroupBy(attr => new { attr.NameAr, attr.NameEn }) // تجميع حسب الاسم العربي والإنجليزي
+                .Select(group => group.First())
+                .Select(attribute => new ProductAttributeResponseDto
             {
                 ProductAttributeId = attribute.Id,
                 ProductAttributeNameAr = attribute.NameAr,
                 ProductAttributeNameEn = attribute.NameEn
+            })
+                .OrderBy(dto => dto.ProductAttributeNameEn)
+                . ToList();
+            return ResponseHandler.Success(responseDtos);
+        }
+        public async Task<Response<List<LocalizedProductAttributeResponseDto>>> GetAllAttributesByIdAsync(int? CategoryId)
+        {
+            if (CategoryId == null)
+            {
+                var allAttributes = await _unitOfWork.ProductAttributeRepository.GetAllAsync();
+                var allResponseDtos = allAttributes.Select(attribute => new LocalizedProductAttributeResponseDto
+                {
+                    ProductAttributeId = attribute.Id,
+                    ProductAttributeName = attribute.GetLocalized(attribute.NameAr, attribute.NameEn)
+                }).ToList();
+                return ResponseHandler.Success(allResponseDtos);
+            }
+            var attributes = await _unitOfWork.ProductAttributeRepository.GetWhereAsync(i=>i.CategoryId==CategoryId);
+            var responseDtos = attributes.Select(attribute => new LocalizedProductAttributeResponseDto
+            {
+                ProductAttributeId = attribute.Id,
+                ProductAttributeName = attribute.GetLocalized(attribute.NameAr,attribute.NameEn)
             }).ToList();
             return ResponseHandler.Success(responseDtos);
         }

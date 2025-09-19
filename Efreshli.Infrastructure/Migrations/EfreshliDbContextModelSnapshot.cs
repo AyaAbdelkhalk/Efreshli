@@ -881,6 +881,9 @@ namespace Efreshli.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Tags")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1347,7 +1350,7 @@ namespace Efreshli.Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ProductItemId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -1361,7 +1364,7 @@ namespace Efreshli.Infrastructure.Migrations
 
                     b.HasKey("WishlistItemId");
 
-                    b.HasIndex("ProductItemId");
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("WishlistId");
 
@@ -1792,9 +1795,9 @@ namespace Efreshli.Infrastructure.Migrations
 
             modelBuilder.Entity("Efreshli.Domain.Models.WishlistItem", b =>
                 {
-                    b.HasOne("Efreshli.Domain.Models.ProductItem", "ProductItem")
+                    b.HasOne("Efreshli.Domain.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductItemId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1804,7 +1807,7 @@ namespace Efreshli.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("ProductItem");
+                    b.Navigation("Product");
 
                     b.Navigation("Wishlist");
                 });

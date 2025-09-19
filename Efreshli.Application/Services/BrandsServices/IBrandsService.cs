@@ -11,6 +11,8 @@ namespace Efreshli.Application.Services.BrandsServices
     public interface IBrandsService
     {
         Task<IEnumerable<BrandResponseDto>> GetAllBrandsAsync(string? search = null, int page = 1, int pageSize = 10);
+        Task<Response<IEnumerable<LocalizedBrandResponseDto>>> GetAllBrandsForUserAsync(string? search = null, int page = 1, int pageSize = 10);
+
         Task<BrandResponseDto?> GetBrandByIdAsync(int id);
         Task<Response<BrandResponseDto>> CreateBrandAsync(CreateBrandDto brandDto);
         Task<BrandResponseDto?> UpdateBrandAsync(int id, UpdateBrandDto brandDto);

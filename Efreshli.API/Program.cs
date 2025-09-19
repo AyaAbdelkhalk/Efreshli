@@ -42,6 +42,10 @@ namespace Efreshli.API
             builder.Services.AddControllers(options =>
             {
                 options.Filters.Add<ValidateModelAsyncFilter>();
+
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
             });
             builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
@@ -62,7 +66,7 @@ namespace Efreshli.API
                 options.AddPolicy(name: AllowOrigins,
                     policy =>
                     {
-                        policy.WithOrigins(
+                        //policy.WithOrigins(
 
                             "https://efresli-front.netlify.app",
                             "https://efeshli-front.vercel.app",
@@ -70,9 +74,12 @@ namespace Efreshli.API
                             "http://localhost:4200",
                             "https://localhost:4200"
                         )
+
+                        policy.AllowAnyOrigin()
+
                         .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
+                        .AllowAnyMethod();
+                        //.AllowCredentials();
                     });
             });
 
