@@ -15,6 +15,7 @@ namespace Efreshli.Application.Services.CouponServices
         #region Addmin functions
         Task<CouponDTO> GetCouponByIdAsync(int id);
         Task<CouponDTO> GetCouponByCodeAsync(string code);
+        //Task ApplayCoupon(string code,);
         Task<IEnumerable<CouponDTO>> GetAllCouponsAsync();
         Task<CouponDTO> CreateCouponAsync(AddCouponDTO couponDto);
         Task UpdateCouponAsync(UpdateCouponDTO couponDto);

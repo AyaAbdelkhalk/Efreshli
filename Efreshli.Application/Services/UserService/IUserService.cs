@@ -17,7 +17,8 @@ namespace Efreshli.Application.Services.UserService
         Task<int> TotalCount();
         Task<int> CustomersCount();
         Task<int> AdminsCount();
-        Task<PaginatedResult<UserDto>> PageResult(string userRole=null);
+        Task<Response<UserProfileResponseDto>> GetProfileDataAsync();
+        //Task<PaginatedResult<ProfileResponseDto>> PageResult(string userRole=null);
         Task<Response<string>> UpdateProfileAsync(UpdateProfileDto updateProfileDto);
 
     }

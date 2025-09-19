@@ -25,13 +25,13 @@ namespace Efreshli.API.Controllers
         /// <param name="couponId">Optional coupon ID to apply discount</param>
         /// <returns>Checkout preview with subtotal, shipping, discounts, and total</returns>
         [HttpGet("checkout-preview")]
-        public async Task<IActionResult> GetCheckoutPreview([FromQuery] int? couponId = null)
+        public async Task<IActionResult> GetCheckoutPreview([FromQuery] string? couponCode = null)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            var result = await _orderService.GetCheckoutPreviewAsync(userId, couponId);
+            var result = await _orderService.GetCheckoutPreviewAsync(userId, couponCode);
             return result.Succeeded ? Ok(result) : BadRequest(result);
         }
 

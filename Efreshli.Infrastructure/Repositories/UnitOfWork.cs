@@ -1,10 +1,11 @@
-using Efreshli.Application.Interfaces;
+﻿using Efreshli.Application.Interfaces;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
 using Efreshli.Infrastructure.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,10 +89,26 @@ namespace Efreshli.Infrastructure.Repositories
 
 
 
+        public async Task<T> ExecuteInTransactionAsync<T>(Func<Task<T>> operation)
+        {
+            var strategy = _context.Database.CreateExecutionStrategy();
 
+            return await strategy.ExecuteAsync(async () =>
+            {
+                await using var transaction = await _context.Database.BeginTransactionAsync();
 
+                var result = await operation(); // تنفيذ العملية وإرجاع القيمة
+    
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
 
-
+                return result; // هنا يتم إعادة القيمة للـ lambda
+            });
+        }
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
+        }
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return _context.SaveChangesAsync(cancellationToken);

@@ -14,6 +14,7 @@ namespace Efreshli.Domain.Enums
         BankTransfer = 4,
         ApplePay = 5,
         GooglePay = 6,
-        Other = 7
+        Stripe= 7,
+        Other = 8
     }
 }
