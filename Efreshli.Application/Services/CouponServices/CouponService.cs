@@ -2,6 +2,7 @@ using Efreshli.Application.DTOs.CouponDTOs;
 using Efreshli.Application.DTOs.OrderDTOs;
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Interfaces;
+using Efreshli.Application.Services.CartServices;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
 using FluentValidation;
@@ -21,9 +22,11 @@ namespace Efreshli.Application.Services.CouponServices
     {
         #region Props&Ctor
         private readonly IUnitOfWork _unitOfWork;
-        public CouponService(IUnitOfWork unitOfWork)
+        private readonly ICartService _cartService;
+        public CouponService(IUnitOfWork unitOfWork, ICartService cartService)
         {
             _unitOfWork = unitOfWork;
+            _cartService = cartService;
 
         }
         #endregion
@@ -138,62 +141,55 @@ namespace Efreshli.Application.Services.CouponServices
             await _unitOfWork.SaveChangesAsync();
             return true;
         }
-
-        public async Task<Response<CouponValidationResponseDto>> ValidateCouponAsync(
-              string couponCode, string userId)
+        public async Task<Response<CouponValidationResponseDto>> ValidateCouponAsync(string couponCode, string userId)
         {
-           
-                // Input validation
-                if (string.IsNullOrWhiteSpace(couponCode))
-                    return ResponseHandler.ValidationError<CouponValidationResponseDto>("Coupon code is required");
+            // Basic checks
+            if (string.IsNullOrWhiteSpace(couponCode))
+                return ResponseHandler.ValidationError<CouponValidationResponseDto>("Coupon code is required");
 
-                if (string.IsNullOrWhiteSpace(userId))
-                    return ResponseHandler.ValidationError<CouponValidationResponseDto>("User ID is required");
+            if (string.IsNullOrWhiteSpace(userId))
+                return ResponseHandler.ValidationError<CouponValidationResponseDto>("User ID is required");
 
-            var subTotalPrice = 8998;//_unitOfWork.CartRepository;
-                if (subTotalPrice <= 0)
-                    return ResponseHandler.ValidationError<CouponValidationResponseDto>("Subtotal must be greater than zero");
+            // Get cart subtotal from service
+            var subTotalPrice = await _cartService.GetGrandTotalOfCart(userId);
+            if (subTotalPrice <= 0)
+                return ResponseHandler.ValidationError<CouponValidationResponseDto>("Cart is empty");
 
-                // Get coupon
-                var coupon = await _unitOfWork.CouponRepository.GetFirstOrDefaultAsync(c => c.Code == couponCode);
-                if (coupon == null)
-                    return ResponseHandler.NotFound<CouponValidationResponseDto>("Coupon not found");
+            // Fetch coupon
+            var coupon = await _unitOfWork.CouponRepository.GetFirstOrDefaultAsync(c => c.Code == couponCode);
+            if (coupon == null)
+                return ResponseHandler.NotFound<CouponValidationResponseDto>("Coupon not found");
 
-                // Validate coupon status
-                if (!coupon.IsActive)
-                    return ResponseHandler.BadRequest<CouponValidationResponseDto>("Coupon is not active");
+            // Validate rules
+            if (!coupon.IsActive)
+                return ResponseHandler.BadRequest<CouponValidationResponseDto>("Coupon is not active");
 
-                if (coupon.ExpireDate < DateTime.UtcNow)
-                    return ResponseHandler.BadRequest<CouponValidationResponseDto>("Coupon has expired");
+            if (coupon.ExpireDate < DateTime.UtcNow)
+                return ResponseHandler.BadRequest<CouponValidationResponseDto>("Coupon has expired");
 
-                if (coupon.UsedCount >= coupon.UsageLimit)
-                    return ResponseHandler.BadRequest<CouponValidationResponseDto>("Coupon usage limit reached");
+            if (coupon.UsedCount >= coupon.UsageLimit)
+                return ResponseHandler.BadRequest<CouponValidationResponseDto>("Coupon usage limit reached");
 
-                // Check if user has already used this coupon
-                var hasUsed = await HasUserUsedCouponAsync(coupon.CouponId, userId);
-                if (hasUsed)
-                    return ResponseHandler.BadRequest<CouponValidationResponseDto>("You have already used this coupon");
+            if (await HasUserUsedCouponAsync(coupon.CouponId, userId))
+                return ResponseHandler.BadRequest<CouponValidationResponseDto>("You have already used this coupon");
 
-                // Check minimum order amount if specified
-                if (coupon.MinOrderAmount.HasValue && subTotalPrice < coupon.MinOrderAmount.Value)
-                    return ResponseHandler.BadRequest<CouponValidationResponseDto>(
-                        $"Minimum order amount of {coupon.MinOrderAmount.Value} required for this coupon");
+            if (coupon.MinOrderAmount.HasValue && subTotalPrice < coupon.MinOrderAmount.Value)
+                return ResponseHandler.BadRequest<CouponValidationResponseDto>(
+                    $"Minimum order amount of {coupon.MinOrderAmount.Value} required for this coupon");
 
-                // Calculate order preview
-                var orderPreview = await CalculateOrderPreview(coupon, subTotalPrice);
+            // Build order preview
+            var orderPreview = await CalculateOrderPreview(coupon, subTotalPrice);
 
-                // Prepare success response
-                var responseDto = new CouponValidationResponseDto
-                {
-                    IsValid = true,
-                    Message = "Coupon is valid",
-                    OrderPreview = orderPreview
-                };
+            var responseDto = new CouponValidationResponseDto
+            {
+                IsValid = true,
+                Message = "Coupon is valid",
+                OrderPreview = orderPreview
+            };
 
-                return ResponseHandler.Success(responseDto, "Coupon validated successfully");
-           
+            return ResponseHandler.Success(responseDto, "Coupon validated successfully");
         }
-
+      
         private async Task<OrderCheckOutPreviewDto> CalculateOrderPreview(Coupon coupon, decimal subTotalPrice)
         {
             decimal discountValue = coupon.IsPercentage

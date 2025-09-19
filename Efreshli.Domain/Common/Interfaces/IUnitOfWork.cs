@@ -1,4 +1,5 @@
 using Efreshli.Domain.Models;
+using Microsoft.EntityFrameworkCore.Storage;
 
 
 namespace Efreshli.Domain.Common.Interfaces
@@ -30,8 +31,9 @@ namespace Efreshli.Domain.Common.Interfaces
         IGenericRepository<VendorRequest> VendorRequestRepository { get; }
 
 
+        Task<T> ExecuteInTransactionAsync<T>(Func<Task<T>> operation);
 
-
+        Task<IDbContextTransaction> BeginTransactionAsync();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     }

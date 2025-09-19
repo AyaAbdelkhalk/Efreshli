@@ -31,6 +31,13 @@ namespace Efreshli.API.Controllers
             var response = await _userService.UpdateProfileAsync(updateProfileDto);
             return this.CreateResponse(response);
         } 
+        [Authorize]
+        [HttpGet("get-profile")]
+        public async Task<IActionResult> GetProfile()
+        {
+           var result=await _userService.GetProfileDataAsync();
+          return this.CreateResponse(result);
+        }
         #endregion
 
         #region Address

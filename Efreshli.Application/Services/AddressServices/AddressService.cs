@@ -4,13 +4,15 @@ using Efreshli.Application.Resources;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
 using Mapster;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using static Efreshli.Application.Resources.SharedResourcesKeys.Efreshli;
+using Addr = Efreshli.Domain.Models.Address;
 namespace Efreshli.Application.Services.AddressServices
 {
     public class AddressService : IAddressService
@@ -31,7 +33,7 @@ namespace Efreshli.Application.Services.AddressServices
         public async Task<Response<AddressResponseDto>> CreateAsync(CreateAddressDto createAddressDto)
         {
             var userId=_userContext.CurrentUserId;
-            var addressToAdd = createAddressDto.Adapt<Address>();
+            var addressToAdd = createAddressDto.Adapt<Addr>();
             addressToAdd.ApplicationUserId = userId;
 
            var result = await  _unitOfWork.AddressRepository.AddAsync(addressToAdd);
@@ -74,9 +76,11 @@ namespace Efreshli.Application.Services.AddressServices
 
         public async Task<Response<IEnumerable<AddressResponseDto>>> GetCurrentUserAddressesAsync()
         {
-           var result= await GetByUserIdAsync(_userContext.CurrentUserId);
-            if(result==null || !result.Data.Any()) return ResponseHandler.NotFound<IEnumerable<AddressResponseDto>>(_localizer[SharedResourcesKeys.Error.DataNotFound]);
-            return ResponseHandler.Success(result.Data);
+           var addresses = await  _unitOfWork.AddressRepository.GetAll().Where(x => x.ApplicationUserId == _userContext.CurrentUserId).ToListAsync();
+            var mappedAddress = addresses.Adapt<IEnumerable<AddressResponseDto>>();
+           
+            if (mappedAddress == null || !mappedAddress.Any()) return ResponseHandler.NotFound<IEnumerable<AddressResponseDto>>(_localizer[SharedResourcesKeys.Error.DataNotFound]);
+            return ResponseHandler.Success(mappedAddress);
         
         }
 
@@ -85,8 +89,8 @@ namespace Efreshli.Application.Services.AddressServices
             var address =await _unitOfWork.AddressRepository.GetByIdAsync(updateAddressDto.AddressId);
             if(address == null) return ResponseHandler.NotFound<AddressResponseDto>(_localizer[SharedResourcesKeys.Error.DataNotFound]);
 
-            var addressToAdd = updateAddressDto.Adapt<Address>();
-            var result=await _unitOfWork.AddressRepository.UpdateAsync(addressToAdd);
+           updateAddressDto.Adapt(address);
+            var result=await _unitOfWork.AddressRepository.UpdateAsync(address);
             if(result == null) return ResponseHandler.BadRequest<AddressResponseDto>(_localizer[SharedResourcesKeys.Error.BadRequest]);
            
             await _unitOfWork.SaveChangesAsync();
