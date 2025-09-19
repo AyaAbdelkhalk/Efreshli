@@ -1955,8 +1955,8 @@ namespace Efreshli.Application.Services.OrderServices
 
                     var coupon = await _unitOfWork.CouponRepository.GetAll().FirstOrDefaultAsync(x => x.Code == CouponCode);//.GetByIdAsync(couponId.Value);
                     if (coupon != null && coupon.IsActive && DateOnly.FromDateTime(coupon.ExpireDate) >= DateOnly.FromDateTime(DateTime.Now))
-
-                    var coupon = await _unitOfWork.CouponRepository.GetByIdAsync(couponId.Value);
+                     //عملت دا كومنت 
+                    //var coupon = await _unitOfWork.CouponRepository.GetByIdAsync(couponId.Value);
                     if (coupon != null)
 
                     {
