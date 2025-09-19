@@ -230,12 +230,12 @@
 //    }
 
 //    // Helper to map string to your Domain.Enums.PaymentMethod
-//    private Domain.Enums.PaymentMethod MapToPaymentMethod(string paymentMethodStr)
-//    {
-//        if (Enum.TryParse<Domain.Enums.PaymentMethod>(paymentMethodStr, true, out var pm))
-//            return pm;
-//        return Domain.Enums.PaymentMethod.CreditCard; // fallback
-//    }
+//    //private Domain.Enums.PaymentMethod MapToPaymentMethod(string paymentMethodStr)
+//    //{
+//    //    if (Enum.TryParse<Domain.Enums.PaymentMethod>(paymentMethodStr, true, out var pm))
+//    //        return pm;
+//    //    return Domain.Enums.PaymentMethod.CreditCard; // fallback
+//    //}
 
 //    // Endpoint the Angular success page can call to get order by session id
 //    [HttpGet("session-order")]
