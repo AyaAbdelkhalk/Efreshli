@@ -98,10 +98,11 @@ namespace Efreshli.Application.Services.WishlistServices
                 {
                     WishlistId = w.WishlistId,
                     WishlistName = w.Name,
-                    ItemsCount = w.WishlistItems.Count(),
                     MainImages = GetMainImagesUrlsAsync(w.WishlistId).Result.Data,
                     //wishlistItemsDto = GetWishlistItemByWishListIdAsync(w.WishlistId).Result.Data,
-                    WishlistUrl = $"api/wishlist/{w.WishlistId}"
+                    WishlistUrl = $"api/wishlist/{w.WishlistId}",
+                    ItemsCount = GetWishlistItemsByWishListIdAsync(w.WishlistId).Result.Data.Count(),
+
 
                 }).ToList();
                 return ResponseHandler.Success(wishlistDtos);
@@ -162,11 +163,11 @@ namespace Efreshli.Application.Services.WishlistServices
                 {
                     WishlistId = wishlist.Result.WishlistId,
                     WishlistName = wishlist.Result.Name,
-                    ItemsCount = wishlist.Result.WishlistItems.Count(),
                     wishlistItemsDto = GetWishlistItemsByWishListIdAsync(wishlistId).Result.Data,
                     WishlistUrl = $"api/wishlist/{wishlist.Result.WishlistId}"
                     
                 };
+                dto.ItemsCount = dto.wishlistItemsDto.Count();
                 return ResponseHandler.Success(dto);
             }
             catch (Exception ex)
@@ -219,7 +220,7 @@ namespace Efreshli.Application.Services.WishlistServices
         public async Task<Response<List<LocalizedGetWishlistItemDto>>> GetWishlistItemsByWishListIdAsync(int wishlistId)
         {
             var wishlistItems = await _unitOfWork.WishlistItemRepository.GetAllWithIncludeAsync(
-                w => w.WishlistId == wishlistId,
+                w => w.WishlistId == wishlistId && w.Product.IsDeleted==false,
                 includes: new Expression<Func<WishlistItem, object>>[]
                 {
                     c=>c.Product!
@@ -456,7 +457,7 @@ namespace Efreshli.Application.Services.WishlistServices
                 {
                     WishlistId = wishlist.WishlistId,
                     WishlistName = wishlist.Name,
-                    ItemsCount = wishlist.WishlistItems.Count(),
+                    ItemsCount = GetWishlistItemsByWishListIdAsync(wishlist.WishlistId).Result.Data.Count(),
                     IsInWishlist = isInWishlist.Data
                 });
             }
