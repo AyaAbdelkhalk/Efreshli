@@ -1289,6 +1289,7 @@
 using Efreshli.Application.DTOs.OrderDTOs;
 using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Helper.Pagination;
+using Efreshli.Application.Services.CouponServices;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Enums;
 using Efreshli.Domain.Models;
@@ -1304,13 +1305,15 @@ namespace Efreshli.Application.Services.OrderServices
         private readonly IUnitOfWork _unitOfWork;
 
         private readonly IUserContext _userContext;
+        private readonly ICouponService _couponService;
         private const decimal DEFAULT_SHIPPING_PRICE = 50.0m;
         private const int DEFAULT_DELIVERY_DAYS = 3;
 
-        public OrderService(IUnitOfWork unitOfWork, IUserContext userContext)
+        public OrderService(IUnitOfWork unitOfWork, IUserContext userContext, ICouponService couponService)
         {
             _unitOfWork = unitOfWork;
             _userContext = userContext;
+            _couponService = couponService;
         }
 
         public async Task<Response<Order>> CreateOrderFromStripeSessionAsync(Session session)
@@ -1949,14 +1952,31 @@ namespace Efreshli.Application.Services.OrderServices
                 decimal discountValue = 0;
                 if (!string.IsNullOrWhiteSpace(CouponCode))
                 {
+
                     var coupon = await _unitOfWork.CouponRepository.GetAll().FirstOrDefaultAsync(x => x.Code == CouponCode);//.GetByIdAsync(couponId.Value);
                     if (coupon != null && coupon.IsActive && DateOnly.FromDateTime(coupon.ExpireDate) >= DateOnly.FromDateTime(DateTime.Now))
+
+                    var coupon = await _unitOfWork.CouponRepository.GetByIdAsync(couponId.Value);
+                    if (coupon != null)
+
                     {
-                        if (subTotal >= (coupon.MinOrderAmount ?? 0))
+                        // Use CouponService to validate the coupon properly
+                        var couponValidation = await _couponService.ValidateCouponAsync(coupon.Code, userId);
+                        if (couponValidation.Succeeded && couponValidation.Data.IsValid)
                         {
+
                             discountValue = coupon.IsPercentage
                                 ? (subTotal * coupon.DiscountValue / 100)
                                 : coupon.DiscountValue;
+
+                            // Calculate discount using the validated coupon
+                            if (subTotal >= (coupon.MinOrderAmount ?? 0))
+                            {
+                                discountValue = coupon.IsPercentage 
+                                    ? (subTotal * coupon.DiscountValue / 100)
+                                    : coupon.DiscountValue;
+                            }
+
                         }
                     }
                 }
@@ -2037,16 +2057,28 @@ namespace Efreshli.Application.Services.OrderServices
                 Coupon? coupon = null;
                 if (!string.IsNullOrWhiteSpace(createOrderDto.CouponCode))
                 {
+
                     coupon = await _unitOfWork.CouponRepository.GetAll().FirstOrDefaultAsync(x => x.Code == createOrderDto.CouponCode);//GetByIdAsync(createOrderDto.CouponId.Value);
                     if (coupon != null && coupon.IsActive && DateOnly.FromDateTime(coupon.ExpireDate) >= DateOnly.FromDateTime(DateTime.Now))
+
+                    // Get coupon for order creation (we need the entity)
+                    coupon = await _unitOfWork.CouponRepository.GetByIdAsync(createOrderDto.CouponId.Value);
+                    if (coupon != null)
+
                     {
+                        // Use CouponService to validate the coupon properly
+                        var couponValidation = await _couponService.ValidateCouponAsync(coupon.Code, userId);
+                        if (!couponValidation.Succeeded || !couponValidation.Data.IsValid)
+                        {
+                            return ResponseHandler.BadRequest<OrderDto>(couponValidation.Message ?? "Invalid coupon");
+                        }
+
+                        // Calculate discount using the validated coupon
                         if (subTotal >= (coupon.MinOrderAmount ?? 0))
                         {
                             discountValue = coupon.IsPercentage
                                 ? (subTotal * coupon.DiscountValue / 100)
                                 : coupon.DiscountValue;
-
-                            // No max discount amount property found in model
                         }
                     }
                 }

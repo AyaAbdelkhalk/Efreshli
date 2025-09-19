@@ -1,4 +1,5 @@
 ﻿using Efreshli.Application.DTOs.BrandDTOs;
+using Efreshli.Application.Helper.ResultPattern;
 using Efreshli.Application.Services.BrandsServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +15,19 @@ namespace Efreshli.API.Controllers
         {
             _brandsService = brandsService;
         }
-        [HttpGet]
+        [HttpGet("AllBrands")]
         public async Task<IActionResult> GetAllBrands(string? search = null, int page = 1, int pageSize = 10)
         {
             var brands = await _brandsService.GetAllBrandsAsync(search, page, pageSize);
             return Ok(brands);
         }
+        [HttpGet("Brands")]
+        public async Task<IActionResult> GetBrands()
+        {
+            var brands = await _brandsService.GetAllBrandsForUserAsync();
+            return this.CreateResponse(brands);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBrandById(int id)
         {

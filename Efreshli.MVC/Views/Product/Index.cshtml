@@ -289,15 +289,7 @@
             border-color: #dc2626;
         }
 
-   
 
-    /* Table Animation */
-    .admin-table-row {
-        opacity: 0;
-        animation: fadeInUp 0.4s ease forwards;
-    }
-
-  
 
     /* Custom Scrollbar */
     .admin-products-table-container::-webkit-scrollbar {
@@ -317,6 +309,20 @@
         .admin-products-table-container::-webkit-scrollbar-thumb:hover {
             background: var(--secondary-color);
         }
+
+
+   
+    /* بدلاً من هذا: */
+    .admin-table-row {
+        opacity: 0;
+        animation: fadeInUp 0.4s ease forwards;
+    }
+
+    /* استخدم هذا: */
+    .admin-table-row {
+        transition: var(--transition);
+        background: var(--background-white);
+    }
 </style>
 
 <div class="admin-products-page">
@@ -338,7 +344,7 @@
                     <th style="width: 80px;">Image</th>
                     <th style="width: 250px;">Product Name</th>
                     <th style="width: 120px;">Price</th>
-                    <th style="width: 100px;">Colors</th>
+                    @* <th style="width: 100px;">Colors</th> *@
                     <th style="width: 150px;">Dimensions</th>
                     <th style="width: 120px;">Actions</th>
                 </tr>
@@ -350,7 +356,7 @@
 
                 @foreach (var product in Model)
                 {
-                    <tr class="admin-table-row" style="animation-delay: @(Model.ToList().IndexOf(product) * 0.1)s;">
+                        <tr class="admin-table-row">
                         <!-- Product Image -->
                         <td class="admin-table-cell admin-product-image-cell">
                             @if (product.ImageUrl == null || product.ImageUrl == "")
@@ -381,13 +387,13 @@
                             </div>
                         </td>
 
-                        <!-- Colors Count -->
+                       @*  <!-- Colors Count -->
                         <td class="admin-table-cell">
                             <span class="admin-badge colors">
                                 <i class="fa-solid fa-palette" style="font-size: 10px; margin-left: 4px;"></i>
                                 @(product.ProductItemColorsUrls?.Count ?? 0) Color
                             </span>
-                        </td>
+                        </td> *@
 
                         <!-- Dimensions -->
                         <td class="admin-table-cell">
@@ -405,10 +411,11 @@
                                    class="admin-icon-btn admin-btn-view" title="عرض التفاصيل">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>
-                                <button class="admin-icon-btn admin-btn-delete" title="حذف المنتج"
+                                <a 
+                                    class="admin-icon-btn admin-btn-delete" title="حذف المنتج"
                                         onclick="confirmDelete(@product.ProductId)">
                                     <i class="fa-solid fa-trash"></i>
-                                </button>
+                                </a>
                             </div>
                         </td>
                     </tr>
@@ -494,23 +501,44 @@
         });
 
         if (result.isConfirmed) {
-            const response = await fetch(`/Product/DeleteProduct/${productId}`, {
-                method: 'DELETE'
-            });
-
-            if (response.ok) {
-                Swal.fire({
-                    title: 'تم الحذف!',
-                    text: '✅ تم حذف المنتج بنجاح',
-                    icon: 'success',
-                    confirmButtonText: 'تمام'
-                }).then(() => {
-                    location.reload();
+            try {
+                const response = await fetch(`/Product/DeleteProduct/${productId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
                 });
-            } else {
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'تم الحذف!',
+                            text: '✅ تم حذف المنتج بنجاح',
+                            icon: 'success',
+                            confirmButtonText: 'تمام'
+                        }).then(() => {
+                            // إعادة تحميل الصفحة لتحديث القائمة
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'خطأ',
+                            text: '❌ ' + (data.message || 'حصل خطأ أثناء الحذف'),
+                            icon: 'error',
+                            confirmButtonText: 'حسناً'
+                        });
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
                 Swal.fire({
-                    title: 'خطأ',
-                    text: '❌ حصل خطأ أثناء الحذف',
+                    title: 'خطأ في الشبكة',
+                    text: '❌ تعذر الاتصال بالخادم',
                     icon: 'error',
                     confirmButtonText: 'حسناً'
                 });
@@ -519,15 +547,10 @@
     }
 
 
-
     // Add loading animation when page loads
     document.addEventListener('DOMContentLoaded', function() {
         const tableRows = document.querySelectorAll('.admin-table-row');
 
-        // Animate table rows on load
-        tableRows.forEach((row, index) => {
-            row.style.animationDelay = `${index * 0.05}s`;
-        });
 
         // Enhanced image hover effects
         const productImages = document.querySelectorAll('.admin-product-image');

@@ -10,8 +10,8 @@ namespace Efreshli.Application.DTOs.CategoryDTOs
     public class UpdateCategoryDto
     {
         public int CategoryId { get; set; }
-        public string NameAr { get; set; }
-        public string NameEn { get; set; }
+        public string? NameAr { get; set; }
+        public string? NameEn { get; set; }
         public int? ParentId { get; set; }
         public IFormFile? Image { get; set; }
     }

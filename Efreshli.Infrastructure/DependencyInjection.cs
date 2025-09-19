@@ -27,6 +27,7 @@ namespace Efreshli.Infrastructure
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IGenericRepository<Cart>, GenericRepository<Cart>>();
 
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Initialize static UserContext
@@ -48,6 +49,7 @@ namespace Efreshli.Infrastructure
             services.AddScoped<IBrandsRepository, BrandsRepository>();
             services.AddScoped<ICouponRepository, CouponRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IOrderItemRepo, OrderItemRepo>();
 
             #region AI dependencies
             services.Configure<OpenAISettings>(configuration.GetSection("OpenAISettings"));

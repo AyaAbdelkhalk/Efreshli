@@ -1,4 +1,4 @@
-﻿@using Efreshli.Application.Resources
+﻿﻿@using Efreshli.Application.Resources
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<SharedResources> _stringLocalizer
 @using Efreshli.Application.DTOs.ProductDTOs
@@ -39,6 +39,22 @@
                     <textarea asp-for="DescriptionEn" class="ef-form-control" rows="4" placeholder="Detailed product description in English"></textarea>
                 </div>
             </div>
+            <div class="ef-form-group">
+                <label for="tagsInput">Tags (افصل بين كل تاج والتاني بكوما ,)</label>
+                <input type="text" id="tagsInput" name="TagsInput" class="ef-form-control"
+                       placeholder="مثال: chair,sofa,modern"
+                       oninput="updateTagsPreview()" />
+                <span asp-validation-for="TagsInput" class="text-danger"></span>
+
+                <!-- معاينة التاجز -->
+                <div id="tagsPreview" style="margin-top: 10px; display: none;">
+                    <small style="color: #6b7280;">المعاينة:</small>
+                    <div id="tagsContainer" style="margin-top: 5px;"></div>
+                </div>
+
+                <!-- حقل مخفي لإرسال التاجز كقائمة -->
+                <input type="hidden" id="tagsHidden" name="Tags" />
+            </div>
 
             <div class="ef-form-grid">
                 <div>
@@ -76,7 +92,7 @@
 
             <div>
                 <label class="ef-label">3D مودل</label>
-                <input type="file" name="Model_3D"  class="ef-form-control" accept=".glb/image/*" />
+                <input type="file" name="Model_3D" class="ef-form-control" accept=".glb/image/*" />
                 <small style="color: #6b7280; margin-top: 5px; display: block;">يمكنك اضافة 3 موديل للمنتج</small>
             </div>
         </div>
@@ -166,7 +182,7 @@
                         <option value="">-- اختر الخاصية --</option>
                         @foreach (var attr in (List<SelectListItem>)ViewBag.ProductAttributes)
                         {
-                                <option value="@attr.Value">@attr.Text</option>
+                                    <option value="@attr.Value">@attr.Text</option>
                         }
                     </select>
                 </td>
@@ -226,7 +242,7 @@
                                        type="number"
                                        placeholder="0" />
                             </div>
-                            
+
                             <div>
                             <label class="ef-label">الخصم</label>
                             <div style="display: flex; gap: 0.5rem;">
@@ -328,7 +344,38 @@
             productItemIndex++;
             updateItemNumbers();
         }
+                function updateTagsPreview() {
+            const input = document.getElementById('tagsInput');
+            const preview = document.getElementById('tagsPreview');
+            const container = document.getElementById('tagsContainer');
+            const hiddenField = document.getElementById('tagsHidden');
 
+            if (input.value.trim() === '') {
+                preview.style.display = 'none';
+                hiddenField.value = '';
+                return;
+            }
+
+            // تقسيم التاجز وتنظيفها
+            const tags = input.value.split(',')
+                .map(tag => tag.trim())
+                .filter(tag => tag.length > 0);
+
+            if (tags.length > 0) {
+                preview.style.display = 'block';
+
+                // عرض التاجز
+                container.innerHTML = tags.map(tag =>
+                    `<span style="background: #7c2d92; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; margin: 0 3px 3px 0; display: inline-block;">${tag}</span>`
+                ).join('');
+
+                // تحديث الحقل المخفي
+                hiddenField.value = JSON.stringify(tags);
+            } else {
+                preview.style.display = 'none';
+                hiddenField.value = '';
+            }
+        }
         // حذف منتج فرعي
         function removeProductItem(button) {
             const card = button.closest('.ef-product-item-card');
@@ -463,7 +510,7 @@
             submitBtn.disabled = false;
         });
 
-        
+
         document.head.appendChild(style);
     </script>
 }
