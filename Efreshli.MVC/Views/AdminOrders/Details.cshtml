@@ -1,0 +1,331 @@
+@using Efreshli.Domain.Enums
+@model Efreshli.MVC.Models.ViewModels.AdminOrderDetailsViewModel
+
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">Order Details</h2>
+        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Orders
+        </a>
+    </div>
+
+    <!-- Success/Error Messages -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Order Header -->
+    <div class="card shadow-sm mb-4 rounded-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h4 class="mb-1">Order #@Model.OrderId</h4>
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="me-3">
+                            <i class="fas fa-calendar-alt text-muted me-1"></i>
+                            @Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                        </span>
+                        <span>
+                            <i class="fas fa-sync-alt text-muted me-1"></i>
+                            Updated: @Model.LastUpdated.ToString("MMM dd, yyyy HH:mm")
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <!-- Status Update Form -->
+                    <form asp-action="UpdateStatus" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="OrderId" value="@Model.OrderId" />
+                        <div class="input-group">
+                            <select name="Status" class="form-select" style="width: auto;">
+                                <option value="@OrderStatus.Pending" selected="@(Model.Status == OrderStatus.Pending)">Pending</option>
+                                <option value="@OrderStatus.Processing" selected="@(Model.Status == OrderStatus.Processing)">Processing</option>
+                                <option value="@OrderStatus.Shipped" selected="@(Model.Status == OrderStatus.Shipped)">Shipped</option>
+                                <option value="@OrderStatus.Delivered" selected="@(Model.Status == OrderStatus.Delivered)">Delivered</option>
+                                <option value="@OrderStatus.Cancelled" selected="@(Model.Status == OrderStatus.Cancelled)">Cancelled</option>
+                            </select>
+                            <button type="submit" class="btn btn-outline-primary">
+                                <i class="fas fa-sync"></i> Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Customer Information -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm mb-4 rounded-3 h-100">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Customer Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1">Customer</h6>
+                            <p class="mb-0">@Model.CustomerName</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary" title="Edit Customer">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="text-muted mb-1">Phone</h6>
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-0">@(string.IsNullOrEmpty(Model.CustomerPhone) ? "N/A" : Model.CustomerPhone)</p>
+                            <button class="btn btn-sm btn-outline-secondary" title="Copy Phone Number" 
+                                    onclick="copyToClipboard('@(string.IsNullOrEmpty(Model.CustomerPhone) ? "" : Model.CustomerPhone)')" 
+                                    @(string.IsNullOrEmpty(Model.CustomerPhone) ? "disabled" : "")>
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <h6 class="text-muted mb-1">Address</h6>
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-0">@(string.IsNullOrEmpty(Model.CustomerAddress) ? "N/A" : Model.CustomerAddress)</p>
+                            <button class="btn btn-sm btn-outline-secondary" title="Copy Address" 
+                                    onclick="copyToClipboard('@(string.IsNullOrEmpty(Model.CustomerAddress) ? "" : Model.CustomerAddress)')" 
+                                    @(string.IsNullOrEmpty(Model.CustomerAddress) ? "disabled" : "")>
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4 rounded-3 h-100">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Product</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-end">Unit Price</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Products.Any())
+                                {
+                                    @foreach (var item in Model.Products)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="fw-medium">@item.ProductName</div>
+                                            </td>
+                                            <td class="text-center">@item.Quantity</td>
+                                            <td class="text-end">@item.UnitPrice.ToString("C")</td>
+                                            <td class="text-end fw-medium">@item.TotalPrice.ToString("C")</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center py-3 text-muted">
+                                            No products found in this order
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="border-top pt-3 mt-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Payment Method</h6>
+                                <p>
+                                    @if (Model.PaymentMethod == PaymentMethod.CashOnDelivery)
+                                    {
+                                        <span class="badge bg-warning-subtle text-warning-emphasis">Cash on Delivery</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success-subtle text-success-emphasis">Online Payment</span>
+                                    }
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted">Customer Notes</h6>
+                                <textarea class="form-control" rows="2" readonly>@Model.CustomerNotes</textarea>
+                            </div>
+                        </div>
+
+                        <div class="border-top pt-3 mt-3">
+                            <div class="row">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <h6 class="text-muted">Order Status</h6>
+                                    @switch (Model.Status)
+                                    {
+                                        case OrderStatus.Pending:
+                                            <span class="badge rounded-pill bg-warning fs-6">Pending</span>
+                                            break;
+                                        case OrderStatus.Processing:
+                                            <span class="badge rounded-pill bg-primary fs-6">Processing</span>
+                                            break;
+                                        case OrderStatus.Shipped:
+                                            <span class="badge rounded-pill bg-purple fs-6">Shipped</span>
+                                            break;
+                                        case OrderStatus.Delivered:
+                                            <span class="badge rounded-pill bg-success fs-6">Delivered</span>
+                                            break;
+                                        case OrderStatus.Cancelled:
+                                            <span class="badge rounded-pill bg-danger fs-6">Cancelled</span>
+                                            break;
+                                    }
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless mb-0">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-muted">Subtotal:</td>
+                                                    <td class="text-end">@Model.SubTotal.ToString("C")</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-muted">Tax:</td>
+                                                    <td class="text-end">@Model.Tax.ToString("C")</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-muted">Shipping:</td>
+                                                    <td class="text-end">@Model.ShippingFee.ToString("C")</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-muted">Discount:</td>
+                                                    <td class="text-end text-success">-@Model.Discount.ToString("C")</td>
+                                                </tr>
+                                                <tr class="border-top">
+                                                    <td class="fw-bold">Total:</td>
+                                                    <td class="fw-bold text-end text-primary">@Model.FinalTotal.ToString("C")</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="card shadow-sm rounded-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <form asp-action="Approve" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.OrderId" />
+                        <button type="submit" class="btn btn-success me-2" 
+                                @(Model.Status == OrderStatus.Pending || Model.Status == OrderStatus.Processing ? "" : "disabled")>
+                            <i class="fas fa-check-circle"></i> Approve Order
+                        </button>
+                    </form>
+                    
+                    <form asp-action="Cancel" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.OrderId" />
+                        <button type="submit" class="btn btn-danger me-2" 
+                                @(Model.Status == OrderStatus.Delivered || Model.Status == OrderStatus.Cancelled ? "disabled" : "")>
+                            <i class="fas fa-times-circle"></i> Cancel Order
+                        </button>
+                    </form>
+                    
+                    <form asp-action="AssignToDelivery" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.OrderId" />
+                        <button type="submit" class="btn btn-primary me-2" 
+                                @(Model.Status == OrderStatus.Processing ? "" : "disabled")>
+                            <i class="fas fa-truck"></i> Assign to Delivery
+                        </button>
+                    </form>
+                </div>
+                <div>
+                    <form asp-action="GenerateInvoice" method="get" class="d-inline">
+                        <input type="hidden" name="id" value="@Model.OrderId" />
+                        <button type="submit" class="btn btn-outline-secondary">
+                            <i class="fas fa-file-pdf"></i> Generate Invoice
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-purple {
+        background-color: #6f42c1 !important;
+    }
+    
+    .badge.rounded-pill {
+        font-size: 0.85em;
+        padding: 0.6em 1em;
+    }
+    
+    .card {
+        border: none;
+    }
+    
+    .table th {
+        font-weight: 600;
+    }
+    
+    textarea[readonly] {
+        background-color: #f8f9fa;
+    }
+</style>
+
+<script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            // Show a temporary success message
+            var alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed';
+            alertDiv.style.bottom = '20px';
+            alertDiv.style.right = '20px';
+            alertDiv.style.zIndex = '9999';
+            alertDiv.innerHTML = '<i class="fas fa-check-circle me-2"></i>Copied to clipboard!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+            document.body.appendChild(alertDiv);
+            
+            // Remove the alert after 3 seconds
+            setTimeout(function() {
+                if (alertDiv.parentNode) {
+                    alertDiv.parentNode.removeChild(alertDiv);
+                }
+            }, 3000);
+        });
+    }
+</script>

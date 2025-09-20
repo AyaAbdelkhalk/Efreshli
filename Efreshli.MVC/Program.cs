@@ -19,6 +19,7 @@ using Microsoft.Extensions.Options;
 using Stripe;
 using System.Globalization;
 using Microsoft.AspNetCore.StaticFiles;
+using Efreshli.Domain.Common.Interfaces;
 
 namespace Efreshli.MVC
 {
@@ -78,6 +79,9 @@ namespace Efreshli.MVC
 
             // 6. HttpContext
             builder.Services.AddHttpContextAccessor();
+            
+            // 7. Register UserContext explicitly
+            builder.Services.AddScoped<IUserContext, UserContext>();
 
             //// 7. Localization
             //builder.Services.AddLocalization(opt =>
