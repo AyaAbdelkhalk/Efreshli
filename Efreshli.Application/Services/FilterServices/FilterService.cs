@@ -276,10 +276,10 @@ namespace Efreshli.Application.Services.FilterServices
                 var dto = new FilteredProductsDto
                 {
                     ProductId = product.ProductId,
-                    Name = product.GetLocalized(product.NameEn, product.NameAr) ?? string.Empty,
-                    Description = product.GetLocalized(product.DescriptionEn, product.DescriptionAr) ?? string.Empty,
+                    Name = product.GetLocalized(product.NameAr, product.NameEn) ?? string.Empty,
+                    Description = product.GetLocalized(product.DescriptionAr, product.DescriptionEn) ?? string.Empty,
                     DimensionsOrSize = product.DimensionsOrSize,
-                    Category = product.Category?.GetLocalized(product.Category.NameEn, product.Category.NameAr) ?? string.Empty,
+                    Category = product.Category?.GetLocalized(product.Category.NameAr, product.Category.NameEn) ?? string.Empty,
                     CategoryId = product.CategoryId,
                     BrandId = product.BrandId,
                     Price = bestItem.Price,

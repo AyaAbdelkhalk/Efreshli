@@ -1,0 +1,348 @@
+@using Efreshli.Domain.Enums
+@model Efreshli.MVC.Models.ViewModels.AdminOrderListViewModel
+
+@{
+    ViewData["Title"] = "Orders Management";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="orders-container">
+    
+
+    <!-- Filters Section -->
+    <div class="orders-card">
+        <div class="orders-card-body">
+            <form method="get" class="orders-form">
+                <div class="form-group">
+                    <label for="searchTerm">Search</label>
+                    <input type="text" id="searchTerm" name="Filters.SearchTerm"
+                           placeholder="Order ID or Customer Phone"
+                           value="@Model.Filters.SearchTerm">
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" name="Filters.Status">
+                        <option value="">All Statuses</option>
+                        <option value="@OrderStatus.Pending" selected="@(Model.Filters.Status == OrderStatus.Pending)">Pending</option>
+                        <option value="@OrderStatus.Processing" selected="@(Model.Filters.Status == OrderStatus.Processing)">Processing</option>
+                        <option value="@OrderStatus.Shipped" selected="@(Model.Filters.Status == OrderStatus.Shipped)">Shipped</option>
+                        <option value="@OrderStatus.Delivered" selected="@(Model.Filters.Status == OrderStatus.Delivered)">Delivered</option>
+                        <option value="@OrderStatus.Cancelled" selected="@(Model.Filters.Status == OrderStatus.Cancelled)">Cancelled</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="paymentMethod">Payment Method</label>
+                    <select id="paymentMethod" name="Filters.PaymentMethod">
+                        <option value="">All Methods</option>
+                        <option value="@PaymentMethod.CashOnDelivery" selected="@(Model.Filters.PaymentMethod == PaymentMethod.CashOnDelivery)">Cash</option>
+                        <option value="@PaymentMethod.Stripe" selected="@(Model.Filters.PaymentMethod == PaymentMethod.Stripe)">Online</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="shippingType">Shipping Type</label>
+                    <select id="shippingType" name="Filters.ShippingType">
+                        <option value="">All Types</option>
+                        <option value="Delivery" selected="@(Model.Filters.ShippingType == "Delivery")">Delivery</option>
+                        <option value="Pickup" selected="@(Model.Filters.ShippingType == "Pickup")">Pickup</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateFrom">Date From</label>
+                    <input type="date" id="dateFrom" name="Filters.DateFrom"
+                           value="@(Model.Filters.DateFrom?.ToString("yyyy-MM-dd"))">
+                </div>
+
+                <div class="form-group">
+                    <label for="dateTo">Date To</label>
+                    <input type="date" id="dateTo" name="Filters.DateTo"
+                           value="@(Model.Filters.DateTo?.ToString("yyyy-MM-dd"))">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Apply</button>
+                    <a href="@Url.Action("Index")" class="btn-secondary">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="orders-card">
+        <div class="orders-card-body">
+            <div class="orders-table-wrapper">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Phone</th>
+                            <th>Date</th>
+                            <th>Total</th>
+                            <th>Payment</th>
+                            <th>Shipping</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Orders.Any())
+                        {
+                            @foreach (var order in Model.Orders)
+                            {
+                                <tr>
+                                    <td><strong>#@order.OrderId</strong></td>
+                                    <td>@order.CustomerName</td>
+                                    <td>@(string.IsNullOrEmpty(order.CustomerPhone) ? "N/A" : order.CustomerPhone)</td>
+                                    <td>@order.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                    <td>@order.TotalPrice.ToString("C")</td>
+                                    <td>
+                                        @if (order.PaymentMethod == PaymentMethod.CashOnDelivery)
+                                        {
+                                            <span class="badge badge-cash">Cash</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-online">Online</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (order.ShippingType == "Delivery")
+                                        {
+                                            <span class="badge badge-delivery">Delivery</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-pickup">Pickup</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @switch (order.Status)
+                                        {
+                                            case OrderStatus.Pending:
+                                                <span class="badge badge-pending">Pending</span>
+                                                break;
+                                            case OrderStatus.Processing:
+                                                <span class="badge badge-processing">Processing</span>
+                                                break;
+                                            case OrderStatus.Shipped:
+                                                <span class="badge badge-shipped">Shipped</span>
+                                                break;
+                                            case OrderStatus.Delivered:
+                                                <span class="badge badge-delivered">Delivered</span>
+                                                break;
+                                            case OrderStatus.Cancelled:
+                                                <span class="badge badge-cancelled">Cancelled</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Details", new { id = order.OrderId })"
+                                           class="btn-small">View Details</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="9" class="no-orders">
+                                    <p>No orders found</p>
+                                    <small>Try adjusting your filters or check back later</small>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (Model.Orders.Any())
+            {
+                <div class="orders-footer">
+                    <div class="orders-info">
+                        Showing @Model.Orders.Count() of @Model.Orders.Count() orders
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .orders-container {
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .orders-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    
+
+    .orders-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+
+    .orders-card-body {
+        padding: 20px;
+    }
+
+    .orders-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 200px;
+    }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+    }
+
+    .btn-primary {
+        background: #e11d48;
+        color: #fff;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+
+    .btn-secondary {
+        background: #f8f9fa;
+        color: #333;
+        padding: 8px 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+    .btn-small {
+        background: #e11d48;
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        text-decoration: none;
+    }
+
+    .orders-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .orders-table th, .orders-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .orders-table th {
+            font-weight: 600;
+            background: #f8f9fa;
+        }
+
+    .badge {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: bold;
+    }
+
+    .badge-cash {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .badge-online {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .badge-delivery {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .badge-pickup {
+        background: #cce5ff;
+        color: #004085;
+    }
+
+    .badge-pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .badge-processing {
+        background: #cce5ff;
+        color: #e11d48;
+    }
+
+    .badge-shipped {
+        background: #e2d9f3;
+        color: #5a189a;
+    }
+
+    .badge-delivered {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .badge-cancelled {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .no-orders {
+        text-align: center;
+        padding: 30px;
+        color: #6c757d;
+    }
+
+    .orders-footer {
+        margin-top: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .orders-info {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+</style>
