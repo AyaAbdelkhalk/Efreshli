@@ -356,7 +356,7 @@ namespace Efreshli.Application.Services.AuthServices
                     issuer: _jwtSettings.Issuer,
                     audience: _jwtSettings.Audience,
                     claims: claims,
-                    expires: DateTime.UtcNow.AddMinutes(_jwtSettings.TokenExpirationInMinutes),
+                    expires: DateTime.UtcNow.AddHours(_jwtSettings.TokenExpirationInMinutes),
                     signingCredentials: creds
                 );
 

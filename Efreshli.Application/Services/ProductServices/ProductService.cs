@@ -648,6 +648,15 @@ namespace Efreshli.Application.Services.ProductServices
             if (product != null && product.ProductItems != null && product.ProductItems.Any())
             {
                 var best=HomeService.SelectBestProductItem(product.ProductItems.ToList());
+               
+
+                // set 3d model link
+                var Model_3d_link =  product.ProductImages?.Where(img => img != null && img.ReferenceType == ImageReferenceType.Model_3D).Select(img => img.URL).First();
+                if (!string.IsNullOrWhiteSpace(Model_3d_link))
+                {
+                    Model_3d_link = "http://efreshli-admin.runasp.net" + Model_3d_link;
+                }
+
                 var resdto = new LocalizedProductDetailsDto
                 {
                     ProductId = productId,
@@ -660,7 +669,7 @@ namespace Efreshli.Application.Services.ProductServices
                     DimensionsOrSize = product.DimensionsOrSize,
                     SKU = product.SKU,
                     ProductImages = product.ProductImages?.Where(img => img != null && img.ReferenceType != ImageReferenceType.Model_3D).Select(img => img.URL).ToList() ?? new List<string>(),
-                    Model_3D = product.ProductImages?.Where(img => img != null && img.ReferenceType == ImageReferenceType.Model_3D).Select(img => img.URL).FirstOrDefault(),
+                    Model_3D = Model_3d_link,
                     ProductSpecification = product.AttributeValues != null ? product.AttributeValues.Select(av => new LocalizedProductAttributeValueResponseDto
                     {
                         Name = av.ProductAttribute != null ? product.GetLocalized(av.ProductAttribute.NameAr, av.ProductAttribute.NameEn) : null,
