@@ -207,6 +207,7 @@ namespace Efreshli.Application.Services.OrderServices
                 Console.WriteLine($"🎉 Order creation completed successfully for session: {session.Id}");
                 return ResponseHandler.Created(order);
             });
+
         }
 
         public async Task<Response<OrderCheckOutPreviewDto>> GetCheckoutPreviewAsync(string userId, string? CouponCode = null)
