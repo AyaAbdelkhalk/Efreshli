@@ -37,16 +37,13 @@ namespace Efreshli.MVC.Models.ViewModels
         public List<TopProductViewModel> LeastSellingProducts { get; set; } = new List<TopProductViewModel>();
         
         // Frequently bought together products
-        public List<FrequentlyBoughtTogetherViewModel> FrequentlyBoughtTogether { get; set; } = new List<FrequentlyBoughtTogetherViewModel>();
+      //  public List<FrequentlyBoughtTogetherViewModel> FrequentlyBoughtTogether { get; set; } = new List<FrequentlyBoughtTogetherViewModel>();
         
         // Out-of-stock alerts
         public List<OutOfStockProductViewModel> OutOfStockProducts { get; set; } = new List<OutOfStockProductViewModel>();
         
-        // Order status breakdown
-        public Dictionary<string, int> OrderStatusBreakdown { get; set; } = new Dictionary<string, int>();
-        
         // Weekly revenue growth trend
-        public List<RevenueTrendViewModel> WeeklyRevenueTrend { get; set; } = new List<RevenueTrendViewModel>();
+      //  public List<RevenueTrendViewModel> WeeklyRevenueTrend { get; set; } = new List<RevenueTrendViewModel>();
         
         // Highest revenue day
         public DateTime HighestRevenueDay { get; set; }
@@ -80,12 +77,12 @@ namespace Efreshli.MVC.Models.ViewModels
         public decimal MonthlyGrowthValue { get; set; }
     }
     
-    public class FrequentlyBoughtTogetherViewModel
-    {
-        public string Product1Name { get; set; }
-        public string Product2Name { get; set; }
-        public int Frequency { get; set; }
-    }
+    //public class FrequentlyBoughtTogetherViewModel
+    //{
+    //    public string Product1Name { get; set; }
+    //    public string Product2Name { get; set; }
+    //    public int Frequency { get; set; }
+    //}
     
     public class OutOfStockProductViewModel
     {
@@ -95,10 +92,10 @@ namespace Efreshli.MVC.Models.ViewModels
         public int LowStockThreshold { get; set; } = 5; // Default threshold
     }
     
-    public class RevenueTrendViewModel
-    {
-        public DateTime WeekStartDate { get; set; }
-        public decimal Revenue { get; set; }
-        public decimal GrowthPercentage { get; set; }
-    }
+    //public class RevenueTrendViewModel
+    //{
+    //    public DateTime WeekStartDate { get; set; }
+    //    public decimal Revenue { get; set; }
+    //    public decimal GrowthPercentage { get; set; }
+    //}
 }

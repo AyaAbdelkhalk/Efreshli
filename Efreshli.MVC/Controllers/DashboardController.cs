@@ -1,23 +1,18 @@
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Enums;
-using Efreshli.Domain.Models;
-using Efreshli.MVC.Models;
 using Efreshli.MVC.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using System.Globalization;
 
 namespace Efreshli.MVC.Controllers
 {
     [Authorize(UserRoles.Admin)]
-    public class HomeController : Controller
+    public class DashboardController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<DashboardController> _logger;
         private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
+        public DashboardController(ILogger<DashboardController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
@@ -25,38 +20,46 @@ namespace Efreshli.MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var dashboardData = await GetDashboardDataAsync();
-            ViewData["Title"] = "Dashboard";
-            return View(dashboardData);
+            try
+            {
+                var dashboardData = await GetDashboardDataAsync();
+                ViewData["Title"] = "Admin Dashboard";
+                return View(dashboardData);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading dashboard data");
+                TempData["Error"] = "An error occurred while loading dashboard data.";
+                return View(new DashboardViewModel());
+            }
         }
-        
+
         private async Task<DashboardViewModel> GetDashboardDataAsync()
         {
             var model = new DashboardViewModel();
-            
+
             // Get all necessary data
             var orders = (await _unitOfWork.OrderRepository.GetAllAsync()).ToList();
-            var orderItems = orders.SelectMany(o => o.OrderItems ?? new List<OrderItem>()).ToList();
+            var orderItems = orders.SelectMany(o => o.OrderItems ?? new List<Efreshli.Domain.Models.OrderItem>()).ToList();
             var products = (await _unitOfWork.ProductRepository.GetAllAsync()).ToList();
-            var productItems = products.SelectMany(p => p.ProductItems ?? new List<ProductItem>()).ToList();
+            var productItems = products.SelectMany(p => p.ProductItems ?? new List<Efreshli.Domain.Models.ProductItem>()).ToList();
             var categories = (await _unitOfWork.CategoryRepository.GetAllAsync()).ToList();
             var users = (await _unitOfWork.UserRepository.GetAllAsync()).ToList();
             var payments = (await _unitOfWork.PaymentRepository.GetAllAsync()).ToList();
-            
-            // Existing data
+
+            // Basic statistics
             model.OrderStatusData = orders
                 .GroupBy(o => o.Status.ToString())
                 .ToDictionary(g => g.Key, g => g.Count());
-            
+
             model.PaymentMethodData = payments
                 .GroupBy(p => p.PaymentMethod.ToString())
                 .ToDictionary(g => g.Key, g => g.Count());
-            
 
             model.CategoryProductCount = categories
-                .DistinctBy(c => CultureInfo.CurrentUICulture.Name == "ar-EG" ? c.NameAr : c.NameEn)
+                .DistinctBy(c => c.NameEn)
                 .ToDictionary(
-                    c => CultureInfo.CurrentUICulture.Name == "ar-EG" ? c.NameAr : c.NameEn,
+                    c => c.NameEn,
                     c => products.Count(p => p.CategoryId == c.CategoryId)
                 );
 
@@ -73,69 +76,69 @@ namespace Efreshli.MVC.Controllers
                     OrderDate = o.CreatedDate
                 })
                 .ToList();
-            
+
             model.TotalProducts = products.Count();
             model.TotalOrders = orders.Count();
             model.TotalUsers = users.Count();
-            model.TotalRevenue = orders.Where(o => o.Status == OrderStatus.Delivered).Sum(o => o.TotalPrice);
-            
+            model.TotalRevenue = orders.Where(o => o.Status == Efreshli.Domain.Enums.OrderStatus.Delivered).Sum(o => o.TotalPrice);
+
             // New analytics data
-            // Sales data (daily/weekly/monthly)
             model.DailySales = GetDailySales(orders);
             model.WeeklySales = GetWeeklySales(orders);
             model.MonthlySales = GetMonthlySales(orders);
-            
+
             // Top-selling products
             model.TopSellingProducts = GetTopSellingProducts(orderItems, products);
-            
+
             // Sales by category
             model.CategorySales = GetCategorySales(orderItems, products, categories);
-            
+
             // Sales growth compared to last period
             model.SalesGrowth = GetSalesGrowth(orders);
-            
+
             // Best-selling vs least-selling products
             var allProductsSales = GetAllProductsSales(orderItems, products);
             model.BestSellingProducts = allProductsSales.OrderByDescending(p => p.Revenue).Take(5).ToList();
             model.LeastSellingProducts = allProductsSales.OrderBy(p => p.Revenue).Take(5).ToList();
-            
+
             // Frequently bought together products
           //  model.FrequentlyBoughtTogether = GetFrequentlyBoughtTogether(orders);
-            
+
             // Out-of-stock alerts
             model.OutOfStockProducts = GetOutOfStockProducts(productItems, products);
-            
+
             // Weekly revenue growth trend
            // model.WeeklyRevenueTrend = GetWeeklyRevenueTrend(orders);
-            
+
             // Highest revenue day
             var dailyRevenue = orders
-                .Where(o => o.Status == OrderStatus.Delivered)
+                .Where(o => o.Status == Efreshli.Domain.Enums.OrderStatus.Delivered)
                 .GroupBy(o => o.CreatedDate.Date)
                 .Select(g => new { Date = g.Key, Revenue = g.Sum(o => o.TotalPrice) })
                 .OrderByDescending(x => x.Revenue)
                 .FirstOrDefault();
-                
+
             if (dailyRevenue != null)
             {
                 model.HighestRevenueDay = dailyRevenue.Date;
                 model.HighestRevenueAmount = dailyRevenue.Revenue;
             }
-            
+
             return model;
         }
-        
+
         private DateTime GetWeekStartDate(DateTime date)
         {
             var dayOfWeek = (int)date.DayOfWeek;
             return date.AddDays(-dayOfWeek).Date;
         }
-        
-        private List<TopProductViewModel> GetTopSellingProducts(List<OrderItem> orderItems, List<Efreshli.Domain.Models.Product> products)
+
+        private List<TopProductViewModel> GetTopSellingProducts(List<Efreshli.Domain.Models.OrderItem> orderItems, List<Efreshli.Domain.Models.Product> products)
         {
             var productSales = orderItems
                 .GroupBy(oi => oi.ProductItem?.Product?.ProductId)
-                .Select(g => new {
+                .Select(g => new
+                {
                     ProductId = g.Key,
                     UnitsSold = g.Sum(oi => oi.Quantity),
                     Revenue = g.Sum(oi => oi.Quantity * oi.Price)
@@ -143,7 +146,7 @@ namespace Efreshli.MVC.Controllers
                 .Where(x => x.ProductId.HasValue)
                 .OrderByDescending(x => x.Revenue)
                 .Take(10);
-            
+
             var result = new List<TopProductViewModel>();
             foreach (var sale in productSales)
             {
@@ -153,51 +156,52 @@ namespace Efreshli.MVC.Controllers
                     result.Add(new TopProductViewModel
                     {
                         ProductId = product.ProductId,
-                        ProductName = CultureInfo.CurrentUICulture.Name == "ar-EG" ? product.NameAr : product.NameEn,
+                        ProductName = product.NameEn,
                         UnitsSold = sale.UnitsSold,
                         Revenue = sale.Revenue,
-                        Category = product.Category != null ? 
-                            (CultureInfo.CurrentUICulture.Name == "ar-EG" ? product.Category.NameAr : product.Category.NameEn) : "N/A"
+                        Category = product.Category != null ? product.Category.NameEn : "N/A"
                     });
                 }
             }
-            
+
             return result;
         }
-        
-        private Dictionary<string, decimal> GetCategorySales(List<OrderItem> orderItems, List<Efreshli.Domain.Models.Product> products, List<Category> categories)
+
+        private Dictionary<string, decimal> GetCategorySales(List<Efreshli.Domain.Models.OrderItem> orderItems, List<Efreshli.Domain.Models.Product> products, List<Efreshli.Domain.Models.Category> categories)
         {
             var categorySales = orderItems
                 .Where(oi => oi.ProductItem?.Product != null)
                 .GroupBy(oi => oi.ProductItem.Product.CategoryId)
-                .Select(g => new {
+                .Select(g => new
+                {
                     CategoryId = g.Key,
                     Revenue = g.Sum(oi => oi.Quantity * oi.Price)
                 })
                 .ToDictionary(x => x.CategoryId, x => x.Revenue);
-            
+
             var result = new Dictionary<string, decimal>();
             foreach (var category in categories)
             {
-                var categoryName = CultureInfo.CurrentUICulture.Name == "ar-EG" ? category.NameAr : category.NameEn;
+                var categoryName = category.NameEn;
                 result[categoryName] = categorySales.ContainsKey(category.CategoryId) ? categorySales[category.CategoryId] : 0;
             }
-            
+
             return result;
         }
-        
-        private List<TopProductViewModel> GetAllProductsSales(List<OrderItem> orderItems, List<Efreshli.Domain.Models.Product> products)
+
+        private List<TopProductViewModel> GetAllProductsSales(List<Efreshli.Domain.Models.OrderItem> orderItems, List<Efreshli.Domain.Models.Product> products)
         {
             var productSales = orderItems
                 .Where(oi => oi.ProductItem?.Product != null)
                 .GroupBy(oi => oi.ProductItem.Product.ProductId)
-                .Select(g => new {
+                .Select(g => new
+                {
                     ProductId = g.Key,
                     UnitsSold = g.Sum(oi => oi.Quantity),
                     Revenue = g.Sum(oi => oi.Quantity * oi.Price)
                 })
                 .ToDictionary(x => x.ProductId, x => new { x.UnitsSold, x.Revenue });
-            
+
             var result = new List<TopProductViewModel>();
             foreach (var product in products)
             {
@@ -205,17 +209,16 @@ namespace Efreshli.MVC.Controllers
                 result.Add(new TopProductViewModel
                 {
                     ProductId = product.ProductId,
-                    ProductName = CultureInfo.CurrentUICulture.Name == "ar-EG" ? product.NameAr : product.NameEn,
+                    ProductName = product.NameEn,
                     UnitsSold = salesData.UnitsSold,
                     Revenue = salesData.Revenue,
-                    Category = product.Category != null ? 
-                        (CultureInfo.CurrentUICulture.Name == "ar-EG" ? product.Category.NameAr : product.Category.NameEn) : "N/A"
+                    Category = product.Category != null ? product.Category.NameEn : "N/A"
                 });
             }
-            
+
             return result;
         }
-        
+
         //private List<FrequentlyBoughtTogetherViewModel> GetFrequentlyBoughtTogether(List<Efreshli.Domain.Models.Order> orders)
         //{
         //    var result = new List<FrequentlyBoughtTogetherViewModel>();
@@ -265,7 +268,7 @@ namespace Efreshli.MVC.Controllers
             
         //    // Convert to view models
         //    var allProducts = orders
-        //        .SelectMany(o => o.OrderItems ?? new List<OrderItem>())
+        //        .SelectMany(o => o.OrderItems ?? new List<Efreshli.Domain.Models.OrderItem>())
         //        .Where(oi => oi.ProductItem?.Product != null)
         //        .Select(oi => oi.ProductItem.Product)
         //        .GroupBy(p => p.ProductId)
@@ -281,8 +284,8 @@ namespace Efreshli.MVC.Controllers
                     
         //            result.Add(new FrequentlyBoughtTogetherViewModel
         //            {
-        //                Product1Name = CultureInfo.CurrentUICulture.Name == "ar-EG" ? product1.NameAr : product1.NameEn,
-        //                Product2Name = CultureInfo.CurrentUICulture.Name == "ar-EG" ? product2.NameAr : product2.NameEn,
+        //                Product1Name = product1.NameEn,
+        //                Product2Name = product2.NameEn,
         //                Frequency = pair.Value
         //            });
         //        }
@@ -291,7 +294,7 @@ namespace Efreshli.MVC.Controllers
         //    return result;
         //}
         
-        private List<OutOfStockProductViewModel> GetOutOfStockProducts(List<ProductItem> productItems, List<Efreshli.Domain.Models.Product> products)
+        private List<OutOfStockProductViewModel> GetOutOfStockProducts(List<Efreshli.Domain.Models.ProductItem> productItems, List<Efreshli.Domain.Models.Product> products)
         {
             var lowStockThreshold = 5; // Default threshold
             
@@ -311,7 +314,7 @@ namespace Efreshli.MVC.Controllers
                     result.Add(new OutOfStockProductViewModel
                     {
                         ProductId = product.ProductId,
-                        ProductName = CultureInfo.CurrentUICulture.Name == "ar-EG" ? product.NameAr : product.NameEn,
+                        ProductName = product.NameEn,
                         CurrentStock = totalQuantity,
                         LowStockThreshold = lowStockThreshold
                     });
@@ -323,7 +326,7 @@ namespace Efreshli.MVC.Controllers
         
         private Dictionary<DateTime, decimal> GetDailySales(List<Efreshli.Domain.Models.Order> orders)
         {
-            var deliveredOrders = orders.Where(o => o.Status == OrderStatus.Delivered);
+            var deliveredOrders = orders.Where(o => o.Status == Efreshli.Domain.Enums.OrderStatus.Delivered);
             var dailySales = deliveredOrders
                 .GroupBy(o => o.CreatedDate.Date)
                 .ToDictionary(g => g.Key, g => g.Sum(o => o.TotalPrice));
@@ -342,7 +345,7 @@ namespace Efreshli.MVC.Controllers
         
         private Dictionary<DateTime, decimal> GetWeeklySales(List<Efreshli.Domain.Models.Order> orders)
         {
-            var deliveredOrders = orders.Where(o => o.Status == OrderStatus.Delivered);
+            var deliveredOrders = orders.Where(o => o.Status == Efreshli.Domain.Enums.OrderStatus.Delivered);
             var weeklySales = deliveredOrders
                 .GroupBy(o => GetWeekStartDate(o.CreatedDate))
                 .ToDictionary(g => g.Key, g => g.Sum(o => o.TotalPrice));
@@ -362,7 +365,7 @@ namespace Efreshli.MVC.Controllers
         
         private Dictionary<DateTime, decimal> GetMonthlySales(List<Efreshli.Domain.Models.Order> orders)
         {
-            var deliveredOrders = orders.Where(o => o.Status == OrderStatus.Delivered);
+            var deliveredOrders = orders.Where(o => o.Status == Efreshli.Domain.Enums.OrderStatus.Delivered);
             var monthlySales = deliveredOrders
                 .GroupBy(o => new DateTime(o.CreatedDate.Year, o.CreatedDate.Month, 1))
                 .ToDictionary(g => g.Key, g => g.Sum(o => o.TotalPrice));
@@ -382,7 +385,7 @@ namespace Efreshli.MVC.Controllers
         
         private SalesGrowthViewModel GetSalesGrowth(List<Efreshli.Domain.Models.Order> orders)
         {
-            var deliveredOrders = orders.Where(o => o.Status == OrderStatus.Delivered);
+            var deliveredOrders = orders.Where(o => o.Status == Efreshli.Domain.Enums.OrderStatus.Delivered);
             var today = DateTime.Today;
             
             // Current week
@@ -431,7 +434,7 @@ namespace Efreshli.MVC.Controllers
         
         //private List<RevenueTrendViewModel> GetWeeklyRevenueTrend(List<Efreshli.Domain.Models.Order> orders)
         //{
-        //    var deliveredOrders = orders.Where(o => o.Status == OrderStatus.Delivered);
+        //    var deliveredOrders = orders.Where(o => o.Status == Efreshli.Domain.Enums.OrderStatus.Delivered);
         //    var today = DateTime.Today;
         //    var currentWeekStart = GetWeekStartDate(today);
             
@@ -466,42 +469,5 @@ namespace Efreshli.MVC.Controllers
             
         //    return result;
         //}
-        
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        public IActionResult SetLanguage(string culture, string returnUrl = null)
-        {
-            // Validate the culture
-            var supportedCultures = new[] { "en-US", "ar-EG" };
-            if (!supportedCultures.Contains(culture))
-            {
-                culture = "ar-EG"; // Fallback to default culture
-            }
-
-            // Set the cookie
-            Response.Cookies.Append(
-                "LanguagePreference",
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-                new CookieOptions
-                {
-                    Expires = DateTimeOffset.UtcNow.AddYears(1),
-                    SameSite = SameSiteMode.Lax,
-                    Secure = true,
-                    HttpOnly = true
-                }
-            );
-
-            // Redirect to returnUrl if provided, otherwise to Home/Index
-            return LocalRedirect(returnUrl ?? Url.Action("Index", "Home"));
-        }
     }
 }
