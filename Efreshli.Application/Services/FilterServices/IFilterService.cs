@@ -8,9 +8,9 @@ namespace Efreshli.Application.Services.FilterServices
     public interface IFilterService
     {
         Task<Response<PaginatedResult<FilteredProductsDto>>> GetFilteredProductsAsync(ProductFilterRequest request);
-
-        Task<Response<List<DropDownDto>>> GetBrandsByCategoryId(int categoryId);
-        Task<Response<List<ColorsDropDownDto>>> GetFabricColorsByCategoryId(int categoryId);
-        Task<Response<List<ColorsDropDownDto>>> GetWoodColorsByCategoryId(int categoryId);
+        Task<Response<List<DropDownDto>>> GetCategories();
+        Task<Response<List<DropDownDto>>> GetBrandsByCategoryId(int? categoryId);
+        Task<Response<List<ColorsDropDownDto>>> GetFabricColorsByCategoryId(int? categoryId);
+        Task<Response<List<ColorsDropDownDto>>> GetWoodColorsByCategoryId(int? categoryId);
     }
 }

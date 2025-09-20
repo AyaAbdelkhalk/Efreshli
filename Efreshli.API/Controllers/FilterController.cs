@@ -17,20 +17,26 @@ namespace Efreshli.API.Controllers
         {
             _filterService = filterService;
         }
-        [HttpGet("brands/{categoryId}")]
-        public async Task<IActionResult> GetBrandsByCategoryId(int categoryId)
+        [HttpGet("categories")]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var categories = await _filterService.GetCategories();
+            return this.CreateResponse(categories);
+        }
+        [HttpGet("brands")]
+        public async Task<IActionResult> GetBrandsByCategoryId(int? categoryId=null)
         {
             var brands = await _filterService.GetBrandsByCategoryId(categoryId);
             return this.CreateResponse(brands);
         }
-        [HttpGet("Fabriccolors/{categoryId}")]
-        public async Task<IActionResult> GetFabricColorsByCategoryId(int categoryId)
+        [HttpGet("Fabriccolors")]
+        public async Task<IActionResult> GetFabricColorsByCategoryId(int? categoryId = null)
         {
             var colors = await _filterService.GetFabricColorsByCategoryId(categoryId);
             return this.CreateResponse(colors);
         }
-        [HttpGet("Woodcolors/{categoryId}")]
-        public async Task<IActionResult> GetWoodColorsByCategoryId(int categoryId)
+        [HttpGet("Woodcolors")]
+        public async Task<IActionResult> GetWoodColorsByCategoryId(int? categoryId = null)
         {
             var colors = await _filterService.GetWoodColorsByCategoryId(categoryId);
             return this.CreateResponse(colors);

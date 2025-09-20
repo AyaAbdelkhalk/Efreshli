@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static Efreshli.Application.Resources.SharedResourcesKeys;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Efreshli.Application.Services.FilterServices
 {
@@ -33,15 +34,34 @@ namespace Efreshli.Application.Services.FilterServices
         #endregion
 
         #region FilterBarData
-        public async Task<Response<List<DropDownDto>>> GetBrandsByCategoryId(int categoryId)
+
+        public async Task<Response<List<DropDownDto>>> GetCategories()
+        {
+            var categories = await _unitOfWork.CategoryRepository.GetAll()
+                .Where(c => c.ParentId == null || c.ParentId == 511)
+                .ToListAsync();
+            if (categories == null || !categories.Any())
+            {
+                return ResponseHandler.NotFound<List<DropDownDto>>();
+            }
+            var result = categories.Select(c => new DropDownDto
+            {
+                Id = c.CategoryId,
+                Name = c.GetLocalized(c.NameAr, c.NameEn) ?? string.Empty
+            })
+            .ToList();
+            return ResponseHandler.Success(result);
+        }
+
+        public async Task<Response<List<DropDownDto>>> GetBrandsByCategoryId(int? categoryId)
         {
             var query = _unitOfWork.ProductRepository.GetAll()
                     .Include(p => p.Brand)
                     .Where(p => p.Brand != null);
 
-            if (categoryId > 0)
+            if (categoryId.HasValue && categoryId.Value > 0)
             {
-                query = query.Where(p => p.CategoryId == categoryId);
+                query = query.Where(p => p.CategoryId == categoryId.Value);
             }
 
             var brands = await query
@@ -58,12 +78,19 @@ namespace Efreshli.Application.Services.FilterServices
             return ResponseHandler.Success(brands);
         }
 
-        public async Task<Response<List<ColorsDropDownDto>>> GetFabricColorsByCategoryId(int categoryId)
+        public async Task<Response<List<ColorsDropDownDto>>> GetFabricColorsByCategoryId(int? categoryId)
         {
-            var colors = await _unitOfWork.ProductRepository.GetAll()
-                   .Where(p => p.CategoryId == categoryId)
+            var query = _unitOfWork.ProductRepository.GetAll();
+
+            // Filter by category only if categoryId has a value and is greater than 0
+            if (categoryId.HasValue && categoryId.Value > 0)
+            {
+                query = query.Where(p => p.CategoryId == categoryId.Value);
+            }
+
+            var colors = await query
                    .SelectMany(p => p.ProductItems)
-                   .Where(pi => pi.FabricColorId != null && pi.FabricColor.Image != null) // ✅ إضافة null check على الصورة
+                   .Where(pi => pi.FabricColorId != null ) // ✅ إضافة null check على الصورة
                    .Include(pi => pi.FabricColor)
                    .ThenInclude(fc => fc.Image)
                    .GroupBy(pi => new
@@ -81,25 +108,30 @@ namespace Efreshli.Application.Services.FilterServices
             return ResponseHandler.Success(colors);
         }
 
-        public async Task<Response<List<ColorsDropDownDto>>> GetWoodColorsByCategoryId(int categoryId)
+        public async Task<Response<List<ColorsDropDownDto>>> GetWoodColorsByCategoryId(int? categoryId)
         {
-            var colors = await _unitOfWork.ProductRepository.GetAll()
-                    .Where(p => p.CategoryId == categoryId)
-                    .SelectMany(p => p.ProductItems)
-                    .Where(pi => pi.WoodColorId != null && pi.WoodColor.Image != null) // ✅ نفس الفكرة هنا
-                    .Include(pi => pi.WoodColor)
-                    .ThenInclude(wc => wc.Image)
-                    .GroupBy(pi => new
-                    {
-                        pi.WoodColorId,
-                        pi.WoodColor.Image.URL
-                    })
-                    .Select(g => new ColorsDropDownDto
-                    {
-                        ColorId = (int)g.Key.WoodColorId,
-                        ImageUrl = g.Key.URL,
-                    })
-                    .ToListAsync();
+            var query = _unitOfWork.ProductRepository.GetAll();
+            if (categoryId.HasValue)
+            {
+                query = query.Where(p => p.CategoryId == categoryId.Value);
+            }
+            var colors = await query
+                .SelectMany(p => p.ProductItems)
+                .Where(pi => pi.WoodColorId != null) // ✅ نفس الفكرة هنا
+                .Include(pi => pi.WoodColor)
+                .ThenInclude(wc => wc.Image)
+                .GroupBy(pi => new
+                {
+                    pi.WoodColorId,
+                    pi.WoodColor.Image.URL
+                })
+                .Select(g => new ColorsDropDownDto
+                {
+                    ColorId = (int)g.Key.WoodColorId,
+                    ImageUrl = g.Key.URL,
+                })
+                .ToListAsync();
+
 
             return ResponseHandler.Success(colors);
         }
