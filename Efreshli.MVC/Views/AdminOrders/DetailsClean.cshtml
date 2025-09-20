@@ -1,0 +1,247 @@
+@using Efreshli.Domain.Enums
+@model Efreshli.MVC.Models.ViewModels.AdminOrderDetailsViewModel
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/admin-order-details.css" />
+
+<div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">Order Details - #@Model.OrderId</h1>
+        <a href="@Url.Action("Index")" class="btn btn-outline">
+            ← Back to Orders
+        </a>
+    </div>
+
+    <!-- Alert Messages -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            <span>@TempData["Success"]</span>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            <span>@TempData["Error"]</span>
+        </div>
+    }
+
+    <!-- Order Information Card -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Order Information</h2>
+        </div>
+        <div class="card-body">
+            <div class="grid grid-cols-2 grid-cols-md-2">
+                <div>
+                    <p class="text-muted mb-sm">Order ID</p>
+                    <p class="text-xl font-semibold">#@Model.OrderId</p>
+                </div>
+                <div>
+                    <p class="text-muted mb-sm">Order Status</p>
+                    @switch (Model.Status)
+                    {
+                        case OrderStatus.Pending:
+                            <span class="badge badge-pending">Pending</span>
+                            break;
+                        case OrderStatus.Processing:
+                            <span class="badge badge-processing">Processing</span>
+                            break;
+                        case OrderStatus.Shipped:
+                            <span class="badge badge-shipped">Shipped</span>
+                            break;
+                        case OrderStatus.Delivered:
+                            <span class="badge badge-delivered">Delivered</span>
+                            break;
+                        case OrderStatus.Cancelled:
+                            <span class="badge badge-cancelled">Cancelled</span>
+                            break;
+                    }
+                </div>
+                <div>
+                    <p class="text-muted mb-sm">Created Date</p>
+                    <p>@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</p>
+                </div>
+                <div>
+                    <p class="text-muted mb-sm">Last Updated</p>
+                    <p>@Model.LastUpdated.ToString("MMM dd, yyyy HH:mm")</p>
+                </div>
+            </div>
+
+            <!-- Status Update Form -->
+            <div class="mt-lg">
+                <form asp-action="UpdateStatus" method="post" class="flex items-center gap-md">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="OrderId" value="@Model.OrderId" />
+                    <div class="form-group">
+                        <label class="form-label">Update Status</label>
+                        <select name="Status" class="form-select">
+                            <option value="@OrderStatus.Pending" selected="@(Model.Status == OrderStatus.Pending)">Pending</option>
+                            <option value="@OrderStatus.Processing" selected="@(Model.Status == OrderStatus.Processing)">Processing</option>
+                            <option value="@OrderStatus.Shipped" selected="@(Model.Status == OrderStatus.Shipped)">Shipped</option>
+                            <option value="@OrderStatus.Delivered" selected="@(Model.Status == OrderStatus.Delivered)">Delivered</option>
+                            <option value="@OrderStatus.Cancelled" selected="@(Model.Status == OrderStatus.Cancelled)">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Information Card -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Customer Information</h2>
+        </div>
+        <div class="card-body">
+            <div class="grid grid-cols-2 grid-cols-md-2">
+                <div>
+                    <p class="text-muted mb-sm">Customer Name</p>
+                    <p class="text-lg font-semibold">@Model.CustomerName</p>
+                </div>
+                <div>
+                    <p class="text-muted mb-sm">Phone Number</p>
+                    <p>@(string.IsNullOrEmpty(Model.CustomerPhone) ? "N/A" : Model.CustomerPhone)</p>
+                </div>
+                <div class="grid-cols-1">
+                    <p class="text-muted mb-sm">Delivery Address</p>
+                    <p>@(string.IsNullOrEmpty(Model.CustomerAddress) ? "N/A" : Model.CustomerAddress)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Items Card -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Order Items</h2>
+        </div>
+        <div class="card-body">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th class="text-right">Quantity</th>
+                            <th class="text-right">Unit Price</th>
+                            <th class="text-right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Products.Any())
+                        {
+                            @foreach (var item in Model.Products)
+                            {
+                                <tr>
+                                    <td>@item.ProductName</td>
+                                    <td class="text-right">@item.Quantity</td>
+                                    <td class="text-right">@item.UnitPrice.ToString("C")</td>
+                                    <td class="text-right font-semibold">@item.TotalPrice.ToString("C")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">No products found in this order</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Summary Card -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Order Summary</h2>
+        </div>
+        <div class="card-body">
+            <div class="grid grid-cols-2 grid-cols-md-2">
+                <div>
+                    <h3 class="text-lg font-semibold mb-lg">Payment Information</h3>
+                    <p class="text-muted mb-sm">Payment Method</p>
+                    @if (Model.PaymentMethod == PaymentMethod.CashOnDelivery)
+                    {
+                        <p>Cash on Delivery</p>
+                    }
+                    else
+                    {
+                        <p>Online Payment</p>
+                    }
+                    
+                    <div class="mt-lg">
+                        <p class="text-muted mb-sm">Customer Notes</p>
+                        <p>@(string.IsNullOrEmpty(Model.CustomerNotes) ? "No notes provided" : Model.CustomerNotes)</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-lg">Order Totals</h3>
+                    <div class="order-summary-row">
+                        <span>Subtotal:</span>
+                        <span>@Model.SubTotal.ToString("C")</span>
+                    </div>
+                    <div class="order-summary-row">
+                        <span>Tax:</span>
+                        <span>@Model.Tax.ToString("C")</span>
+                    </div>
+                    <div class="order-summary-row">
+                        <span>Shipping:</span>
+                        <span>@Model.ShippingFee.ToString("C")</span>
+                    </div>
+                    <div class="order-summary-row">
+                        <span>Discount:</span>
+                        <span class="text-success">-@Model.Discount.ToString("C")</span>
+                    </div>
+                    <div class="order-summary-row total">
+                        <span>Total:</span>
+                        <span class="text-primary">@Model.FinalTotal.ToString("C")</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <form asp-action="Approve" method="post" class="inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.OrderId" />
+                    <button type="submit" class="btn btn-success" @(Model.Status == OrderStatus.Pending || Model.Status == OrderStatus.Processing ? "" : "disabled")>
+                        Approve Order
+                    </button>
+                </form>
+                
+                <form asp-action="Cancel" method="post" class="inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.OrderId" />
+                    <button type="submit" class="btn btn-danger" @(Model.Status == OrderStatus.Delivered || Model.Status == OrderStatus.Cancelled ? "disabled" : "")>
+                        Cancel Order
+                    </button>
+                </form>
+                
+                <form asp-action="AssignToDelivery" method="post" class="inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.OrderId" />
+                    <button type="submit" class="btn btn-primary" @(Model.Status == OrderStatus.Processing ? "" : "disabled")>
+                        Assign to Delivery
+                    </button>
+                </form>
+                
+                <form asp-action="GenerateInvoice" method="get" class="inline">
+                    <input type="hidden" name="id" value="@Model.OrderId" />
+                    <button type="submit" class="btn btn-outline">
+                        Generate Invoice
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
