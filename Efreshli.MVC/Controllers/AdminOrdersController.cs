@@ -39,7 +39,7 @@ namespace Efreshli.MVC.Controllers
                 if (!string.IsNullOrEmpty(filters.SearchTerm))
                 {
                     query = query.Where(o => o.OrderId.ToString().Contains(filters.SearchTerm) ||
-                        o.ApplicationUser.PhoneNumber.Contains(filters.SearchTerm));
+                        (o.ApplicationUser != null && o.ApplicationUser.PhoneNumber.Contains(filters.SearchTerm)));
                 }
 
                 if (filters.Status.HasValue)
@@ -49,7 +49,7 @@ namespace Efreshli.MVC.Controllers
 
                 if (filters.PaymentMethod.HasValue)
                 {
-                    query = query.Where(o => o.Payment.PaymentMethod == filters.PaymentMethod);
+                    query = query.Where(o => o.Payment != null && o.Payment.PaymentMethod == filters.PaymentMethod);
                 }
 
                 if (!string.IsNullOrEmpty(filters.ShippingType))
@@ -122,28 +122,32 @@ namespace Efreshli.MVC.Controllers
 
                 if (order == null)
                 {
-                    return NotFound();
+                    TempData["Error"] = "Order not found.";
+                    return RedirectToAction(nameof(Index));
                 }
 
+                // Map to ViewModel
                 var viewModel = new AdminOrderDetailsViewModel
                 {
                     OrderId = order.OrderId,
                     Status = order.Status,
                     CreatedAt = order.CreatedDate,
                     LastUpdated = order.UpdatedDate ?? order.CreatedDate,
-                    CustomerName = order.ApplicationUser?.FullName ?? "N/A",
-                    CustomerPhone = order.ApplicationUser?.PhoneNumber ?? order.DeliveryAddress?.PhoneNumber ?? "N/A",
-                    CustomerAddress = order.DeliveryAddress?.FullAddress ?? "Pickup at store",
+                    CustomerName = $"{order.ApplicationUser?.FirstName} {order.ApplicationUser?.LastName}",
+                    CustomerPhone = order.ApplicationUser?.PhoneNumber ?? "",
+                    CustomerAddress = order.DeliveryAddress != null
+                        ? $"{order.DeliveryAddress.FullAddress}, {order.DeliveryAddress.Area}, Floor {order.DeliveryAddress.FloorNumber}"
+                        : "Pickup from store",
                     Products = order.OrderItems?.Select(oi => new AdminOrderProductItemViewModel
                     {
-                        ProductId = oi.ProductItem?.ProductId ?? 0,
-                        ProductName = oi.ProductItem?.Product?.NameEn ?? "Unknown Product",
+                        ProductId = oi.ProductItem.ProductId,
+                        ProductName = oi.ProductItem.Product.NameEn, // Use NameEn from Product
                         Quantity = oi.Quantity,
-                        UnitPrice = oi.Price,
-                        TotalPrice = oi.Quantity * oi.Price
+                        UnitPrice = oi.Price, // Use Price from OrderItem
+                        TotalPrice = oi.Quantity * oi.Price // Calculate total price
                     }).ToList() ?? new List<AdminOrderProductItemViewModel>(),
                     SubTotal = order.SubTotalPrice,
-                    Tax = 0, // Calculate based on your business logic
+                    Tax = 0, // Assuming tax is calculated elsewhere or is 0
                     ShippingFee = order.ShippingPrice,
                     Discount = order.DiscountValue ?? 0,
                     FinalTotal = order.TotalPrice,
@@ -151,7 +155,7 @@ namespace Efreshli.MVC.Controllers
                     CustomerNotes = order.Note ?? ""
                 };
 
-                return View(viewModel);
+                return View("DetailsModern", viewModel);
             }
             catch (Exception ex)
             {

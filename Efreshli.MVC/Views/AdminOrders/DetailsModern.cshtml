@@ -1,0 +1,205 @@
+@using Efreshli.Domain.Enums
+@model Efreshli.MVC.Models.ViewModels.AdminOrderDetailsViewModel
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/order-details.css" />
+
+<div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">Order Details - #@Model.OrderId</h1>
+        <a href="@Url.Action("Index")" class="btn btn-outline">
+            ← Back to Orders
+        </a>
+    </div>
+
+    <!-- Alert Messages -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            <span>@TempData["Success"]</span>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            <span>@TempData["Error"]</span>
+        </div>
+    }
+
+    <!-- Main Grid Layout -->
+    <div class="main-grid">
+        <!-- Left Column: Customer Information -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Customer Information</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label text-muted">Customer Name</label>
+                    <p class="font-semibold">@Model.CustomerName</p>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label text-muted">Phone Number</label>
+                    <p>@(string.IsNullOrEmpty(Model.CustomerPhone) ? "N/A" : Model.CustomerPhone)</p>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label text-muted">Delivery Address</label>
+                    <p>@(string.IsNullOrEmpty(Model.CustomerAddress) ? "N/A" : Model.CustomerAddress)</p>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label text-muted">Order Date</label>
+                    <p>@Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Order Summary, Payment Info, Status, Totals -->
+        <div>
+            <!-- Order Summary Card -->
+            <div class="card mb-lg">
+                <div class="card-header">
+                    <h2>Order Summary</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th class="text-right">Quantity</th>
+                                    <th class="text-right">Unit Price</th>
+                                    <th class="text-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Products.Any())
+                                {
+                                    @foreach (var item in Model.Products)
+                                    {
+                                        <tr>
+                                            <td>@item.ProductName</td>
+                                            <td class="text-right">@item.Quantity</td>
+                                            <td class="text-right">@item.UnitPrice.ToString("C")</td>
+                                            <td class="text-right font-semibold">@item.TotalPrice.ToString("C")</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">No products found in this order</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment & Status Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Payment & Status</h2>
+                </div>
+                <div class="card-body">
+                    <div class="flex justify-between items-center mb-lg">
+                        <div>
+                            <label class="form-label text-muted">Payment Method</label>
+                            @if (Model.PaymentMethod == PaymentMethod.CashOnDelivery)
+                            {
+                                <span class="badge badge-pending">Cash on Delivery</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-success">Online Payment</span>
+                            }
+                        </div>
+                        
+                        <div>
+                            <label class="form-label text-muted">Order Status</label>
+                            @switch (Model.Status)
+                            {
+                                case OrderStatus.Pending:
+                                    <span class="badge badge-pending">Pending</span>
+                                    break;
+                                case OrderStatus.Processing:
+                                    <span class="badge badge-processing">Processing</span>
+                                    break;
+                                case OrderStatus.Shipped:
+                                    <span class="badge badge-shipped">Shipped</span>
+                                    break;
+                                case OrderStatus.Delivered:
+                                    <span class="badge badge-delivered">Delivered</span>
+                                    break;
+                                case OrderStatus.Cancelled:
+                                    <span class="badge badge-cancelled">Cancelled</span>
+                                    break;
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-lg">
+                        <label class="form-label text-muted">Customer Notes</label>
+                        <textarea class="form-control" rows="3" readonly>@(string.IsNullOrEmpty(Model.CustomerNotes) ? "No notes provided" : Model.CustomerNotes)</textarea>
+                    </div>
+                    
+                    <!-- Order Totals -->
+                    <div class="card" style="box-shadow: none; border: 1px solid var(--gray-200);">
+                        <div class="card-body">
+                            <div class="order-summary-row">
+                                <span>Subtotal:</span>
+                                <span>@Model.SubTotal.ToString("C")</span>
+                            </div>
+                            <div class="order-summary-row">
+                                <span>Shipping:</span>
+                                <span>@Model.ShippingFee.ToString("C")</span>
+                            </div>
+                            <div class="order-summary-row">
+                                <span>Discount:</span>
+                                <span class="text-success">-@Model.Discount.ToString("C")</span>
+                            </div>
+                            <div class="order-summary-row total">
+                                <span>Total:</span>
+                                <span class="text-primary">@Model.FinalTotal.ToString("C")</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <form asp-action="Approve" method="post" class="inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.OrderId" />
+                            <button type="submit" class="btn btn-success" @(Model.Status == OrderStatus.Pending || Model.Status == OrderStatus.Processing ? "" : "disabled")>
+                                Approve Order
+                            </button>
+                        </form>
+                        
+                        <form asp-action="Cancel" method="post" class="inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.OrderId" />
+                            <button type="submit" class="btn btn-danger" @(Model.Status == OrderStatus.Delivered || Model.Status == OrderStatus.Cancelled ? "disabled" : "")>
+                                Cancel Order
+                            </button>
+                        </form>
+                        
+                        <form asp-action="AssignToDelivery" method="post" class="inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.OrderId" />
+                            <button type="submit" class="btn btn-primary" @(Model.Status == OrderStatus.Processing ? "" : "disabled")>
+                                Assign to Delivery
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
