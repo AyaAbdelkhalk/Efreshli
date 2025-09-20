@@ -2,6 +2,7 @@ using Efreshli.Application.Interfaces;
 using Efreshli.Application.Services.AIServices;
 using Efreshli.Application.Services.EmailService;
 using Efreshli.Application.Services.ReviewServices;
+using Efreshli.Domain.Common.Classes;
 using Efreshli.Domain.Common.Interfaces;
 using Efreshli.Domain.Models;
 using Efreshli.Domain.Settings;
@@ -29,6 +30,9 @@ namespace Efreshli.Infrastructure
 
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
+            // Register UserContext service
+            services.AddScoped<IUserContext, UserContext>();
 
             // Initialize static UserContext
             //UserContext.Initialize(services.BuildServiceProvider());

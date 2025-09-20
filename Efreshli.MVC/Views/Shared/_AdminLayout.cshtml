@@ -1,4 +1,4 @@
-﻿﻿﻿@using System.Globalization
+﻿﻿﻿﻿﻿﻿﻿@using System.Globalization
 @using Efreshli.Application.Resources
 @using Microsoft.Extensions.Localization
 @using Microsoft.Extensions.Options
@@ -72,7 +72,6 @@
     <link rel="stylesheet" href="~/css/Category.css">
     <link rel="stylesheet" href="~/css/AdminSidebar/Sidebar.css">
 
-    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"> *@
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 
     <!-- #region client side validation using IQuery -->
@@ -248,8 +247,8 @@
                         </div>
                     </a>
 
-                    <a href="#"
-                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
+                    <a asp-area="" asp-controller="AdminOrders" asp-action="Index"
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("AdminOrders")">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-shopping-bag-3-line text-sm"></i>
                         </div>
@@ -295,7 +294,7 @@
 
                     <!-- #endregion -->
 
-
+@* 
                     <a href="#"
                        class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
@@ -306,8 +305,7 @@
                             <i class="ri-arrow-right-s-line text-xs"></i>
                         </div>
                     </a>
-
-                    <div class="border-t border-white/10 my-3"></div>
+ *@
 
                     <a href="#"
                        class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
@@ -320,7 +318,7 @@
                         </div>
                     </a>
 
-                    <a href="#"
+                  @*   <a href="#"
                        class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-question-line text-sm"></i>
@@ -329,7 +327,7 @@
                         <div class="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
                             <i class="ri-external-link-line text-xs"></i>
                         </div>
-                    </a>
+                    </a> *@
 
 
 

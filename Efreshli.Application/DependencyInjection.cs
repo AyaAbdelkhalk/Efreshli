@@ -66,7 +66,7 @@ namespace Efreshli.Application
             services.AddScoped<IProductItemService, ProductItemService>();
             services.AddScoped<IWishlistService, WishlistService>();
             services.AddScoped<ISharedService, SharedService>();
-            services.AddScoped<IOrderService, OrderService>();
+           // services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICartService, CartService>();
 
             services.AddScoped<IUserService, UserService>();
