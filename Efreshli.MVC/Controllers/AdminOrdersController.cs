@@ -177,6 +177,13 @@ namespace Efreshli.MVC.Controllers
                         return RedirectToAction(nameof(Index));
                     }
 
+                    // Check if order is already cancelled - if so, prevent status update
+                    if (order.Status == OrderStatus.Cancelled)
+                    {
+                        TempData["Error"] = "Cannot update status of a cancelled order.";
+                        return RedirectToAction(nameof(Details), new { id = model.OrderId });
+                    }
+
                     order.Status = model.Status;
                     order.UpdatedDate = DateTime.Now;
                     
