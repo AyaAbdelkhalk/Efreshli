@@ -7,6 +7,7 @@ using Mapster;
 using Microsoft.AspNetCore.Http;
 using System.Linq.Expressions;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 
 namespace Efreshli.Application.Services.CartServices
 {
@@ -291,6 +292,7 @@ namespace Efreshli.Application.Services.CartServices
 
                     if (productItem?.Product != null)
                     {
+                       
                         // Get product images
                         var productImages = await GetProductImagesAsync(productItem.ProductId);
 
@@ -301,6 +303,7 @@ namespace Efreshli.Application.Services.CartServices
                             ProductName = productItem.Product.NameEn ?? "Unknown Product",
                             Price = productItem.Price,
                             Quantity = item.RequiredQuantity,
+                            Discount=productItem.Discount,
                             TotalPrice = productItem.Price * item.RequiredQuantity,
                             DimensionsOrSize = productItem.Product.DimensionsOrSize ?? string.Empty,
                             SKU = productItem.Product.SKU ?? string.Empty,
@@ -353,8 +356,14 @@ namespace Efreshli.Application.Services.CartServices
 
         public async Task<decimal> GetGrandTotalOfCart(string userId)
         {
-            var result = await GetCartByUserIdAsync(userId);
-            return result.Data?.GrandTotal ?? 0;
+          
+            var cartId = await _unitOfWork.CartRepository.GetAll().Where(x => x.ApplicationUserId == userId).Select(x => x.CartId).FirstOrDefaultAsync();
+            if (cartId == 0) return 0;
+            var grandtotal = await _unitOfWork.CartItemRepository.GetAll().Where(x => x.CartId == cartId && x.IsDeleted == false).Select(x => x.RequiredQuantity * x.ProductItem.Price).ToListAsync();
+            if(grandtotal==null || grandtotal.Count==0) return 0;
+
+            return grandtotal.Sum();
+        
         }
     }
 }
