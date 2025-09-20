@@ -4,14 +4,19 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
+using System;
 
 namespace Efreshli.Infrastructure.Data
 {
     public class EfreshliDbContext : IdentityDbContext<ApplicationUser>
     {
-        public EfreshliDbContext(DbContextOptions<EfreshliDbContext> options)
+        private readonly IUserContext? _userContext;
+
+        public EfreshliDbContext(DbContextOptions<EfreshliDbContext> options, IUserContext? userContext = null)
         : base(options)
         {
+            _userContext = userContext;
         }
         //public EfreshliDbContext(DbContextOptions options) : base(options)
         //{
@@ -171,12 +176,47 @@ namespace Efreshli.Infrastructure.Data
 
         public override int SaveChanges()
         {
+            UpdateAuditFields();
             return base.SaveChanges();
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            UpdateAuditFields();
             return await base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void UpdateAuditFields()
+        {
+            var userId = _userContext?.CurrentUserId ?? "system";
+
+            var entries = ChangeTracker.Entries()
+                .Where(e => e.Entity is IAuditable && 
+                    (e.State == EntityState.Added || 
+                    e.State == EntityState.Modified || 
+                    e.State == EntityState.Deleted));
+
+            foreach (var entry in entries)
+            {
+                var auditableEntity = (IAuditable)entry.Entity;
+                if (entry.State == EntityState.Added)
+                {
+                    auditableEntity.CreatedBy = userId;
+                    auditableEntity.CreatedDate = DateTime.UtcNow;
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    auditableEntity.UpdatedBy = userId;
+                    auditableEntity.UpdatedDate = DateTime.UtcNow;
+                }
+                else if (entry.State == EntityState.Deleted)
+                {
+                    entry.State = EntityState.Modified;
+                    auditableEntity.IsDeleted = true;
+                    auditableEntity.DeletedBy = userId;
+                    auditableEntity.DeletedDate = DateTime.UtcNow;
+                }
+            }
         }
     }
 }
