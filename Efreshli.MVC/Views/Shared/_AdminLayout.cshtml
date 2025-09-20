@@ -1,4 +1,4 @@
-﻿﻿﻿@using System.Globalization
+﻿﻿﻿﻿﻿﻿﻿@using System.Globalization
 @using Efreshli.Application.Resources
 @using Microsoft.Extensions.Localization
 @using Microsoft.Extensions.Options
@@ -68,11 +68,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
     @* <link rel="stylesheet" href="~/css/Brand/Brand.css"> *@
     <link rel="stylesheet" href="~/css/Category.css">
     <link rel="stylesheet" href="~/css/AdminSidebar/Sidebar.css">
 
-    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"> *@
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 
     <!-- #region client side validation using IQuery -->
@@ -248,8 +248,8 @@
                         </div>
                     </a>
 
-                    <a href="#"
-                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group">
+                    <a asp-area="" asp-controller="AdminOrders" asp-action="Index"
+                       class="nav-link flex items-center px-3 py-2.5 text-gray-600 hover:text-gray-900 rounded-lg group @IsActive("AdminOrders")">
                         <div class="icon-wrapper w-4 h-4 flex items-center justify-center">
                             <i class="ri-shopping-bag-3-line text-sm"></i>
                         </div>
