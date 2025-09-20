@@ -1,15 +1,741 @@
 @using Efreshli.Domain.Enums
 @model Efreshli.MVC.Models.ViewModels.AdminOrderDetailsViewModel
-
 @{
     ViewData["Title"] = "Order Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<style>
+    /* ========================================
+       MODERN CSS VARIABLES & RESET
+    ======================================== */
+    :root {
+        /* Color Palette */
+        --primary-color: #6366f1;
+        --primary-hover: #4f46e5;
+        --primary-light: #e0e7ff;
+        --success-color: #10b981;
+        --success-hover: #059669;
+        --success-light: #d1fae5;
+        --warning-color: #f59e0b;
+        --warning-light: #fef3c7;
+        --danger-color: #ef4444;
+        --danger-hover: #dc2626;
+        --danger-light: #fee2e2;
+        --secondary-color: #64748b;
+        --secondary-hover: #475569;
+        --purple-color: #8b5cf6;
+        /* Neutral Colors */
+        --white: #ffffff;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-400: #9ca3af;
+        --gray-500: #6b7280;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+        --gray-900: #111827;
+        /* Spacing */
+        --space-1: 0.25rem;
+        --space-2: 0.5rem;
+        --space-3: 0.75rem;
+        --space-4: 1rem;
+        --space-5: 1.25rem;
+        --space-6: 1.5rem;
+        --space-8: 2rem;
+        --space-12: 3rem;
+        /* Border Radius */
+        --radius-sm: 0.25rem;
+        --radius: 0.375rem;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-xl: 1rem;
+        --radius-full: 9999px;
+        /* Shadows */
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        /* Transitions */
+        --transition: all 0.2s ease-in-out;
+        --transition-fast: all 0.15s ease-in-out;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    /* ========================================
+       LAYOUT COMPONENTS
+    ======================================== */
+    .container-fluid {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 var(--space-6);
+    }
+
+    .row {
+        display: grid;
+        gap: var(--space-6);
+        grid-template-columns: 1fr;
+    }
+
+   
+
+    .col-full {
+        grid-column: 1 / -1;
+    }
+
+    /* ========================================
+       FLEXBOX UTILITIES
+    ======================================== */
+    .flex {
+        display: flex;
+    }
+
+    .flex-col {
+        flex-direction: column;
+    }
+
+    .flex-wrap {
+        flex-wrap: wrap;
+    }
+
+    .items-center {
+        align-items: center;
+    }
+
+    .items-start {
+        align-items: flex-start;
+    }
+
+    .justify-between {
+        justify-content: space-between;
+    }
+
+    .justify-center {
+        justify-content: center;
+    }
+
+    .gap-2 {
+        gap: var(--space-2);
+    }
+
+    .gap-3 {
+        gap: var(--space-3);
+    }
+
+    .gap-4 {
+        gap: var(--space-4);
+    }
+
+    /* ========================================
+       SPACING UTILITIES
+    ======================================== */
+    .m-0 {
+        margin: 0;
+    }
+
+    .mb-1 {
+        margin-bottom: var(--space-1);
+    }
+
+    .mb-2 {
+        margin-bottom: var(--space-2);
+    }
+
+    .mb-3 {
+        margin-bottom: var(--space-3);
+    }
+
+    .mb-4 {
+        margin-bottom: var(--space-4);
+    }
+
+    .mb-6 {
+        margin-bottom: var(--space-6);
+    }
+
+    .me-2 {
+        margin-right: var(--space-2);
+    }
+
+    .me-3 {
+        margin-right: var(--space-3);
+    }
+
+    .mt-4 {
+        margin-top: var(--space-4);
+    }
+
+    .pt-4 {
+        padding-top: var(--space-4);
+    }
+
+    .py-4 {
+        padding: var(--space-4) 0;
+    }
+
+    .px-4 {
+        padding: 0 var(--space-4);
+    }
+
+    /* ========================================
+       TYPOGRAPHY
+    ======================================== */
+    .text-primary {
+        color: var(--primary-color);
+    }
+
+    .text-success {
+        color: var(--success-color);
+    }
+
+    .text-warning {
+        color: var(--warning-color);
+    }
+
+    .text-danger {
+        color: var(--danger-color);
+    }
+
+    .text-muted {
+        color: var(--gray-500);
+    }
+
+    .text-white {
+        color: var(--white);
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .font-medium {
+        font-weight: 500;
+    }
+
+    .font-semibold {
+        font-weight: 600;
+    }
+
+    .font-bold {
+        font-weight: 700;
+    }
+
+    .text-sm {
+        font-size: 0.875rem;
+    }
+
+    .text-base {
+        font-size: 1rem;
+    }
+
+    .text-lg {
+        font-size: 1.125rem;
+    }
+
+    .text-xl {
+        font-size: 1.25rem;
+    }
+
+    .text-2xl {
+        font-size: 1.5rem;
+    }
+
+    /* ========================================
+       MODERN BUTTONS
+    ======================================== */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+        padding: var(--space-3) var(--space-4);
+        font-size: 0.875rem;
+        font-weight: 500;
+        line-height: 1.5;
+        border-radius: var(--radius);
+        border: 1px solid transparent;
+        cursor: pointer;
+        text-decoration: none;
+        transition: var(--transition);
+        min-height: 40px;
+        white-space: nowrap;
+    }
+
+        .btn:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+        color: var(--white);
+        box-shadow: var(--shadow-sm);
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-hover), #3730a3);
+            box-shadow: var(--shadow);
+            transform: translateY(-1px);
+        }
+
+    .btn-success {
+        background: linear-gradient(135deg, var(--success-color), var(--success-hover));
+        color: var(--white);
+        box-shadow: var(--shadow-sm);
+    }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, var(--success-hover), #047857);
+            box-shadow: var(--shadow);
+            transform: translateY(-1px);
+        }
+
+    .btn-danger {
+        background: linear-gradient(135deg, var(--danger-color), var(--danger-hover));
+        color: var(--white);
+        box-shadow: var(--shadow-sm);
+    }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, var(--danger-hover), #b91c1c);
+            box-shadow: var(--shadow);
+            transform: translateY(-1px);
+        }
+
+    .btn-outline {
+        background: var(--white);
+        border: 2px solid var(--gray-200);
+        color: var(--gray-700);
+    }
+
+        .btn-outline:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+    .btn-sm {
+        padding: var(--space-2) var(--space-3);
+        font-size: 0.75rem;
+        min-height: 32px;
+    }
+
+    /* ========================================
+       MODERN CARDS
+    ======================================== */
+    .card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--gray-100);
+        overflow: hidden;
+        transition: var(--transition);
+        height: fit-content;
+    }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+    .card-header {
+        padding: var(--space-6);
+        background: linear-gradient(135deg, var(--gray-50), var(--white));
+        border-bottom: 1px solid var(--gray-100);
+    }
+
+        .card-header h5 {
+            margin: 0;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+    .card-body {
+        padding: var(--space-6);
+    }
+
+    .card-full-height {
+        height: 100%;
+    }
+
+    /* ========================================
+       MODERN FORMS
+    ======================================== */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+
+    .form-control,
+    .form-select {
+        padding: var(--space-3) var(--space-4);
+        border: 2px solid var(--gray-200);
+        border-radius: var(--radius);
+        font-size: 0.875rem;
+        transition: var(--transition);
+        background: var(--white);
+        min-height: 44px;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+    .form-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b7280'%3e%3cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3e%3c/svg%3e");
+        background-position: right var(--space-3) center;
+        background-repeat: no-repeat;
+        background-size: 1.25rem;
+        padding-right: 2.5rem;
+        appearance: none;
+    }
+
+    .form-readonly {
+        background-color: var(--gray-50);
+        color: var(--gray-600);
+    }
+
+    .input-group {
+        display: flex;
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+    }
+
+        .input-group .form-select {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right: none;
+            flex: 1;
+        }
+
+        .input-group .btn {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+    /* ========================================
+       MODERN TABLES
+    ======================================== */
+    .table-container {
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        border: 1px solid var(--gray-100);
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+    }
+
+        .table th {
+            background: linear-gradient(135deg, var(--gray-50), var(--white));
+            padding: var(--space-4);
+            text-align: left;
+            font-weight: 600;
+            color: var(--gray-700);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .table td {
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--gray-100);
+            vertical-align: middle;
+        }
+
+        .table tbody tr:hover {
+            background-color: var(--gray-50);
+            transition: var(--transition-fast);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    .table-borderless {
+        border: none;
+    }
+
+        .table-borderless th,
+        .table-borderless td {
+            border: none;
+        }
+
+    /* ========================================
+       MODERN ALERTS
+    ======================================== */
+    .alert {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        padding: var(--space-4) var(--space-6);
+        border-radius: var(--radius-lg);
+        border: 1px solid;
+        margin-bottom: var(--space-4);
+        position: relative;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .alert-success {
+        background: linear-gradient(135deg, var(--success-light), #ecfdf5);
+        border-color: var(--success-color);
+        color: #065f46;
+    }
+
+    .alert-danger {
+        background: linear-gradient(135deg, var(--danger-light), #fef2f2);
+        border-color: var(--danger-color);
+        color: #991b1b;
+    }
+
+    .alert-close {
+        position: absolute;
+        right: var(--space-4);
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        font-size: 1.25rem;
+        cursor: pointer;
+        color: inherit;
+        opacity: 0.7;
+        transition: var(--transition);
+    }
+
+        .alert-close:hover {
+            opacity: 1;
+        }
+
+    /* ========================================
+       MODERN BADGES
+    ======================================== */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-1);
+        padding: var(--space-2) var(--space-3);
+        font-size: 0.75rem;
+        font-weight: 600;
+        border-radius: var(--radius-full);
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+    }
+
+    .badge-warning {
+        background: linear-gradient(135deg, var(--warning-light), #fef3c7);
+        color: #92400e;
+        border: 1px solid var(--warning-color);
+    }
+
+    .badge-success {
+        background: linear-gradient(135deg, var(--success-light), #d1fae5);
+        color: #065f46;
+        border: 1px solid var(--success-color);
+    }
+
+    .badge-primary {
+        background: linear-gradient(135deg, var(--primary-light), #e0e7ff);
+        color: #3730a3;
+        border: 1px solid var(--primary-color);
+    }
+
+    .badge-danger {
+        background: linear-gradient(135deg, var(--danger-light), #fee2e2);
+        color: #991b1b;
+        border: 1px solid var(--danger-color);
+    }
+
+    .badge-purple {
+        background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+        color: #6b21a8;
+        border: 1px solid var(--purple-color);
+    }
+
+    .badge-lg {
+        padding: var(--space-2) var(--space-4);
+        font-size: 0.875rem;
+    }
+
+    /* ========================================
+       MODERN PAGE HEADER
+    ======================================== */
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: var(--space-8);
+        padding: var(--space-6) 0;
+        border-bottom: 1px solid var(--gray-100);
+        flex-wrap: wrap;
+        gap: var(--space-4);
+    }
+
+    .page-title {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: var(--gray-800);
+        margin: 0;
+        background: linear-gradient(135deg, var(--primary-color), var(--purple-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* ========================================
+       STATUS INDICATORS
+    ======================================== */
+    .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .status-pending .status-dot {
+        background-color: var(--warning-color);
+    }
+
+    .status-processing .status-dot {
+        background-color: var(--primary-color);
+    }
+
+    .status-shipped .status-dot {
+        background-color: var(--purple-color);
+    }
+
+    .status-delivered .status-dot {
+        background-color: var(--success-color);
+    }
+
+    .status-cancelled .status-dot {
+        background-color: var(--danger-color);
+    }
+
+    /* ========================================
+       UTILITY CLASSES
+    ======================================== */
+    .border-top {
+        border-top: 1px solid var(--gray-200);
+    }
+
+    .rounded {
+        border-radius: var(--radius);
+    }
+
+    .shadow {
+        box-shadow: var(--shadow);
+    }
+
+    .position-fixed {
+        position: fixed;
+    }
+
+    .w-full {
+        width: 100%;
+    }
+
+    .h-full {
+        height: 100%;
+    }
+
+    /* ========================================
+       ICONS (FontAwesome Fallback)
+    ======================================== */
+    .icon {
+        width: 1rem;
+        height: 1rem;
+        display: inline-block;
+    }
+
+    .fas:before {
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .fa-arrow-left:before {
+        content: "?";
+    }
+
+    .fa-check-circle:before {
+        content: "?";
+    }
+
+    .fa-exclamation-circle:before {
+        content: "?";
+    }
+
+    .fa-calendar-alt:before {
+        content: "??";
+    }
+
+    .fa-sync-alt:before {
+        content: "??";
+    }
+
+    .fa-edit:before {
+        content: "??";
+    }
+
+    .fa-copy:before {
+        content: "??";
+    }
+
+    .fa-sync:before {
+        content: "??";
+    }
+
+    .fa-times-circle:before {
+        content: "?";
+    }
+
+    .fa-truck:before {
+        content: "??";
+    }
+
+    .fa-file-pdf:before {
+        content: "??";
+    }
+
+  
+  
+</style>
+
 <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-primary">Order Details</h2>
-        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+    <!-- Modern Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">Order Details</h1>
+        <a href="@Url.Action("Index")" class="btn btn-outline">
             <i class="fas fa-arrow-left"></i> Back to Orders
         </a>
     </div>
@@ -17,51 +743,52 @@
     <!-- Success/Error Messages -->
     @if (TempData["Success"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm" role="alert">
-            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert alert-success animate-slide-in" role="alert">
+            <i class="fas fa-check-circle"></i>
+            <span>@TempData["Success"]</span>
+            <button type="button" class="alert-close" onclick="closeAlert(this)" aria-label="Close">×</button>
         </div>
     }
-
     @if (TempData["Error"] != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm" role="alert">
-            <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert alert-danger animate-slide-in" role="alert">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>@TempData["Error"]</span>
+            <button type="button" class="alert-close" onclick="closeAlert(this)" aria-label="Close">×</button>
         </div>
     }
 
-    <!-- Order Header -->
-    <div class="card shadow-sm mb-4 rounded-3">
+    <!-- Order Header Card -->
+    <div class="card mb-6 animate-fade-in">
         <div class="card-body">
-            <div class="d-flex justify-content-between align-items-start">
+            <div class="flex justify-between items-start flex-wrap gap-4">
                 <div>
-                    <h4 class="mb-1">Order #@Model.OrderId</h4>
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="me-3">
-                            <i class="fas fa-calendar-alt text-muted me-1"></i>
+                    <h2 class="text-2xl font-bold text-primary mb-2">Order #@Model.OrderId</h2>
+                    <div class="flex items-center gap-4 text-sm text-muted flex-wrap">
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-calendar-alt"></i>
                             @Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")
                         </span>
-                        <span>
-                            <i class="fas fa-sync-alt text-muted me-1"></i>
+                        <span class="flex items-center gap-2">
+                            <i class="fas fa-sync-alt"></i>
                             Updated: @Model.LastUpdated.ToString("MMM dd, yyyy HH:mm")
                         </span>
                     </div>
                 </div>
                 <div>
                     <!-- Status Update Form -->
-                    <form asp-action="UpdateStatus" method="post" class="d-inline">
+                    <form asp-action="UpdateStatus" method="post">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="OrderId" value="@Model.OrderId" />
                         <div class="input-group">
-                            <select name="Status" class="form-select" style="width: auto;">
+                            <select name="Status" class="form-select">
                                 <option value="@OrderStatus.Pending" selected="@(Model.Status == OrderStatus.Pending)">Pending</option>
                                 <option value="@OrderStatus.Processing" selected="@(Model.Status == OrderStatus.Processing)">Processing</option>
                                 <option value="@OrderStatus.Shipped" selected="@(Model.Status == OrderStatus.Shipped)">Shipped</option>
                                 <option value="@OrderStatus.Delivered" selected="@(Model.Status == OrderStatus.Delivered)">Delivered</option>
                                 <option value="@OrderStatus.Cancelled" selected="@(Model.Status == OrderStatus.Cancelled)">Cancelled</option>
                             </select>
-                            <button type="submit" class="btn btn-outline-primary">
+                            <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-sync"></i> Update
                             </button>
                         </div>
@@ -71,42 +798,43 @@
         </div>
     </div>
 
-    <div class="row">
-        <!-- Customer Information -->
-        <div class="col-lg-4">
-            <div class="card shadow-sm mb-4 rounded-3 h-100">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Customer Information</h5>
+    <!-- Main Content Grid -->
+    <div class="row mb-6">
+        <!-- Customer Information Card -->
+        <div class="animate-fade-in">
+            <div class="card card-full-height">
+                <div class="card-header">
+                    <h5>Customer Information</h5>
                 </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between mb-3">
+                    <div class="flex justify-between items-start mb-4">
                         <div>
-                            <h6 class="text-muted mb-1">Customer</h6>
-                            <p class="mb-0">@Model.CustomerName</p>
+                            <h6 class="text-sm font-semibold text-muted mb-1">Customer</h6>
+                            <p class="font-medium text-lg">@Model.CustomerName</p>
                         </div>
-                        <div>
-                            <button class="btn btn-sm btn-outline-primary" title="Edit Customer">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </div>
+                        <button class="btn btn-sm btn-outline" title="Edit Customer">
+                            <i class="fas fa-edit"></i>
+                        </button>
                     </div>
-                    <div class="mb-3">
-                        <h6 class="text-muted mb-1">Phone</h6>
-                        <div class="d-flex justify-content-between">
-                            <p class="mb-0">@(string.IsNullOrEmpty(Model.CustomerPhone) ? "N/A" : Model.CustomerPhone)</p>
-                            <button class="btn btn-sm btn-outline-secondary" title="Copy Phone Number" 
-                                    onclick="copyToClipboard('@(string.IsNullOrEmpty(Model.CustomerPhone) ? "" : Model.CustomerPhone)')" 
+
+                    <div class="mb-4">
+                        <h6 class="text-sm font-semibold text-muted mb-1">Phone</h6>
+                        <div class="flex justify-between items-center">
+                            <p class="font-medium">@(string.IsNullOrEmpty(Model.CustomerPhone) ? "N/A" : Model.CustomerPhone)</p>
+                            <button class="btn btn-sm btn-outline" title="Copy Phone Number"
+                                    onclick="copyToClipboard('@(string.IsNullOrEmpty(Model.CustomerPhone) ? "" : Model.CustomerPhone)')"
                                     @(string.IsNullOrEmpty(Model.CustomerPhone) ? "disabled" : "")>
                                 <i class="fas fa-copy"></i>
                             </button>
                         </div>
                     </div>
+
                     <div>
-                        <h6 class="text-muted mb-1">Address</h6>
-                        <div class="d-flex justify-content-between">
-                            <p class="mb-0">@(string.IsNullOrEmpty(Model.CustomerAddress) ? "N/A" : Model.CustomerAddress)</p>
-                            <button class="btn btn-sm btn-outline-secondary" title="Copy Address" 
-                                    onclick="copyToClipboard('@(string.IsNullOrEmpty(Model.CustomerAddress) ? "" : Model.CustomerAddress)')" 
+                        <h6 class="text-sm font-semibold text-muted mb-1">Address</h6>
+                        <div class="flex justify-between items-start">
+                            <p class="font-medium">@(string.IsNullOrEmpty(Model.CustomerAddress) ? "N/A" : Model.CustomerAddress)</p>
+                            <button class="btn btn-sm btn-outline" title="Copy Address"
+                                    onclick="copyToClipboard('@(string.IsNullOrEmpty(Model.CustomerAddress) ? "" : Model.CustomerAddress)')"
                                     @(string.IsNullOrEmpty(Model.CustomerAddress) ? "disabled" : "")>
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -116,21 +844,22 @@
             </div>
         </div>
 
-        <!-- Order Summary -->
-        <div class="col-lg-8">
-            <div class="card shadow-sm mb-4 rounded-3 h-100">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">Order Summary</h5>
+        <!-- Order Summary Card -->
+        <div class="animate-fade-in">
+            <div class="card card-full-height">
+                <div class="card-header">
+                    <h5>Order Summary</h5>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <!-- Products Table -->
+                    <div class="table-container mb-6">
                         <table class="table">
-                            <thead class="table-light">
+                            <thead>
                                 <tr>
                                     <th>Product</th>
                                     <th class="text-center">Quantity</th>
-                                    <th class="text-end">Unit Price</th>
-                                    <th class="text-end">Total</th>
+                                    <th class="text-right">Unit Price</th>
+                                    <th class="text-right">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -140,19 +869,21 @@
                                     {
                                         <tr>
                                             <td>
-                                                <div class="fw-medium">@item.ProductName</div>
+                                                <div class="font-semibold">@item.ProductName</div>
                                             </td>
-                                            <td class="text-center">@item.Quantity</td>
-                                            <td class="text-end">@item.UnitPrice.ToString("C")</td>
-                                            <td class="text-end fw-medium">@item.TotalPrice.ToString("C")</td>
+                                            <td class="text-center">
+                                                <span class="badge badge-primary">@item.Quantity</span>
+                                            </td>
+                                            <td class="text-right font-medium">@item.UnitPrice.ToString("C")</td>
+                                            <td class="text-right font-bold text-primary">@item.TotalPrice.ToString("C")</td>
                                         </tr>
                                     }
                                 }
                                 else
                                 {
                                     <tr>
-                                        <td colspan="4" class="text-center py-3 text-muted">
-                                            No products found in this order
+                                        <td colspan="4" class="text-center py-8 text-muted">
+                                            <div class="text-lg">No products found in this order</div>
                                         </td>
                                     </tr>
                                 }
@@ -160,77 +891,92 @@
                         </table>
                     </div>
 
-                    <div class="border-top pt-3 mt-3">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h6 class="text-muted">Payment Method</h6>
-                                <p>
-                                    @if (Model.PaymentMethod == PaymentMethod.CashOnDelivery)
-                                    {
-                                        <span class="badge bg-warning-subtle text-warning-emphasis">Cash on Delivery</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-success-subtle text-success-emphasis">Online Payment</span>
-                                    }
-                                </p>
+                    <!-- Payment & Notes Section -->
+                    <div class="border-top pt-6 mb-6">
+                        <div class="row gap-6">
+                            <div>
+                                <h6 class="font-semibold text-muted mb-2">Payment Method</h6>
+                                @if (Model.PaymentMethod == PaymentMethod.CashOnDelivery)
+                                {
+                                    <span class="badge badge-warning badge-lg">Cash on Delivery</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-success badge-lg">Online Payment</span>
+                                }
                             </div>
-                            <div class="col-md-6">
-                                <h6 class="text-muted">Customer Notes</h6>
-                                <textarea class="form-control" rows="2" readonly>@Model.CustomerNotes</textarea>
+                            <div>
+                                <h6 class="font-semibold text-muted mb-2">Customer Notes</h6>
+                                <textarea class="form-control form-readonly" rows="3" readonly>@Model.CustomerNotes</textarea>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="border-top pt-3 mt-3">
-                            <div class="row">
-                                <div class="col-md-6 mb-3 mb-md-0">
-                                    <h6 class="text-muted">Order Status</h6>
-                                    @switch (Model.Status)
-                                    {
-                                        case OrderStatus.Pending:
-                                            <span class="badge rounded-pill bg-warning fs-6">Pending</span>
-                                            break;
-                                        case OrderStatus.Processing:
-                                            <span class="badge rounded-pill bg-primary fs-6">Processing</span>
-                                            break;
-                                        case OrderStatus.Shipped:
-                                            <span class="badge rounded-pill bg-purple fs-6">Shipped</span>
-                                            break;
-                                        case OrderStatus.Delivered:
-                                            <span class="badge rounded-pill bg-success fs-6">Delivered</span>
-                                            break;
-                                        case OrderStatus.Cancelled:
-                                            <span class="badge rounded-pill bg-danger fs-6">Cancelled</span>
-                                            break;
-                                    }
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="table-responsive">
-                                        <table class="table table-borderless mb-0">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="text-muted">Subtotal:</td>
-                                                    <td class="text-end">@Model.SubTotal.ToString("C")</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-muted">Tax:</td>
-                                                    <td class="text-end">@Model.Tax.ToString("C")</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-muted">Shipping:</td>
-                                                    <td class="text-end">@Model.ShippingFee.ToString("C")</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-muted">Discount:</td>
-                                                    <td class="text-end text-success">-@Model.Discount.ToString("C")</td>
-                                                </tr>
-                                                <tr class="border-top">
-                                                    <td class="fw-bold">Total:</td>
-                                                    <td class="fw-bold text-end text-primary">@Model.FinalTotal.ToString("C")</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                    <!-- Order Status & Totals Section -->
+                    <div class="border-top pt-6">
+                        <div class="row gap-6">
+                            <div>
+                                <h6 class="font-semibold text-muted mb-3">Order Status</h6>
+                                @switch (Model.Status)
+                                {
+                                    case OrderStatus.Pending:
+                                        <div class="status-indicator status-pending">
+                                            <span class="status-dot"></span>
+                                            <span class="badge badge-warning badge-lg">Pending</span>
+                                        </div>
+                                        break;
+                                    case OrderStatus.Processing:
+                                        <div class="status-indicator status-processing">
+                                            <span class="status-dot"></span>
+                                            <span class="badge badge-primary badge-lg">Processing</span>
+                                        </div>
+                                        break;
+                                    case OrderStatus.Shipped:
+                                        <div class="status-indicator status-shipped">
+                                            <span class="status-dot"></span>
+                                            <span class="badge badge-purple badge-lg">Shipped</span>
+                                        </div>
+                                        break;
+                                    case OrderStatus.Delivered:
+                                        <div class="status-indicator status-delivered">
+                                            <span class="status-dot"></span>
+                                            <span class="badge badge-success badge-lg">Delivered</span>
+                                        </div>
+                                        break;
+                                    case OrderStatus.Cancelled:
+                                        <div class="status-indicator status-cancelled">
+                                            <span class="status-dot"></span>
+                                            <span class="badge badge-danger badge-lg">Cancelled</span>
+                                        </div>
+                                        break;
+                                }
+                            </div>
+                            <div>
+                                <div class="table-container">
+                                    <table class="table table-borderless">
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-muted">Subtotal:</td>
+                                                <td class="text-right font-semibold">@Model.SubTotal.ToString("C")</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Tax:</td>
+                                                <td class="text-right font-semibold">@Model.Tax.ToString("C")</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Shipping:</td>
+                                                <td class="text-right font-semibold">@Model.ShippingFee.ToString("C")</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-muted">Discount:</td>
+                                                <td class="text-right font-semibold text-success">-@Model.Discount.ToString("C")</td>
+                                            </tr>
+                                            <tr class="border-top">
+                                                <td class="font-bold text-lg">Total:</td>
+                                                <td class="text-right font-bold text-xl text-primary">@Model.FinalTotal.ToString("C")</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -240,42 +986,40 @@
         </div>
     </div>
 
-    <!-- Action Buttons -->
-    <div class="card shadow-sm rounded-3">
+    <!-- Action Buttons Card -->
+    <div class="card col-full animate-fade-in">
         <div class="card-body">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <form asp-action="Approve" method="post" class="d-inline">
+            <div class="flex justify-between items-center flex-wrap gap-4">
+                <div class="flex gap-3 flex-wrap">
+                    <form asp-action="Approve" method="post" class="inline">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" value="@Model.OrderId" />
-                        <button type="submit" class="btn btn-success me-2" 
-                                @(Model.Status == OrderStatus.Pending || Model.Status == OrderStatus.Processing ? "" : "disabled")>
+                        <button type="submit" class="btn btn-success" @(Model.Status == OrderStatus.Pending || Model.Status == OrderStatus.Processing ? "" : "disabled")>
                             <i class="fas fa-check-circle"></i> Approve Order
                         </button>
                     </form>
-                    
-                    <form asp-action="Cancel" method="post" class="d-inline">
+
+                    <form asp-action="Cancel" method="post" class="inline">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" value="@Model.OrderId" />
-                        <button type="submit" class="btn btn-danger me-2" 
-                                @(Model.Status == OrderStatus.Delivered || Model.Status == OrderStatus.Cancelled ? "disabled" : "")>
+                        <button type="submit" class="btn btn-danger" @(Model.Status == OrderStatus.Delivered || Model.Status == OrderStatus.Cancelled ? "disabled" : "")>
                             <i class="fas fa-times-circle"></i> Cancel Order
                         </button>
                     </form>
-                    
-                    <form asp-action="AssignToDelivery" method="post" class="d-inline">
+
+                    <form asp-action="AssignToDelivery" method="post" class="inline">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" value="@Model.OrderId" />
-                        <button type="submit" class="btn btn-primary me-2" 
-                                @(Model.Status == OrderStatus.Processing ? "" : "disabled")>
+                        <button type="submit" class="btn btn-primary" @(Model.Status == OrderStatus.Processing ? "" : "disabled")>
                             <i class="fas fa-truck"></i> Assign to Delivery
                         </button>
                     </form>
                 </div>
+
                 <div>
-                    <form asp-action="GenerateInvoice" method="get" class="d-inline">
+                    <form asp-action="GenerateInvoice" method="get" class="inline">
                         <input type="hidden" name="id" value="@Model.OrderId" />
-                        <button type="submit" class="btn btn-outline-secondary">
+                        <button type="submit" class="btn btn-outline">
                             <i class="fas fa-file-pdf"></i> Generate Invoice
                         </button>
                     </form>
@@ -285,47 +1029,161 @@
     </div>
 </div>
 
-<style>
-    .bg-purple {
-        background-color: #6f42c1 !important;
-    }
-    
-    .badge.rounded-pill {
-        font-size: 0.85em;
-        padding: 0.6em 1em;
-    }
-    
-    .card {
-        border: none;
-    }
-    
-    .table th {
-        font-weight: 600;
-    }
-    
-    textarea[readonly] {
-        background-color: #f8f9fa;
-    }
-</style>
-
 <script>
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(function() {
-            // Show a temporary success message
-            var alertDiv = document.createElement('div');
-            alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed';
-            alertDiv.style.bottom = '20px';
-            alertDiv.style.right = '20px';
-            alertDiv.style.zIndex = '9999';
-            alertDiv.innerHTML = '<i class="fas fa-check-circle me-2"></i>Copied to clipboard!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-            document.body.appendChild(alertDiv);
-            
-            // Remove the alert after 3 seconds
-            setTimeout(function() {
-                if (alertDiv.parentNode) {
-                    alertDiv.parentNode.removeChild(alertDiv);
+    // Modern JavaScript for enhanced functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add loading states to buttons
+        const buttons = document.querySelectorAll('button[type="submit"]');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                if (!this.disabled) {
+                    this.style.opacity = '0.7';
+                    this.style.pointerEvents = 'none';
+                    setTimeout(() => {
+                        this.style.opacity = '1';
+                        this.style.pointerEvents = 'auto';
+                    }, 2000);
                 }
-            }, 3000);
+            });
+        });
+
+        // Add smooth animations to cards
+        const cards = document.querySelectorAll('.card');
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        cards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            observer.observe(card);
+        });
+    });
+
+    // Enhanced copy to clipboard function
+    function copyToClipboard(text) {
+        if (!text || text === '') return;
+
+        navigator.clipboard.writeText(text).then(function() {
+            showNotification('Copied to clipboard!', 'success');
+        }).catch(function(err) {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            showNotification('Copied to clipboard!', 'success');
         });
     }
+
+    // Modern notification system
+    function showNotification(message, type = 'success') {
+        // Remove existing notifications
+        const existing = document.querySelectorAll('.notification');
+        existing.forEach(notif => notif.remove());
+
+        const notification = document.createElement('div');
+        notification.className = `notification animate-slide-in position-fixed`;
+        notification.style.cssText = `
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            min-width: 200px;
+            backdrop-filter: blur(10px);
+        `;
+
+        if (type === 'success') {
+            notification.style.background = 'linear-gradient(135deg, #d1fae5, #a7f3d0)';
+            notification.style.color = '#065f46';
+            notification.style.border = '1px solid #10b981';
+            notification.innerHTML = '<i class="fas fa-check-circle"></i><span>' + message + '</span>';
+        } else if (type === 'error') {
+            notification.style.background = 'linear-gradient(135deg, #fee2e2, #fecaca)';
+            notification.style.color = '#991b1b';
+            notification.style.border = '1px solid #ef4444';
+            notification.innerHTML = '<i class="fas fa-exclamation-circle"></i><span>' + message + '</span>';
+        }
+
+        document.body.appendChild(notification);
+
+        // Auto remove after 3 seconds with fade out
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    // Close alert function
+    function closeAlert(button) {
+        const alert = button.closest('.alert');
+        if (alert) {
+            alert.style.opacity = '0';
+            alert.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            }, 300);
+        }
+    }
+
+    // Add ripple effect to buttons
+    document.querySelectorAll('.btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+
+            ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+            `;
+
+            this.style.position = 'relative';
+            this.style.overflow = 'hidden';
+            this.appendChild(ripple);
+
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+
+    
+    document.head.appendChild(style);
 </script>
