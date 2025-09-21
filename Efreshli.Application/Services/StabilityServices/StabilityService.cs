@@ -11,7 +11,7 @@ namespace Efreshli.Application.Services.StabilityServices
 {
     public class StabilityService:IStabilityService
     {
-        private readonly string _apiKey = "sk-KynpBs9iDRhoCF3hQbJTnncCDgZ31TtLyUXNB9F8bCgFibIx";
+        private readonly string _apiKey = "sk-ChYN9HJykqfLlOLNZMlUiWcmoOBB0hZ7IsX6BRi6aW7PfcO6";
         private readonly string _stabilityUrl = "https://api.stability.ai/v2beta/3d/stable-fast-3d";
        
         public async Task<IFormFile> ConvertToGlbAsync(IFormFile imageFile)

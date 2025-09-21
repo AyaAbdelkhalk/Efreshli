@@ -654,7 +654,7 @@ namespace Efreshli.Application.Services.ProductServices
                 var Model_3d_link =  product.ProductImages?.Where(img => img != null && img.ReferenceType == ImageReferenceType.Model_3D).Select(img => img.URL).First();
                 if (!string.IsNullOrWhiteSpace(Model_3d_link))
                 {
-                    Model_3d_link = "http://efreshli-admin.runasp.net" + Model_3d_link;
+                    Model_3d_link = "http://efreshliadmin.runasp.net" + Model_3d_link;
                 }
 
                 var resdto = new LocalizedProductDetailsDto
