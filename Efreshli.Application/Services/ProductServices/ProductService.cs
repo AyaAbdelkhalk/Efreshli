@@ -651,7 +651,7 @@ namespace Efreshli.Application.Services.ProductServices
                
 
                 // set 3d model link
-                var Model_3d_link =  product.ProductImages?.Where(img => img != null && img.ReferenceType == ImageReferenceType.Model_3D).Select(img => img.URL).First();
+                var Model_3d_link =  product.ProductImages?.Where(img => img != null && img.ReferenceType == ImageReferenceType.Model_3D).Select(img => img.URL).FirstOrDefault();
                 if (!string.IsNullOrWhiteSpace(Model_3d_link))
                 {
                     Model_3d_link = "http://efreshliadmin.runasp.net" + Model_3d_link;
